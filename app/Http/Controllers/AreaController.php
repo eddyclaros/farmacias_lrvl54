@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Area;
 use Illuminate\Support\Facades\DB;
 
+
 class AreaController extends Controller
 {
     /**
@@ -16,10 +17,20 @@ class AreaController extends Controller
      */
     public function index()
     {
-        $areas = Area::all();
+        //$areas = Area::all();
+        $areas= Area::orderby('codigo','asc')->paginate(2);
         $maxcorrelativo = Area::select(DB::raw('max(correlativo) as maximo'))
                                 ->get();
-        return ['areas'=>$areas,
+        return ['pagination'=>[
+            'total'         =>    $areas->total(),
+            'current_page'  =>    $areas->currentPage(),
+            'per_page'      =>    $areas->perPage(),
+            'last_page'     =>    $areas->lastPage(),
+            'from'          =>    $areas->firstItem(),
+            'to'            =>    $areas->lastItem(),
+
+        ] ,
+                'areas'=>$areas,
                 'maxcorrelativo'=>$maxcorrelativo];
     }
 
