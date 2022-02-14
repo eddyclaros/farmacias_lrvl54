@@ -15,10 +15,33 @@ class AreaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $buscararray=array();
+        if(!empty($request->buscar)){
+            $buscararray = explode(" ",$request->buscar);
+        }
+        if(sizeof($buscararray>0)){
+            $sqls='';
+            foreach($buscararray as $valor){
+                if(empty($sqls)){
+                    $sqls="(codigo like '%".$valor."%' or nombre like '%".$valor."%' or descripcion like '%".$valor."%')" ;
+                }
+                else
+                {
+                    $sqls.=" and (codigo like '%".$valor."%' or nombre like '%".$valor."%' or descripcion like '%".$valor."%')" ;
+                }
+
+            }
+            $areas= Area::orderby('codigo','asc')->whereraw($sqls)->paginate(10);
+        }
+        else
+        {
+            $areas= Area::orderby('codigo','asc')->paginate(10);
+        }
+        
         //$areas = Area::all();
-        $areas= Area::orderby('codigo','asc')->paginate(2);
+        
         $maxcorrelativo = Area::select(DB::raw('max(correlativo) as maximo'))
                                 ->get();
         return ['pagination'=>[

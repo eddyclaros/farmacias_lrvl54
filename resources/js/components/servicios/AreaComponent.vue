@@ -19,12 +19,8 @@
                     <div class="form-group row">
                         <div class="col-md-6">
                             <div class="input-group">
-                                <select class="form-control col-md-3" id="opcion" name="opcion">
-                                    <option value="nombre">Nombre</option>
-                                    <option value="descripcion">Descripción</option>
-                                </select>
-                                <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar">
+                                <button type="submit" class="btn btn-primary" @click="listarAreas(1)"><i class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
                     </div>
@@ -97,10 +93,10 @@
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
+                                <label class="col-md-3 form-control-label" for="text-input">Nombre <span  v-if="!sicompleto" class="error">(*)</span></label>
                                 <div class="col-md-9">
-                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del Area" v-model="nombre">
-                                    <span class="help-block">(*) Ingrese el nombre del Area</span>
+                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del Area" v-model="nombre" >
+                                    <span  v-if="!sicompleto" class="error">Debe Ingresar el Nombre del Area</span>
                                 </div>
                             </div>
                             
@@ -114,7 +110,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"  @click="cerrarModal('registrar')">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarArea()">Guardar</button>
+                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarArea()" :disabled="!sicompleto">Guardar</button>
                         <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarArea()">Actualizar</button>
                     </div>
                 </div>
@@ -123,36 +119,14 @@
             <!-- /.modal-dialog -->
         </div>
         <!--Fin del modal-->
-        <!-- Inicio del modal Eliminar -->
-        <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-danger" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Eliminar Categoría</h4>
-                        <button type="button" class="close"  aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Estas seguro de eliminar la categoría?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" >Cerrar</button>
-                        <button type="button" class="btn btn-danger">Eliminar</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- Fin del modal Eliminar -->
+        
         
     </main>
 </template>
 
 <script>
 import Swal from 'sweetalert2'
-
+//Vue.use(VeeValidate);
     export default {
         data(){
             return{
@@ -173,10 +147,19 @@ import Swal from 'sweetalert2'
                 tituloModal:'',
                 tipoAccion:1,
                 idarea:'',
+                buscar:''
+                
             }
 
         },
         computed:{
+            sicompleto(){
+                let me=this;
+                if (me.nombre!='')
+                    return true;
+                else
+                    return false;
+            },
             isActived:function(){
                 return this.pagination.current_page;
             },
@@ -205,7 +188,7 @@ import Swal from 'sweetalert2'
         methods :{
             listarAreas(page){
                 let me=this;
-                var url='/area?page='+page;
+                var url='/area?page='+page+'&buscar='+me.buscar;
                 axios.get(url).then(function(response){
                     var respuesta=response.data;
                     //console.log(respuesta.areas);
@@ -408,10 +391,17 @@ import Swal from 'sweetalert2'
 
         },
         mounted() {
-            this.listarAreas();
+            this.listarAreas(1);
             this.classModal = new _pl.Modals();
             this.classModal.addModal('registrar');
             //console.log('Component mounted.')
         }
     }
 </script>
+<style scoped>
+.error{
+    color: red;
+    font-size: 10px;
+    
+}
+</style>
