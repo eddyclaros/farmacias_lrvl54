@@ -2123,6 +2123,359 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/servicios/AreaComponent.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/servicios/AreaComponent.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      nombre: '',
+      descripcion: '',
+      codigo: '',
+      correlativo: 0,
+      arrayAreas: [],
+      tituloModal: '',
+      tipoAccion: 1,
+      idarea: ''
+    };
+  },
+  methods: {
+    listarAreas: function listarAreas() {
+      var me = this;
+      axios.get('/area').then(function (response) {
+        //console.log(response);
+        var respuesta = response.data; //console.log(respuesta);
+
+        me.arrayAreas = respuesta.areas;
+        me.correlativo = respuesta.maxcorrelativo[0].maximo;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    registrarArea: function registrarArea() {
+      var me = this;
+      if (me.correlativo == '') me.correlativo = 1;else me.correlativo++;
+      if (me.correlativo < 10) me.codigo = '0' + me.correlativo;
+      axios.post('/area/registrar', {
+        'nombre': me.nombre,
+        'descripcion': me.descripcion,
+        'codigo': me.codigo,
+        'correlativo': me.correlativo
+      }).then(function (response) {
+        me.cerrarModal('registrar');
+        me.listarAreas();
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    eliminarArea: function eliminarArea(idarea) {
+      var me = this; //console.log("prueba");
+
+      var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      });
+      swalWithBootstrapButtons.fire({
+        title: 'Esta Seguro de Desactivar?',
+        text: "Es una eliminacion logica",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, Desactivar',
+        cancelButtonText: 'No, Cancelar',
+        reverseButtons: true
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          axios.put('/area/desactivar', {
+            'id': idarea
+          }).then(function (response) {
+            swalWithBootstrapButtons.fire('Desactivado!', 'El registro a sido desactivado Correctamente', 'success');
+            me.listarAreas();
+          })["catch"](function (error) {
+            console.log(error);
+          });
+        } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.DismissReason.cancel) {
+          /* swalWithBootstrapButtons.fire(
+          'Cancelado!',
+          'El Registro no fue desactivado',
+          'error'
+          ) */
+        }
+      });
+    },
+    activarArea: function activarArea(idarea) {
+      var me = this; //console.log("prueba");
+
+      var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      });
+      swalWithBootstrapButtons.fire({
+        title: 'Esta Seguro de Activar?',
+        text: "Es una Activacion logica",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, Activar',
+        cancelButtonText: 'No, Cancelar',
+        reverseButtons: true
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          axios.put('/area/activar', {
+            'id': idarea
+          }).then(function (response) {
+            swalWithBootstrapButtons.fire('Activado!', 'El registro a sido Activado Correctamente', 'success');
+            me.listarAreas();
+          })["catch"](function (error) {
+            console.log(error);
+          });
+        } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.DismissReason.cancel) {
+          /* swalWithBootstrapButtons.fire(
+          'Cancelado!',
+          'El Registro no fue Activado',
+          'error'
+          ) */
+        }
+      });
+    },
+    actualizarArea: function actualizarArea() {
+      // const Swal = require('sweetalert2')
+      var me = this;
+      axios.put('/area/actualizar', {
+        'id': me.idarea,
+        'nombre': me.nombre,
+        'descripcion': me.descripcion
+      }).then(function (response) {
+        if (response.data.length) {} // console.log(response)
+        else {
+          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Actualizado Correctamente');
+          me.listarAreas();
+        }
+      })["catch"](function (error) {});
+      me.cerrarModal('registrar');
+    },
+    abrirModal: function abrirModal(accion) {
+      var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+      var me = this;
+
+      switch (accion) {
+        case 'registrar':
+          {
+            me.tituloModal = 'Registar Area';
+            me.tipoAccion = 1;
+            me.nombre = '';
+            me.descripcion = '';
+            me.classModal.openModal('registrar');
+            break;
+          }
+
+        case 'actualizar':
+          {
+            me.idarea = data.id;
+            me.tipoAccion = 2;
+            me.tituloModal = 'Actualizar Area';
+            me.nombre = data.nombre;
+            me.descripcion = data.descripcion;
+            me.classModal.openModal('registrar');
+            break;
+          }
+      }
+    },
+    cerrarModal: function cerrarModal(accion) {
+      var me = this;
+      me.classModal.closeModal(accion);
+      me.nombre = '';
+      me.descripcion = '';
+      me.tipoAccion = 1;
+    }
+  },
+  mounted: function mounted() {
+    this.listarAreas();
+    this.classModal = new _pl.Modals();
+    this.classModal.addModal('registrar'); //console.log('Component mounted.')
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap/dist/js/bootstrap.js":
 /*!*****************************************************!*\
   !*** ./node_modules/bootstrap/dist/js/bootstrap.js ***!
@@ -37619,6 +37972,3408 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./node_modules/sweetalert2/dist/sweetalert2.all.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/sweetalert2/dist/sweetalert2.all.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+* sweetalert2 v11.4.0
+* Released under the MIT License.
+*/
+(function (global, factory) {
+   true ? module.exports = factory() :
+  undefined;
+}(this, function () { 'use strict';
+
+  const consolePrefix = 'SweetAlert2:';
+  /**
+   * Filter the unique values into a new array
+   * @param arr
+   */
+
+  const uniqueArray = arr => {
+    const result = [];
+
+    for (let i = 0; i < arr.length; i++) {
+      if (result.indexOf(arr[i]) === -1) {
+        result.push(arr[i]);
+      }
+    }
+
+    return result;
+  };
+  /**
+   * Capitalize the first letter of a string
+   * @param {string} str
+   * @returns {string}
+   */
+
+  const capitalizeFirstLetter = str => str.charAt(0).toUpperCase() + str.slice(1);
+  /**
+   * @param {NodeList | HTMLCollection | NamedNodeMap} nodeList
+   * @returns {array}
+   */
+
+  const toArray = nodeList => Array.prototype.slice.call(nodeList);
+  /**
+   * Standardize console warnings
+   * @param {string | array} message
+   */
+
+  const warn = message => {
+    console.warn("".concat(consolePrefix, " ").concat(typeof message === 'object' ? message.join(' ') : message));
+  };
+  /**
+   * Standardize console errors
+   * @param {string} message
+   */
+
+  const error = message => {
+    console.error("".concat(consolePrefix, " ").concat(message));
+  };
+  /**
+   * Private global state for `warnOnce`
+   * @type {Array}
+   * @private
+   */
+
+  const previousWarnOnceMessages = [];
+  /**
+   * Show a console warning, but only if it hasn't already been shown
+   * @param {string} message
+   */
+
+  const warnOnce = message => {
+    if (!previousWarnOnceMessages.includes(message)) {
+      previousWarnOnceMessages.push(message);
+      warn(message);
+    }
+  };
+  /**
+   * Show a one-time console warning about deprecated params/methods
+   */
+
+  const warnAboutDeprecation = (deprecatedParam, useInstead) => {
+    warnOnce("\"".concat(deprecatedParam, "\" is deprecated and will be removed in the next major release. Please use \"").concat(useInstead, "\" instead."));
+  };
+  /**
+   * If `arg` is a function, call it (with no arguments or context) and return the result.
+   * Otherwise, just pass the value through
+   * @param arg
+   */
+
+  const callIfFunction = arg => typeof arg === 'function' ? arg() : arg;
+  const hasToPromiseFn = arg => arg && typeof arg.toPromise === 'function';
+  const asPromise = arg => hasToPromiseFn(arg) ? arg.toPromise() : Promise.resolve(arg);
+  const isPromise = arg => arg && Promise.resolve(arg) === arg;
+
+  const defaultParams = {
+    title: '',
+    titleText: '',
+    text: '',
+    html: '',
+    footer: '',
+    icon: undefined,
+    iconColor: undefined,
+    iconHtml: undefined,
+    template: undefined,
+    toast: false,
+    showClass: {
+      popup: 'swal2-show',
+      backdrop: 'swal2-backdrop-show',
+      icon: 'swal2-icon-show'
+    },
+    hideClass: {
+      popup: 'swal2-hide',
+      backdrop: 'swal2-backdrop-hide',
+      icon: 'swal2-icon-hide'
+    },
+    customClass: {},
+    target: 'body',
+    color: undefined,
+    backdrop: true,
+    heightAuto: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    allowEnterKey: true,
+    stopKeydownPropagation: true,
+    keydownListenerCapture: false,
+    showConfirmButton: true,
+    showDenyButton: false,
+    showCancelButton: false,
+    preConfirm: undefined,
+    preDeny: undefined,
+    confirmButtonText: 'OK',
+    confirmButtonAriaLabel: '',
+    confirmButtonColor: undefined,
+    denyButtonText: 'No',
+    denyButtonAriaLabel: '',
+    denyButtonColor: undefined,
+    cancelButtonText: 'Cancel',
+    cancelButtonAriaLabel: '',
+    cancelButtonColor: undefined,
+    buttonsStyling: true,
+    reverseButtons: false,
+    focusConfirm: true,
+    focusDeny: false,
+    focusCancel: false,
+    returnFocus: true,
+    showCloseButton: false,
+    closeButtonHtml: '&times;',
+    closeButtonAriaLabel: 'Close this dialog',
+    loaderHtml: '',
+    showLoaderOnConfirm: false,
+    showLoaderOnDeny: false,
+    imageUrl: undefined,
+    imageWidth: undefined,
+    imageHeight: undefined,
+    imageAlt: '',
+    timer: undefined,
+    timerProgressBar: false,
+    width: undefined,
+    padding: undefined,
+    background: undefined,
+    input: undefined,
+    inputPlaceholder: '',
+    inputLabel: '',
+    inputValue: '',
+    inputOptions: {},
+    inputAutoTrim: true,
+    inputAttributes: {},
+    inputValidator: undefined,
+    returnInputValueOnDeny: false,
+    validationMessage: undefined,
+    grow: false,
+    position: 'center',
+    progressSteps: [],
+    currentProgressStep: undefined,
+    progressStepsDistance: undefined,
+    willOpen: undefined,
+    didOpen: undefined,
+    didRender: undefined,
+    willClose: undefined,
+    didClose: undefined,
+    didDestroy: undefined,
+    scrollbarPadding: true
+  };
+  const updatableParams = ['allowEscapeKey', 'allowOutsideClick', 'background', 'buttonsStyling', 'cancelButtonAriaLabel', 'cancelButtonColor', 'cancelButtonText', 'closeButtonAriaLabel', 'closeButtonHtml', 'color', 'confirmButtonAriaLabel', 'confirmButtonColor', 'confirmButtonText', 'currentProgressStep', 'customClass', 'denyButtonAriaLabel', 'denyButtonColor', 'denyButtonText', 'didClose', 'didDestroy', 'footer', 'hideClass', 'html', 'icon', 'iconColor', 'iconHtml', 'imageAlt', 'imageHeight', 'imageUrl', 'imageWidth', 'preConfirm', 'preDeny', 'progressSteps', 'returnFocus', 'reverseButtons', 'showCancelButton', 'showCloseButton', 'showConfirmButton', 'showDenyButton', 'text', 'title', 'titleText', 'willClose'];
+  const deprecatedParams = {};
+  const toastIncompatibleParams = ['allowOutsideClick', 'allowEnterKey', 'backdrop', 'focusConfirm', 'focusDeny', 'focusCancel', 'returnFocus', 'heightAuto', 'keydownListenerCapture'];
+  /**
+   * Is valid parameter
+   * @param {string} paramName
+   */
+
+  const isValidParameter = paramName => {
+    return Object.prototype.hasOwnProperty.call(defaultParams, paramName);
+  };
+  /**
+   * Is valid parameter for Swal.update() method
+   * @param {string} paramName
+   */
+
+  const isUpdatableParameter = paramName => {
+    return updatableParams.indexOf(paramName) !== -1;
+  };
+  /**
+   * Is deprecated parameter
+   * @param {string} paramName
+   */
+
+  const isDeprecatedParameter = paramName => {
+    return deprecatedParams[paramName];
+  };
+
+  const checkIfParamIsValid = param => {
+    if (!isValidParameter(param)) {
+      warn("Unknown parameter \"".concat(param, "\""));
+    }
+  };
+
+  const checkIfToastParamIsValid = param => {
+    if (toastIncompatibleParams.includes(param)) {
+      warn("The parameter \"".concat(param, "\" is incompatible with toasts"));
+    }
+  };
+
+  const checkIfParamIsDeprecated = param => {
+    if (isDeprecatedParameter(param)) {
+      warnAboutDeprecation(param, isDeprecatedParameter(param));
+    }
+  };
+  /**
+   * Show relevant warnings for given params
+   *
+   * @param params
+   */
+
+
+  const showWarningsForParams = params => {
+    if (!params.backdrop && params.allowOutsideClick) {
+      warn('"allowOutsideClick" parameter requires `backdrop` parameter to be set to `true`');
+    }
+
+    for (const param in params) {
+      checkIfParamIsValid(param);
+
+      if (params.toast) {
+        checkIfToastParamIsValid(param);
+      }
+
+      checkIfParamIsDeprecated(param);
+    }
+  };
+
+  const swalPrefix = 'swal2-';
+  const prefix = items => {
+    const result = {};
+
+    for (const i in items) {
+      result[items[i]] = swalPrefix + items[i];
+    }
+
+    return result;
+  };
+  const swalClasses = prefix(['container', 'shown', 'height-auto', 'iosfix', 'popup', 'modal', 'no-backdrop', 'no-transition', 'toast', 'toast-shown', 'show', 'hide', 'close', 'title', 'html-container', 'actions', 'confirm', 'deny', 'cancel', 'default-outline', 'footer', 'icon', 'icon-content', 'image', 'input', 'file', 'range', 'select', 'radio', 'checkbox', 'label', 'textarea', 'inputerror', 'input-label', 'validation-message', 'progress-steps', 'active-progress-step', 'progress-step', 'progress-step-line', 'loader', 'loading', 'styled', 'top', 'top-start', 'top-end', 'top-left', 'top-right', 'center', 'center-start', 'center-end', 'center-left', 'center-right', 'bottom', 'bottom-start', 'bottom-end', 'bottom-left', 'bottom-right', 'grow-row', 'grow-column', 'grow-fullscreen', 'rtl', 'timer-progress-bar', 'timer-progress-bar-container', 'scrollbar-measure', 'icon-success', 'icon-warning', 'icon-info', 'icon-question', 'icon-error']);
+  const iconTypes = prefix(['success', 'warning', 'info', 'question', 'error']);
+
+  /**
+   * Gets the popup container which contains the backdrop and the popup itself.
+   *
+   * @returns {HTMLElement | null}
+   */
+
+  const getContainer = () => document.body.querySelector(".".concat(swalClasses.container));
+  const elementBySelector = selectorString => {
+    const container = getContainer();
+    return container ? container.querySelector(selectorString) : null;
+  };
+
+  const elementByClass = className => {
+    return elementBySelector(".".concat(className));
+  };
+
+  const getPopup = () => elementByClass(swalClasses.popup);
+  const getIcon = () => elementByClass(swalClasses.icon);
+  const getTitle = () => elementByClass(swalClasses.title);
+  const getHtmlContainer = () => elementByClass(swalClasses['html-container']);
+  const getImage = () => elementByClass(swalClasses.image);
+  const getProgressSteps = () => elementByClass(swalClasses['progress-steps']);
+  const getValidationMessage = () => elementByClass(swalClasses['validation-message']);
+  const getConfirmButton = () => elementBySelector(".".concat(swalClasses.actions, " .").concat(swalClasses.confirm));
+  const getDenyButton = () => elementBySelector(".".concat(swalClasses.actions, " .").concat(swalClasses.deny));
+  const getInputLabel = () => elementByClass(swalClasses['input-label']);
+  const getLoader = () => elementBySelector(".".concat(swalClasses.loader));
+  const getCancelButton = () => elementBySelector(".".concat(swalClasses.actions, " .").concat(swalClasses.cancel));
+  const getActions = () => elementByClass(swalClasses.actions);
+  const getFooter = () => elementByClass(swalClasses.footer);
+  const getTimerProgressBar = () => elementByClass(swalClasses['timer-progress-bar']);
+  const getCloseButton = () => elementByClass(swalClasses.close); // https://github.com/jkup/focusable/blob/master/index.js
+
+  const focusable = "\n  a[href],\n  area[href],\n  input:not([disabled]),\n  select:not([disabled]),\n  textarea:not([disabled]),\n  button:not([disabled]),\n  iframe,\n  object,\n  embed,\n  [tabindex=\"0\"],\n  [contenteditable],\n  audio[controls],\n  video[controls],\n  summary\n";
+  const getFocusableElements = () => {
+    const focusableElementsWithTabindex = toArray(getPopup().querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])')) // sort according to tabindex
+    .sort((a, b) => {
+      const tabindexA = parseInt(a.getAttribute('tabindex'));
+      const tabindexB = parseInt(b.getAttribute('tabindex'));
+
+      if (tabindexA > tabindexB) {
+        return 1;
+      } else if (tabindexA < tabindexB) {
+        return -1;
+      }
+
+      return 0;
+    });
+    const otherFocusableElements = toArray(getPopup().querySelectorAll(focusable)).filter(el => el.getAttribute('tabindex') !== '-1');
+    return uniqueArray(focusableElementsWithTabindex.concat(otherFocusableElements)).filter(el => isVisible(el));
+  };
+  const isModal = () => {
+    return !hasClass(document.body, swalClasses['toast-shown']) && !hasClass(document.body, swalClasses['no-backdrop']);
+  };
+  const isToast = () => {
+    return getPopup() && hasClass(getPopup(), swalClasses.toast);
+  };
+  const isLoading = () => {
+    return getPopup().hasAttribute('data-loading');
+  };
+
+  const states = {
+    previousBodyPadding: null
+  };
+  /**
+   * Securely set innerHTML of an element
+   * https://github.com/sweetalert2/sweetalert2/issues/1926
+   *
+   * @param {HTMLElement} elem
+   * @param {string} html
+   */
+
+  const setInnerHtml = (elem, html) => {
+    elem.textContent = '';
+
+    if (html) {
+      const parser = new DOMParser();
+      const parsed = parser.parseFromString(html, "text/html");
+      toArray(parsed.querySelector('head').childNodes).forEach(child => {
+        elem.appendChild(child);
+      });
+      toArray(parsed.querySelector('body').childNodes).forEach(child => {
+        elem.appendChild(child);
+      });
+    }
+  };
+  /**
+   * @param {HTMLElement} elem
+   * @param {string} className
+   * @returns {boolean}
+   */
+
+  const hasClass = (elem, className) => {
+    if (!className) {
+      return false;
+    }
+
+    const classList = className.split(/\s+/);
+
+    for (let i = 0; i < classList.length; i++) {
+      if (!elem.classList.contains(classList[i])) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const removeCustomClasses = (elem, params) => {
+    toArray(elem.classList).forEach(className => {
+      if (!Object.values(swalClasses).includes(className) && !Object.values(iconTypes).includes(className) && !Object.values(params.showClass).includes(className)) {
+        elem.classList.remove(className);
+      }
+    });
+  };
+
+  const applyCustomClass = (elem, params, className) => {
+    removeCustomClasses(elem, params);
+
+    if (params.customClass && params.customClass[className]) {
+      if (typeof params.customClass[className] !== 'string' && !params.customClass[className].forEach) {
+        return warn("Invalid type of customClass.".concat(className, "! Expected string or iterable object, got \"").concat(typeof params.customClass[className], "\""));
+      }
+
+      addClass(elem, params.customClass[className]);
+    }
+  };
+  /**
+   * @param {HTMLElement} popup
+   * @param {string} inputType
+   * @returns {HTMLInputElement | null}
+   */
+
+  const getInput = (popup, inputType) => {
+    if (!inputType) {
+      return null;
+    }
+
+    switch (inputType) {
+      case 'select':
+      case 'textarea':
+      case 'file':
+        return popup.querySelector(".".concat(swalClasses.popup, " > .").concat(swalClasses[inputType]));
+
+      case 'checkbox':
+        return popup.querySelector(".".concat(swalClasses.popup, " > .").concat(swalClasses.checkbox, " input"));
+
+      case 'radio':
+        return popup.querySelector(".".concat(swalClasses.popup, " > .").concat(swalClasses.radio, " input:checked")) || popup.querySelector(".".concat(swalClasses.popup, " > .").concat(swalClasses.radio, " input:first-child"));
+
+      case 'range':
+        return popup.querySelector(".".concat(swalClasses.popup, " > .").concat(swalClasses.range, " input"));
+
+      default:
+        return popup.querySelector(".".concat(swalClasses.popup, " > .").concat(swalClasses.input));
+    }
+  };
+  /**
+   * @param {HTMLInputElement} input
+   */
+
+  const focusInput = input => {
+    input.focus(); // place cursor at end of text in text input
+
+    if (input.type !== 'file') {
+      // http://stackoverflow.com/a/2345915
+      const val = input.value;
+      input.value = '';
+      input.value = val;
+    }
+  };
+  /**
+   * @param {HTMLElement | HTMLElement[] | null} target
+   * @param {string | string[]} classList
+   * @param {boolean} condition
+   */
+
+  const toggleClass = (target, classList, condition) => {
+    if (!target || !classList) {
+      return;
+    }
+
+    if (typeof classList === 'string') {
+      classList = classList.split(/\s+/).filter(Boolean);
+    }
+
+    classList.forEach(className => {
+      if (Array.isArray(target)) {
+        target.forEach(elem => {
+          condition ? elem.classList.add(className) : elem.classList.remove(className);
+        });
+      } else {
+        condition ? target.classList.add(className) : target.classList.remove(className);
+      }
+    });
+  };
+  /**
+   * @param {HTMLElement | HTMLElement[] | null} target
+   * @param {string | string[]} classList
+   */
+
+  const addClass = (target, classList) => {
+    toggleClass(target, classList, true);
+  };
+  /**
+   * @param {HTMLElement | HTMLElement[] | null} target
+   * @param {string | string[]} classList
+   */
+
+  const removeClass = (target, classList) => {
+    toggleClass(target, classList, false);
+  };
+  /**
+   * Get direct child of an element by class name
+   *
+   * @param {HTMLElement} elem
+   * @param {string} className
+   * @returns {HTMLElement | null}
+   */
+
+  const getDirectChildByClass = (elem, className) => {
+    const childNodes = toArray(elem.childNodes);
+
+    for (let i = 0; i < childNodes.length; i++) {
+      if (hasClass(childNodes[i], className)) {
+        return childNodes[i];
+      }
+    }
+  };
+  /**
+   * @param {HTMLElement} elem
+   * @param {string} property
+   * @param {*} value
+   */
+
+  const applyNumericalStyle = (elem, property, value) => {
+    if (value === "".concat(parseInt(value))) {
+      value = parseInt(value);
+    }
+
+    if (value || parseInt(value) === 0) {
+      elem.style[property] = typeof value === 'number' ? "".concat(value, "px") : value;
+    } else {
+      elem.style.removeProperty(property);
+    }
+  };
+  /**
+   * @param {HTMLElement} elem
+   * @param {string} display
+   */
+
+  const show = function (elem) {
+    let display = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'flex';
+    elem.style.display = display;
+  };
+  /**
+   * @param {HTMLElement} elem
+   */
+
+  const hide = elem => {
+    elem.style.display = 'none';
+  };
+  const setStyle = (parent, selector, property, value) => {
+    const el = parent.querySelector(selector);
+
+    if (el) {
+      el.style[property] = value;
+    }
+  };
+  const toggle = (elem, condition, display) => {
+    condition ? show(elem, display) : hide(elem);
+  }; // borrowed from jquery $(elem).is(':visible') implementation
+
+  const isVisible = elem => !!(elem && (elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length));
+  const allButtonsAreHidden = () => !isVisible(getConfirmButton()) && !isVisible(getDenyButton()) && !isVisible(getCancelButton());
+  const isScrollable = elem => !!(elem.scrollHeight > elem.clientHeight); // borrowed from https://stackoverflow.com/a/46352119
+
+  const hasCssAnimation = elem => {
+    const style = window.getComputedStyle(elem);
+    const animDuration = parseFloat(style.getPropertyValue('animation-duration') || '0');
+    const transDuration = parseFloat(style.getPropertyValue('transition-duration') || '0');
+    return animDuration > 0 || transDuration > 0;
+  };
+  const animateTimerProgressBar = function (timer) {
+    let reset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    const timerProgressBar = getTimerProgressBar();
+
+    if (isVisible(timerProgressBar)) {
+      if (reset) {
+        timerProgressBar.style.transition = 'none';
+        timerProgressBar.style.width = '100%';
+      }
+
+      setTimeout(() => {
+        timerProgressBar.style.transition = "width ".concat(timer / 1000, "s linear");
+        timerProgressBar.style.width = '0%';
+      }, 10);
+    }
+  };
+  const stopTimerProgressBar = () => {
+    const timerProgressBar = getTimerProgressBar();
+    const timerProgressBarWidth = parseInt(window.getComputedStyle(timerProgressBar).width);
+    timerProgressBar.style.removeProperty('transition');
+    timerProgressBar.style.width = '100%';
+    const timerProgressBarFullWidth = parseInt(window.getComputedStyle(timerProgressBar).width);
+    const timerProgressBarPercent = timerProgressBarWidth / timerProgressBarFullWidth * 100;
+    timerProgressBar.style.removeProperty('transition');
+    timerProgressBar.style.width = "".concat(timerProgressBarPercent, "%");
+  };
+
+  /**
+   * Detect Node env
+   *
+   * @returns {boolean}
+   */
+  const isNodeEnv = () => typeof window === 'undefined' || typeof document === 'undefined';
+
+  const RESTORE_FOCUS_TIMEOUT = 100;
+
+  const globalState = {};
+
+  const focusPreviousActiveElement = () => {
+    if (globalState.previousActiveElement && globalState.previousActiveElement.focus) {
+      globalState.previousActiveElement.focus();
+      globalState.previousActiveElement = null;
+    } else if (document.body) {
+      document.body.focus();
+    }
+  }; // Restore previous active (focused) element
+
+
+  const restoreActiveElement = returnFocus => {
+    return new Promise(resolve => {
+      if (!returnFocus) {
+        return resolve();
+      }
+
+      const x = window.scrollX;
+      const y = window.scrollY;
+      globalState.restoreFocusTimeout = setTimeout(() => {
+        focusPreviousActiveElement();
+        resolve();
+      }, RESTORE_FOCUS_TIMEOUT); // issues/900
+
+      window.scrollTo(x, y);
+    });
+  };
+
+  const sweetHTML = "\n <div aria-labelledby=\"".concat(swalClasses.title, "\" aria-describedby=\"").concat(swalClasses['html-container'], "\" class=\"").concat(swalClasses.popup, "\" tabindex=\"-1\">\n   <button type=\"button\" class=\"").concat(swalClasses.close, "\"></button>\n   <ul class=\"").concat(swalClasses['progress-steps'], "\"></ul>\n   <div class=\"").concat(swalClasses.icon, "\"></div>\n   <img class=\"").concat(swalClasses.image, "\" />\n   <h2 class=\"").concat(swalClasses.title, "\" id=\"").concat(swalClasses.title, "\"></h2>\n   <div class=\"").concat(swalClasses['html-container'], "\" id=\"").concat(swalClasses['html-container'], "\"></div>\n   <input class=\"").concat(swalClasses.input, "\" />\n   <input type=\"file\" class=\"").concat(swalClasses.file, "\" />\n   <div class=\"").concat(swalClasses.range, "\">\n     <input type=\"range\" />\n     <output></output>\n   </div>\n   <select class=\"").concat(swalClasses.select, "\"></select>\n   <div class=\"").concat(swalClasses.radio, "\"></div>\n   <label for=\"").concat(swalClasses.checkbox, "\" class=\"").concat(swalClasses.checkbox, "\">\n     <input type=\"checkbox\" />\n     <span class=\"").concat(swalClasses.label, "\"></span>\n   </label>\n   <textarea class=\"").concat(swalClasses.textarea, "\"></textarea>\n   <div class=\"").concat(swalClasses['validation-message'], "\" id=\"").concat(swalClasses['validation-message'], "\"></div>\n   <div class=\"").concat(swalClasses.actions, "\">\n     <div class=\"").concat(swalClasses.loader, "\"></div>\n     <button type=\"button\" class=\"").concat(swalClasses.confirm, "\"></button>\n     <button type=\"button\" class=\"").concat(swalClasses.deny, "\"></button>\n     <button type=\"button\" class=\"").concat(swalClasses.cancel, "\"></button>\n   </div>\n   <div class=\"").concat(swalClasses.footer, "\"></div>\n   <div class=\"").concat(swalClasses['timer-progress-bar-container'], "\">\n     <div class=\"").concat(swalClasses['timer-progress-bar'], "\"></div>\n   </div>\n </div>\n").replace(/(^|\n)\s*/g, '');
+
+  const resetOldContainer = () => {
+    const oldContainer = getContainer();
+
+    if (!oldContainer) {
+      return false;
+    }
+
+    oldContainer.remove();
+    removeClass([document.documentElement, document.body], [swalClasses['no-backdrop'], swalClasses['toast-shown'], swalClasses['has-column']]);
+    return true;
+  };
+
+  const resetValidationMessage = () => {
+    globalState.currentInstance.resetValidationMessage();
+  };
+
+  const addInputChangeListeners = () => {
+    const popup = getPopup();
+    const input = getDirectChildByClass(popup, swalClasses.input);
+    const file = getDirectChildByClass(popup, swalClasses.file);
+    const range = popup.querySelector(".".concat(swalClasses.range, " input"));
+    const rangeOutput = popup.querySelector(".".concat(swalClasses.range, " output"));
+    const select = getDirectChildByClass(popup, swalClasses.select);
+    const checkbox = popup.querySelector(".".concat(swalClasses.checkbox, " input"));
+    const textarea = getDirectChildByClass(popup, swalClasses.textarea);
+    input.oninput = resetValidationMessage;
+    file.onchange = resetValidationMessage;
+    select.onchange = resetValidationMessage;
+    checkbox.onchange = resetValidationMessage;
+    textarea.oninput = resetValidationMessage;
+
+    range.oninput = () => {
+      resetValidationMessage();
+      rangeOutput.value = range.value;
+    };
+
+    range.onchange = () => {
+      resetValidationMessage();
+      range.nextSibling.value = range.value;
+    };
+  };
+
+  const getTarget = target => typeof target === 'string' ? document.querySelector(target) : target;
+
+  const setupAccessibility = params => {
+    const popup = getPopup();
+    popup.setAttribute('role', params.toast ? 'alert' : 'dialog');
+    popup.setAttribute('aria-live', params.toast ? 'polite' : 'assertive');
+
+    if (!params.toast) {
+      popup.setAttribute('aria-modal', 'true');
+    }
+  };
+
+  const setupRTL = targetElement => {
+    if (window.getComputedStyle(targetElement).direction === 'rtl') {
+      addClass(getContainer(), swalClasses.rtl);
+    }
+  };
+  /*
+   * Add modal + backdrop to DOM
+   */
+
+
+  const init = params => {
+    // Clean up the old popup container if it exists
+    const oldContainerExisted = resetOldContainer();
+    /* istanbul ignore if */
+
+    if (isNodeEnv()) {
+      error('SweetAlert2 requires document to initialize');
+      return;
+    }
+
+    const container = document.createElement('div');
+    container.className = swalClasses.container;
+
+    if (oldContainerExisted) {
+      addClass(container, swalClasses['no-transition']);
+    }
+
+    setInnerHtml(container, sweetHTML);
+    const targetElement = getTarget(params.target);
+    targetElement.appendChild(container);
+    setupAccessibility(params);
+    setupRTL(targetElement);
+    addInputChangeListeners();
+  };
+
+  /**
+   * @param {HTMLElement | object | string} param
+   * @param {HTMLElement} target
+   */
+
+  const parseHtmlToContainer = (param, target) => {
+    // DOM element
+    if (param instanceof HTMLElement) {
+      target.appendChild(param);
+    } // Object
+    else if (typeof param === 'object') {
+      handleObject(param, target);
+    } // Plain string
+    else if (param) {
+      setInnerHtml(target, param);
+    }
+  };
+  /**
+   * @param {object} param
+   * @param {HTMLElement} target
+   */
+
+  const handleObject = (param, target) => {
+    // JQuery element(s)
+    if (param.jquery) {
+      handleJqueryElem(target, param);
+    } // For other objects use their string representation
+    else {
+      setInnerHtml(target, param.toString());
+    }
+  };
+
+  const handleJqueryElem = (target, elem) => {
+    target.textContent = '';
+
+    if (0 in elem) {
+      for (let i = 0; (i in elem); i++) {
+        target.appendChild(elem[i].cloneNode(true));
+      }
+    } else {
+      target.appendChild(elem.cloneNode(true));
+    }
+  };
+
+  const animationEndEvent = (() => {
+    // Prevent run in Node env
+
+    /* istanbul ignore if */
+    if (isNodeEnv()) {
+      return false;
+    }
+
+    const testEl = document.createElement('div');
+    const transEndEventNames = {
+      WebkitAnimation: 'webkitAnimationEnd',
+      // Chrome, Safari and Opera
+      animation: 'animationend' // Standard syntax
+
+    };
+
+    for (const i in transEndEventNames) {
+      if (Object.prototype.hasOwnProperty.call(transEndEventNames, i) && typeof testEl.style[i] !== 'undefined') {
+        return transEndEventNames[i];
+      }
+    }
+
+    return false;
+  })();
+
+  // https://github.com/twbs/bootstrap/blob/master/js/src/modal.js
+
+  const measureScrollbar = () => {
+    const scrollDiv = document.createElement('div');
+    scrollDiv.className = swalClasses['scrollbar-measure'];
+    document.body.appendChild(scrollDiv);
+    const scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth;
+    document.body.removeChild(scrollDiv);
+    return scrollbarWidth;
+  };
+
+  const renderActions = (instance, params) => {
+    const actions = getActions();
+    const loader = getLoader(); // Actions (buttons) wrapper
+
+    if (!params.showConfirmButton && !params.showDenyButton && !params.showCancelButton) {
+      hide(actions);
+    } else {
+      show(actions);
+    } // Custom class
+
+
+    applyCustomClass(actions, params, 'actions'); // Render all the buttons
+
+    renderButtons(actions, loader, params); // Loader
+
+    setInnerHtml(loader, params.loaderHtml);
+    applyCustomClass(loader, params, 'loader');
+  };
+
+  function renderButtons(actions, loader, params) {
+    const confirmButton = getConfirmButton();
+    const denyButton = getDenyButton();
+    const cancelButton = getCancelButton(); // Render buttons
+
+    renderButton(confirmButton, 'confirm', params);
+    renderButton(denyButton, 'deny', params);
+    renderButton(cancelButton, 'cancel', params);
+    handleButtonsStyling(confirmButton, denyButton, cancelButton, params);
+
+    if (params.reverseButtons) {
+      if (params.toast) {
+        actions.insertBefore(cancelButton, confirmButton);
+        actions.insertBefore(denyButton, confirmButton);
+      } else {
+        actions.insertBefore(cancelButton, loader);
+        actions.insertBefore(denyButton, loader);
+        actions.insertBefore(confirmButton, loader);
+      }
+    }
+  }
+
+  function handleButtonsStyling(confirmButton, denyButton, cancelButton, params) {
+    if (!params.buttonsStyling) {
+      return removeClass([confirmButton, denyButton, cancelButton], swalClasses.styled);
+    }
+
+    addClass([confirmButton, denyButton, cancelButton], swalClasses.styled); // Buttons background colors
+
+    if (params.confirmButtonColor) {
+      confirmButton.style.backgroundColor = params.confirmButtonColor;
+      addClass(confirmButton, swalClasses['default-outline']);
+    }
+
+    if (params.denyButtonColor) {
+      denyButton.style.backgroundColor = params.denyButtonColor;
+      addClass(denyButton, swalClasses['default-outline']);
+    }
+
+    if (params.cancelButtonColor) {
+      cancelButton.style.backgroundColor = params.cancelButtonColor;
+      addClass(cancelButton, swalClasses['default-outline']);
+    }
+  }
+
+  function renderButton(button, buttonType, params) {
+    toggle(button, params["show".concat(capitalizeFirstLetter(buttonType), "Button")], 'inline-block');
+    setInnerHtml(button, params["".concat(buttonType, "ButtonText")]); // Set caption text
+
+    button.setAttribute('aria-label', params["".concat(buttonType, "ButtonAriaLabel")]); // ARIA label
+    // Add buttons custom classes
+
+    button.className = swalClasses[buttonType];
+    applyCustomClass(button, params, "".concat(buttonType, "Button"));
+    addClass(button, params["".concat(buttonType, "ButtonClass")]);
+  }
+
+  function handleBackdropParam(container, backdrop) {
+    if (typeof backdrop === 'string') {
+      container.style.background = backdrop;
+    } else if (!backdrop) {
+      addClass([document.documentElement, document.body], swalClasses['no-backdrop']);
+    }
+  }
+
+  function handlePositionParam(container, position) {
+    if (position in swalClasses) {
+      addClass(container, swalClasses[position]);
+    } else {
+      warn('The "position" parameter is not valid, defaulting to "center"');
+      addClass(container, swalClasses.center);
+    }
+  }
+
+  function handleGrowParam(container, grow) {
+    if (grow && typeof grow === 'string') {
+      const growClass = "grow-".concat(grow);
+
+      if (growClass in swalClasses) {
+        addClass(container, swalClasses[growClass]);
+      }
+    }
+  }
+
+  const renderContainer = (instance, params) => {
+    const container = getContainer();
+
+    if (!container) {
+      return;
+    }
+
+    handleBackdropParam(container, params.backdrop);
+    handlePositionParam(container, params.position);
+    handleGrowParam(container, params.grow); // Custom class
+
+    applyCustomClass(container, params, 'container');
+  };
+
+  /**
+   * This module contains `WeakMap`s for each effectively-"private  property" that a `Swal` has.
+   * For example, to set the private property "foo" of `this` to "bar", you can `privateProps.foo.set(this, 'bar')`
+   * This is the approach that Babel will probably take to implement private methods/fields
+   *   https://github.com/tc39/proposal-private-methods
+   *   https://github.com/babel/babel/pull/7555
+   * Once we have the changes from that PR in Babel, and our core class fits reasonable in *one module*
+   *   then we can use that language feature.
+   */
+  var privateProps = {
+    awaitingPromise: new WeakMap(),
+    promise: new WeakMap(),
+    innerParams: new WeakMap(),
+    domCache: new WeakMap()
+  };
+
+  const inputTypes = ['input', 'file', 'range', 'select', 'radio', 'checkbox', 'textarea'];
+  const renderInput = (instance, params) => {
+    const popup = getPopup();
+    const innerParams = privateProps.innerParams.get(instance);
+    const rerender = !innerParams || params.input !== innerParams.input;
+    inputTypes.forEach(inputType => {
+      const inputClass = swalClasses[inputType];
+      const inputContainer = getDirectChildByClass(popup, inputClass); // set attributes
+
+      setAttributes(inputType, params.inputAttributes); // set class
+
+      inputContainer.className = inputClass;
+
+      if (rerender) {
+        hide(inputContainer);
+      }
+    });
+
+    if (params.input) {
+      if (rerender) {
+        showInput(params);
+      } // set custom class
+
+
+      setCustomClass(params);
+    }
+  };
+
+  const showInput = params => {
+    if (!renderInputType[params.input]) {
+      return error("Unexpected type of input! Expected \"text\", \"email\", \"password\", \"number\", \"tel\", \"select\", \"radio\", \"checkbox\", \"textarea\", \"file\" or \"url\", got \"".concat(params.input, "\""));
+    }
+
+    const inputContainer = getInputContainer(params.input);
+    const input = renderInputType[params.input](inputContainer, params);
+    show(input); // input autofocus
+
+    setTimeout(() => {
+      focusInput(input);
+    });
+  };
+
+  const removeAttributes = input => {
+    for (let i = 0; i < input.attributes.length; i++) {
+      const attrName = input.attributes[i].name;
+
+      if (!['type', 'value', 'style'].includes(attrName)) {
+        input.removeAttribute(attrName);
+      }
+    }
+  };
+
+  const setAttributes = (inputType, inputAttributes) => {
+    const input = getInput(getPopup(), inputType);
+
+    if (!input) {
+      return;
+    }
+
+    removeAttributes(input);
+
+    for (const attr in inputAttributes) {
+      input.setAttribute(attr, inputAttributes[attr]);
+    }
+  };
+
+  const setCustomClass = params => {
+    const inputContainer = getInputContainer(params.input);
+
+    if (params.customClass) {
+      addClass(inputContainer, params.customClass.input);
+    }
+  };
+
+  const setInputPlaceholder = (input, params) => {
+    if (!input.placeholder || params.inputPlaceholder) {
+      input.placeholder = params.inputPlaceholder;
+    }
+  };
+
+  const setInputLabel = (input, prependTo, params) => {
+    if (params.inputLabel) {
+      input.id = swalClasses.input;
+      const label = document.createElement('label');
+      const labelClass = swalClasses['input-label'];
+      label.setAttribute('for', input.id);
+      label.className = labelClass;
+      addClass(label, params.customClass.inputLabel);
+      label.innerText = params.inputLabel;
+      prependTo.insertAdjacentElement('beforebegin', label);
+    }
+  };
+
+  const getInputContainer = inputType => {
+    const inputClass = swalClasses[inputType] ? swalClasses[inputType] : swalClasses.input;
+    return getDirectChildByClass(getPopup(), inputClass);
+  };
+
+  const renderInputType = {};
+
+  renderInputType.text = renderInputType.email = renderInputType.password = renderInputType.number = renderInputType.tel = renderInputType.url = (input, params) => {
+    if (typeof params.inputValue === 'string' || typeof params.inputValue === 'number') {
+      input.value = params.inputValue;
+    } else if (!isPromise(params.inputValue)) {
+      warn("Unexpected type of inputValue! Expected \"string\", \"number\" or \"Promise\", got \"".concat(typeof params.inputValue, "\""));
+    }
+
+    setInputLabel(input, input, params);
+    setInputPlaceholder(input, params);
+    input.type = params.input;
+    return input;
+  };
+
+  renderInputType.file = (input, params) => {
+    setInputLabel(input, input, params);
+    setInputPlaceholder(input, params);
+    return input;
+  };
+
+  renderInputType.range = (range, params) => {
+    const rangeInput = range.querySelector('input');
+    const rangeOutput = range.querySelector('output');
+    rangeInput.value = params.inputValue;
+    rangeInput.type = params.input;
+    rangeOutput.value = params.inputValue;
+    setInputLabel(rangeInput, range, params);
+    return range;
+  };
+
+  renderInputType.select = (select, params) => {
+    select.textContent = '';
+
+    if (params.inputPlaceholder) {
+      const placeholder = document.createElement('option');
+      setInnerHtml(placeholder, params.inputPlaceholder);
+      placeholder.value = '';
+      placeholder.disabled = true;
+      placeholder.selected = true;
+      select.appendChild(placeholder);
+    }
+
+    setInputLabel(select, select, params);
+    return select;
+  };
+
+  renderInputType.radio = radio => {
+    radio.textContent = '';
+    return radio;
+  };
+
+  renderInputType.checkbox = (checkboxContainer, params) => {
+    /** @type {HTMLInputElement} */
+    const checkbox = getInput(getPopup(), 'checkbox');
+    checkbox.value = '1';
+    checkbox.id = swalClasses.checkbox;
+    checkbox.checked = Boolean(params.inputValue);
+    const label = checkboxContainer.querySelector('span');
+    setInnerHtml(label, params.inputPlaceholder);
+    return checkboxContainer;
+  };
+
+  renderInputType.textarea = (textarea, params) => {
+    textarea.value = params.inputValue;
+    setInputPlaceholder(textarea, params);
+    setInputLabel(textarea, textarea, params);
+
+    const getMargin = el => parseInt(window.getComputedStyle(el).marginLeft) + parseInt(window.getComputedStyle(el).marginRight); // https://github.com/sweetalert2/sweetalert2/issues/2291
+
+
+    setTimeout(() => {
+      // https://github.com/sweetalert2/sweetalert2/issues/1699
+      if ('MutationObserver' in window) {
+        const initialPopupWidth = parseInt(window.getComputedStyle(getPopup()).width);
+
+        const textareaResizeHandler = () => {
+          const textareaWidth = textarea.offsetWidth + getMargin(textarea);
+
+          if (textareaWidth > initialPopupWidth) {
+            getPopup().style.width = "".concat(textareaWidth, "px");
+          } else {
+            getPopup().style.width = null;
+          }
+        };
+
+        new MutationObserver(textareaResizeHandler).observe(textarea, {
+          attributes: true,
+          attributeFilter: ['style']
+        });
+      }
+    });
+    return textarea;
+  };
+
+  const renderContent = (instance, params) => {
+    const htmlContainer = getHtmlContainer();
+    applyCustomClass(htmlContainer, params, 'htmlContainer'); // Content as HTML
+
+    if (params.html) {
+      parseHtmlToContainer(params.html, htmlContainer);
+      show(htmlContainer, 'block');
+    } // Content as plain text
+    else if (params.text) {
+      htmlContainer.textContent = params.text;
+      show(htmlContainer, 'block');
+    } // No content
+    else {
+      hide(htmlContainer);
+    }
+
+    renderInput(instance, params);
+  };
+
+  const renderFooter = (instance, params) => {
+    const footer = getFooter();
+    toggle(footer, params.footer);
+
+    if (params.footer) {
+      parseHtmlToContainer(params.footer, footer);
+    } // Custom class
+
+
+    applyCustomClass(footer, params, 'footer');
+  };
+
+  const renderCloseButton = (instance, params) => {
+    const closeButton = getCloseButton();
+    setInnerHtml(closeButton, params.closeButtonHtml); // Custom class
+
+    applyCustomClass(closeButton, params, 'closeButton');
+    toggle(closeButton, params.showCloseButton);
+    closeButton.setAttribute('aria-label', params.closeButtonAriaLabel);
+  };
+
+  const renderIcon = (instance, params) => {
+    const innerParams = privateProps.innerParams.get(instance);
+    const icon = getIcon(); // if the given icon already rendered, apply the styling without re-rendering the icon
+
+    if (innerParams && params.icon === innerParams.icon) {
+      // Custom or default content
+      setContent(icon, params);
+      applyStyles(icon, params);
+      return;
+    }
+
+    if (!params.icon && !params.iconHtml) {
+      return hide(icon);
+    }
+
+    if (params.icon && Object.keys(iconTypes).indexOf(params.icon) === -1) {
+      error("Unknown icon! Expected \"success\", \"error\", \"warning\", \"info\" or \"question\", got \"".concat(params.icon, "\""));
+      return hide(icon);
+    }
+
+    show(icon); // Custom or default content
+
+    setContent(icon, params);
+    applyStyles(icon, params); // Animate icon
+
+    addClass(icon, params.showClass.icon);
+  };
+
+  const applyStyles = (icon, params) => {
+    for (const iconType in iconTypes) {
+      if (params.icon !== iconType) {
+        removeClass(icon, iconTypes[iconType]);
+      }
+    }
+
+    addClass(icon, iconTypes[params.icon]); // Icon color
+
+    setColor(icon, params); // Success icon background color
+
+    adjustSuccessIconBackgroundColor(); // Custom class
+
+    applyCustomClass(icon, params, 'icon');
+  }; // Adjust success icon background color to match the popup background color
+
+
+  const adjustSuccessIconBackgroundColor = () => {
+    const popup = getPopup();
+    const popupBackgroundColor = window.getComputedStyle(popup).getPropertyValue('background-color');
+    const successIconParts = popup.querySelectorAll('[class^=swal2-success-circular-line], .swal2-success-fix');
+
+    for (let i = 0; i < successIconParts.length; i++) {
+      successIconParts[i].style.backgroundColor = popupBackgroundColor;
+    }
+  };
+
+  const successIconHtml = "\n  <div class=\"swal2-success-circular-line-left\"></div>\n  <span class=\"swal2-success-line-tip\"></span> <span class=\"swal2-success-line-long\"></span>\n  <div class=\"swal2-success-ring\"></div> <div class=\"swal2-success-fix\"></div>\n  <div class=\"swal2-success-circular-line-right\"></div>\n";
+  const errorIconHtml = "\n  <span class=\"swal2-x-mark\">\n    <span class=\"swal2-x-mark-line-left\"></span>\n    <span class=\"swal2-x-mark-line-right\"></span>\n  </span>\n";
+
+  const setContent = (icon, params) => {
+    icon.textContent = '';
+
+    if (params.iconHtml) {
+      setInnerHtml(icon, iconContent(params.iconHtml));
+    } else if (params.icon === 'success') {
+      setInnerHtml(icon, successIconHtml);
+    } else if (params.icon === 'error') {
+      setInnerHtml(icon, errorIconHtml);
+    } else {
+      const defaultIconHtml = {
+        question: '?',
+        warning: '!',
+        info: 'i'
+      };
+      setInnerHtml(icon, iconContent(defaultIconHtml[params.icon]));
+    }
+  };
+
+  const setColor = (icon, params) => {
+    if (!params.iconColor) {
+      return;
+    }
+
+    icon.style.color = params.iconColor;
+    icon.style.borderColor = params.iconColor;
+
+    for (const sel of ['.swal2-success-line-tip', '.swal2-success-line-long', '.swal2-x-mark-line-left', '.swal2-x-mark-line-right']) {
+      setStyle(icon, sel, 'backgroundColor', params.iconColor);
+    }
+
+    setStyle(icon, '.swal2-success-ring', 'borderColor', params.iconColor);
+  };
+
+  const iconContent = content => "<div class=\"".concat(swalClasses['icon-content'], "\">").concat(content, "</div>");
+
+  const renderImage = (instance, params) => {
+    const image = getImage();
+
+    if (!params.imageUrl) {
+      return hide(image);
+    }
+
+    show(image, ''); // Src, alt
+
+    image.setAttribute('src', params.imageUrl);
+    image.setAttribute('alt', params.imageAlt); // Width, height
+
+    applyNumericalStyle(image, 'width', params.imageWidth);
+    applyNumericalStyle(image, 'height', params.imageHeight); // Class
+
+    image.className = swalClasses.image;
+    applyCustomClass(image, params, 'image');
+  };
+
+  const createStepElement = step => {
+    const stepEl = document.createElement('li');
+    addClass(stepEl, swalClasses['progress-step']);
+    setInnerHtml(stepEl, step);
+    return stepEl;
+  };
+
+  const createLineElement = params => {
+    const lineEl = document.createElement('li');
+    addClass(lineEl, swalClasses['progress-step-line']);
+
+    if (params.progressStepsDistance) {
+      lineEl.style.width = params.progressStepsDistance;
+    }
+
+    return lineEl;
+  };
+
+  const renderProgressSteps = (instance, params) => {
+    const progressStepsContainer = getProgressSteps();
+
+    if (!params.progressSteps || params.progressSteps.length === 0) {
+      return hide(progressStepsContainer);
+    }
+
+    show(progressStepsContainer);
+    progressStepsContainer.textContent = '';
+
+    if (params.currentProgressStep >= params.progressSteps.length) {
+      warn('Invalid currentProgressStep parameter, it should be less than progressSteps.length ' + '(currentProgressStep like JS arrays starts from 0)');
+    }
+
+    params.progressSteps.forEach((step, index) => {
+      const stepEl = createStepElement(step);
+      progressStepsContainer.appendChild(stepEl);
+
+      if (index === params.currentProgressStep) {
+        addClass(stepEl, swalClasses['active-progress-step']);
+      }
+
+      if (index !== params.progressSteps.length - 1) {
+        const lineEl = createLineElement(params);
+        progressStepsContainer.appendChild(lineEl);
+      }
+    });
+  };
+
+  const renderTitle = (instance, params) => {
+    const title = getTitle();
+    toggle(title, params.title || params.titleText, 'block');
+
+    if (params.title) {
+      parseHtmlToContainer(params.title, title);
+    }
+
+    if (params.titleText) {
+      title.innerText = params.titleText;
+    } // Custom class
+
+
+    applyCustomClass(title, params, 'title');
+  };
+
+  const renderPopup = (instance, params) => {
+    const container = getContainer();
+    const popup = getPopup(); // Width
+    // https://github.com/sweetalert2/sweetalert2/issues/2170
+
+    if (params.toast) {
+      applyNumericalStyle(container, 'width', params.width);
+      popup.style.width = '100%';
+      popup.insertBefore(getLoader(), getIcon());
+    } else {
+      applyNumericalStyle(popup, 'width', params.width);
+    } // Padding
+
+
+    applyNumericalStyle(popup, 'padding', params.padding); // Color
+
+    if (params.color) {
+      popup.style.color = params.color;
+    } // Background
+
+
+    if (params.background) {
+      popup.style.background = params.background;
+    }
+
+    hide(getValidationMessage()); // Classes
+
+    addClasses(popup, params);
+  };
+
+  const addClasses = (popup, params) => {
+    // Default Class + showClass when updating Swal.update({})
+    popup.className = "".concat(swalClasses.popup, " ").concat(isVisible(popup) ? params.showClass.popup : '');
+
+    if (params.toast) {
+      addClass([document.documentElement, document.body], swalClasses['toast-shown']);
+      addClass(popup, swalClasses.toast);
+    } else {
+      addClass(popup, swalClasses.modal);
+    } // Custom class
+
+
+    applyCustomClass(popup, params, 'popup');
+
+    if (typeof params.customClass === 'string') {
+      addClass(popup, params.customClass);
+    } // Icon class (#1842)
+
+
+    if (params.icon) {
+      addClass(popup, swalClasses["icon-".concat(params.icon)]);
+    }
+  };
+
+  const render = (instance, params) => {
+    renderPopup(instance, params);
+    renderContainer(instance, params);
+    renderProgressSteps(instance, params);
+    renderIcon(instance, params);
+    renderImage(instance, params);
+    renderTitle(instance, params);
+    renderCloseButton(instance, params);
+    renderContent(instance, params);
+    renderActions(instance, params);
+    renderFooter(instance, params);
+
+    if (typeof params.didRender === 'function') {
+      params.didRender(getPopup());
+    }
+  };
+
+  const DismissReason = Object.freeze({
+    cancel: 'cancel',
+    backdrop: 'backdrop',
+    close: 'close',
+    esc: 'esc',
+    timer: 'timer'
+  });
+
+  // Adding aria-hidden="true" to elements outside of the active modal dialog ensures that
+  // elements not within the active modal dialog will not be surfaced if a user opens a screen
+  // reader’s list of elements (headings, form controls, landmarks, etc.) in the document.
+
+  const setAriaHidden = () => {
+    const bodyChildren = toArray(document.body.children);
+    bodyChildren.forEach(el => {
+      if (el === getContainer() || el.contains(getContainer())) {
+        return;
+      }
+
+      if (el.hasAttribute('aria-hidden')) {
+        el.setAttribute('data-previous-aria-hidden', el.getAttribute('aria-hidden'));
+      }
+
+      el.setAttribute('aria-hidden', 'true');
+    });
+  };
+  const unsetAriaHidden = () => {
+    const bodyChildren = toArray(document.body.children);
+    bodyChildren.forEach(el => {
+      if (el.hasAttribute('data-previous-aria-hidden')) {
+        el.setAttribute('aria-hidden', el.getAttribute('data-previous-aria-hidden'));
+        el.removeAttribute('data-previous-aria-hidden');
+      } else {
+        el.removeAttribute('aria-hidden');
+      }
+    });
+  };
+
+  const swalStringParams = ['swal-title', 'swal-html', 'swal-footer'];
+  const getTemplateParams = params => {
+    const template = typeof params.template === 'string' ? document.querySelector(params.template) : params.template;
+
+    if (!template) {
+      return {};
+    }
+    /** @type {DocumentFragment} */
+
+
+    const templateContent = template.content;
+    showWarningsForElements(templateContent);
+    const result = Object.assign(getSwalParams(templateContent), getSwalButtons(templateContent), getSwalImage(templateContent), getSwalIcon(templateContent), getSwalInput(templateContent), getSwalStringParams(templateContent, swalStringParams));
+    return result;
+  };
+  /**
+   * @param {DocumentFragment} templateContent
+   */
+
+  const getSwalParams = templateContent => {
+    const result = {};
+    toArray(templateContent.querySelectorAll('swal-param')).forEach(param => {
+      showWarningsForAttributes(param, ['name', 'value']);
+      const paramName = param.getAttribute('name');
+      const value = param.getAttribute('value');
+
+      if (typeof defaultParams[paramName] === 'boolean' && value === 'false') {
+        result[paramName] = false;
+      }
+
+      if (typeof defaultParams[paramName] === 'object') {
+        result[paramName] = JSON.parse(value);
+      }
+    });
+    return result;
+  };
+  /**
+   * @param {DocumentFragment} templateContent
+   */
+
+
+  const getSwalButtons = templateContent => {
+    const result = {};
+    toArray(templateContent.querySelectorAll('swal-button')).forEach(button => {
+      showWarningsForAttributes(button, ['type', 'color', 'aria-label']);
+      const type = button.getAttribute('type');
+      result["".concat(type, "ButtonText")] = button.innerHTML;
+      result["show".concat(capitalizeFirstLetter(type), "Button")] = true;
+
+      if (button.hasAttribute('color')) {
+        result["".concat(type, "ButtonColor")] = button.getAttribute('color');
+      }
+
+      if (button.hasAttribute('aria-label')) {
+        result["".concat(type, "ButtonAriaLabel")] = button.getAttribute('aria-label');
+      }
+    });
+    return result;
+  };
+  /**
+   * @param {DocumentFragment} templateContent
+   */
+
+
+  const getSwalImage = templateContent => {
+    const result = {};
+    /** @type {HTMLElement} */
+
+    const image = templateContent.querySelector('swal-image');
+
+    if (image) {
+      showWarningsForAttributes(image, ['src', 'width', 'height', 'alt']);
+
+      if (image.hasAttribute('src')) {
+        result.imageUrl = image.getAttribute('src');
+      }
+
+      if (image.hasAttribute('width')) {
+        result.imageWidth = image.getAttribute('width');
+      }
+
+      if (image.hasAttribute('height')) {
+        result.imageHeight = image.getAttribute('height');
+      }
+
+      if (image.hasAttribute('alt')) {
+        result.imageAlt = image.getAttribute('alt');
+      }
+    }
+
+    return result;
+  };
+  /**
+   * @param {DocumentFragment} templateContent
+   */
+
+
+  const getSwalIcon = templateContent => {
+    const result = {};
+    /** @type {HTMLElement} */
+
+    const icon = templateContent.querySelector('swal-icon');
+
+    if (icon) {
+      showWarningsForAttributes(icon, ['type', 'color']);
+
+      if (icon.hasAttribute('type')) {
+        result.icon = icon.getAttribute('type');
+      }
+
+      if (icon.hasAttribute('color')) {
+        result.iconColor = icon.getAttribute('color');
+      }
+
+      result.iconHtml = icon.innerHTML;
+    }
+
+    return result;
+  };
+  /**
+   * @param {DocumentFragment} templateContent
+   */
+
+
+  const getSwalInput = templateContent => {
+    const result = {};
+    /** @type {HTMLElement} */
+
+    const input = templateContent.querySelector('swal-input');
+
+    if (input) {
+      showWarningsForAttributes(input, ['type', 'label', 'placeholder', 'value']);
+      result.input = input.getAttribute('type') || 'text';
+
+      if (input.hasAttribute('label')) {
+        result.inputLabel = input.getAttribute('label');
+      }
+
+      if (input.hasAttribute('placeholder')) {
+        result.inputPlaceholder = input.getAttribute('placeholder');
+      }
+
+      if (input.hasAttribute('value')) {
+        result.inputValue = input.getAttribute('value');
+      }
+    }
+
+    const inputOptions = templateContent.querySelectorAll('swal-input-option');
+
+    if (inputOptions.length) {
+      result.inputOptions = {};
+      toArray(inputOptions).forEach(option => {
+        showWarningsForAttributes(option, ['value']);
+        const optionValue = option.getAttribute('value');
+        const optionName = option.innerHTML;
+        result.inputOptions[optionValue] = optionName;
+      });
+    }
+
+    return result;
+  };
+  /**
+   * @param {DocumentFragment} templateContent
+   * @param {string[]} paramNames
+   */
+
+
+  const getSwalStringParams = (templateContent, paramNames) => {
+    const result = {};
+
+    for (const i in paramNames) {
+      const paramName = paramNames[i];
+      /** @type {HTMLElement} */
+
+      const tag = templateContent.querySelector(paramName);
+
+      if (tag) {
+        showWarningsForAttributes(tag, []);
+        result[paramName.replace(/^swal-/, '')] = tag.innerHTML.trim();
+      }
+    }
+
+    return result;
+  };
+  /**
+   * @param {DocumentFragment} templateContent
+   */
+
+
+  const showWarningsForElements = templateContent => {
+    const allowedElements = swalStringParams.concat(['swal-param', 'swal-button', 'swal-image', 'swal-icon', 'swal-input', 'swal-input-option']);
+    toArray(templateContent.children).forEach(el => {
+      const tagName = el.tagName.toLowerCase();
+
+      if (allowedElements.indexOf(tagName) === -1) {
+        warn("Unrecognized element <".concat(tagName, ">"));
+      }
+    });
+  };
+  /**
+   * @param {HTMLElement} el
+   * @param {string[]} allowedAttributes
+   */
+
+
+  const showWarningsForAttributes = (el, allowedAttributes) => {
+    toArray(el.attributes).forEach(attribute => {
+      if (allowedAttributes.indexOf(attribute.name) === -1) {
+        warn(["Unrecognized attribute \"".concat(attribute.name, "\" on <").concat(el.tagName.toLowerCase(), ">."), "".concat(allowedAttributes.length ? "Allowed attributes are: ".concat(allowedAttributes.join(', ')) : 'To set the value, use HTML within the element.')]);
+      }
+    });
+  };
+
+  var defaultInputValidators = {
+    email: (string, validationMessage) => {
+      return /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]{2,24}$/.test(string) ? Promise.resolve() : Promise.resolve(validationMessage || 'Invalid email address');
+    },
+    url: (string, validationMessage) => {
+      // taken from https://stackoverflow.com/a/3809435 with a small change from #1306 and #2013
+      return /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,63}\b([-a-zA-Z0-9@:%_+.~#?&/=]*)$/.test(string) ? Promise.resolve() : Promise.resolve(validationMessage || 'Invalid URL');
+    }
+  };
+
+  function setDefaultInputValidators(params) {
+    // Use default `inputValidator` for supported input types if not provided
+    if (!params.inputValidator) {
+      Object.keys(defaultInputValidators).forEach(key => {
+        if (params.input === key) {
+          params.inputValidator = defaultInputValidators[key];
+        }
+      });
+    }
+  }
+
+  function validateCustomTargetElement(params) {
+    // Determine if the custom target element is valid
+    if (!params.target || typeof params.target === 'string' && !document.querySelector(params.target) || typeof params.target !== 'string' && !params.target.appendChild) {
+      warn('Target parameter is not valid, defaulting to "body"');
+      params.target = 'body';
+    }
+  }
+  /**
+   * Set type, text and actions on popup
+   *
+   * @param params
+   */
+
+
+  function setParameters(params) {
+    setDefaultInputValidators(params); // showLoaderOnConfirm && preConfirm
+
+    if (params.showLoaderOnConfirm && !params.preConfirm) {
+      warn('showLoaderOnConfirm is set to true, but preConfirm is not defined.\n' + 'showLoaderOnConfirm should be used together with preConfirm, see usage example:\n' + 'https://sweetalert2.github.io/#ajax-request');
+    }
+
+    validateCustomTargetElement(params); // Replace newlines with <br> in title
+
+    if (typeof params.title === 'string') {
+      params.title = params.title.split('\n').join('<br />');
+    }
+
+    init(params);
+  }
+
+  class Timer {
+    constructor(callback, delay) {
+      this.callback = callback;
+      this.remaining = delay;
+      this.running = false;
+      this.start();
+    }
+
+    start() {
+      if (!this.running) {
+        this.running = true;
+        this.started = new Date();
+        this.id = setTimeout(this.callback, this.remaining);
+      }
+
+      return this.remaining;
+    }
+
+    stop() {
+      if (this.running) {
+        this.running = false;
+        clearTimeout(this.id);
+        this.remaining -= new Date().getTime() - this.started.getTime();
+      }
+
+      return this.remaining;
+    }
+
+    increase(n) {
+      const running = this.running;
+
+      if (running) {
+        this.stop();
+      }
+
+      this.remaining += n;
+
+      if (running) {
+        this.start();
+      }
+
+      return this.remaining;
+    }
+
+    getTimerLeft() {
+      if (this.running) {
+        this.stop();
+        this.start();
+      }
+
+      return this.remaining;
+    }
+
+    isRunning() {
+      return this.running;
+    }
+
+  }
+
+  const fixScrollbar = () => {
+    // for queues, do not do this more than once
+    if (states.previousBodyPadding !== null) {
+      return;
+    } // if the body has overflow
+
+
+    if (document.body.scrollHeight > window.innerHeight) {
+      // add padding so the content doesn't shift after removal of scrollbar
+      states.previousBodyPadding = parseInt(window.getComputedStyle(document.body).getPropertyValue('padding-right'));
+      document.body.style.paddingRight = "".concat(states.previousBodyPadding + measureScrollbar(), "px");
+    }
+  };
+  const undoScrollbar = () => {
+    if (states.previousBodyPadding !== null) {
+      document.body.style.paddingRight = "".concat(states.previousBodyPadding, "px");
+      states.previousBodyPadding = null;
+    }
+  };
+
+  /* istanbul ignore file */
+
+  const iOSfix = () => {
+    const iOS = // @ts-ignore
+    /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+
+    if (iOS && !hasClass(document.body, swalClasses.iosfix)) {
+      const offset = document.body.scrollTop;
+      document.body.style.top = "".concat(offset * -1, "px");
+      addClass(document.body, swalClasses.iosfix);
+      lockBodyScroll();
+      addBottomPaddingForTallPopups();
+    }
+  };
+  /**
+   * https://github.com/sweetalert2/sweetalert2/issues/1948
+   */
+
+  const addBottomPaddingForTallPopups = () => {
+    const ua = navigator.userAgent;
+    const iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
+    const webkit = !!ua.match(/WebKit/i);
+    const iOSSafari = iOS && webkit && !ua.match(/CriOS/i);
+
+    if (iOSSafari) {
+      const bottomPanelHeight = 44;
+
+      if (getPopup().scrollHeight > window.innerHeight - bottomPanelHeight) {
+        getContainer().style.paddingBottom = "".concat(bottomPanelHeight, "px");
+      }
+    }
+  };
+  /**
+   * https://github.com/sweetalert2/sweetalert2/issues/1246
+   */
+
+
+  const lockBodyScroll = () => {
+    const container = getContainer();
+    let preventTouchMove;
+
+    container.ontouchstart = e => {
+      preventTouchMove = shouldPreventTouchMove(e);
+    };
+
+    container.ontouchmove = e => {
+      if (preventTouchMove) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+  };
+
+  const shouldPreventTouchMove = event => {
+    const target = event.target;
+    const container = getContainer();
+
+    if (isStylus(event) || isZoom(event)) {
+      return false;
+    }
+
+    if (target === container) {
+      return true;
+    }
+
+    if (!isScrollable(container) && target.tagName !== 'INPUT' && // #1603
+    target.tagName !== 'TEXTAREA' && // #2266
+    !(isScrollable(getHtmlContainer()) && // #1944
+    getHtmlContainer().contains(target))) {
+      return true;
+    }
+
+    return false;
+  };
+  /**
+   * https://github.com/sweetalert2/sweetalert2/issues/1786
+   *
+   * @param {*} event
+   * @returns {boolean}
+   */
+
+
+  const isStylus = event => {
+    return event.touches && event.touches.length && event.touches[0].touchType === 'stylus';
+  };
+  /**
+   * https://github.com/sweetalert2/sweetalert2/issues/1891
+   *
+   * @param {TouchEvent} event
+   * @returns {boolean}
+   */
+
+
+  const isZoom = event => {
+    return event.touches && event.touches.length > 1;
+  };
+
+  const undoIOSfix = () => {
+    if (hasClass(document.body, swalClasses.iosfix)) {
+      const offset = parseInt(document.body.style.top, 10);
+      removeClass(document.body, swalClasses.iosfix);
+      document.body.style.top = '';
+      document.body.scrollTop = offset * -1;
+    }
+  };
+
+  const SHOW_CLASS_TIMEOUT = 10;
+  /**
+   * Open popup, add necessary classes and styles, fix scrollbar
+   *
+   * @param params
+   */
+
+  const openPopup = params => {
+    const container = getContainer();
+    const popup = getPopup();
+
+    if (typeof params.willOpen === 'function') {
+      params.willOpen(popup);
+    }
+
+    const bodyStyles = window.getComputedStyle(document.body);
+    const initialBodyOverflow = bodyStyles.overflowY;
+    addClasses$1(container, popup, params); // scrolling is 'hidden' until animation is done, after that 'auto'
+
+    setTimeout(() => {
+      setScrollingVisibility(container, popup);
+    }, SHOW_CLASS_TIMEOUT);
+
+    if (isModal()) {
+      fixScrollContainer(container, params.scrollbarPadding, initialBodyOverflow);
+      setAriaHidden();
+    }
+
+    if (!isToast() && !globalState.previousActiveElement) {
+      globalState.previousActiveElement = document.activeElement;
+    }
+
+    if (typeof params.didOpen === 'function') {
+      setTimeout(() => params.didOpen(popup));
+    }
+
+    removeClass(container, swalClasses['no-transition']);
+  };
+
+  const swalOpenAnimationFinished = event => {
+    const popup = getPopup();
+
+    if (event.target !== popup) {
+      return;
+    }
+
+    const container = getContainer();
+    popup.removeEventListener(animationEndEvent, swalOpenAnimationFinished);
+    container.style.overflowY = 'auto';
+  };
+
+  const setScrollingVisibility = (container, popup) => {
+    if (animationEndEvent && hasCssAnimation(popup)) {
+      container.style.overflowY = 'hidden';
+      popup.addEventListener(animationEndEvent, swalOpenAnimationFinished);
+    } else {
+      container.style.overflowY = 'auto';
+    }
+  };
+
+  const fixScrollContainer = (container, scrollbarPadding, initialBodyOverflow) => {
+    iOSfix();
+
+    if (scrollbarPadding && initialBodyOverflow !== 'hidden') {
+      fixScrollbar();
+    } // sweetalert2/issues/1247
+
+
+    setTimeout(() => {
+      container.scrollTop = 0;
+    });
+  };
+
+  const addClasses$1 = (container, popup, params) => {
+    addClass(container, params.showClass.backdrop); // this workaround with opacity is needed for https://github.com/sweetalert2/sweetalert2/issues/2059
+
+    popup.style.setProperty('opacity', '0', 'important');
+    show(popup, 'grid');
+    setTimeout(() => {
+      // Animate popup right after showing it
+      addClass(popup, params.showClass.popup); // and remove the opacity workaround
+
+      popup.style.removeProperty('opacity');
+    }, SHOW_CLASS_TIMEOUT); // 10ms in order to fix #2062
+
+    addClass([document.documentElement, document.body], swalClasses.shown);
+
+    if (params.heightAuto && params.backdrop && !params.toast) {
+      addClass([document.documentElement, document.body], swalClasses['height-auto']);
+    }
+  };
+
+  /**
+   * Shows loader (spinner), this is useful with AJAX requests.
+   * By default the loader be shown instead of the "Confirm" button.
+   */
+
+  const showLoading = buttonToReplace => {
+    let popup = getPopup();
+
+    if (!popup) {
+      new Swal(); // eslint-disable-line no-new
+    }
+
+    popup = getPopup();
+    const loader = getLoader();
+
+    if (isToast()) {
+      hide(getIcon());
+    } else {
+      replaceButton(popup, buttonToReplace);
+    }
+
+    show(loader);
+    popup.setAttribute('data-loading', true);
+    popup.setAttribute('aria-busy', true);
+    popup.focus();
+  };
+
+  const replaceButton = (popup, buttonToReplace) => {
+    const actions = getActions();
+    const loader = getLoader();
+
+    if (!buttonToReplace && isVisible(getConfirmButton())) {
+      buttonToReplace = getConfirmButton();
+    }
+
+    show(actions);
+
+    if (buttonToReplace) {
+      hide(buttonToReplace);
+      loader.setAttribute('data-button-to-replace', buttonToReplace.className);
+    }
+
+    loader.parentNode.insertBefore(loader, buttonToReplace);
+    addClass([popup, actions], swalClasses.loading);
+  };
+
+  const handleInputOptionsAndValue = (instance, params) => {
+    if (params.input === 'select' || params.input === 'radio') {
+      handleInputOptions(instance, params);
+    } else if (['text', 'email', 'number', 'tel', 'textarea'].includes(params.input) && (hasToPromiseFn(params.inputValue) || isPromise(params.inputValue))) {
+      showLoading(getConfirmButton());
+      handleInputValue(instance, params);
+    }
+  };
+  const getInputValue = (instance, innerParams) => {
+    const input = instance.getInput();
+
+    if (!input) {
+      return null;
+    }
+
+    switch (innerParams.input) {
+      case 'checkbox':
+        return getCheckboxValue(input);
+
+      case 'radio':
+        return getRadioValue(input);
+
+      case 'file':
+        return getFileValue(input);
+
+      default:
+        return innerParams.inputAutoTrim ? input.value.trim() : input.value;
+    }
+  };
+
+  const getCheckboxValue = input => input.checked ? 1 : 0;
+
+  const getRadioValue = input => input.checked ? input.value : null;
+
+  const getFileValue = input => input.files.length ? input.getAttribute('multiple') !== null ? input.files : input.files[0] : null;
+
+  const handleInputOptions = (instance, params) => {
+    const popup = getPopup();
+
+    const processInputOptions = inputOptions => populateInputOptions[params.input](popup, formatInputOptions(inputOptions), params);
+
+    if (hasToPromiseFn(params.inputOptions) || isPromise(params.inputOptions)) {
+      showLoading(getConfirmButton());
+      asPromise(params.inputOptions).then(inputOptions => {
+        instance.hideLoading();
+        processInputOptions(inputOptions);
+      });
+    } else if (typeof params.inputOptions === 'object') {
+      processInputOptions(params.inputOptions);
+    } else {
+      error("Unexpected type of inputOptions! Expected object, Map or Promise, got ".concat(typeof params.inputOptions));
+    }
+  };
+
+  const handleInputValue = (instance, params) => {
+    const input = instance.getInput();
+    hide(input);
+    asPromise(params.inputValue).then(inputValue => {
+      input.value = params.input === 'number' ? parseFloat(inputValue) || 0 : "".concat(inputValue);
+      show(input);
+      input.focus();
+      instance.hideLoading();
+    }).catch(err => {
+      error("Error in inputValue promise: ".concat(err));
+      input.value = '';
+      show(input);
+      input.focus();
+      instance.hideLoading();
+    });
+  };
+
+  const populateInputOptions = {
+    select: (popup, inputOptions, params) => {
+      const select = getDirectChildByClass(popup, swalClasses.select);
+
+      const renderOption = (parent, optionLabel, optionValue) => {
+        const option = document.createElement('option');
+        option.value = optionValue;
+        setInnerHtml(option, optionLabel);
+        option.selected = isSelected(optionValue, params.inputValue);
+        parent.appendChild(option);
+      };
+
+      inputOptions.forEach(inputOption => {
+        const optionValue = inputOption[0];
+        const optionLabel = inputOption[1]; // <optgroup> spec:
+        // https://www.w3.org/TR/html401/interact/forms.html#h-17.6
+        // "...all OPTGROUP elements must be specified directly within a SELECT element (i.e., groups may not be nested)..."
+        // check whether this is a <optgroup>
+
+        if (Array.isArray(optionLabel)) {
+          // if it is an array, then it is an <optgroup>
+          const optgroup = document.createElement('optgroup');
+          optgroup.label = optionValue;
+          optgroup.disabled = false; // not configurable for now
+
+          select.appendChild(optgroup);
+          optionLabel.forEach(o => renderOption(optgroup, o[1], o[0]));
+        } else {
+          // case of <option>
+          renderOption(select, optionLabel, optionValue);
+        }
+      });
+      select.focus();
+    },
+    radio: (popup, inputOptions, params) => {
+      const radio = getDirectChildByClass(popup, swalClasses.radio);
+      inputOptions.forEach(inputOption => {
+        const radioValue = inputOption[0];
+        const radioLabel = inputOption[1];
+        const radioInput = document.createElement('input');
+        const radioLabelElement = document.createElement('label');
+        radioInput.type = 'radio';
+        radioInput.name = swalClasses.radio;
+        radioInput.value = radioValue;
+
+        if (isSelected(radioValue, params.inputValue)) {
+          radioInput.checked = true;
+        }
+
+        const label = document.createElement('span');
+        setInnerHtml(label, radioLabel);
+        label.className = swalClasses.label;
+        radioLabelElement.appendChild(radioInput);
+        radioLabelElement.appendChild(label);
+        radio.appendChild(radioLabelElement);
+      });
+      const radios = radio.querySelectorAll('input');
+
+      if (radios.length) {
+        radios[0].focus();
+      }
+    }
+  };
+  /**
+   * Converts `inputOptions` into an array of `[value, label]`s
+   * @param inputOptions
+   */
+
+  const formatInputOptions = inputOptions => {
+    const result = [];
+
+    if (typeof Map !== 'undefined' && inputOptions instanceof Map) {
+      inputOptions.forEach((value, key) => {
+        let valueFormatted = value;
+
+        if (typeof valueFormatted === 'object') {
+          // case of <optgroup>
+          valueFormatted = formatInputOptions(valueFormatted);
+        }
+
+        result.push([key, valueFormatted]);
+      });
+    } else {
+      Object.keys(inputOptions).forEach(key => {
+        let valueFormatted = inputOptions[key];
+
+        if (typeof valueFormatted === 'object') {
+          // case of <optgroup>
+          valueFormatted = formatInputOptions(valueFormatted);
+        }
+
+        result.push([key, valueFormatted]);
+      });
+    }
+
+    return result;
+  };
+
+  const isSelected = (optionValue, inputValue) => {
+    return inputValue && inputValue.toString() === optionValue.toString();
+  };
+
+  const handleConfirmButtonClick = instance => {
+    const innerParams = privateProps.innerParams.get(instance);
+    instance.disableButtons();
+
+    if (innerParams.input) {
+      handleConfirmOrDenyWithInput(instance, 'confirm');
+    } else {
+      confirm(instance, true);
+    }
+  };
+  const handleDenyButtonClick = instance => {
+    const innerParams = privateProps.innerParams.get(instance);
+    instance.disableButtons();
+
+    if (innerParams.returnInputValueOnDeny) {
+      handleConfirmOrDenyWithInput(instance, 'deny');
+    } else {
+      deny(instance, false);
+    }
+  };
+  const handleCancelButtonClick = (instance, dismissWith) => {
+    instance.disableButtons();
+    dismissWith(DismissReason.cancel);
+  };
+
+  const handleConfirmOrDenyWithInput = (instance, type
+  /* 'confirm' | 'deny' */
+  ) => {
+    const innerParams = privateProps.innerParams.get(instance);
+
+    if (!innerParams.input) {
+      return error("The \"input\" parameter is needed to be set when using returnInputValueOn".concat(capitalizeFirstLetter(type)));
+    }
+
+    const inputValue = getInputValue(instance, innerParams);
+
+    if (innerParams.inputValidator) {
+      handleInputValidator(instance, inputValue, type);
+    } else if (!instance.getInput().checkValidity()) {
+      instance.enableButtons();
+      instance.showValidationMessage(innerParams.validationMessage);
+    } else if (type === 'deny') {
+      deny(instance, inputValue);
+    } else {
+      confirm(instance, inputValue);
+    }
+  };
+
+  const handleInputValidator = (instance, inputValue, type
+  /* 'confirm' | 'deny' */
+  ) => {
+    const innerParams = privateProps.innerParams.get(instance);
+    instance.disableInput();
+    const validationPromise = Promise.resolve().then(() => asPromise(innerParams.inputValidator(inputValue, innerParams.validationMessage)));
+    validationPromise.then(validationMessage => {
+      instance.enableButtons();
+      instance.enableInput();
+
+      if (validationMessage) {
+        instance.showValidationMessage(validationMessage);
+      } else if (type === 'deny') {
+        deny(instance, inputValue);
+      } else {
+        confirm(instance, inputValue);
+      }
+    });
+  };
+
+  const deny = (instance, value) => {
+    const innerParams = privateProps.innerParams.get(instance || undefined);
+
+    if (innerParams.showLoaderOnDeny) {
+      showLoading(getDenyButton());
+    }
+
+    if (innerParams.preDeny) {
+      privateProps.awaitingPromise.set(instance || undefined, true); // Flagging the instance as awaiting a promise so it's own promise's reject/resolve methods doesn't get destroyed until the result from this preDeny's promise is received
+
+      const preDenyPromise = Promise.resolve().then(() => asPromise(innerParams.preDeny(value, innerParams.validationMessage)));
+      preDenyPromise.then(preDenyValue => {
+        if (preDenyValue === false) {
+          instance.hideLoading();
+        } else {
+          instance.closePopup({
+            isDenied: true,
+            value: typeof preDenyValue === 'undefined' ? value : preDenyValue
+          });
+        }
+      }).catch(error$$1 => rejectWith(instance || undefined, error$$1));
+    } else {
+      instance.closePopup({
+        isDenied: true,
+        value
+      });
+    }
+  };
+
+  const succeedWith = (instance, value) => {
+    instance.closePopup({
+      isConfirmed: true,
+      value
+    });
+  };
+
+  const rejectWith = (instance, error$$1) => {
+    instance.rejectPromise(error$$1);
+  };
+
+  const confirm = (instance, value) => {
+    const innerParams = privateProps.innerParams.get(instance || undefined);
+
+    if (innerParams.showLoaderOnConfirm) {
+      showLoading();
+    }
+
+    if (innerParams.preConfirm) {
+      instance.resetValidationMessage();
+      privateProps.awaitingPromise.set(instance || undefined, true); // Flagging the instance as awaiting a promise so it's own promise's reject/resolve methods doesn't get destroyed until the result from this preConfirm's promise is received
+
+      const preConfirmPromise = Promise.resolve().then(() => asPromise(innerParams.preConfirm(value, innerParams.validationMessage)));
+      preConfirmPromise.then(preConfirmValue => {
+        if (isVisible(getValidationMessage()) || preConfirmValue === false) {
+          instance.hideLoading();
+        } else {
+          succeedWith(instance, typeof preConfirmValue === 'undefined' ? value : preConfirmValue);
+        }
+      }).catch(error$$1 => rejectWith(instance || undefined, error$$1));
+    } else {
+      succeedWith(instance, value);
+    }
+  };
+
+  const handlePopupClick = (instance, domCache, dismissWith) => {
+    const innerParams = privateProps.innerParams.get(instance);
+
+    if (innerParams.toast) {
+      handleToastClick(instance, domCache, dismissWith);
+    } else {
+      // Ignore click events that had mousedown on the popup but mouseup on the container
+      // This can happen when the user drags a slider
+      handleModalMousedown(domCache); // Ignore click events that had mousedown on the container but mouseup on the popup
+
+      handleContainerMousedown(domCache);
+      handleModalClick(instance, domCache, dismissWith);
+    }
+  };
+
+  const handleToastClick = (instance, domCache, dismissWith) => {
+    // Closing toast by internal click
+    domCache.popup.onclick = () => {
+      const innerParams = privateProps.innerParams.get(instance);
+
+      if (innerParams && (isAnyButtonShown(innerParams) || innerParams.timer || innerParams.input)) {
+        return;
+      }
+
+      dismissWith(DismissReason.close);
+    };
+  };
+  /**
+   * @param {*} innerParams
+   * @returns {boolean}
+   */
+
+
+  const isAnyButtonShown = innerParams => {
+    return innerParams.showConfirmButton || innerParams.showDenyButton || innerParams.showCancelButton || innerParams.showCloseButton;
+  };
+
+  let ignoreOutsideClick = false;
+
+  const handleModalMousedown = domCache => {
+    domCache.popup.onmousedown = () => {
+      domCache.container.onmouseup = function (e) {
+        domCache.container.onmouseup = undefined; // We only check if the mouseup target is the container because usually it doesn't
+        // have any other direct children aside of the popup
+
+        if (e.target === domCache.container) {
+          ignoreOutsideClick = true;
+        }
+      };
+    };
+  };
+
+  const handleContainerMousedown = domCache => {
+    domCache.container.onmousedown = () => {
+      domCache.popup.onmouseup = function (e) {
+        domCache.popup.onmouseup = undefined; // We also need to check if the mouseup target is a child of the popup
+
+        if (e.target === domCache.popup || domCache.popup.contains(e.target)) {
+          ignoreOutsideClick = true;
+        }
+      };
+    };
+  };
+
+  const handleModalClick = (instance, domCache, dismissWith) => {
+    domCache.container.onclick = e => {
+      const innerParams = privateProps.innerParams.get(instance);
+
+      if (ignoreOutsideClick) {
+        ignoreOutsideClick = false;
+        return;
+      }
+
+      if (e.target === domCache.container && callIfFunction(innerParams.allowOutsideClick)) {
+        dismissWith(DismissReason.backdrop);
+      }
+    };
+  };
+
+  /*
+   * Global function to determine if SweetAlert2 popup is shown
+   */
+
+  const isVisible$1 = () => {
+    return isVisible(getPopup());
+  };
+  /*
+   * Global function to click 'Confirm' button
+   */
+
+  const clickConfirm = () => getConfirmButton() && getConfirmButton().click();
+  /*
+   * Global function to click 'Deny' button
+   */
+
+  const clickDeny = () => getDenyButton() && getDenyButton().click();
+  /*
+   * Global function to click 'Cancel' button
+   */
+
+  const clickCancel = () => getCancelButton() && getCancelButton().click();
+
+  const addKeydownHandler = (instance, globalState, innerParams, dismissWith) => {
+    if (globalState.keydownTarget && globalState.keydownHandlerAdded) {
+      globalState.keydownTarget.removeEventListener('keydown', globalState.keydownHandler, {
+        capture: globalState.keydownListenerCapture
+      });
+      globalState.keydownHandlerAdded = false;
+    }
+
+    if (!innerParams.toast) {
+      globalState.keydownHandler = e => keydownHandler(instance, e, dismissWith);
+
+      globalState.keydownTarget = innerParams.keydownListenerCapture ? window : getPopup();
+      globalState.keydownListenerCapture = innerParams.keydownListenerCapture;
+      globalState.keydownTarget.addEventListener('keydown', globalState.keydownHandler, {
+        capture: globalState.keydownListenerCapture
+      });
+      globalState.keydownHandlerAdded = true;
+    }
+  }; // Focus handling
+
+  const setFocus = (innerParams, index, increment) => {
+    const focusableElements = getFocusableElements(); // search for visible elements and select the next possible match
+
+    if (focusableElements.length) {
+      index = index + increment; // rollover to first item
+
+      if (index === focusableElements.length) {
+        index = 0; // go to last item
+      } else if (index === -1) {
+        index = focusableElements.length - 1;
+      }
+
+      return focusableElements[index].focus();
+    } // no visible focusable elements, focus the popup
+
+
+    getPopup().focus();
+  };
+  const arrowKeysNextButton = ['ArrowRight', 'ArrowDown'];
+  const arrowKeysPreviousButton = ['ArrowLeft', 'ArrowUp'];
+
+  const keydownHandler = (instance, e, dismissWith) => {
+    const innerParams = privateProps.innerParams.get(instance);
+
+    if (!innerParams) {
+      return; // This instance has already been destroyed
+    }
+
+    if (innerParams.stopKeydownPropagation) {
+      e.stopPropagation();
+    } // ENTER
+
+
+    if (e.key === 'Enter') {
+      handleEnter(instance, e, innerParams);
+    } // TAB
+    else if (e.key === 'Tab') {
+      handleTab(e, innerParams);
+    } // ARROWS - switch focus between buttons
+    else if ([...arrowKeysNextButton, ...arrowKeysPreviousButton].includes(e.key)) {
+      handleArrows(e.key);
+    } // ESC
+    else if (e.key === 'Escape') {
+      handleEsc(e, innerParams, dismissWith);
+    }
+  };
+
+  const handleEnter = (instance, e, innerParams) => {
+    // #2386 #720 #721
+    if (!callIfFunction(innerParams.allowEnterKey) || e.isComposing) {
+      return;
+    }
+
+    if (e.target && instance.getInput() && e.target.outerHTML === instance.getInput().outerHTML) {
+      if (['textarea', 'file'].includes(innerParams.input)) {
+        return; // do not submit
+      }
+
+      clickConfirm();
+      e.preventDefault();
+    }
+  };
+
+  const handleTab = (e, innerParams) => {
+    const targetElement = e.target;
+    const focusableElements = getFocusableElements();
+    let btnIndex = -1;
+
+    for (let i = 0; i < focusableElements.length; i++) {
+      if (targetElement === focusableElements[i]) {
+        btnIndex = i;
+        break;
+      }
+    } // Cycle to the next button
+
+
+    if (!e.shiftKey) {
+      setFocus(innerParams, btnIndex, 1);
+    } // Cycle to the prev button
+    else {
+      setFocus(innerParams, btnIndex, -1);
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
+  const handleArrows = key => {
+    const confirmButton = getConfirmButton();
+    const denyButton = getDenyButton();
+    const cancelButton = getCancelButton();
+
+    if (![confirmButton, denyButton, cancelButton].includes(document.activeElement)) {
+      return;
+    }
+
+    const sibling = arrowKeysNextButton.includes(key) ? 'nextElementSibling' : 'previousElementSibling';
+    const buttonToFocus = document.activeElement[sibling];
+
+    if (buttonToFocus instanceof HTMLElement) {
+      buttonToFocus.focus();
+    }
+  };
+
+  const handleEsc = (e, innerParams, dismissWith) => {
+    if (callIfFunction(innerParams.allowEscapeKey)) {
+      e.preventDefault();
+      dismissWith(DismissReason.esc);
+    }
+  };
+
+  const isJqueryElement = elem => typeof elem === 'object' && elem.jquery;
+
+  const isElement = elem => elem instanceof Element || isJqueryElement(elem);
+
+  const argsToParams = args => {
+    const params = {};
+
+    if (typeof args[0] === 'object' && !isElement(args[0])) {
+      Object.assign(params, args[0]);
+    } else {
+      ['title', 'html', 'icon'].forEach((name, index) => {
+        const arg = args[index];
+
+        if (typeof arg === 'string' || isElement(arg)) {
+          params[name] = arg;
+        } else if (arg !== undefined) {
+          error("Unexpected type of ".concat(name, "! Expected \"string\" or \"Element\", got ").concat(typeof arg));
+        }
+      });
+    }
+
+    return params;
+  };
+
+  function fire() {
+    const Swal = this; // eslint-disable-line @typescript-eslint/no-this-alias
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return new Swal(...args);
+  }
+
+  /**
+   * Returns an extended version of `Swal` containing `params` as defaults.
+   * Useful for reusing Swal configuration.
+   *
+   * For example:
+   *
+   * Before:
+   * const textPromptOptions = { input: 'text', showCancelButton: true }
+   * const {value: firstName} = await Swal.fire({ ...textPromptOptions, title: 'What is your first name?' })
+   * const {value: lastName} = await Swal.fire({ ...textPromptOptions, title: 'What is your last name?' })
+   *
+   * After:
+   * const TextPrompt = Swal.mixin({ input: 'text', showCancelButton: true })
+   * const {value: firstName} = await TextPrompt('What is your first name?')
+   * const {value: lastName} = await TextPrompt('What is your last name?')
+   *
+   * @param mixinParams
+   */
+  function mixin(mixinParams) {
+    class MixinSwal extends this {
+      _main(params, priorityMixinParams) {
+        return super._main(params, Object.assign({}, mixinParams, priorityMixinParams));
+      }
+
+    }
+
+    return MixinSwal;
+  }
+
+  /**
+   * If `timer` parameter is set, returns number of milliseconds of timer remained.
+   * Otherwise, returns undefined.
+   */
+
+  const getTimerLeft = () => {
+    return globalState.timeout && globalState.timeout.getTimerLeft();
+  };
+  /**
+   * Stop timer. Returns number of milliseconds of timer remained.
+   * If `timer` parameter isn't set, returns undefined.
+   */
+
+  const stopTimer = () => {
+    if (globalState.timeout) {
+      stopTimerProgressBar();
+      return globalState.timeout.stop();
+    }
+  };
+  /**
+   * Resume timer. Returns number of milliseconds of timer remained.
+   * If `timer` parameter isn't set, returns undefined.
+   */
+
+  const resumeTimer = () => {
+    if (globalState.timeout) {
+      const remaining = globalState.timeout.start();
+      animateTimerProgressBar(remaining);
+      return remaining;
+    }
+  };
+  /**
+   * Resume timer. Returns number of milliseconds of timer remained.
+   * If `timer` parameter isn't set, returns undefined.
+   */
+
+  const toggleTimer = () => {
+    const timer = globalState.timeout;
+    return timer && (timer.running ? stopTimer() : resumeTimer());
+  };
+  /**
+   * Increase timer. Returns number of milliseconds of an updated timer.
+   * If `timer` parameter isn't set, returns undefined.
+   */
+
+  const increaseTimer = n => {
+    if (globalState.timeout) {
+      const remaining = globalState.timeout.increase(n);
+      animateTimerProgressBar(remaining, true);
+      return remaining;
+    }
+  };
+  /**
+   * Check if timer is running. Returns true if timer is running
+   * or false if timer is paused or stopped.
+   * If `timer` parameter isn't set, returns undefined
+   */
+
+  const isTimerRunning = () => {
+    return globalState.timeout && globalState.timeout.isRunning();
+  };
+
+  let bodyClickListenerAdded = false;
+  const clickHandlers = {};
+  function bindClickHandler() {
+    let attr = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'data-swal-template';
+    clickHandlers[attr] = this;
+
+    if (!bodyClickListenerAdded) {
+      document.body.addEventListener('click', bodyClickListener);
+      bodyClickListenerAdded = true;
+    }
+  }
+
+  const bodyClickListener = event => {
+    for (let el = event.target; el && el !== document; el = el.parentNode) {
+      for (const attr in clickHandlers) {
+        const template = el.getAttribute(attr);
+
+        if (template) {
+          clickHandlers[attr].fire({
+            template
+          });
+          return;
+        }
+      }
+    }
+  };
+
+
+
+  var staticMethods = /*#__PURE__*/Object.freeze({
+    isValidParameter: isValidParameter,
+    isUpdatableParameter: isUpdatableParameter,
+    isDeprecatedParameter: isDeprecatedParameter,
+    argsToParams: argsToParams,
+    isVisible: isVisible$1,
+    clickConfirm: clickConfirm,
+    clickDeny: clickDeny,
+    clickCancel: clickCancel,
+    getContainer: getContainer,
+    getPopup: getPopup,
+    getTitle: getTitle,
+    getHtmlContainer: getHtmlContainer,
+    getImage: getImage,
+    getIcon: getIcon,
+    getInputLabel: getInputLabel,
+    getCloseButton: getCloseButton,
+    getActions: getActions,
+    getConfirmButton: getConfirmButton,
+    getDenyButton: getDenyButton,
+    getCancelButton: getCancelButton,
+    getLoader: getLoader,
+    getFooter: getFooter,
+    getTimerProgressBar: getTimerProgressBar,
+    getFocusableElements: getFocusableElements,
+    getValidationMessage: getValidationMessage,
+    isLoading: isLoading,
+    fire: fire,
+    mixin: mixin,
+    showLoading: showLoading,
+    enableLoading: showLoading,
+    getTimerLeft: getTimerLeft,
+    stopTimer: stopTimer,
+    resumeTimer: resumeTimer,
+    toggleTimer: toggleTimer,
+    increaseTimer: increaseTimer,
+    isTimerRunning: isTimerRunning,
+    bindClickHandler: bindClickHandler
+  });
+
+  /**
+   * Hides loader and shows back the button which was hidden by .showLoading()
+   */
+
+  function hideLoading() {
+    // do nothing if popup is closed
+    const innerParams = privateProps.innerParams.get(this);
+
+    if (!innerParams) {
+      return;
+    }
+
+    const domCache = privateProps.domCache.get(this);
+    hide(domCache.loader);
+
+    if (isToast()) {
+      if (innerParams.icon) {
+        show(getIcon());
+      }
+    } else {
+      showRelatedButton(domCache);
+    }
+
+    removeClass([domCache.popup, domCache.actions], swalClasses.loading);
+    domCache.popup.removeAttribute('aria-busy');
+    domCache.popup.removeAttribute('data-loading');
+    domCache.confirmButton.disabled = false;
+    domCache.denyButton.disabled = false;
+    domCache.cancelButton.disabled = false;
+  }
+
+  const showRelatedButton = domCache => {
+    const buttonToReplace = domCache.popup.getElementsByClassName(domCache.loader.getAttribute('data-button-to-replace'));
+
+    if (buttonToReplace.length) {
+      show(buttonToReplace[0], 'inline-block');
+    } else if (allButtonsAreHidden()) {
+      hide(domCache.actions);
+    }
+  };
+
+  /**
+   * Gets the input DOM node, this method works with input parameter.
+   * @returns {HTMLElement | null}
+   */
+
+  function getInput$1(instance) {
+    const innerParams = privateProps.innerParams.get(instance || this);
+    const domCache = privateProps.domCache.get(instance || this);
+
+    if (!domCache) {
+      return null;
+    }
+
+    return getInput(domCache.popup, innerParams.input);
+  }
+
+  /**
+   * This module contains `WeakMap`s for each effectively-"private  property" that a `Swal` has.
+   * For example, to set the private property "foo" of `this` to "bar", you can `privateProps.foo.set(this, 'bar')`
+   * This is the approach that Babel will probably take to implement private methods/fields
+   *   https://github.com/tc39/proposal-private-methods
+   *   https://github.com/babel/babel/pull/7555
+   * Once we have the changes from that PR in Babel, and our core class fits reasonable in *one module*
+   *   then we can use that language feature.
+   */
+  var privateMethods = {
+    swalPromiseResolve: new WeakMap(),
+    swalPromiseReject: new WeakMap()
+  };
+
+  /*
+   * Instance method to close sweetAlert
+   */
+
+  function removePopupAndResetState(instance, container, returnFocus, didClose) {
+    if (isToast()) {
+      triggerDidCloseAndDispose(instance, didClose);
+    } else {
+      restoreActiveElement(returnFocus).then(() => triggerDidCloseAndDispose(instance, didClose));
+      globalState.keydownTarget.removeEventListener('keydown', globalState.keydownHandler, {
+        capture: globalState.keydownListenerCapture
+      });
+      globalState.keydownHandlerAdded = false;
+    }
+
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent); // workaround for #2088
+    // for some reason removing the container in Safari will scroll the document to bottom
+
+    if (isSafari) {
+      container.setAttribute('style', 'display:none !important');
+      container.removeAttribute('class');
+      container.innerHTML = '';
+    } else {
+      container.remove();
+    }
+
+    if (isModal()) {
+      undoScrollbar();
+      undoIOSfix();
+      unsetAriaHidden();
+    }
+
+    removeBodyClasses();
+  }
+
+  function removeBodyClasses() {
+    removeClass([document.documentElement, document.body], [swalClasses.shown, swalClasses['height-auto'], swalClasses['no-backdrop'], swalClasses['toast-shown']]);
+  }
+
+  function close(resolveValue) {
+    resolveValue = prepareResolveValue(resolveValue);
+    const swalPromiseResolve = privateMethods.swalPromiseResolve.get(this);
+    const didClose = triggerClosePopup(this);
+
+    if (this.isAwaitingPromise()) {
+      // A swal awaiting for a promise (after a click on Confirm or Deny) cannot be dismissed anymore #2335
+      if (!resolveValue.isDismissed) {
+        handleAwaitingPromise(this);
+        swalPromiseResolve(resolveValue);
+      }
+    } else if (didClose) {
+      // Resolve Swal promise
+      swalPromiseResolve(resolveValue);
+    }
+  }
+  function isAwaitingPromise() {
+    return !!privateProps.awaitingPromise.get(this);
+  }
+
+  const triggerClosePopup = instance => {
+    const popup = getPopup();
+
+    if (!popup) {
+      return false;
+    }
+
+    const innerParams = privateProps.innerParams.get(instance);
+
+    if (!innerParams || hasClass(popup, innerParams.hideClass.popup)) {
+      return false;
+    }
+
+    removeClass(popup, innerParams.showClass.popup);
+    addClass(popup, innerParams.hideClass.popup);
+    const backdrop = getContainer();
+    removeClass(backdrop, innerParams.showClass.backdrop);
+    addClass(backdrop, innerParams.hideClass.backdrop);
+    handlePopupAnimation(instance, popup, innerParams);
+    return true;
+  };
+
+  function rejectPromise(error) {
+    const rejectPromise = privateMethods.swalPromiseReject.get(this);
+    handleAwaitingPromise(this);
+
+    if (rejectPromise) {
+      // Reject Swal promise
+      rejectPromise(error);
+    }
+  }
+
+  const handleAwaitingPromise = instance => {
+    if (instance.isAwaitingPromise()) {
+      privateProps.awaitingPromise.delete(instance); // The instance might have been previously partly destroyed, we must resume the destroy process in this case #2335
+
+      if (!privateProps.innerParams.get(instance)) {
+        instance._destroy();
+      }
+    }
+  };
+
+  const prepareResolveValue = resolveValue => {
+    // When user calls Swal.close()
+    if (typeof resolveValue === 'undefined') {
+      return {
+        isConfirmed: false,
+        isDenied: false,
+        isDismissed: true
+      };
+    }
+
+    return Object.assign({
+      isConfirmed: false,
+      isDenied: false,
+      isDismissed: false
+    }, resolveValue);
+  };
+
+  const handlePopupAnimation = (instance, popup, innerParams) => {
+    const container = getContainer(); // If animation is supported, animate
+
+    const animationIsSupported = animationEndEvent && hasCssAnimation(popup);
+
+    if (typeof innerParams.willClose === 'function') {
+      innerParams.willClose(popup);
+    }
+
+    if (animationIsSupported) {
+      animatePopup(instance, popup, container, innerParams.returnFocus, innerParams.didClose);
+    } else {
+      // Otherwise, remove immediately
+      removePopupAndResetState(instance, container, innerParams.returnFocus, innerParams.didClose);
+    }
+  };
+
+  const animatePopup = (instance, popup, container, returnFocus, didClose) => {
+    globalState.swalCloseEventFinishedCallback = removePopupAndResetState.bind(null, instance, container, returnFocus, didClose);
+    popup.addEventListener(animationEndEvent, function (e) {
+      if (e.target === popup) {
+        globalState.swalCloseEventFinishedCallback();
+        delete globalState.swalCloseEventFinishedCallback;
+      }
+    });
+  };
+
+  const triggerDidCloseAndDispose = (instance, didClose) => {
+    setTimeout(() => {
+      if (typeof didClose === 'function') {
+        didClose.bind(instance.params)();
+      }
+
+      instance._destroy();
+    });
+  };
+
+  function setButtonsDisabled(instance, buttons, disabled) {
+    const domCache = privateProps.domCache.get(instance);
+    buttons.forEach(button => {
+      domCache[button].disabled = disabled;
+    });
+  }
+
+  function setInputDisabled(input, disabled) {
+    if (!input) {
+      return false;
+    }
+
+    if (input.type === 'radio') {
+      const radiosContainer = input.parentNode.parentNode;
+      const radios = radiosContainer.querySelectorAll('input');
+
+      for (let i = 0; i < radios.length; i++) {
+        radios[i].disabled = disabled;
+      }
+    } else {
+      input.disabled = disabled;
+    }
+  }
+
+  function enableButtons() {
+    setButtonsDisabled(this, ['confirmButton', 'denyButton', 'cancelButton'], false);
+  }
+  function disableButtons() {
+    setButtonsDisabled(this, ['confirmButton', 'denyButton', 'cancelButton'], true);
+  }
+  function enableInput() {
+    return setInputDisabled(this.getInput(), false);
+  }
+  function disableInput() {
+    return setInputDisabled(this.getInput(), true);
+  }
+
+  function showValidationMessage(error) {
+    const domCache = privateProps.domCache.get(this);
+    const params = privateProps.innerParams.get(this);
+    setInnerHtml(domCache.validationMessage, error);
+    domCache.validationMessage.className = swalClasses['validation-message'];
+
+    if (params.customClass && params.customClass.validationMessage) {
+      addClass(domCache.validationMessage, params.customClass.validationMessage);
+    }
+
+    show(domCache.validationMessage);
+    const input = this.getInput();
+
+    if (input) {
+      input.setAttribute('aria-invalid', true);
+      input.setAttribute('aria-describedby', swalClasses['validation-message']);
+      focusInput(input);
+      addClass(input, swalClasses.inputerror);
+    }
+  } // Hide block with validation message
+
+  function resetValidationMessage$1() {
+    const domCache = privateProps.domCache.get(this);
+
+    if (domCache.validationMessage) {
+      hide(domCache.validationMessage);
+    }
+
+    const input = this.getInput();
+
+    if (input) {
+      input.removeAttribute('aria-invalid');
+      input.removeAttribute('aria-describedby');
+      removeClass(input, swalClasses.inputerror);
+    }
+  }
+
+  function getProgressSteps$1() {
+    const domCache = privateProps.domCache.get(this);
+    return domCache.progressSteps;
+  }
+
+  /**
+   * Updates popup parameters.
+   */
+
+  function update(params) {
+    const popup = getPopup();
+    const innerParams = privateProps.innerParams.get(this);
+
+    if (!popup || hasClass(popup, innerParams.hideClass.popup)) {
+      return warn("You're trying to update the closed or closing popup, that won't work. Use the update() method in preConfirm parameter or show a new popup.");
+    }
+
+    const validUpdatableParams = filterValidParams(params);
+    const updatedParams = Object.assign({}, innerParams, validUpdatableParams);
+    render(this, updatedParams);
+    privateProps.innerParams.set(this, updatedParams);
+    Object.defineProperties(this, {
+      params: {
+        value: Object.assign({}, this.params, params),
+        writable: false,
+        enumerable: true
+      }
+    });
+  }
+
+  const filterValidParams = params => {
+    const validUpdatableParams = {};
+    Object.keys(params).forEach(param => {
+      if (isUpdatableParameter(param)) {
+        validUpdatableParams[param] = params[param];
+      } else {
+        warn("Invalid parameter to update: \"".concat(param, "\". Updatable params are listed here: https://github.com/sweetalert2/sweetalert2/blob/master/src/utils/params.js\n\nIf you think this parameter should be updatable, request it here: https://github.com/sweetalert2/sweetalert2/issues/new?template=02_feature_request.md"));
+      }
+    });
+    return validUpdatableParams;
+  };
+
+  function _destroy() {
+    const domCache = privateProps.domCache.get(this);
+    const innerParams = privateProps.innerParams.get(this);
+
+    if (!innerParams) {
+      disposeWeakMaps(this); // The WeakMaps might have been partly destroyed, we must recall it to dispose any remaining WeakMaps #2335
+
+      return; // This instance has already been destroyed
+    } // Check if there is another Swal closing
+
+
+    if (domCache.popup && globalState.swalCloseEventFinishedCallback) {
+      globalState.swalCloseEventFinishedCallback();
+      delete globalState.swalCloseEventFinishedCallback;
+    } // Check if there is a swal disposal defer timer
+
+
+    if (globalState.deferDisposalTimer) {
+      clearTimeout(globalState.deferDisposalTimer);
+      delete globalState.deferDisposalTimer;
+    }
+
+    if (typeof innerParams.didDestroy === 'function') {
+      innerParams.didDestroy();
+    }
+
+    disposeSwal(this);
+  }
+
+  const disposeSwal = instance => {
+    disposeWeakMaps(instance); // Unset this.params so GC will dispose it (#1569)
+
+    delete instance.params; // Unset globalState props so GC will dispose globalState (#1569)
+
+    delete globalState.keydownHandler;
+    delete globalState.keydownTarget; // Unset currentInstance
+
+    delete globalState.currentInstance;
+  };
+
+  const disposeWeakMaps = instance => {
+    // If the current instance is awaiting a promise result, we keep the privateMethods to call them once the promise result is retrieved #2335
+    if (instance.isAwaitingPromise()) {
+      unsetWeakMaps(privateProps, instance);
+      privateProps.awaitingPromise.set(instance, true);
+    } else {
+      unsetWeakMaps(privateMethods, instance);
+      unsetWeakMaps(privateProps, instance);
+    }
+  };
+
+  const unsetWeakMaps = (obj, instance) => {
+    for (const i in obj) {
+      obj[i].delete(instance);
+    }
+  };
+
+
+
+  var instanceMethods = /*#__PURE__*/Object.freeze({
+    hideLoading: hideLoading,
+    disableLoading: hideLoading,
+    getInput: getInput$1,
+    close: close,
+    isAwaitingPromise: isAwaitingPromise,
+    rejectPromise: rejectPromise,
+    closePopup: close,
+    closeModal: close,
+    closeToast: close,
+    enableButtons: enableButtons,
+    disableButtons: disableButtons,
+    enableInput: enableInput,
+    disableInput: disableInput,
+    showValidationMessage: showValidationMessage,
+    resetValidationMessage: resetValidationMessage$1,
+    getProgressSteps: getProgressSteps$1,
+    update: update,
+    _destroy: _destroy
+  });
+
+  let currentInstance;
+
+  class SweetAlert {
+    constructor() {
+      // Prevent run in Node env
+      if (typeof window === 'undefined') {
+        return;
+      }
+
+      currentInstance = this; // @ts-ignore
+
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      const outerParams = Object.freeze(this.constructor.argsToParams(args));
+      Object.defineProperties(this, {
+        params: {
+          value: outerParams,
+          writable: false,
+          enumerable: true,
+          configurable: true
+        }
+      }); // @ts-ignore
+
+      const promise = this._main(this.params);
+
+      privateProps.promise.set(this, promise);
+    }
+
+    _main(userParams) {
+      let mixinParams = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      showWarningsForParams(Object.assign({}, mixinParams, userParams));
+
+      if (globalState.currentInstance) {
+        globalState.currentInstance._destroy();
+
+        if (isModal()) {
+          unsetAriaHidden();
+        }
+      }
+
+      globalState.currentInstance = this;
+      const innerParams = prepareParams(userParams, mixinParams);
+      setParameters(innerParams);
+      Object.freeze(innerParams); // clear the previous timer
+
+      if (globalState.timeout) {
+        globalState.timeout.stop();
+        delete globalState.timeout;
+      } // clear the restore focus timeout
+
+
+      clearTimeout(globalState.restoreFocusTimeout);
+      const domCache = populateDomCache(this);
+      render(this, innerParams);
+      privateProps.innerParams.set(this, innerParams);
+      return swalPromise(this, domCache, innerParams);
+    } // `catch` cannot be the name of a module export, so we define our thenable methods here instead
+
+
+    then(onFulfilled) {
+      const promise = privateProps.promise.get(this);
+      return promise.then(onFulfilled);
+    }
+
+    finally(onFinally) {
+      const promise = privateProps.promise.get(this);
+      return promise.finally(onFinally);
+    }
+
+  }
+
+  const swalPromise = (instance, domCache, innerParams) => {
+    return new Promise((resolve, reject) => {
+      // functions to handle all closings/dismissals
+      const dismissWith = dismiss => {
+        instance.closePopup({
+          isDismissed: true,
+          dismiss
+        });
+      };
+
+      privateMethods.swalPromiseResolve.set(instance, resolve);
+      privateMethods.swalPromiseReject.set(instance, reject);
+
+      domCache.confirmButton.onclick = () => handleConfirmButtonClick(instance);
+
+      domCache.denyButton.onclick = () => handleDenyButtonClick(instance);
+
+      domCache.cancelButton.onclick = () => handleCancelButtonClick(instance, dismissWith);
+
+      domCache.closeButton.onclick = () => dismissWith(DismissReason.close);
+
+      handlePopupClick(instance, domCache, dismissWith);
+      addKeydownHandler(instance, globalState, innerParams, dismissWith);
+      handleInputOptionsAndValue(instance, innerParams);
+      openPopup(innerParams);
+      setupTimer(globalState, innerParams, dismissWith);
+      initFocus(domCache, innerParams); // Scroll container to top on open (#1247, #1946)
+
+      setTimeout(() => {
+        domCache.container.scrollTop = 0;
+      });
+    });
+  };
+
+  const prepareParams = (userParams, mixinParams) => {
+    const templateParams = getTemplateParams(userParams);
+    const params = Object.assign({}, defaultParams, mixinParams, templateParams, userParams); // precedence is described in #2131
+
+    params.showClass = Object.assign({}, defaultParams.showClass, params.showClass);
+    params.hideClass = Object.assign({}, defaultParams.hideClass, params.hideClass);
+    return params;
+  };
+
+  const populateDomCache = instance => {
+    const domCache = {
+      popup: getPopup(),
+      container: getContainer(),
+      actions: getActions(),
+      confirmButton: getConfirmButton(),
+      denyButton: getDenyButton(),
+      cancelButton: getCancelButton(),
+      loader: getLoader(),
+      closeButton: getCloseButton(),
+      validationMessage: getValidationMessage(),
+      progressSteps: getProgressSteps()
+    };
+    privateProps.domCache.set(instance, domCache);
+    return domCache;
+  };
+
+  const setupTimer = (globalState$$1, innerParams, dismissWith) => {
+    const timerProgressBar = getTimerProgressBar();
+    hide(timerProgressBar);
+
+    if (innerParams.timer) {
+      globalState$$1.timeout = new Timer(() => {
+        dismissWith('timer');
+        delete globalState$$1.timeout;
+      }, innerParams.timer);
+
+      if (innerParams.timerProgressBar) {
+        show(timerProgressBar);
+        applyCustomClass(timerProgressBar, innerParams, 'timerProgressBar');
+        setTimeout(() => {
+          if (globalState$$1.timeout && globalState$$1.timeout.running) {
+            // timer can be already stopped or unset at this point
+            animateTimerProgressBar(innerParams.timer);
+          }
+        });
+      }
+    }
+  };
+
+  const initFocus = (domCache, innerParams) => {
+    if (innerParams.toast) {
+      return;
+    }
+
+    if (!callIfFunction(innerParams.allowEnterKey)) {
+      return blurActiveElement();
+    }
+
+    if (!focusButton(domCache, innerParams)) {
+      setFocus(innerParams, -1, 1);
+    }
+  };
+
+  const focusButton = (domCache, innerParams) => {
+    if (innerParams.focusDeny && isVisible(domCache.denyButton)) {
+      domCache.denyButton.focus();
+      return true;
+    }
+
+    if (innerParams.focusCancel && isVisible(domCache.cancelButton)) {
+      domCache.cancelButton.focus();
+      return true;
+    }
+
+    if (innerParams.focusConfirm && isVisible(domCache.confirmButton)) {
+      domCache.confirmButton.focus();
+      return true;
+    }
+
+    return false;
+  };
+
+  const blurActiveElement = () => {
+    if (document.activeElement instanceof HTMLElement && typeof document.activeElement.blur === 'function') {
+      document.activeElement.blur();
+    }
+  }; // Assign instance methods from src/instanceMethods/*.js to prototype
+
+
+  Object.assign(SweetAlert.prototype, instanceMethods); // Assign static methods from src/staticMethods/*.js to constructor
+
+  Object.assign(SweetAlert, staticMethods); // Proxy to instance methods to constructor, for now, for backwards compatibility
+
+  Object.keys(instanceMethods).forEach(key => {
+    SweetAlert[key] = function () {
+      if (currentInstance) {
+        return currentInstance[key](...arguments);
+      }
+    };
+  });
+  SweetAlert.DismissReason = DismissReason;
+  SweetAlert.version = '11.4.0';
+
+  const Swal = SweetAlert; // @ts-ignore
+
+  Swal.default = Swal;
+
+  return Swal;
+
+}));
+if (typeof this !== 'undefined' && this.Sweetalert2){  this.swal = this.sweetAlert = this.Swal = this.SweetAlert = this.Sweetalert2}
+
+"undefined"!=typeof document&&function(e,t){var n=e.createElement("style");if(e.getElementsByTagName("head")[0].appendChild(n),n.styleSheet)n.styleSheet.disabled||(n.styleSheet.cssText=t);else try{n.innerHTML=t}catch(e){n.innerText=t}}(document,".swal2-popup.swal2-toast{box-sizing:border-box;grid-column:1/4!important;grid-row:1/4!important;grid-template-columns:1fr 99fr 1fr;padding:1em;overflow-y:hidden;background:#fff;box-shadow:0 0 1px rgba(0,0,0,.075),0 1px 2px rgba(0,0,0,.075),1px 2px 4px rgba(0,0,0,.075),1px 3px 8px rgba(0,0,0,.075),2px 4px 16px rgba(0,0,0,.075);pointer-events:all}.swal2-popup.swal2-toast>*{grid-column:2}.swal2-popup.swal2-toast .swal2-title{margin:.5em 1em;padding:0;font-size:1em;text-align:initial}.swal2-popup.swal2-toast .swal2-loading{justify-content:center}.swal2-popup.swal2-toast .swal2-input{height:2em;margin:.5em;font-size:1em}.swal2-popup.swal2-toast .swal2-validation-message{font-size:1em}.swal2-popup.swal2-toast .swal2-footer{margin:.5em 0 0;padding:.5em 0 0;font-size:.8em}.swal2-popup.swal2-toast .swal2-close{grid-column:3/3;grid-row:1/99;align-self:center;width:.8em;height:.8em;margin:0;font-size:2em}.swal2-popup.swal2-toast .swal2-html-container{margin:.5em 1em;padding:0;font-size:1em;text-align:initial}.swal2-popup.swal2-toast .swal2-html-container:empty{padding:0}.swal2-popup.swal2-toast .swal2-loader{grid-column:1;grid-row:1/99;align-self:center;width:2em;height:2em;margin:.25em}.swal2-popup.swal2-toast .swal2-icon{grid-column:1;grid-row:1/99;align-self:center;width:2em;min-width:2em;height:2em;margin:0 .5em 0 0}.swal2-popup.swal2-toast .swal2-icon .swal2-icon-content{display:flex;align-items:center;font-size:1.8em;font-weight:700}.swal2-popup.swal2-toast .swal2-icon.swal2-success .swal2-success-ring{width:2em;height:2em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line]{top:.875em;width:1.375em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left]{left:.3125em}.swal2-popup.swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right]{right:.3125em}.swal2-popup.swal2-toast .swal2-actions{justify-content:flex-start;height:auto;margin:0;margin-top:.5em;padding:0 .5em}.swal2-popup.swal2-toast .swal2-styled{margin:.25em .5em;padding:.4em .6em;font-size:1em}.swal2-popup.swal2-toast .swal2-success{border-color:#a5dc86}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line]{position:absolute;width:1.6em;height:3em;transform:rotate(45deg);border-radius:50%}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=left]{top:-.8em;left:-.5em;transform:rotate(-45deg);transform-origin:2em 2em;border-radius:4em 0 0 4em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=right]{top:-.25em;left:.9375em;transform-origin:0 1.5em;border-radius:0 4em 4em 0}.swal2-popup.swal2-toast .swal2-success .swal2-success-ring{width:2em;height:2em}.swal2-popup.swal2-toast .swal2-success .swal2-success-fix{top:0;left:.4375em;width:.4375em;height:2.6875em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line]{height:.3125em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line][class$=tip]{top:1.125em;left:.1875em;width:.75em}.swal2-popup.swal2-toast .swal2-success [class^=swal2-success-line][class$=long]{top:.9375em;right:.1875em;width:1.375em}.swal2-popup.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-tip{-webkit-animation:swal2-toast-animate-success-line-tip .75s;animation:swal2-toast-animate-success-line-tip .75s}.swal2-popup.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-long{-webkit-animation:swal2-toast-animate-success-line-long .75s;animation:swal2-toast-animate-success-line-long .75s}.swal2-popup.swal2-toast.swal2-show{-webkit-animation:swal2-toast-show .5s;animation:swal2-toast-show .5s}.swal2-popup.swal2-toast.swal2-hide{-webkit-animation:swal2-toast-hide .1s forwards;animation:swal2-toast-hide .1s forwards}.swal2-container{display:grid;position:fixed;z-index:1060;top:0;right:0;bottom:0;left:0;box-sizing:border-box;grid-template-areas:\"top-start     top            top-end\" \"center-start  center         center-end\" \"bottom-start  bottom-center  bottom-end\";grid-template-rows:minmax(-webkit-min-content,auto) minmax(-webkit-min-content,auto) minmax(-webkit-min-content,auto);grid-template-rows:minmax(min-content,auto) minmax(min-content,auto) minmax(min-content,auto);height:100%;padding:.625em;overflow-x:hidden;transition:background-color .1s;-webkit-overflow-scrolling:touch}.swal2-container.swal2-backdrop-show,.swal2-container.swal2-noanimation{background:rgba(0,0,0,.4)}.swal2-container.swal2-backdrop-hide{background:0 0!important}.swal2-container.swal2-bottom-start,.swal2-container.swal2-center-start,.swal2-container.swal2-top-start{grid-template-columns:minmax(0,1fr) auto auto}.swal2-container.swal2-bottom,.swal2-container.swal2-center,.swal2-container.swal2-top{grid-template-columns:auto minmax(0,1fr) auto}.swal2-container.swal2-bottom-end,.swal2-container.swal2-center-end,.swal2-container.swal2-top-end{grid-template-columns:auto auto minmax(0,1fr)}.swal2-container.swal2-top-start>.swal2-popup{align-self:start}.swal2-container.swal2-top>.swal2-popup{grid-column:2;align-self:start;justify-self:center}.swal2-container.swal2-top-end>.swal2-popup,.swal2-container.swal2-top-right>.swal2-popup{grid-column:3;align-self:start;justify-self:end}.swal2-container.swal2-center-left>.swal2-popup,.swal2-container.swal2-center-start>.swal2-popup{grid-row:2;align-self:center}.swal2-container.swal2-center>.swal2-popup{grid-column:2;grid-row:2;align-self:center;justify-self:center}.swal2-container.swal2-center-end>.swal2-popup,.swal2-container.swal2-center-right>.swal2-popup{grid-column:3;grid-row:2;align-self:center;justify-self:end}.swal2-container.swal2-bottom-left>.swal2-popup,.swal2-container.swal2-bottom-start>.swal2-popup{grid-column:1;grid-row:3;align-self:end}.swal2-container.swal2-bottom>.swal2-popup{grid-column:2;grid-row:3;justify-self:center;align-self:end}.swal2-container.swal2-bottom-end>.swal2-popup,.swal2-container.swal2-bottom-right>.swal2-popup{grid-column:3;grid-row:3;align-self:end;justify-self:end}.swal2-container.swal2-grow-fullscreen>.swal2-popup,.swal2-container.swal2-grow-row>.swal2-popup{grid-column:1/4;width:100%}.swal2-container.swal2-grow-column>.swal2-popup,.swal2-container.swal2-grow-fullscreen>.swal2-popup{grid-row:1/4;align-self:stretch}.swal2-container.swal2-no-transition{transition:none!important}.swal2-popup{display:none;position:relative;box-sizing:border-box;grid-template-columns:minmax(0,100%);width:32em;max-width:100%;padding:0 0 1.25em;border:none;border-radius:5px;background:#fff;color:#545454;font-family:inherit;font-size:1rem}.swal2-popup:focus{outline:0}.swal2-popup.swal2-loading{overflow-y:hidden}.swal2-title{position:relative;max-width:100%;margin:0;padding:.8em 1em 0;color:inherit;font-size:1.875em;font-weight:600;text-align:center;text-transform:none;word-wrap:break-word}.swal2-actions{display:flex;z-index:1;box-sizing:border-box;flex-wrap:wrap;align-items:center;justify-content:center;width:auto;margin:1.25em auto 0;padding:0}.swal2-actions:not(.swal2-loading) .swal2-styled[disabled]{opacity:.4}.swal2-actions:not(.swal2-loading) .swal2-styled:hover{background-image:linear-gradient(rgba(0,0,0,.1),rgba(0,0,0,.1))}.swal2-actions:not(.swal2-loading) .swal2-styled:active{background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2))}.swal2-loader{display:none;align-items:center;justify-content:center;width:2.2em;height:2.2em;margin:0 1.875em;-webkit-animation:swal2-rotate-loading 1.5s linear 0s infinite normal;animation:swal2-rotate-loading 1.5s linear 0s infinite normal;border-width:.25em;border-style:solid;border-radius:100%;border-color:#2778c4 transparent #2778c4 transparent}.swal2-styled{margin:.3125em;padding:.625em 1.1em;transition:box-shadow .1s;box-shadow:0 0 0 3px transparent;font-weight:500}.swal2-styled:not([disabled]){cursor:pointer}.swal2-styled.swal2-confirm{border:0;border-radius:.25em;background:initial;background-color:#7066e0;color:#fff;font-size:1em}.swal2-styled.swal2-confirm:focus{box-shadow:0 0 0 3px rgba(112,102,224,.5)}.swal2-styled.swal2-deny{border:0;border-radius:.25em;background:initial;background-color:#dc3741;color:#fff;font-size:1em}.swal2-styled.swal2-deny:focus{box-shadow:0 0 0 3px rgba(220,55,65,.5)}.swal2-styled.swal2-cancel{border:0;border-radius:.25em;background:initial;background-color:#6e7881;color:#fff;font-size:1em}.swal2-styled.swal2-cancel:focus{box-shadow:0 0 0 3px rgba(110,120,129,.5)}.swal2-styled.swal2-default-outline:focus{box-shadow:0 0 0 3px rgba(100,150,200,.5)}.swal2-styled:focus{outline:0}.swal2-styled::-moz-focus-inner{border:0}.swal2-footer{justify-content:center;margin:1em 0 0;padding:1em 1em 0;border-top:1px solid #eee;color:inherit;font-size:1em}.swal2-timer-progress-bar-container{position:absolute;right:0;bottom:0;left:0;grid-column:auto!important;overflow:hidden;border-bottom-right-radius:5px;border-bottom-left-radius:5px}.swal2-timer-progress-bar{width:100%;height:.25em;background:rgba(0,0,0,.2)}.swal2-image{max-width:100%;margin:2em auto 1em}.swal2-close{z-index:2;align-items:center;justify-content:center;width:1.2em;height:1.2em;margin-top:0;margin-right:0;margin-bottom:-1.2em;padding:0;overflow:hidden;transition:color .1s,box-shadow .1s;border:none;border-radius:5px;background:0 0;color:#ccc;font-family:serif;font-family:monospace;font-size:2.5em;cursor:pointer;justify-self:end}.swal2-close:hover{transform:none;background:0 0;color:#f27474}.swal2-close:focus{outline:0;box-shadow:inset 0 0 0 3px rgba(100,150,200,.5)}.swal2-close::-moz-focus-inner{border:0}.swal2-html-container{z-index:1;justify-content:center;margin:1em 1.6em .3em;padding:0;overflow:auto;color:inherit;font-size:1.125em;font-weight:400;line-height:normal;text-align:center;word-wrap:break-word;word-break:break-word}.swal2-checkbox,.swal2-file,.swal2-input,.swal2-radio,.swal2-select,.swal2-textarea{margin:1em 2em 3px}.swal2-file,.swal2-input,.swal2-textarea{box-sizing:border-box;width:auto;transition:border-color .1s,box-shadow .1s;border:1px solid #d9d9d9;border-radius:.1875em;background:inherit;box-shadow:inset 0 1px 1px rgba(0,0,0,.06),0 0 0 3px transparent;color:inherit;font-size:1.125em}.swal2-file.swal2-inputerror,.swal2-input.swal2-inputerror,.swal2-textarea.swal2-inputerror{border-color:#f27474!important;box-shadow:0 0 2px #f27474!important}.swal2-file:focus,.swal2-input:focus,.swal2-textarea:focus{border:1px solid #b4dbed;outline:0;box-shadow:inset 0 1px 1px rgba(0,0,0,.06),0 0 0 3px rgba(100,150,200,.5)}.swal2-file::-moz-placeholder,.swal2-input::-moz-placeholder,.swal2-textarea::-moz-placeholder{color:#ccc}.swal2-file:-ms-input-placeholder,.swal2-input:-ms-input-placeholder,.swal2-textarea:-ms-input-placeholder{color:#ccc}.swal2-file::placeholder,.swal2-input::placeholder,.swal2-textarea::placeholder{color:#ccc}.swal2-range{margin:1em 2em 3px;background:#fff}.swal2-range input{width:80%}.swal2-range output{width:20%;color:inherit;font-weight:600;text-align:center}.swal2-range input,.swal2-range output{height:2.625em;padding:0;font-size:1.125em;line-height:2.625em}.swal2-input{height:2.625em;padding:0 .75em}.swal2-file{width:75%;margin-right:auto;margin-left:auto;background:inherit;font-size:1.125em}.swal2-textarea{height:6.75em;padding:.75em}.swal2-select{min-width:50%;max-width:100%;padding:.375em .625em;background:inherit;color:inherit;font-size:1.125em}.swal2-checkbox,.swal2-radio{align-items:center;justify-content:center;background:#fff;color:inherit}.swal2-checkbox label,.swal2-radio label{margin:0 .6em;font-size:1.125em}.swal2-checkbox input,.swal2-radio input{flex-shrink:0;margin:0 .4em}.swal2-input-label{display:flex;justify-content:center;margin:1em auto 0}.swal2-validation-message{align-items:center;justify-content:center;margin:1em 0 0;padding:.625em;overflow:hidden;background:#f0f0f0;color:#666;font-size:1em;font-weight:300}.swal2-validation-message::before{content:\"!\";display:inline-block;width:1.5em;min-width:1.5em;height:1.5em;margin:0 .625em;border-radius:50%;background-color:#f27474;color:#fff;font-weight:600;line-height:1.5em;text-align:center}.swal2-icon{position:relative;box-sizing:content-box;justify-content:center;width:5em;height:5em;margin:2.5em auto .6em;border:.25em solid transparent;border-radius:50%;border-color:#000;font-family:inherit;line-height:5em;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.swal2-icon .swal2-icon-content{display:flex;align-items:center;font-size:3.75em}.swal2-icon.swal2-error{border-color:#f27474;color:#f27474}.swal2-icon.swal2-error .swal2-x-mark{position:relative;flex-grow:1}.swal2-icon.swal2-error [class^=swal2-x-mark-line]{display:block;position:absolute;top:2.3125em;width:2.9375em;height:.3125em;border-radius:.125em;background-color:#f27474}.swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left]{left:1.0625em;transform:rotate(45deg)}.swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right]{right:1em;transform:rotate(-45deg)}.swal2-icon.swal2-error.swal2-icon-show{-webkit-animation:swal2-animate-error-icon .5s;animation:swal2-animate-error-icon .5s}.swal2-icon.swal2-error.swal2-icon-show .swal2-x-mark{-webkit-animation:swal2-animate-error-x-mark .5s;animation:swal2-animate-error-x-mark .5s}.swal2-icon.swal2-warning{border-color:#facea8;color:#f8bb86}.swal2-icon.swal2-warning.swal2-icon-show{-webkit-animation:swal2-animate-error-icon .5s;animation:swal2-animate-error-icon .5s}.swal2-icon.swal2-warning.swal2-icon-show .swal2-icon-content{-webkit-animation:swal2-animate-i-mark .5s;animation:swal2-animate-i-mark .5s}.swal2-icon.swal2-info{border-color:#9de0f6;color:#3fc3ee}.swal2-icon.swal2-info.swal2-icon-show{-webkit-animation:swal2-animate-error-icon .5s;animation:swal2-animate-error-icon .5s}.swal2-icon.swal2-info.swal2-icon-show .swal2-icon-content{-webkit-animation:swal2-animate-i-mark .8s;animation:swal2-animate-i-mark .8s}.swal2-icon.swal2-question{border-color:#c9dae1;color:#87adbd}.swal2-icon.swal2-question.swal2-icon-show{-webkit-animation:swal2-animate-error-icon .5s;animation:swal2-animate-error-icon .5s}.swal2-icon.swal2-question.swal2-icon-show .swal2-icon-content{-webkit-animation:swal2-animate-question-mark .8s;animation:swal2-animate-question-mark .8s}.swal2-icon.swal2-success{border-color:#a5dc86;color:#a5dc86}.swal2-icon.swal2-success [class^=swal2-success-circular-line]{position:absolute;width:3.75em;height:7.5em;transform:rotate(45deg);border-radius:50%}.swal2-icon.swal2-success [class^=swal2-success-circular-line][class$=left]{top:-.4375em;left:-2.0635em;transform:rotate(-45deg);transform-origin:3.75em 3.75em;border-radius:7.5em 0 0 7.5em}.swal2-icon.swal2-success [class^=swal2-success-circular-line][class$=right]{top:-.6875em;left:1.875em;transform:rotate(-45deg);transform-origin:0 3.75em;border-radius:0 7.5em 7.5em 0}.swal2-icon.swal2-success .swal2-success-ring{position:absolute;z-index:2;top:-.25em;left:-.25em;box-sizing:content-box;width:100%;height:100%;border:.25em solid rgba(165,220,134,.3);border-radius:50%}.swal2-icon.swal2-success .swal2-success-fix{position:absolute;z-index:1;top:.5em;left:1.625em;width:.4375em;height:5.625em;transform:rotate(-45deg)}.swal2-icon.swal2-success [class^=swal2-success-line]{display:block;position:absolute;z-index:2;height:.3125em;border-radius:.125em;background-color:#a5dc86}.swal2-icon.swal2-success [class^=swal2-success-line][class$=tip]{top:2.875em;left:.8125em;width:1.5625em;transform:rotate(45deg)}.swal2-icon.swal2-success [class^=swal2-success-line][class$=long]{top:2.375em;right:.5em;width:2.9375em;transform:rotate(-45deg)}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-line-tip{-webkit-animation:swal2-animate-success-line-tip .75s;animation:swal2-animate-success-line-tip .75s}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-line-long{-webkit-animation:swal2-animate-success-line-long .75s;animation:swal2-animate-success-line-long .75s}.swal2-icon.swal2-success.swal2-icon-show .swal2-success-circular-line-right{-webkit-animation:swal2-rotate-success-circular-line 4.25s ease-in;animation:swal2-rotate-success-circular-line 4.25s ease-in}.swal2-progress-steps{flex-wrap:wrap;align-items:center;max-width:100%;margin:1.25em auto;padding:0;background:inherit;font-weight:600}.swal2-progress-steps li{display:inline-block;position:relative}.swal2-progress-steps .swal2-progress-step{z-index:20;flex-shrink:0;width:2em;height:2em;border-radius:2em;background:#2778c4;color:#fff;line-height:2em;text-align:center}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step{background:#2778c4}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step{background:#add8e6;color:#fff}.swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step-line{background:#add8e6}.swal2-progress-steps .swal2-progress-step-line{z-index:10;flex-shrink:0;width:2.5em;height:.4em;margin:0 -1px;background:#2778c4}[class^=swal2]{-webkit-tap-highlight-color:transparent}.swal2-show{-webkit-animation:swal2-show .3s;animation:swal2-show .3s}.swal2-hide{-webkit-animation:swal2-hide .15s forwards;animation:swal2-hide .15s forwards}.swal2-noanimation{transition:none}.swal2-scrollbar-measure{position:absolute;top:-9999px;width:50px;height:50px;overflow:scroll}.swal2-rtl .swal2-close{margin-right:initial;margin-left:0}.swal2-rtl .swal2-timer-progress-bar{right:0;left:auto}@-webkit-keyframes swal2-toast-show{0%{transform:translateY(-.625em) rotateZ(2deg)}33%{transform:translateY(0) rotateZ(-2deg)}66%{transform:translateY(.3125em) rotateZ(2deg)}100%{transform:translateY(0) rotateZ(0)}}@keyframes swal2-toast-show{0%{transform:translateY(-.625em) rotateZ(2deg)}33%{transform:translateY(0) rotateZ(-2deg)}66%{transform:translateY(.3125em) rotateZ(2deg)}100%{transform:translateY(0) rotateZ(0)}}@-webkit-keyframes swal2-toast-hide{100%{transform:rotateZ(1deg);opacity:0}}@keyframes swal2-toast-hide{100%{transform:rotateZ(1deg);opacity:0}}@-webkit-keyframes swal2-toast-animate-success-line-tip{0%{top:.5625em;left:.0625em;width:0}54%{top:.125em;left:.125em;width:0}70%{top:.625em;left:-.25em;width:1.625em}84%{top:1.0625em;left:.75em;width:.5em}100%{top:1.125em;left:.1875em;width:.75em}}@keyframes swal2-toast-animate-success-line-tip{0%{top:.5625em;left:.0625em;width:0}54%{top:.125em;left:.125em;width:0}70%{top:.625em;left:-.25em;width:1.625em}84%{top:1.0625em;left:.75em;width:.5em}100%{top:1.125em;left:.1875em;width:.75em}}@-webkit-keyframes swal2-toast-animate-success-line-long{0%{top:1.625em;right:1.375em;width:0}65%{top:1.25em;right:.9375em;width:0}84%{top:.9375em;right:0;width:1.125em}100%{top:.9375em;right:.1875em;width:1.375em}}@keyframes swal2-toast-animate-success-line-long{0%{top:1.625em;right:1.375em;width:0}65%{top:1.25em;right:.9375em;width:0}84%{top:.9375em;right:0;width:1.125em}100%{top:.9375em;right:.1875em;width:1.375em}}@-webkit-keyframes swal2-show{0%{transform:scale(.7)}45%{transform:scale(1.05)}80%{transform:scale(.95)}100%{transform:scale(1)}}@keyframes swal2-show{0%{transform:scale(.7)}45%{transform:scale(1.05)}80%{transform:scale(.95)}100%{transform:scale(1)}}@-webkit-keyframes swal2-hide{0%{transform:scale(1);opacity:1}100%{transform:scale(.5);opacity:0}}@keyframes swal2-hide{0%{transform:scale(1);opacity:1}100%{transform:scale(.5);opacity:0}}@-webkit-keyframes swal2-animate-success-line-tip{0%{top:1.1875em;left:.0625em;width:0}54%{top:1.0625em;left:.125em;width:0}70%{top:2.1875em;left:-.375em;width:3.125em}84%{top:3em;left:1.3125em;width:1.0625em}100%{top:2.8125em;left:.8125em;width:1.5625em}}@keyframes swal2-animate-success-line-tip{0%{top:1.1875em;left:.0625em;width:0}54%{top:1.0625em;left:.125em;width:0}70%{top:2.1875em;left:-.375em;width:3.125em}84%{top:3em;left:1.3125em;width:1.0625em}100%{top:2.8125em;left:.8125em;width:1.5625em}}@-webkit-keyframes swal2-animate-success-line-long{0%{top:3.375em;right:2.875em;width:0}65%{top:3.375em;right:2.875em;width:0}84%{top:2.1875em;right:0;width:3.4375em}100%{top:2.375em;right:.5em;width:2.9375em}}@keyframes swal2-animate-success-line-long{0%{top:3.375em;right:2.875em;width:0}65%{top:3.375em;right:2.875em;width:0}84%{top:2.1875em;right:0;width:3.4375em}100%{top:2.375em;right:.5em;width:2.9375em}}@-webkit-keyframes swal2-rotate-success-circular-line{0%{transform:rotate(-45deg)}5%{transform:rotate(-45deg)}12%{transform:rotate(-405deg)}100%{transform:rotate(-405deg)}}@keyframes swal2-rotate-success-circular-line{0%{transform:rotate(-45deg)}5%{transform:rotate(-45deg)}12%{transform:rotate(-405deg)}100%{transform:rotate(-405deg)}}@-webkit-keyframes swal2-animate-error-x-mark{0%{margin-top:1.625em;transform:scale(.4);opacity:0}50%{margin-top:1.625em;transform:scale(.4);opacity:0}80%{margin-top:-.375em;transform:scale(1.15)}100%{margin-top:0;transform:scale(1);opacity:1}}@keyframes swal2-animate-error-x-mark{0%{margin-top:1.625em;transform:scale(.4);opacity:0}50%{margin-top:1.625em;transform:scale(.4);opacity:0}80%{margin-top:-.375em;transform:scale(1.15)}100%{margin-top:0;transform:scale(1);opacity:1}}@-webkit-keyframes swal2-animate-error-icon{0%{transform:rotateX(100deg);opacity:0}100%{transform:rotateX(0);opacity:1}}@keyframes swal2-animate-error-icon{0%{transform:rotateX(100deg);opacity:0}100%{transform:rotateX(0);opacity:1}}@-webkit-keyframes swal2-rotate-loading{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}@keyframes swal2-rotate-loading{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}@-webkit-keyframes swal2-animate-question-mark{0%{transform:rotateY(-360deg)}100%{transform:rotateY(0)}}@keyframes swal2-animate-question-mark{0%{transform:rotateY(-360deg)}100%{transform:rotateY(0)}}@-webkit-keyframes swal2-animate-i-mark{0%{transform:rotateZ(45deg);opacity:0}25%{transform:rotateZ(-25deg);opacity:.4}50%{transform:rotateZ(15deg);opacity:.8}75%{transform:rotateZ(-5deg);opacity:1}100%{transform:rotateX(0);opacity:1}}@keyframes swal2-animate-i-mark{0%{transform:rotateZ(45deg);opacity:0}25%{transform:rotateZ(-25deg);opacity:.4}50%{transform:rotateZ(15deg);opacity:.8}75%{transform:rotateZ(-5deg);opacity:1}100%{transform:rotateX(0);opacity:1}}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown){overflow:hidden}body.swal2-height-auto{height:auto!important}body.swal2-no-backdrop .swal2-container{background-color:transparent!important;pointer-events:none}body.swal2-no-backdrop .swal2-container .swal2-popup{pointer-events:all}body.swal2-no-backdrop .swal2-container .swal2-modal{box-shadow:0 0 10px rgba(0,0,0,.4)}@media print{body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown){overflow-y:scroll!important}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown)>[aria-hidden=true]{display:none}body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) .swal2-container{position:static!important}}body.swal2-toast-shown .swal2-container{box-sizing:border-box;width:360px;max-width:100%;background-color:transparent;pointer-events:none}body.swal2-toast-shown .swal2-container.swal2-top{top:0;right:auto;bottom:auto;left:50%;transform:translateX(-50%)}body.swal2-toast-shown .swal2-container.swal2-top-end,body.swal2-toast-shown .swal2-container.swal2-top-right{top:0;right:0;bottom:auto;left:auto}body.swal2-toast-shown .swal2-container.swal2-top-left,body.swal2-toast-shown .swal2-container.swal2-top-start{top:0;right:auto;bottom:auto;left:0}body.swal2-toast-shown .swal2-container.swal2-center-left,body.swal2-toast-shown .swal2-container.swal2-center-start{top:50%;right:auto;bottom:auto;left:0;transform:translateY(-50%)}body.swal2-toast-shown .swal2-container.swal2-center{top:50%;right:auto;bottom:auto;left:50%;transform:translate(-50%,-50%)}body.swal2-toast-shown .swal2-container.swal2-center-end,body.swal2-toast-shown .swal2-container.swal2-center-right{top:50%;right:0;bottom:auto;left:auto;transform:translateY(-50%)}body.swal2-toast-shown .swal2-container.swal2-bottom-left,body.swal2-toast-shown .swal2-container.swal2-bottom-start{top:auto;right:auto;bottom:0;left:0}body.swal2-toast-shown .swal2-container.swal2-bottom{top:auto;right:auto;bottom:0;left:50%;transform:translateX(-50%)}body.swal2-toast-shown .swal2-container.swal2-bottom-end,body.swal2-toast-shown .swal2-container.swal2-bottom-right{top:auto;right:0;bottom:0;left:auto}");
+
+/***/ }),
+
 /***/ "./node_modules/timers-browserify/main.js":
 /*!************************************************!*\
   !*** ./node_modules/timers-browserify/main.js ***!
@@ -38269,6 +42024,541 @@ var staticRenderFns = [
         ]
       ),
     ])
+  },
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/servicios/AreaComponent.vue?vue&type=template&id=c2a6c9ba&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/servicios/AreaComponent.vue?vue&type=template&id=c2a6c9ba& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("main", { staticClass: "main" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "container-fluid" }, [
+      _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card-header" }, [
+          _c("i", { staticClass: "fa fa-align-justify" }),
+          _vm._v(" Categorías\n                "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-secondary",
+              attrs: { type: "button" },
+              on: {
+                click: function ($event) {
+                  return _vm.abrirModal("registrar")
+                },
+              },
+            },
+            [
+              _c("i", { staticClass: "icon-plus" }),
+              _vm._v(" Nuevo\n                "),
+            ]
+          ),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c(
+            "table",
+            { staticClass: "table table-bordered table-striped table-sm" },
+            [
+              _vm._m(2),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.arrayAreas, function (area) {
+                  return _c("tr", { key: area.id }, [
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-warning btn-sm",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.abrirModal("actualizar", area)
+                            },
+                          },
+                        },
+                        [_c("i", { staticClass: "icon-pencil" })]
+                      ),
+                      _vm._v("  \n                                "),
+                      area.activo == 1
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-danger btn-sm",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.eliminarArea(area.id)
+                                },
+                              },
+                            },
+                            [_c("i", { staticClass: "icon-trash" })]
+                          )
+                        : _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-success btn-sm",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function ($event) {
+                                  return _vm.activarArea(area.id)
+                                },
+                              },
+                            },
+                            [_c("i", { staticClass: "icon-check" })]
+                          ),
+                    ]),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(area.codigo) },
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(area.nombre) },
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(area.descripcion) },
+                    }),
+                    _vm._v(" "),
+                    _c("td", [
+                      area.activo == 1
+                        ? _c("div", [
+                            _c("span", { staticClass: "badge badge-success" }, [
+                              _vm._v("Activo"),
+                            ]),
+                          ])
+                        : _c("div", [
+                            _c("span", { staticClass: "badge badge-warning" }, [
+                              _vm._v("Desactivado"),
+                            ]),
+                          ]),
+                    ]),
+                  ])
+                }),
+                0
+              ),
+            ]
+          ),
+          _vm._v(" "),
+          _vm._m(3),
+        ]),
+      ]),
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "myModalLabel",
+          id: "registrar",
+          "aria-hidden": "true",
+          "data-backdrop": "static",
+          "data-keyboard": "false",
+        },
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-primary modal-lg",
+            attrs: { role: "document" },
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c("h4", { staticClass: "modal-title" }, [
+                  _vm._v(_vm._s(_vm.tituloModal)),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: { type: "button", "aria-label": "Close" },
+                    on: {
+                      click: function ($event) {
+                        return _vm.cerrarModal("registrar")
+                      },
+                    },
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×"),
+                    ]),
+                  ]
+                ),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c(
+                  "form",
+                  {
+                    staticClass: "form-horizontal",
+                    attrs: {
+                      action: "",
+                      method: "post",
+                      enctype: "multipart/form-data",
+                    },
+                  },
+                  [
+                    _c("div", { staticClass: "form-group row" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-md-3 form-control-label",
+                          attrs: { for: "text-input" },
+                        },
+                        [_vm._v("Nombre")]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-9" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.nombre,
+                              expression: "nombre",
+                            },
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "text",
+                            id: "nombre",
+                            name: "nombre",
+                            placeholder: "Nombre del Area",
+                          },
+                          domProps: { value: _vm.nombre },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.nombre = $event.target.value
+                            },
+                          },
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "help-block" }, [
+                          _vm._v("(*) Ingrese el nombre del Area"),
+                        ]),
+                      ]),
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group row" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-md-3 form-control-label",
+                          attrs: { for: "text-input" },
+                        },
+                        [_vm._v("Descripción")]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-9" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.descripcion,
+                              expression: "descripcion",
+                            },
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "text",
+                            id: "descripcion",
+                            name: "descripcion",
+                            placeholder: "Ingrese una Descripción",
+                          },
+                          domProps: { value: _vm.descripcion },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.descripcion = $event.target.value
+                            },
+                          },
+                        }),
+                      ]),
+                    ]),
+                  ]
+                ),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function ($event) {
+                        return _vm.cerrarModal("registrar")
+                      },
+                    },
+                  },
+                  [_vm._v("Cerrar")]
+                ),
+                _vm._v(" "),
+                _vm.tipoAccion == 1
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function ($event) {
+                            return _vm.registrarArea()
+                          },
+                        },
+                      },
+                      [_vm._v("Guardar")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.tipoAccion == 2
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function ($event) {
+                            return _vm.actualizarArea()
+                          },
+                        },
+                      },
+                      [_vm._v("Actualizar")]
+                    )
+                  : _vm._e(),
+              ]),
+            ]),
+          ]
+        ),
+      ]
+    ),
+    _vm._v(" "),
+    _vm._m(4),
+  ])
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ol", { staticClass: "breadcrumb" }, [
+      _c("li", { staticClass: "breadcrumb-item" }, [_vm._v("Home")]),
+      _vm._v(" "),
+      _c("li", { staticClass: "breadcrumb-item" }, [
+        _c("a", { attrs: { href: "#" } }, [_vm._v("Admin")]),
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "breadcrumb-item active" }, [
+        _vm._v("Dashboard"),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group row" }, [
+      _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "input-group" }, [
+          _c(
+            "select",
+            {
+              staticClass: "form-control col-md-3",
+              attrs: { id: "opcion", name: "opcion" },
+            },
+            [
+              _c("option", { attrs: { value: "nombre" } }, [_vm._v("Nombre")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "descripcion" } }, [
+                _vm._v("Descripción"),
+              ]),
+            ]
+          ),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "text",
+              id: "texto",
+              name: "texto",
+              placeholder: "Texto a buscar",
+            },
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+            [_c("i", { staticClass: "fa fa-search" }), _vm._v(" Buscar")]
+          ),
+        ]),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Opciones")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Codigo")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Nombre")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Descripción")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Estado")]),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("nav", [
+      _c("ul", { staticClass: "pagination" }, [
+        _c("li", { staticClass: "page-item" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("Ant"),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item active" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("1"),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("2"),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("3"),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("4"),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "page-item" }, [
+          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+            _vm._v("Sig"),
+          ]),
+        ]),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        staticStyle: { display: "none" },
+        attrs: {
+          id: "modalEliminar",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "myModalLabel",
+          "aria-hidden": "true",
+        },
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-danger",
+            attrs: { role: "document" },
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c("h4", { staticClass: "modal-title" }, [
+                  _vm._v("Eliminar Categoría"),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: { type: "button", "aria-label": "Close" },
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×"),
+                    ]),
+                  ]
+                ),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("p", [_vm._v("Estas seguro de eliminar la categoría?")]),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button" },
+                  },
+                  [_vm._v("Cerrar")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  { staticClass: "btn btn-danger", attrs: { type: "button" } },
+                  [_vm._v("Eliminar")]
+                ),
+              ]),
+            ]),
+          ]
+        ),
+      ]
+    )
   },
 ]
 render._withStripped = true
@@ -50503,6 +54793,7 @@ module.exports = function(module) {
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+window._pl = __webpack_require__(/*! ./func_10251.js */ "./resources/js/func_10251.js");
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -50514,6 +54805,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
+Vue.component('area-component', __webpack_require__(/*! ./components/servicios/AreaComponent.vue */ "./resources/js/components/servicios/AreaComponent.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -50639,6 +54931,3498 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/components/servicios/AreaComponent.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/servicios/AreaComponent.vue ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AreaComponent_vue_vue_type_template_id_c2a6c9ba___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AreaComponent.vue?vue&type=template&id=c2a6c9ba& */ "./resources/js/components/servicios/AreaComponent.vue?vue&type=template&id=c2a6c9ba&");
+/* harmony import */ var _AreaComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AreaComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/servicios/AreaComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AreaComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AreaComponent_vue_vue_type_template_id_c2a6c9ba___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AreaComponent_vue_vue_type_template_id_c2a6c9ba___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/servicios/AreaComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/servicios/AreaComponent.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/servicios/AreaComponent.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AreaComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./AreaComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/servicios/AreaComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AreaComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/servicios/AreaComponent.vue?vue&type=template&id=c2a6c9ba&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/servicios/AreaComponent.vue?vue&type=template&id=c2a6c9ba& ***!
+  \********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AreaComponent_vue_vue_type_template_id_c2a6c9ba___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./AreaComponent.vue?vue&type=template&id=c2a6c9ba& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/servicios/AreaComponent.vue?vue&type=template&id=c2a6c9ba&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AreaComponent_vue_vue_type_template_id_c2a6c9ba___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AreaComponent_vue_vue_type_template_id_c2a6c9ba___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/func_10251.js":
+/*!************************************!*\
+  !*** ./resources/js/func_10251.js ***!
+  \************************************/
+/*! exports provided: validatePermission, generateKey, TEM, TED, _ppf351_2516, _fff3512_23623, _fff3512_23622, getcriterio, getcriterioGarantes, setgraficoLista, getcriterioGarantesLista, _vm2154_12185_145, _vm2154_12186_135, _vm2999158_1fgf_135, _vm2154_12185, datapicker, datatime, getdatapicker, _mg3612152_215, Modals, Slider, _vvp2521_cr01, _vvp2521_cr02_b, _vvp2521_cr02, _vvp2521_cr0egresados, _vvp2521_cr_emp, _vvp2521_cr_cen_emp, _vvp2521_bio01, _vvp2521_00001, _vvp2521_00002, _vvp2521_00003, _vvp2521_00004, redondeo_valor, fillDecimals, ppppp, generaperfil, _mff82sdf_mjd, _perff_00125, _perff_00126, _mmf2251_3325, _mf362353_225, _mf36265_25421 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "validatePermission", function() { return validatePermission; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generateKey", function() { return generateKey; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TEM", function() { return TEM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TED", function() { return TED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_ppf351_2516", function() { return _ppf351_2516; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_fff3512_23623", function() { return _fff3512_23623; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_fff3512_23622", function() { return _fff3512_23622; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getcriterio", function() { return getcriterio; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getcriterioGarantes", function() { return getcriterioGarantes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setgraficoLista", function() { return setgraficoLista; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getcriterioGarantesLista", function() { return getcriterioGarantesLista; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vm2154_12185_145", function() { return _vm2154_12185_145; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vm2154_12186_135", function() { return _vm2154_12186_135; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vm2999158_1fgf_135", function() { return _vm2999158_1fgf_135; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vm2154_12185", function() { return _vm2154_12185; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "datapicker", function() { return datapicker; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "datatime", function() { return datatime; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getdatapicker", function() { return getdatapicker; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_mg3612152_215", function() { return _mg3612152_215; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Modals", function() { return Modals; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Slider", function() { return Slider; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vvp2521_cr01", function() { return _vvp2521_cr01; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vvp2521_cr02_b", function() { return _vvp2521_cr02_b; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vvp2521_cr02", function() { return _vvp2521_cr02; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vvp2521_cr0egresados", function() { return _vvp2521_cr0egresados; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vvp2521_cr_emp", function() { return _vvp2521_cr_emp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vvp2521_cr_cen_emp", function() { return _vvp2521_cr_cen_emp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vvp2521_bio01", function() { return _vvp2521_bio01; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vvp2521_00001", function() { return _vvp2521_00001; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vvp2521_00002", function() { return _vvp2521_00002; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vvp2521_00003", function() { return _vvp2521_00003; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_vvp2521_00004", function() { return _vvp2521_00004; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "redondeo_valor", function() { return redondeo_valor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fillDecimals", function() { return fillDecimals; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ppppp", function() { return ppppp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generaperfil", function() { return generaperfil; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_mff82sdf_mjd", function() { return _mff82sdf_mjd; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_perff_00125", function() { return _perff_00125; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_perff_00126", function() { return _perff_00126; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_mmf2251_3325", function() { return _mmf2251_3325; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_mf362353_225", function() { return _mf362353_225; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_mf36265_25421", function() { return _mf36265_25421; });
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/*
+para crear comandos en laravel ejemplo para crear base de datos nueva
+// Referencia: https://stackoverflow.com/questions/38832166/how-to-create-a-mysql-db-with-laravel#answer-47316035  
+
+*/
+
+/*para el biometrico instalar el composer zklib
+composer require rats/zkteco
+https://github.com/raihanafroz/zkteco
+
+*/
+
+/*
+PARA LEER TEXTOS
+https://github.com/js1016/txt-reader
+
+para leer excel
+https://sheetjs.com/
+ejemplo:
+https://www.aspsnippets.com/Articles/Read-Parse-Excel-File-XLS-and-XLSX-using-JavaScript.aspx
+
+!function(t){var e={};function n(r){if(e[r])return e[r].exports;var o=e[r]={i:r,l:!1,exports:{}};return t[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}n.m=t,n.c=e,n.d=function(t,e,r){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:r})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var o in t)n.d(r,o,function(e){return t[e]}.bind(null,o));return r},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=7)}([function(t,e){var n;n=function(){return this}();try{n=n||new Function("return this")()}catch(t){"object"==typeof window&&(n=window)}t.exports=n},function(t,e,n){"use strict";e.a=function(t){var e=this.constructor;return this.then((function(n){return e.resolve(t()).then((function(){return n}))}),(function(n){return e.resolve(t()).then((function(){return e.reject(n)}))}))}},function(t,e,n){(function(n){var r,o,i;o=[],void 0===(i="function"==typeof(r=function(){"use strict";var t=void 0!==n?n:self;if(void 0!==t.TextEncoder&&void 0!==t.TextDecoder)return{TextEncoder:t.TextEncoder,TextDecoder:t.TextDecoder};var e=["utf8","utf-8","unicode-1-1-utf-8"];return{TextEncoder:function(t){if(e.indexOf(t)<0&&null!=t)throw new RangeError("Invalid encoding type. Only utf-8 is supported");this.encoding="utf-8",this.encode=function(t){if("string"!=typeof t)throw new TypeError("passed argument must be of type string");var e=unescape(encodeURIComponent(t)),n=new Uint8Array(e.length);return e.split("").forEach((function(t,e){n[e]=t.charCodeAt(0)})),n}},TextDecoder:function(t,n){if(e.indexOf(t)<0&&null!=t)throw new RangeError("Invalid encoding type. Only utf-8 is supported");if(this.encoding="utf-8",this.ignoreBOM=!1,this.fatal=void 0!==n&&"fatal"in n&&n.fatal,"boolean"!=typeof this.fatal)throw new TypeError("fatal flag must be boolean");this.decode=function(t,e){if(void 0===t)return"";if("boolean"!=typeof(void 0!==e&&"stream"in e&&e.stream))throw new TypeError("stream option must be boolean");if(ArrayBuffer.isView(t)){var n=new Uint8Array(t.buffer),r=new Array(n.length);return n.forEach((function(t,e){r[e]=String.fromCharCode(t)})),decodeURIComponent(escape(r.join("")))}throw new TypeError("passed argument must be an array buffer view")}}}})?r.apply(e,o):r)||(t.exports=i)}).call(this,n(0))},function(t,e,n){"use strict";void 0===Uint8Array.prototype.indexOf&&(Uint8Array.prototype.indexOf=function(t){return Array.prototype.indexOf.call(this,t)}),void 0===Uint8Array.prototype.slice&&(Uint8Array.prototype.slice=function(t,e){return new Uint8Array(Array.prototype.slice.call(this,t,e))}),Uint8Array.prototype.forEach||(Uint8Array.prototype.forEach=function(t){var e,n;if(null==this)throw new TypeError("this is null or not defined");var r=Object(this),o=r.length>>>0;if("function"!=typeof t)throw new TypeError(t+" is not a function");for(arguments.length>1&&(e=arguments[1]),n=0;n<o;){var i;n in r&&(i=r[n],t.call(e,i,n,r)),n++}})},function(t,e,n){"use strict";var r=this&&this.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};e.__esModule=!0;var o=n(2);n(8),n(3);var i,u=r(n(12)),a=function(t,e){this.action=t,this.data=void 0!==e?e:null};!function(t){t[t.Initialized=0]="Initialized",t[t.Queued=1]="Queued",t[t.Running=2]="Running",t[t.Completed=3]="Completed"}(i||(i={}));var s=function(){function t(t,e,n){var r=this;this.id=t,this.requestMessage=e,this.parser=n,this.requestMessage.taskId=t,this.state=i.Initialized,this.onProgress=null,this.startTime=0,this.promise=new Promise((function(t,e){r.resolve=t,r.reject=e}))}return t.prototype.dispose=function(){this.resolve=null,this.reject=null,this.promise=null},t.prototype.run=function(){this.state=i.Running,this.startTime=(new Date).getTime()},t.prototype.complete=function(t){this.state=i.Completed;var e=(new Date).getTime()-this.startTime;if(t.success){var n={timeTaken:e,message:t.message,result:t.result};this.resolve(n)}else this.reject(t.message);this.dispose()},t.prototype.updateProgress=function(t){null!==this.onProgress&&this.onProgress.call(this.parser,t)},t.prototype.then=function(t){var e=this;return this.promise&&this.promise.then((function(n){t.call(e.parser,n)})).catch((function(t){})),this},t.prototype.catch=function(t){var e=this;return this.promise&&this.promise.catch((function(n){t.call(e.parser,n)})),this},t.prototype.progress=function(t){return this.onProgress=t,this},t}(),c=function(){function t(){var t=this;this.taskList=[],this.runningTask=null,this.queuedTaskList=[],this.verboseLogging=!1,this.utf8decoder=new o.TextDecoder("utf-8"),this.lineCount=0,Object.defineProperty(this,"lineCount",{value:0,writable:!1}),this.file=null,this.worker=new Worker(window.URL.createObjectURL(new Blob(["!function(e){var t={};function r(i){if(t[i])return t[i].exports;var n=t[i]={i:i,l:!1,exports:{}};return e[i].call(n.exports,n,n.exports,r),n.l=!0,n.exports}r.m=e,r.c=t,r.d=function(e,t,i){r.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:i})},r.r=function(e){\"undefined\"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:\"Module\"}),Object.defineProperty(e,\"__esModule\",{value:!0})},r.t=function(e,t){if(1&t&&(e=r(e)),8&t)return e;if(4&t&&\"object\"==typeof e&&e&&e.__esModule)return e;var i=Object.create(null);if(r.r(i),Object.defineProperty(i,\"default\",{enumerable:!0,value:e}),2&t&&\"string\"!=typeof e)for(var n in e)r.d(i,n,function(t){return e[t]}.bind(null,n));return i},r.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return r.d(t,\"a\",t),t},r.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},r.p=\"\",r(r.s=6)}([function(e,t){var r;r=function(){return this}();try{r=r||new Function(\"return this\")()}catch(e){\"object\"==typeof window&&(r=window)}e.exports=r},,function(e,t,r){(function(r){var i,n,s;n=[],void 0===(s=\"function\"==typeof(i=function(){\"use strict\";var e=void 0!==r?r:self;if(void 0!==e.TextEncoder&&void 0!==e.TextDecoder)return{TextEncoder:e.TextEncoder,TextDecoder:e.TextDecoder};var t=[\"utf8\",\"utf-8\",\"unicode-1-1-utf-8\"];return{TextEncoder:function(e){if(t.indexOf(e)<0&&null!=e)throw new RangeError(\"Invalid encoding type. Only utf-8 is supported\");this.encoding=\"utf-8\",this.encode=function(e){if(\"string\"!=typeof e)throw new TypeError(\"passed argument must be of type string\");var t=unescape(encodeURIComponent(e)),r=new Uint8Array(t.length);return t.split(\"\").forEach((function(e,t){r[t]=e.charCodeAt(0)})),r}},TextDecoder:function(e,r){if(t.indexOf(e)<0&&null!=e)throw new RangeError(\"Invalid encoding type. Only utf-8 is supported\");if(this.encoding=\"utf-8\",this.ignoreBOM=!1,this.fatal=void 0!==r&&\"fatal\"in r&&r.fatal,\"boolean\"!=typeof this.fatal)throw new TypeError(\"fatal flag must be boolean\");this.decode=function(e,t){if(void 0===e)return\"\";if(\"boolean\"!=typeof(void 0!==t&&\"stream\"in t&&t.stream))throw new TypeError(\"stream option must be boolean\");if(ArrayBuffer.isView(e)){var r=new Uint8Array(e.buffer),i=new Array(r.length);return r.forEach((function(e,t){i[t]=String.fromCharCode(e)})),decodeURIComponent(escape(i.join(\"\")))}throw new TypeError(\"passed argument must be an array buffer view\")}}}})?i.apply(t,n):i)||(e.exports=s)}).call(this,r(0))},function(e,t,r){\"use strict\";void 0===Uint8Array.prototype.indexOf&&(Uint8Array.prototype.indexOf=function(e){return Array.prototype.indexOf.call(this,e)}),void 0===Uint8Array.prototype.slice&&(Uint8Array.prototype.slice=function(e,t){return new Uint8Array(Array.prototype.slice.call(this,e,t))}),Uint8Array.prototype.forEach||(Uint8Array.prototype.forEach=function(e){var t,r;if(null==this)throw new TypeError(\"this is null or not defined\");var i=Object(this),n=i.length>>>0;if(\"function\"!=typeof e)throw new TypeError(e+\" is not a function\");for(arguments.length>1&&(t=arguments[1]),r=0;r<n;){var s;r in i&&(s=i[r],e.call(t,s,r,i)),r++}})},,,function(module,exports,__webpack_require__){\"use strict\";exports.__esModule=!0;var text_encoding_shim_1=__webpack_require__(2);__webpack_require__(3);var utf8decoder=new text_encoding_shim_1.TextDecoder(\"utf-8\"),DEFAULT_CHUNK_SIZE=104857600,currentTaskId=null,txtReaderWorker=null,sniffWorker=null,verboseLogging=!1,useTransferrable=navigator.userAgent.indexOf(\"Firefox\")>-1,respondMessage=function(e){e.done&&(currentTaskId=null),postMessage.apply(null,[e])},respondTransferrableMessage=function(e,t){e.done&&(currentTaskId=null),postMessage(e,t)},createProgressResponseMessage=function(e){var t=new ResponseMessage(e);return t.done=!1,t},validateWorker=function(){return null!==txtReaderWorker||(respondMessage(new ResponseMessage(!1,\"File has not been loaded into the worker, need to loadFile first.\")),!1)},mergeUint8Array=function(e,t){if(0===e.byteLength)return t;if(0===t.byteLength)return e;var r=new Uint8Array(e.byteLength+t.byteLength);return r.set(e,0),r.set(t,e.byteLength),r},isLineWithinLinesRange=function(e,t){var r=getLinesRangeEnd(t);return e>=t.start&&e<=r},getLinesRangeEnd=function(e){return void 0!==e.count?e.start+e.count-1:e.end},getLinesRangeCount=function(e){return void 0!==e.count?e.count:e.end-e.start+1},getLinesRangeStart=function(e){return\"number\"==typeof e?e:e.start},getStartCountForSporadicLineItem=function(e){return\"number\"==typeof e?{start:e,count:1}:void 0!==e.end?{start:e.start,count:e.end-e.start+1}:e};self.addEventListener(\"message\",(function(e){var t=e.data;if(verboseLogging&&console.log(\"Worker thread received a message from main thread: \\r\\n\",e.data),null!==currentTaskId)throw\"The worker thread is busy.\";switch(currentTaskId=t.taskId,t.action){case\"loadFile\":txtReaderWorker=new TxtReaderWorker(t.data.file,t.data.config);break;case\"enableVerbose\":verboseLogging=!0,respondMessage(new ResponseMessage(!0));break;case\"setChunkSize\":if(\"number\"!=typeof t.data||t.data<1)return void respondMessage(new ResponseMessage(!1,\"Invalid CHUNK_SIZE, must be greater than 1.\"));txtReaderWorker&&(txtReaderWorker.CHUNK_SIZE=t.data),DEFAULT_CHUNK_SIZE=t.data,respondMessage(new ResponseMessage(DEFAULT_CHUNK_SIZE));break;case\"getLines\":validateWorker()&&txtReaderWorker.getLines(t.data.start,t.data.count);break;case\"getSporadicLines\":validateWorker()&&txtReaderWorker.getSporadicLines(t.data.sporadicLinesMap,t.data.decode);break;case\"iterateLines\":validateWorker()&&txtReaderWorker.iterateLines(t.data);break;case\"iterateSporadicLines\":validateWorker()&&txtReaderWorker.iterateSporadicLines(t.data.config,t.data.lines);break;case\"sniffLines\":sniffWorker=new TxtReaderWorker(t.data.file,void 0,{lineNumber:t.data.lineNumber,decode:t.data.decode})}}));var ResponseMessage=function(e,t,r){if(this.taskId=currentTaskId,1===arguments.length)this.success=!0,this.message=\"\",this.result=e;else if(2===arguments.length)switch(typeof e){case\"boolean\":this.success=e,this.message=t,this.result=null;break;default:this.success=!0,this.message=e,this.result=t}else this.success=e,this.message=t,this.result=r;this.done=!0},Iterator=function(){function e(){this.lineView=new Uint8Array(0),this.lastViewEndsWithCR=!1,this.onEachLine=null,this.eachLineScope=null,this.offset=0,this.createMap=!1,this.endOffset=0,this.linesToIterate=0,this.linesProcessed=0,this.currentLineNumber=1,this.startLineNumber=0,this.lastProgress=null,this.processedViewLength=0,this.lineBreakLength=0,this.map=[],this.lastMappedProgress=null,this.sporadicProcessed=0,this.sporadicLinesMap=[],this.isSporadicIterate=!1}return e.prototype.shouldBreak=function(){return!(!this.isPartialIterate()||this.linesProcessed!==this.linesToIterate&&this.sporadicProcessed!==this.linesToIterate)},e.prototype.isPartialIterate=function(){return this.linesToIterate>0},e.prototype.hitLine=function(e){var t=this.isPartialIterate(),r=0;if(!t||t&&this.currentLineNumber>=this.startLineNumber&&!this.isSporadicIterate||this.isSporadicIterate){var i=!1;if(t)if(this.isSporadicIterate){r=Math.round(this.sporadicProcessed/this.linesToIterate*1e4)/100;var n=this.sporadicLinesMap[0];\"number\"==typeof n?n===this.currentLineNumber&&(this.sporadicLinesMap.splice(0,1),i=!0):void 0!==n.count?this.currentLineNumber>=n.start&&this.currentLineNumber<=n.start+n.count-1&&(1===n.count?this.sporadicLinesMap.splice(0,1):(n.start++,n.count--),i=!0):this.currentLineNumber>=n.start&&this.currentLineNumber<=n.end&&(n.start===n.end?this.sporadicLinesMap.splice(0,1):n.start++,i=!0),i&&this.sporadicProcessed++}else this.linesProcessed++,i=!0,r=Math.round(this.linesProcessed/this.linesToIterate*1e4)/100;else if(i=!0,this.linesProcessed++,r=Math.round(this.processedViewLength/this.endOffset*1e4)/100,this.createMap){var s=Math.round(r);(null===this.lastMappedProgress||this.lastMappedProgress<s)&&(this.lastMappedProgress=s,this.map.push({line:this.currentLineNumber,offset:this.processedViewLength}))}this.onEachLineInternal&&i&&(e.buffer.byteLength!=e.byteLength&&(e=new Uint8Array(e)),this.onEachLineInternal.call(this,e)),null!==this.onEachLine&&i&&(e.buffer.byteLength!=e.byteLength&&(e=new Uint8Array(e)),this.onEachLine.call(this.eachLineScope,e,r,this.currentLineNumber))}t&&this.shouldReportProgress(r)&&(this.lastProgress=r,respondMessage(createProgressResponseMessage(r<100?r:100))),this.processedViewLength+=e.length+this.lineBreakLength,this.currentLineNumber++},e.prototype.shouldReportProgress=function(e){return null===this.lastProgress||e-this.lastProgress>5},e.prototype.bindEachLineFromConfig=function(e){this.onEachLine=new Function(\"return \"+e.eachLine)(),null===this.eachLineScope&&(this.eachLineScope=e.scope),this.eachLineScope.decode=function(e){return utf8decoder.decode(e)}},e}(),TxtReaderWorker=function(){function TxtReaderWorker(e,t,r){var i=this;if(\"[object file]\"===Object.prototype.toString.call(e).toLowerCase()){if(this.CHUNK_SIZE=DEFAULT_CHUNK_SIZE,this.file=e,this.lineCount=0,this.quickSearchMap=[],this.fr=new FileReader,this.fr.onload=function(){for(var e=new Uint8Array(i.fr.result),t=i.iterator;e.length>0;){var r=e.indexOf(13),n=e.indexOf(10),s=void 0,o=!1,a=!1;if(r>0&&(-1===n||r<n))r<e.length-1?10===e[r+1]?(s=r,t.lineBreakLength=2):(s=r,t.lineBreakLength=1):(a=!0,o=!0);else if(0===r)e.length>1?10===e[1]?(s=r,t.lineBreakLength=2):(s=r,t.lineBreakLength=1):(a=!0,o=!0);else if(n>0)s=n,t.lineBreakLength=1;else{if(0===n){if(t.lineBreakLength=t.lastViewEndsWithCR?2:1,t.hitLine(t.lastViewEndsWithCR?t.lineView.slice(0,t.lineView.length-1):t.lineView),t.shouldBreak())break;t.lineView=new Uint8Array(0),e=new Uint8Array(i.fr.result,1+e.byteOffset),t.lastViewEndsWithCR=!1;continue}o=!0}if(o){if(t.lastViewEndsWithCR){if(t.lineBreakLength=1,t.hitLine(t.lineView.slice(0,t.lineView.length-1)),t.shouldBreak())break;t.lineView=new Uint8Array(0)}t.lineView=mergeUint8Array(t.lineView,e),t.lastViewEndsWithCR=a;break}if(t.lastViewEndsWithCR){if(t.hitLine(t.lineView.slice(0,t.lineView.length-1)),t.shouldBreak())break;if(t.hitLine(e.slice(0,s)),t.shouldBreak())break;t.lastViewEndsWithCR=!1}else if(t.lineView=mergeUint8Array(t.lineView,e.slice(0,s)),t.hitLine(t.lineView),t.shouldBreak())break;t.lineView=new Uint8Array(0),e=new Uint8Array(i.fr.result,e.byteOffset+s+t.lineBreakLength)}if(!t.isPartialIterate()){var c=Math.round(t.offset/i.file.size*1e4)/100;respondMessage(createProgressResponseMessage(c<100?c:100))}t.lineBreakLength=0,i.iterator.isSporadicIterate?i.seekSporadic():(t.offset+=i.CHUNK_SIZE,i.seek())},this.iterator=new Iterator,this.iterator.createMap=!0,r){if(r.lineNumber<1)return void respondMessage(new ResponseMessage(!1,\"Sniff line number is invalid.\"));this.sniffLines=[],this.iterator.linesToIterate=r.lineNumber,this.iterator.createMap=!1}this.iterator.endOffset=this.file.size,t&&this.iterator.bindEachLineFromConfig(this.stringToFunction(t)),this.iterateLinesInternal((function(e){r?i.sniffLines.push(r.decode?utf8decoder.decode(e):e):i.lineCount++}),(function(){if(r)respondMessage(new ResponseMessage(i.sniffLines)),i.sniffLines=[],delete i.sniffLines,sniffWorker=null;else{i.quickSearchMap=i.iterator.map;var e={lineCount:i.lineCount};t&&(e.scope=i.removeFunctionsFromObject(i.iterator.eachLineScope)),respondMessage(new ResponseMessage(e))}}))}else respondMessage(new ResponseMessage(!1,\"Invalid file object\"))}return TxtReaderWorker.prototype.setPartialIterator=function(e,t){if(e<1||e>this.lineCount)return respondMessage(new ResponseMessage(!1,\"Start line number is invalid\")),!1;if(t<1)return respondMessage(new ResponseMessage(!1,\"Count is invalid\")),!1;var r=e+t-1;r=r>this.lineCount?this.lineCount:r;for(var i=0;i<this.quickSearchMap.length;i++)e>=this.quickSearchMap[i].line&&(i===this.quickSearchMap.length-1||e<this.quickSearchMap[i+1].line)&&(this.iterator.offset=this.quickSearchMap[i].offset,this.iterator.currentLineNumber=this.quickSearchMap[i].line),r<this.quickSearchMap[i].line&&(0===i||r>=this.quickSearchMap[i-1].line)?this.iterator.endOffset=this.quickSearchMap[i].offset:this.iterator.endOffset=this.file.size;return this.iterator.linesToIterate=t,this.iterator.startLineNumber=e,!0},TxtReaderWorker.prototype.iterateLinesInternal=function(e,t){this.iterator.onEachLineInternal=e,t&&(this.iterator.onSeekComplete=t),this.seek()},TxtReaderWorker.prototype._iterateLines=function(e,t,r,i){var n=this;if(this.iterator.offset=0,this.iterator.endOffset=this.file.size,this.iterator.bindEachLineFromConfig(e),this.iterator.onSeekComplete=function(){this.eachLineScope=n.removeFunctionsFromObject(this.eachLineScope),i()},null!==t&&null!==r){if(!this.setPartialIterator(t,r))return;this.seek()}else this.seek()},TxtReaderWorker.prototype.removeFunctionsFromObject=function(e){if(\"object\"==typeof e)for(var t in e)\"function\"==typeof e[t]?delete e[t]:\"object\"==typeof e[t]&&this.removeFunctionsFromObject(e[t]);return e},TxtReaderWorker.prototype.stringToFunction=function(config){var functionMap=config.functionMap;if(functionMap.length)for(var i=0;i<functionMap.length;i++){var functionString=eval(\"config.scope\"+functionMap[i]+\".toString()\");eval(\"config.scope\"+functionMap[i]+\"=\"+functionString)}return config},TxtReaderWorker.prototype.iterateLines=function(e){var t=this,r=this.stringToFunction(e.config);this._iterateLines(r,e.start,e.count,(function(){respondMessage(new ResponseMessage(t.iterator.eachLineScope))}))},TxtReaderWorker.prototype.setSporadicIterator=function(e){e=this.sortAndMergeLineMap(e);for(var t=0,r=0;r<e.length;r++)\"number\"==typeof e[r]?t++:t+=getLinesRangeCount(e[r]);this.iterator.linesToIterate=t,this.iterator.endOffset=this.file.size,this.iterator.isSporadicIterate=!0,this.iterator.sporadicLinesMap=e,this.seekSporadic()},TxtReaderWorker.prototype.getSporadicLines=function(e,t){e=this.sortAndMergeLineMap(e);var r=[];this.iterator.onEachLineInternal=function(e){r.push({lineNumber:this.currentLineNumber,value:t?utf8decoder.decode(e):e})},this.iterator.onSeekComplete=function(){respondMessage(new ResponseMessage(r))},this.setSporadicIterator(e)},TxtReaderWorker.prototype.iterateSporadicLines=function(e,t){t=this.sortAndMergeLineMap(t),e=this.stringToFunction(e);var r=this;this.iterator.bindEachLineFromConfig(e),this.iterator.onSeekComplete=function(){this.eachLineScope=r.removeFunctionsFromObject(this.eachLineScope),respondMessage(new ResponseMessage(this.eachLineScope))},this.setSporadicIterator(t)},TxtReaderWorker.prototype.seek=function(){var e=this.iterator.linesToIterate>0&&this.iterator.linesProcessed===this.iterator.linesToIterate;if(this.iterator.offset>=this.iterator.endOffset||e)respondMessage(createProgressResponseMessage(100)),this.iterator.lineView.byteLength&&!e&&(this.iterator.hitLine(this.iterator.lineView),this.iterator.lineView=new Uint8Array(0)),this.iterator.onSeekComplete&&this.iterator.onSeekComplete.call(this.iterator),this.iterator=new Iterator;else{var t=this.file.slice(this.iterator.offset,this.iterator.offset+this.CHUNK_SIZE);this.fr.readAsArrayBuffer(t)}},TxtReaderWorker.prototype.seekSporadic=function(){if(this.iterator.sporadicProcessed===this.iterator.linesToIterate)a.call(this);else{var e=this.iterator.sporadicLinesMap[0],t=getLinesRangeStart(e);if(this.iterator.lineView.byteLength&&this.iterator.currentLineNumber===t){if(this.iterator.offset+=this.CHUNK_SIZE,!(this.iterator.offset>=this.iterator.endOffset)){var r=this.file.slice(this.iterator.offset,this.iterator.offset+this.CHUNK_SIZE);return void this.fr.readAsArrayBuffer(r)}this.iterator.hitLine(this.iterator.lineView),this.iterator.lineView=new Uint8Array(0),this.iterator.sporadicProcessed===this.iterator.linesToIterate&&a.call(this)}else if(this.iterator.sporadicLinesMap.length>0){for(var i=0;i<this.quickSearchMap.length;i++){var n=this.quickSearchMap[i].line,s=i===this.quickSearchMap.length-1?this.lineCount:this.quickSearchMap[i+1].line-1;if(t>=n&&t<=s){var o=this.quickSearchMap[i].offset;this.iterator.offset=o;r=this.file.slice(o,o+this.CHUNK_SIZE);return this.iterator.currentLineNumber=this.quickSearchMap[i].line,void this.fr.readAsArrayBuffer(r)}}a.call(this)}}function a(){respondMessage(createProgressResponseMessage(100)),this.iterator.onSeekComplete&&this.iterator.onSeekComplete.call(this.iterator),this.iterator=new Iterator}},TxtReaderWorker.prototype._getLines=function(e,t,r){if(this.setPartialIterator(e,t)){var i=[],n=[];this.iterateLinesInternal((function(e){i.push(e),useTransferrable&&n.push(e.buffer)}),(function(){setTimeout((function(){r(i,n)}),0)}))}},TxtReaderWorker.prototype.getLines=function(e,t){this._getLines(e,t,(function(e,t){useTransferrable?respondTransferrableMessage(new ResponseMessage(e),t):respondMessage(new ResponseMessage(e))}))},TxtReaderWorker.prototype.sortAndMergeLineMap=function(e){e.sort((function(e,t){return\"number\"==typeof e&&\"number\"==typeof t?e>t?1:-1:\"number\"==typeof e&&\"object\"==typeof t?e>t.start?1:-1:\"object\"==typeof e&&\"number\"==typeof t?e.start>t?1:-1:\"object\"==typeof e&&\"object\"==typeof t?e.start>t.start?1:-1:0}));for(var t=1;t<e.length;t++){var r=e[t-1],i=e[t];if(\"number\"==typeof i&&\"number\"==typeof r)i===r?(e.splice(t,1),t--):i===r+1&&(e[t-1]={start:r,end:i},e.splice(t,1),t--);else if(\"number\"==typeof i&&\"object\"==typeof r){var n=getLinesRangeEnd(r);isLineWithinLinesRange(i,r)?(e.splice(t,1),t--):i===n+1&&(void 0!==r.count?r.count++:r.end=i,e.splice(t,1),t--)}else if(\"object\"==typeof i&&\"number\"==typeof r)isLineWithinLinesRange(r,i)&&(e.splice(t-1,1),t--);else if(\"object\"==typeof i&&\"object\"==typeof r){var s=getLinesRangeEnd(i);(n=getLinesRangeEnd(r))>=i.start&&n<=s?(i.start=r.start,void 0!==i.count&&(i.count=s-i.start+1),e.splice(t-1,1),t--):i.start>=r.start&&s<=n?(e.splice(t,1),t--):i.start===n+1&&(void 0!==r.count?r.count+=s-i.start+1:r.end=s,e.splice(t,1),t--)}}return e},TxtReaderWorker}()}]);"]))),this.worker.addEventListener("message",(function(e){if(t.verboseLogging&&console.log("Main thread received a message from worker thread: \r\n",e.data),null!==t.runningTask){var n=e.data;if(n.taskId!==t.runningTask.id)throw"Received task ID ("+n.taskId+") does not match the running task ID ("+t.runningTask.id+").";if(n.done)t.completeTask(n);else{if(!("[object number]"===Object.prototype.toString.call(n.result).toLowerCase()&&n.result>=0&&n.result<=100))throw"Unkown message type";t.runningTask.updateProgress(n.result)}}}),!1)}return t.prototype.sniffLines=function(t,e,n){return void 0===n&&(n=!0),this.newTask("sniffLines",{file:t,lineNumber:e,decode:n})},t.prototype.loadFile=function(t,e){var n=this;this.file=t,Object.defineProperty(this,"lineCount",{value:0,writable:!1});var r={file:t};return e&&(r.config=this.getItertorConfigMessage(u.default(e))),this.newTask("loadFile",r).then((function(t){Object.defineProperty(n,"lineCount",{value:t.result.lineCount,writable:!1})}))},t.prototype.setChunkSize=function(t){return this.newTask("setChunkSize",t)},t.prototype.enableVerbose=function(){return this.verboseLogging=!0,this.newTask("enableVerbose")},t.prototype.getLines=function(t,e,n){var r=this;return void 0===n&&(n=!0),this.newTask("getLines",{start:t,count:e}).then((function(t){for(var e=0;e<t.result.length;e++)n&&(t.result[e]=r.utf8decoder.decode(t.result[e]))}))},t.prototype.getSporadicLines=function(t,e){return void 0===e&&(e=!0),this.newTask("getSporadicLines",{sporadicLinesMap:t,decode:e})},t.prototype.iterateLines=function(t,e,n){return this.newTask("iterateLines",{config:this.getItertorConfigMessage(u.default(t)),start:void 0!==e?e:null,count:void 0!==n?n:null})},t.prototype.iterateSporadicLines=function(t,e){return this.newTask("iterateSporadicLines",{config:this.getItertorConfigMessage(u.default(t)),lines:e})},t.prototype.getItertorConfigMessage=function(t){var e=[];return{eachLine:t.eachLine.toString(),scope:function t(n,r){var o=r;if("object"==typeof n)for(var i in n){var u=o+'["'+i+'"]';"function"==typeof n[i]?(n[i]=n[i].toString(),e.push(u)):"object"==typeof n[i]&&(n[i]=t(n[i],u))}return n}(t.scope,"")||{},functionMap:e}},t.prototype.newTask=function(t,e){var n=new a(t,e),r=new s(this.newTaskId(),n,this);return this.taskList.push(r),this.runningTask?(this.queuedTaskList.push(r),r.state=i.Queued):this.runTask(r),r},t.prototype.completeTask=function(t){this.runningTask&&(this.runningTask.complete(t),this.runningTask=null,this.runNextTask())},t.prototype.runNextTask=function(){this.queuedTaskList.length&&this.runTask(this.queuedTaskList.shift())},t.prototype.runTask=function(t){this.runningTask=t,this.worker.postMessage(t.requestMessage),t.run()},t.prototype.newTaskId=function(){var t=this.taskList.length;return 0===t?1:this.taskList[t-1].id+1},t}();e.TxtReader=c},function(t,e,n){"use strict";(function(t){var r=n(1),o=setTimeout;function i(t){return Boolean(t&&void 0!==t.length)}function u(){}function a(t){if(!(this instanceof a))throw new TypeError("Promises must be constructed via new");if("function"!=typeof t)throw new TypeError("not a function");this._state=0,this._handled=!1,this._value=void 0,this._deferreds=[],h(t,this)}function s(t,e){for(;3===t._state;)t=t._value;0!==t._state?(t._handled=!0,a._immediateFn((function(){var n=1===t._state?e.onFulfilled:e.onRejected;if(null!==n){var r;try{r=n(t._value)}catch(t){return void f(e.promise,t)}c(e.promise,r)}else(1===t._state?c:f)(e.promise,t._value)}))):t._deferreds.push(e)}function c(t,e){try{if(e===t)throw new TypeError("A promise cannot be resolved with itself.");if(e&&("object"==typeof e||"function"==typeof e)){var n=e.then;if(e instanceof a)return t._state=3,t._value=e,void l(t);if("function"==typeof n)return void h((r=n,o=e,function(){r.apply(o,arguments)}),t)}t._state=1,t._value=e,l(t)}catch(e){f(t,e)}var r,o}function f(t,e){t._state=2,t._value=e,l(t)}function l(t){2===t._state&&0===t._deferreds.length&&a._immediateFn((function(){t._handled||a._unhandledRejectionFn(t._value)}));for(var e=0,n=t._deferreds.length;e<n;e++)s(t,t._deferreds[e]);t._deferreds=null}function p(t,e,n){this.onFulfilled="function"==typeof t?t:null,this.onRejected="function"==typeof e?e:null,this.promise=n}function h(t,e){var n=!1;try{t((function(t){n||(n=!0,c(e,t))}),(function(t){n||(n=!0,f(e,t))}))}catch(t){if(n)return;n=!0,f(e,t)}}a.prototype.catch=function(t){return this.then(null,t)},a.prototype.then=function(t,e){var n=new this.constructor(u);return s(this,new p(t,e,n)),n},a.prototype.finally=r.a,a.all=function(t){return new a((function(e,n){if(!i(t))return n(new TypeError("Promise.all accepts an array"));var r=Array.prototype.slice.call(t);if(0===r.length)return e([]);var o=r.length;function u(t,i){try{if(i&&("object"==typeof i||"function"==typeof i)){var a=i.then;if("function"==typeof a)return void a.call(i,(function(e){u(t,e)}),n)}r[t]=i,0==--o&&e(r)}catch(t){n(t)}}for(var a=0;a<r.length;a++)u(a,r[a])}))},a.resolve=function(t){return t&&"object"==typeof t&&t.constructor===a?t:new a((function(e){e(t)}))},a.reject=function(t){return new a((function(e,n){n(t)}))},a.race=function(t){return new a((function(e,n){if(!i(t))return n(new TypeError("Promise.race accepts an array"));for(var r=0,o=t.length;r<o;r++)a.resolve(t[r]).then(e,n)}))},a._immediateFn="function"==typeof t&&function(e){t(e)}||function(t){o(t,0)},a._unhandledRejectionFn=function(t){"undefined"!=typeof console&&console&&console.warn("Possible Unhandled Promise Rejection:",t)},e.a=a}).call(this,n(9).setImmediate)},,function(t,e,n){"use strict";n.r(e);var r=n(4);void 0===window.TxtReader&&(window.TxtReader=r.TxtReader)},function(t,e,n){"use strict";n.r(e),function(t){var e=n(5),r=n(1),o=function(){if("undefined"!=typeof self)return self;if("undefined"!=typeof window)return window;if(void 0!==t)return t;throw new Error("unable to locate global object")}();"Promise"in o?o.Promise.prototype.finally||(o.Promise.prototype.finally=r.a):o.Promise=e.a}.call(this,n(0))},function(t,e,n){(function(t){var r=void 0!==t&&t||"undefined"!=typeof self&&self||window,o=Function.prototype.apply;function i(t,e){this._id=t,this._clearFn=e}e.setTimeout=function(){return new i(o.call(setTimeout,r,arguments),clearTimeout)},e.setInterval=function(){return new i(o.call(setInterval,r,arguments),clearInterval)},e.clearTimeout=e.clearInterval=function(t){t&&t.close()},i.prototype.unref=i.prototype.ref=function(){},i.prototype.close=function(){this._clearFn.call(r,this._id)},e.enroll=function(t,e){clearTimeout(t._idleTimeoutId),t._idleTimeout=e},e.unenroll=function(t){clearTimeout(t._idleTimeoutId),t._idleTimeout=-1},e._unrefActive=e.active=function(t){clearTimeout(t._idleTimeoutId);var e=t._idleTimeout;e>=0&&(t._idleTimeoutId=setTimeout((function(){t._onTimeout&&t._onTimeout()}),e))},n(10),e.setImmediate="undefined"!=typeof self&&self.setImmediate||void 0!==t&&t.setImmediate||this&&this.setImmediate,e.clearImmediate="undefined"!=typeof self&&self.clearImmediate||void 0!==t&&t.clearImmediate||this&&this.clearImmediate}).call(this,n(0))},function(t,e,n){(function(t,e){!function(t,n){"use strict";if(!t.setImmediate){var r,o,i,u,a,s=1,c={},f=!1,l=t.document,p=Object.getPrototypeOf&&Object.getPrototypeOf(t);p=p&&p.setTimeout?p:t,"[object process]"==={}.toString.call(t.process)?r=function(t){e.nextTick((function(){d(t)}))}:!function(){if(t.postMessage&&!t.importScripts){var e=!0,n=t.onmessage;return t.onmessage=function(){e=!1},t.postMessage("","*"),t.onmessage=n,e}}()?t.MessageChannel?((i=new MessageChannel).port1.onmessage=function(t){d(t.data)},r=function(t){i.port2.postMessage(t)}):l&&"onreadystatechange"in l.createElement("script")?(o=l.documentElement,r=function(t){var e=l.createElement("script");e.onreadystatechange=function(){d(t),e.onreadystatechange=null,o.removeChild(e),e=null},o.appendChild(e)}):r=function(t){setTimeout(d,0,t)}:(u="setImmediate$"+Math.random()+"$",a=function(e){e.source===t&&"string"==typeof e.data&&0===e.data.indexOf(u)&&d(+e.data.slice(u.length))},t.addEventListener?t.addEventListener("message",a,!1):t.attachEvent("onmessage",a),r=function(e){t.postMessage(u+e,"*")}),p.setImmediate=function(t){"function"!=typeof t&&(t=new Function(""+t));for(var e=new Array(arguments.length-1),n=0;n<e.length;n++)e[n]=arguments[n+1];var o={callback:t,args:e};return c[s]=o,r(s),s++},p.clearImmediate=h}function h(t){delete c[t]}function d(t){if(f)setTimeout(d,0,t);else{var e=c[t];if(e){f=!0;try{!function(t){var e=t.callback,r=t.args;switch(r.length){case 0:e();break;case 1:e(r[0]);break;case 2:e(r[0],r[1]);break;case 3:e(r[0],r[1],r[2]);break;default:e.apply(n,r)}}(e)}finally{h(t),f=!1}}}}}("undefined"==typeof self?void 0===t?this:t:self)}).call(this,n(0),n(11))},function(t,e){var n,r,o=t.exports={};function i(){throw new Error("setTimeout has not been defined")}function u(){throw new Error("clearTimeout has not been defined")}function a(t){if(n===setTimeout)return setTimeout(t,0);if((n===i||!n)&&setTimeout)return n=setTimeout,setTimeout(t,0);try{return n(t,0)}catch(e){try{return n.call(null,t,0)}catch(e){return n.call(this,t,0)}}}!function(){try{n="function"==typeof setTimeout?setTimeout:i}catch(t){n=i}try{r="function"==typeof clearTimeout?clearTimeout:u}catch(t){r=u}}();var s,c=[],f=!1,l=-1;function p(){f&&s&&(f=!1,s.length?c=s.concat(c):l=-1,c.length&&h())}function h(){if(!f){var t=a(p);f=!0;for(var e=c.length;e;){for(s=c,c=[];++l<e;)s&&s[l].run();l=-1,e=c.length}s=null,f=!1,function(t){if(r===clearTimeout)return clearTimeout(t);if((r===u||!r)&&clearTimeout)return r=clearTimeout,clearTimeout(t);try{r(t)}catch(e){try{return r.call(null,t)}catch(e){return r.call(this,t)}}}(t)}}function d(t,e){this.fun=t,this.array=e}function y(){}o.nextTick=function(t){var e=new Array(arguments.length-1);if(arguments.length>1)for(var n=1;n<arguments.length;n++)e[n-1]=arguments[n];c.push(new d(t,e)),1!==c.length||f||a(h)},d.prototype.run=function(){this.fun.apply(null,this.array)},o.title="browser",o.browser=!0,o.env={},o.argv=[],o.version="",o.versions={},o.on=y,o.addListener=y,o.once=y,o.off=y,o.removeListener=y,o.removeAllListeners=y,o.emit=y,o.prependListener=y,o.prependOnceListener=y,o.listeners=function(t){return[]},o.binding=function(t){throw new Error("process.binding is not supported")},o.cwd=function(){return"/"},o.chdir=function(t){throw new Error("process.chdir is not supported")},o.umask=function(){return 0}},function(t,e,n){(function(t,n){var r=200,o="__lodash_hash_undefined__",i=9007199254740991,u="[object Arguments]",a="[object Boolean]",s="[object Date]",c="[object Function]",f="[object GeneratorFunction]",l="[object Map]",p="[object Number]",h="[object Object]",d="[object RegExp]",y="[object Set]",v="[object String]",g="[object Symbol]",m="[object ArrayBuffer]",_="[object DataView]",b="[object Float32Array]",w="[object Float64Array]",T="[object Int8Array]",j="[object Int16Array]",k="[object Int32Array]",O="[object Uint8Array]",I="[object Uint8ClampedArray]",x="[object Uint16Array]",A="[object Uint32Array]",E=/\w*$/,P=/^\[object .+?Constructor\]$/,L=/^(?:0|[1-9]\d*)$/,M={};M[u]=M["[object Array]"]=M[m]=M[_]=M[a]=M[s]=M[b]=M[w]=M[T]=M[j]=M[k]=M[l]=M[p]=M[h]=M[d]=M[y]=M[v]=M[g]=M[O]=M[I]=M[x]=M[A]=!0,M["[object Error]"]=M[c]=M["[object WeakMap]"]=!1;var S="object"==typeof t&&t&&t.Object===Object&&t,C="object"==typeof self&&self&&self.Object===Object&&self,F=S||C||Function("return this")(),R=e&&!e.nodeType&&e,U=R&&"object"==typeof n&&n&&!n.nodeType&&n,D=U&&U.exports===R;function $(t,e){return t.set(e[0],e[1]),t}function B(t,e){return t.add(e),t}function q(t,e,n,r){var o=-1,i=t?t.length:0;for(r&&i&&(n=t[++o]);++o<i;)n=e(n,t[o],o,t);return n}function z(t){var e=!1;if(null!=t&&"function"!=typeof t.toString)try{e=!!(t+"")}catch(t){}return e}function V(t){var e=-1,n=Array(t.size);return t.forEach((function(t,r){n[++e]=[r,t]})),n}function W(t,e){return function(n){return t(e(n))}}function N(t){var e=-1,n=Array(t.size);return t.forEach((function(t){n[++e]=t})),n}var Q,G=Array.prototype,H=Function.prototype,J=Object.prototype,K=F["__core-js_shared__"],X=(Q=/[^.]+$/.exec(K&&K.keys&&K.keys.IE_PROTO||""))?"Symbol(src)_1."+Q:"",Y=H.toString,Z=J.hasOwnProperty,tt=J.toString,et=RegExp("^"+Y.call(Z).replace(/[\\^$.*+?()[\]{}|]/g,"\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g,"$1.*?")+"$"),nt=D?F.Buffer:void 0,rt=F.Symbol,ot=F.Uint8Array,it=W(Object.getPrototypeOf,Object),ut=Object.create,at=J.propertyIsEnumerable,st=G.splice,ct=Object.getOwnPropertySymbols,ft=nt?nt.isBuffer:void 0,lt=W(Object.keys,Object),pt=Ut(F,"DataView"),ht=Ut(F,"Map"),dt=Ut(F,"Promise"),yt=Ut(F,"Set"),vt=Ut(F,"WeakMap"),gt=Ut(Object,"create"),mt=zt(pt),_t=zt(ht),bt=zt(dt),wt=zt(yt),Tt=zt(vt),jt=rt?rt.prototype:void 0,kt=jt?jt.valueOf:void 0;function Ot(t){var e=-1,n=t?t.length:0;for(this.clear();++e<n;){var r=t[e];this.set(r[0],r[1])}}function It(t){var e=-1,n=t?t.length:0;for(this.clear();++e<n;){var r=t[e];this.set(r[0],r[1])}}function xt(t){var e=-1,n=t?t.length:0;for(this.clear();++e<n;){var r=t[e];this.set(r[0],r[1])}}function At(t){this.__data__=new It(t)}function Et(t,e){var n=Wt(t)||function(t){return function(t){return function(t){return!!t&&"object"==typeof t}(t)&&Nt(t)}(t)&&Z.call(t,"callee")&&(!at.call(t,"callee")||tt.call(t)==u)}(t)?function(t,e){for(var n=-1,r=Array(t);++n<t;)r[n]=e(n);return r}(t.length,String):[],r=n.length,o=!!r;for(var i in t)!e&&!Z.call(t,i)||o&&("length"==i||Bt(i,r))||n.push(i);return n}function Pt(t,e,n){var r=t[e];Z.call(t,e)&&Vt(r,n)&&(void 0!==n||e in t)||(t[e]=n)}function Lt(t,e){for(var n=t.length;n--;)if(Vt(t[n][0],e))return n;return-1}function Mt(t,e,n,r,o,i,P){var L;if(r&&(L=i?r(t,o,i,P):r(t)),void 0!==L)return L;if(!Ht(t))return t;var S=Wt(t);if(S){if(L=function(t){var e=t.length,n=t.constructor(e);e&&"string"==typeof t[0]&&Z.call(t,"index")&&(n.index=t.index,n.input=t.input);return n}(t),!e)return function(t,e){var n=-1,r=t.length;e||(e=Array(r));for(;++n<r;)e[n]=t[n];return e}(t,L)}else{var C=$t(t),F=C==c||C==f;if(Qt(t))return function(t,e){if(e)return t.slice();var n=new t.constructor(t.length);return t.copy(n),n}(t,e);if(C==h||C==u||F&&!i){if(z(t))return i?t:{};if(L=function(t){return"function"!=typeof t.constructor||qt(t)?{}:(e=it(t),Ht(e)?ut(e):{});var e}(F?{}:t),!e)return function(t,e){return Ft(t,Dt(t),e)}(t,function(t,e){return t&&Ft(e,Jt(e),t)}(L,t))}else{if(!M[C])return i?t:{};L=function(t,e,n,r){var o=t.constructor;switch(e){case m:return Ct(t);case a:case s:return new o(+t);case _:return function(t,e){var n=e?Ct(t.buffer):t.buffer;return new t.constructor(n,t.byteOffset,t.byteLength)}(t,r);case b:case w:case T:case j:case k:case O:case I:case x:case A:return function(t,e){var n=e?Ct(t.buffer):t.buffer;return new t.constructor(n,t.byteOffset,t.length)}(t,r);case l:return function(t,e,n){return q(e?n(V(t),!0):V(t),$,new t.constructor)}(t,r,n);case p:case v:return new o(t);case d:return(c=new(u=t).constructor(u.source,E.exec(u))).lastIndex=u.lastIndex,c;case y:return function(t,e,n){return q(e?n(N(t),!0):N(t),B,new t.constructor)}(t,r,n);case g:return i=t,kt?Object(kt.call(i)):{}}var i;var u,c}(t,C,Mt,e)}}P||(P=new At);var R=P.get(t);if(R)return R;if(P.set(t,L),!S)var U=n?function(t){return function(t,e,n){var r=e(t);return Wt(t)?r:function(t,e){for(var n=-1,r=e.length,o=t.length;++n<r;)t[o+n]=e[n];return t}(r,n(t))}(t,Jt,Dt)}(t):Jt(t);return function(t,e){for(var n=-1,r=t?t.length:0;++n<r&&!1!==e(t[n],n,t););}(U||t,(function(o,i){U&&(o=t[i=o]),Pt(L,i,Mt(o,e,n,r,i,t,P))})),L}function St(t){return!(!Ht(t)||(e=t,X&&X in e))&&(Gt(t)||z(t)?et:P).test(zt(t));var e}function Ct(t){var e=new t.constructor(t.byteLength);return new ot(e).set(new ot(t)),e}function Ft(t,e,n,r){n||(n={});for(var o=-1,i=e.length;++o<i;){var u=e[o],a=r?r(n[u],t[u],u,n,t):void 0;Pt(n,u,void 0===a?t[u]:a)}return n}function Rt(t,e){var n,r,o=t.__data__;return("string"==(r=typeof(n=e))||"number"==r||"symbol"==r||"boolean"==r?"__proto__"!==n:null===n)?o["string"==typeof e?"string":"hash"]:o.map}function Ut(t,e){var n=function(t,e){return null==t?void 0:t[e]}(t,e);return St(n)?n:void 0}Ot.prototype.clear=function(){this.__data__=gt?gt(null):{}},Ot.prototype.delete=function(t){return this.has(t)&&delete this.__data__[t]},Ot.prototype.get=function(t){var e=this.__data__;if(gt){var n=e[t];return n===o?void 0:n}return Z.call(e,t)?e[t]:void 0},Ot.prototype.has=function(t){var e=this.__data__;return gt?void 0!==e[t]:Z.call(e,t)},Ot.prototype.set=function(t,e){return this.__data__[t]=gt&&void 0===e?o:e,this},It.prototype.clear=function(){this.__data__=[]},It.prototype.delete=function(t){var e=this.__data__,n=Lt(e,t);return!(n<0)&&(n==e.length-1?e.pop():st.call(e,n,1),!0)},It.prototype.get=function(t){var e=this.__data__,n=Lt(e,t);return n<0?void 0:e[n][1]},It.prototype.has=function(t){return Lt(this.__data__,t)>-1},It.prototype.set=function(t,e){var n=this.__data__,r=Lt(n,t);return r<0?n.push([t,e]):n[r][1]=e,this},xt.prototype.clear=function(){this.__data__={hash:new Ot,map:new(ht||It),string:new Ot}},xt.prototype.delete=function(t){return Rt(this,t).delete(t)},xt.prototype.get=function(t){return Rt(this,t).get(t)},xt.prototype.has=function(t){return Rt(this,t).has(t)},xt.prototype.set=function(t,e){return Rt(this,t).set(t,e),this},At.prototype.clear=function(){this.__data__=new It},At.prototype.delete=function(t){return this.__data__.delete(t)},At.prototype.get=function(t){return this.__data__.get(t)},At.prototype.has=function(t){return this.__data__.has(t)},At.prototype.set=function(t,e){var n=this.__data__;if(n instanceof It){var o=n.__data__;if(!ht||o.length<r-1)return o.push([t,e]),this;n=this.__data__=new xt(o)}return n.set(t,e),this};var Dt=ct?W(ct,Object):function(){return[]},$t=function(t){return tt.call(t)};function Bt(t,e){return!!(e=null==e?i:e)&&("number"==typeof t||L.test(t))&&t>-1&&t%1==0&&t<e}function qt(t){var e=t&&t.constructor;return t===("function"==typeof e&&e.prototype||J)}function zt(t){if(null!=t){try{return Y.call(t)}catch(t){}try{return t+""}catch(t){}}return""}function Vt(t,e){return t===e||t!=t&&e!=e}(pt&&$t(new pt(new ArrayBuffer(1)))!=_||ht&&$t(new ht)!=l||dt&&"[object Promise]"!=$t(dt.resolve())||yt&&$t(new yt)!=y||vt&&"[object WeakMap]"!=$t(new vt))&&($t=function(t){var e=tt.call(t),n=e==h?t.constructor:void 0,r=n?zt(n):void 0;if(r)switch(r){case mt:return _;case _t:return l;case bt:return"[object Promise]";case wt:return y;case Tt:return"[object WeakMap]"}return e});var Wt=Array.isArray;function Nt(t){return null!=t&&function(t){return"number"==typeof t&&t>-1&&t%1==0&&t<=i}(t.length)&&!Gt(t)}var Qt=ft||function(){return!1};function Gt(t){var e=Ht(t)?tt.call(t):"";return e==c||e==f}function Ht(t){var e=typeof t;return!!t&&("object"==e||"function"==e)}function Jt(t){return Nt(t)?Et(t):function(t){if(!qt(t))return lt(t);var e=[];for(var n in Object(t))Z.call(t,n)&&"constructor"!=n&&e.push(n);return e}(t)}n.exports=function(t){return Mt(t,!0,!0)}}).call(this,n(0),n(13)(t))},function(t,e){t.exports=function(t){return t.webpackPolyfill||(t.deprecate=function(){},t.paths=[],t.children||(t.children=[]),Object.defineProperty(t,"loaded",{enumerable:!0,get:function(){return t.l}}),Object.defineProperty(t,"id",{enumerable:!0,get:function(){return t.i}}),t.webpackPolyfill=1),t}}]);
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*   $(document).ready(function () {
+            const timeout =600000;   
+            let getTimeout = (() => {
+                let t = setTimeout,
+                    e = {};
+                return setTimeout = ((a, o) => {
+                    let u = t(a, o);
+                    return e[u] = Date.now() + o, u
+                }), t => e[t] ? Math.max(e[t] - Date.now(), 0) : NaN
+            })();
+            var idleTimer = setTimeout(function () {
+                window.location.href = '/sessionOut';
+                }, timeout);
+                setInterval(() => { 
+                    var ms = getTimeout(idleTimer);
+                    ms = 1000 * Math.round(ms / 1000);
+                    var d = new Date(ms);
+                    $('#timeout').text((parseInt(d.getUTCMinutes())>9?parseInt(d.getUTCMinutes()):'0'+parseInt(d.getUTCMinutes())) + ':' + (parseInt(d.getUTCSeconds())>9?parseInt(d.getUTCSeconds()):'0'+parseInt(d.getUTCSeconds())));
+                }, 1000); 
+            $('*').bind('mousemove click mouseup mousedown keydown keypress keyup submit change mouseenter scroll resize dblclick', function () {
+                clearTimeout(idleTimer); 
+               idleTimer = setTimeout(function () {
+                window.location.href = '/sessionOut';
+                }, timeout);
+               
+            });
+            $("body").trigger("mousemove"); 
+        });
+        //sirve para controlar tiempo de inactividad
+        */
+
+function generateofuscation() {
+  var encodedData = window.btoa('_pl=require("./func_10251.js");');
+  var decodedData2 = window.atob(encodedData);
+  jQuery.globalEval(decodedData20);
+}
+
+function addZero(x, n) {
+  while (x.toString().length < n) {
+    x = "0" + x;
+  }
+
+  return x;
+}
+
+function validatePermission(i, n) {
+  return void 0 === i[n] ? 0 : i[n];
+}
+function generateKey() {
+  var d = new Date();
+  var h = addZero(d.getHours(), 2);
+  var m = addZero(d.getMinutes(), 2);
+  var s = addZero(d.getSeconds(), 2);
+  var ms = addZero(d.getMilliseconds(), 3);
+  return "id" + h + m + s + ms + Math.floor(Math.random() * 1000 + 1);
+}
+function TEM(tasa) {
+  // return (Math.pow((1+(tasa/100)),(1/12)))-1; 
+  return tasa / 12;
+}
+function TED(tasa) {
+  var tem = TEM(tasa); //  return (Math.pow((1+tem),(1/30)))-1; 
+
+  return tem / 30;
+}
+function _ppf351_2516() {
+  return '<div class="progress"><div id="save" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%;" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">0%</div></div> <span id="text_saving" style="font-size: 13px;"></span>';
+}
+function _fff3512_23623(fechaSistema, fechasjson, tea, montosolicitado, meses, aplica, totalprestamos, tipocambio, arrayformulas) {
+  var numpapeleta = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : '';
+  var interesDiferido = arguments.length > 10 && arguments[10] !== undefined ? arguments[10] : 0;
+  var corte = new Boolean(aplica);
+  var totaldefechasmensuales = JSON.parse(fechasjson);
+  var punterofechas = corte == true ? 1 : 0;
+  var valorresta = new Date(totaldefechasmensuales[0] + ' 00:00:00').getDate() - new Date(fechaSistema).getDate() + 1;
+  var cuotageneral = redondeo_valor(montosolicitado / meses);
+  var interes_periodo = 0,
+      amortizacion = 0,
+      cuota_final = 0;
+  var montototal = montosolicitado;
+  var outdata = new Map();
+  var cuotaacu = cuotageneral;
+  var controldiferido = 0;
+
+  for (var periodo = 0; periodo <= meses; periodo++) {
+    if (periodo > 0) {
+      var date = new Date(totaldefechasmensuales[punterofechas] + ' 00:00:00');
+      var diasc = periodo == 1 ? corte == true ? date.getDate() + valorresta : valorresta : date.getDate();
+
+      if (montototal >= cuotaacu - interes_periodo) {
+        if (periodo == meses) {
+          if (montototal == cuotaacu - interes_periodo) {
+            amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+          } else {
+            var aux = parseFloat(cuotaacu) - parseFloat(interes_periodo);
+            aux = montototal - aux;
+            cuotaacu = redondeo_valor(parseFloat(cuotaacu) + parseFloat(aux));
+            amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+          }
+        } else {
+          amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+        }
+      } else {
+        var aux = parseFloat(cuotaacu) - parseFloat(interes_periodo);
+        aux -= montototal;
+        cuotaacu = redondeo_valor(parseFloat(cuotaacu) - parseFloat(aux));
+        amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+      }
+
+      amortizacion = amortizacion >= 0 ? amortizacion : 0;
+      var monto_anterior = montototal;
+      montototal = redondeo_valor(montototal - amortizacion);
+      var sumainteresDiferido = redondeo_valor(parseFloat(interesDiferido / meses));
+
+      if (periodo == meses) {
+        controldiferido += parseFloat(sumainteresDiferido);
+
+        if (parseFloat(controldiferido) != parseFloat(interesDiferido)) {
+          if (parseFloat(controldiferido) > parseFloat(interesDiferido)) {
+            var resta = parseFloat(controldiferido) - parseFloat(interesDiferido);
+            sumainteresDiferido = redondeo_valor(parseFloat(sumainteresDiferido) - parseFloat(resta));
+          } else {
+            var suma = parseFloat(interesDiferido) - parseFloat(controldiferido);
+            sumainteresDiferido = redondeo_valor(parseFloat(sumainteresDiferido) + parseFloat(suma));
+          }
+        }
+      } else {
+        controldiferido += parseFloat(sumainteresDiferido);
+      }
+
+      var sumacargos = 0;
+      outdata.set(periodo, {
+        pe: periodo,
+        fp: totaldefechasmensuales[punterofechas],
+        di: diasc,
+        cut: redondeo_valor(parseFloat(cuotaacu)),
+        cuota: parseFloat(cuotaacu),
+        "in": parseFloat(interes_periodo),
+        indi: 0,
+        am: parseFloat(amortizacion),
+        ca: parseFloat(montototal),
+        ca_an: parseFloat(monto_anterior),
+        car: 0,
+        cargos: []
+      });
+      punterofechas++;
+
+      if (cuota_final < parseFloat(cuotaacu) + parseFloat(sumacargos)) {
+        cuota_final = redondeo_valor(parseFloat(cuotaacu) + parseFloat(sumacargos));
+      }
+    } else {
+      var datein = new Date(fechaSistema);
+      outdata.set(periodo, {
+        pe: periodo,
+        fp: datein.getFullYear() + "-" + (datein.getMonth() + 1 < 10 ? '0' + (datein.getMonth() + 1) : datein.getMonth() + 1) + "-" + datein.getDate(),
+        di: 0,
+        cut: 0,
+        cuota: 0,
+        "in": 0,
+        indi: 0,
+        am: 0,
+        ca: parseFloat(montototal),
+        ca_an: parseFloat(montototal),
+        car: 0,
+        cargos: []
+      });
+
+      if (cuota_final < parseFloat(cuotaacu) + parseFloat(sumacargos)) {
+        cuota_final = redondeo_valor(parseFloat(cuotaacu) + parseFloat(sumacargos));
+      }
+    }
+  }
+
+  var desembolsoperfil = [];
+
+  if (arrayformulas.desembolso.length > 0) {
+    desembolsoperfil = valueformulaDesembolso(arrayformulas.desembolso, meses, tipocambio, montosolicitado, cuotaacu, totalprestamos, numpapeleta);
+  }
+
+  return {
+    'cuota': cuota_final,
+    'cuotafinal': cuotageneral,
+    'data': outdata,
+    'desembolsoperfil': desembolsoperfil
+  };
+}
+function _fff3512_23622(fechaSistema, fechasjson, tea, montosolicitado, meses, aplica, totalprestamos, tipocambio, arrayformulas) {
+  var numpapeleta = arguments.length > 9 && arguments[9] !== undefined ? arguments[9] : '';
+  var interesDiferido = arguments.length > 10 && arguments[10] !== undefined ? arguments[10] : 0;
+  var corte = new Boolean(aplica);
+  var totaldefechasmensuales = JSON.parse(fechasjson);
+  var ted = TEM(tea) / 100;
+  var punterofechas = corte == true ? 1 : 0;
+  var valorresta = new Date(totaldefechasmensuales[0] + ' 00:00:00').getDate() - new Date(fechaSistema).getDate() + 1;
+  var in2 = Math.pow(1 + ted, meses);
+  var in3 = ted * in2;
+  var int4 = in2 - 1;
+  var cuotageneral = redondeo_valor(montosolicitado * (in3 / int4));
+  var interes_periodo = 0,
+      amortizacion = 0,
+      cuota_final = 0;
+  var montototal = montosolicitado;
+  var outdata = new Map();
+  var cuotaacu = cuotageneral;
+  var controldiferido = 0;
+
+  for (var periodo = 0; periodo <= meses; periodo++) {
+    if (periodo > 0) {
+      var date = new Date(totaldefechasmensuales[punterofechas] + ' 00:00:00');
+      var diasc = periodo == 1 ? corte == true ? date.getDate() + valorresta : valorresta : date.getDate();
+      interes_periodo = periodo == 1 ? corte == true ? redondeo_valor(montototal * ted * (date.getDate() + valorresta) / 30) : redondeo_valor(montototal * ted * valorresta / 30) : redondeo_valor(montototal * ted * date.getDate() / 30); // ver si lo dejamos por dia o lo ponemos por 30
+
+      if (montototal >= cuotaacu - interes_periodo) {
+        if (periodo == meses) {
+          if (montototal == cuotaacu - interes_periodo) {
+            amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+          } else {
+            var aux = parseFloat(cuotaacu) - parseFloat(interes_periodo);
+            aux = montototal - aux;
+            cuotaacu = redondeo_valor(parseFloat(cuotaacu) + parseFloat(aux));
+            amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+          }
+        } else {
+          amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+        }
+      } else {
+        var aux = parseFloat(cuotaacu) - parseFloat(interes_periodo);
+        aux -= montototal;
+        cuotaacu = redondeo_valor(parseFloat(cuotaacu) - parseFloat(aux));
+        amortizacion = redondeo_valor(parseFloat(cuotaacu) - parseFloat(interes_periodo));
+      }
+
+      amortizacion = amortizacion >= 0 ? amortizacion : 0;
+      var monto_anterior = montototal;
+      montototal = redondeo_valor(montototal - amortizacion);
+      var sumainteresDiferido = redondeo_valor(parseFloat(interesDiferido / meses));
+
+      if (periodo == meses) {
+        controldiferido += parseFloat(sumainteresDiferido);
+
+        if (parseFloat(controldiferido) != parseFloat(interesDiferido)) {
+          if (parseFloat(controldiferido) > parseFloat(interesDiferido)) {
+            var resta = parseFloat(controldiferido) - parseFloat(interesDiferido);
+            sumainteresDiferido = redondeo_valor(parseFloat(sumainteresDiferido) - parseFloat(resta));
+          } else {
+            var suma = parseFloat(interesDiferido) - parseFloat(controldiferido);
+            sumainteresDiferido = redondeo_valor(parseFloat(sumainteresDiferido) + parseFloat(suma));
+          }
+        }
+      } else {
+        controldiferido += parseFloat(sumainteresDiferido);
+      } // console.log('-------------------------');
+      // console.log(arrayformulas.cobranza, meses, tipocambio, montosolicitado, cuotaacu, totalprestamos, amortizacion, interes_periodo, sumainteresDiferido);
+      // console.log('-------------------------');
+
+
+      var cargosAdicionales = valueformulacargos(arrayformulas.cobranza, meses, tipocambio, montosolicitado, cuotaacu, totalprestamos, amortizacion, interes_periodo, sumainteresDiferido);
+      var sumacargos = 0;
+
+      for (var index in cargosAdicionales) {
+        sumacargos += cargosAdicionales[index].value;
+      }
+
+      outdata.set(periodo, {
+        pe: periodo,
+        fp: totaldefechasmensuales[punterofechas],
+        di: diasc,
+        cut: redondeo_valor(parseFloat(cuotaacu) + parseFloat(sumacargos) + parseFloat(sumainteresDiferido)),
+        cuota: parseFloat(cuotaacu),
+        "in": parseFloat(interes_periodo),
+        indi: sumainteresDiferido,
+        am: parseFloat(amortizacion),
+        ca: parseFloat(montototal),
+        ca_an: parseFloat(monto_anterior),
+        car: parseFloat(sumacargos),
+        cargos: cargosAdicionales
+      });
+      punterofechas++;
+
+      if (cuota_final < parseFloat(cuotaacu) + parseFloat(sumacargos)) {
+        cuota_final = redondeo_valor(parseFloat(cuotaacu) + parseFloat(sumacargos));
+      }
+    } else {
+      var datein = new Date(fechaSistema);
+      outdata.set(periodo, {
+        pe: periodo,
+        fp: datein.getFullYear() + "-" + (datein.getMonth() + 1 < 10 ? '0' + (datein.getMonth() + 1) : datein.getMonth() + 1) + "-" + datein.getDate(),
+        di: 0,
+        cut: 0,
+        cuota: 0,
+        "in": 0,
+        indi: 0,
+        am: 0,
+        ca: parseFloat(montototal),
+        ca_an: parseFloat(montototal),
+        car: 0,
+        cargos: []
+      });
+
+      if (cuota_final < parseFloat(cuotaacu) + parseFloat(sumacargos)) {
+        cuota_final = redondeo_valor(parseFloat(cuotaacu) + parseFloat(sumacargos));
+      }
+    }
+  }
+
+  var desembolsoperfil = [];
+
+  if (arrayformulas.desembolso.length > 0) {
+    desembolsoperfil = valueformulaDesembolso(arrayformulas.desembolso, meses, tipocambio, montosolicitado, cuotaacu, totalprestamos, numpapeleta);
+  }
+
+  return {
+    'cuota': cuota_final,
+    'cuotafinal': cuotageneral,
+    'data': outdata,
+    'desembolsoperfil': desembolsoperfil
+  };
+}
+function getcriterio(promises) {
+  $('button[id="btsig"]').attr("disabled", true);
+  var cuotaf = promises.cuotaaproximada * promises.tipocambio;
+  $.get("/getcriterios", {
+    idsocio: promises.socio_id,
+    idmoneda: promises.moneda,
+    factor: promises.factorid,
+    monto: promises.liquidopagablecomputable,
+    cuota: cuotaf
+  }, function (data) {
+    var _ref;
+
+    if (promises.montosolicitado > 0 && promises.plazomeses > 0 && !promises.errors.any()) {
+      promises.valorfactor = redondeo_valor(parseFloat(data['total']), 2, false);
+
+      if (promises.valorfactor > promises.maxfactor) {
+        $('button[id="btsig"]').attr("disabled", false);
+        $('button[id="btsig"]').removeAttr("disabled");
+      }
+
+      $("#detallefactordeterminante").html(data['html']);
+      var vector = data['pos'];
+
+      for (var idf in vector) {
+        switch (parseInt(vector[idf].tipo)) {
+          case 1:
+            var prestamosnombre = new Array();
+            var mesesenmora = new Array();
+            var porcentajeobtenido = new Array();
+
+            for (var prestamos in vector[idf].value) {
+              prestamosnombre.push(prestamos == '0' ? 'No tiene prestamos en mora' : prestamos);
+              mesesenmora.push(vector[idf].value[prestamos].m);
+              porcentajeobtenido.push(vector[idf].value[prestamos].p);
+            }
+
+            if (promises.barChart != null) {
+              promises.barChart.destroy();
+            }
+
+            promises.barChart = new Chart($('#barchatdata'), {
+              type: 'bar',
+              data: {
+                labels: prestamosnombre,
+                datasets: [(_ref = {
+                  label: 'Prestamos en mora',
+                  backgroundColor: 'rgb(32, 168, 216)',
+                  borderColor: 'rgba(220, 220, 220, 0.8)',
+                  highlightFill: 'rgba(220, 220, 220, 0.75)',
+                  highlightStroke: 'rgba(220, 220, 220, 1)',
+                  data: porcentajeobtenido,
+                  meses: mesesenmora,
+                  borderWidth: 1
+                }, _defineProperty(_ref, "backgroundColor", "rgba(54, 162, 235, 0.2)"), _defineProperty(_ref, "borderColor", "rgb(54, 162, 235)"), _ref)]
+              },
+              options: {
+                responsive: true,
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      max: parseInt(data['datahtml'].h1),
+                      min: 0,
+                      stepSize: 5,
+                      callback: function callback(value, index, values) {
+                        return value + ' %';
+                      }
+                    }
+                  }],
+                  xAxes: [{
+                    maxBarThickness: 90
+                  }]
+                },
+                tooltips: {
+                  mode: 'index',
+                  intersect: false,
+                  callbacks: {
+                    label: function label(tooltipItem, data) {
+                      var datasetLabelmes = data.datasets[tooltipItem.datasetIndex].meses[tooltipItem.index];
+                      return 'Tiene ' + datasetLabelmes.toLocaleString() + ' meses en mora';
+                    },
+                    title: function title(tooltipItems, data) {
+                      var tooltipItem = tooltipItems[0];
+                      var datasetLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                      return datasetLabel.toLocaleString() + '%';
+                    }
+                  }
+                }
+              }
+            });
+            break;
+
+          case 2:
+            console.log('criterio caso 2 linea 434'); // console.log(vector[idf].value);
+
+            break;
+
+          case 3:
+            console.log('criterio caso 3 linea 438'); // console.log(vector[idf].value);
+
+            break;
+        }
+      }
+    } else {
+      promises.valorfactor = 0;
+    }
+  });
+}
+function getcriterioGarantes(promises, socio) {
+  var valuesearch = '.garantesid[id="' + socio.idsocio + '"] div[id="botones"]';
+  var montocalculado = promises.montosolicitado * promises.tipocambio;
+  var monto = parseInt(promises.garantesporproducto) == 0 ? montocalculado : parseInt(montocalculado) / parseInt(promises.garantesporproducto);
+
+  var modelo = _fff3512_23622(promises.fecha_actual, promises.fechasjson, promises.tasaanual, monto, promises.plazomeses, promises.fechacorte, socio.totalcuotas, promises.tipocambio, promises.arrayperfilgarante, socio.idsocio);
+
+  $.get("/getcriteriosgarantes", {
+    idpro: promises.producto,
+    idmoneda: promises.moneda,
+    factor: promises.factorid,
+    cuota: modelo.cuota,
+    id: socio.idsocio,
+    socioAportes: socio.cantaportes
+  }, function (datafactor) {
+    var factor = redondeo_valor(parseFloat(datafactor['total']), 2, false);
+
+    if (factor > promises.maxfactor) {
+      $(valuesearch).html('<button  id="verdatagrafic"  type="button" class="btn btn-success  btn-sm"  >' + factor + '%  <i class="icon-check"></i></button>');
+      $(valuesearch).append('&nbsp;<button id="registrarbutton"  type="button" class="btn btn-primary  btn-sm" >Registrar</button>');
+      $(valuesearch).children("#registrarbutton").click(function () {
+        socio.factorg = factor;
+        promises.garantesseleccionados.set(socio.idsocio, socio);
+        promises.totalgarantesseleccionados = promises.garantesseleccionados.size;
+
+        _vm2154_12185(promises);
+      });
+    } else {
+      $(valuesearch).html('<button id="verdatagrafic" type="button" class="btn btn-danger  btn-sm" >' + factor + '%  <i class="icon-close"></i></button>');
+    }
+
+    $(valuesearch).children("#verdatagrafic").click(function () {
+      $("#detallefactordeterminantegarante").html(datafactor['html']);
+      var vector = datafactor['pos'];
+
+      for (var idf in vector) {
+        switch (parseInt(vector[idf].tipo)) {
+          case 1:
+            var prestamosnombre = new Array();
+            var mesesenmora = new Array();
+            var porcentajeobtenido = new Array();
+
+            for (var prestamos in vector[idf].value) {
+              prestamosnombre.push(prestamos == '0' ? 'No tiene prestamos en mora' : prestamos);
+              mesesenmora.push(vector[idf].value[prestamos].m);
+              porcentajeobtenido.push(vector[idf].value[prestamos].p);
+            }
+
+            if (promises.barChartG != null) {
+              promises.barChartG.destroy();
+            }
+
+            promises.barChartG = new Chart($('#barchatdatagarante'), {
+              type: 'bar',
+              data: {
+                labels: prestamosnombre,
+                datasets: [{
+                  label: 'Prestamos en mora',
+                  backgroundColor: 'rgb(32, 168, 216)',
+                  borderColor: 'rgba(220, 220, 220, 0.8)',
+                  highlightFill: 'rgba(220, 220, 220, 0.75)',
+                  highlightStroke: 'rgba(220, 220, 220, 1)',
+                  data: porcentajeobtenido,
+                  meses: mesesenmora
+                }]
+              },
+              options: {
+                responsive: true,
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      max: parseInt(datafactor['datahtml'].h1),
+                      min: 0,
+                      stepSize: 5,
+                      callback: function callback(value, index, values) {
+                        return value + ' %';
+                      }
+                    }
+                  }],
+                  xAxes: [{
+                    maxBarThickness: 90
+                  }]
+                },
+                tooltips: {
+                  mode: 'index',
+                  intersect: false,
+                  callbacks: {
+                    label: function label(tooltipItem, data) {
+                      var datasetLabelmes = data.datasets[tooltipItem.datasetIndex].meses[tooltipItem.index];
+                      return 'Tiene ' + datasetLabelmes.toLocaleString() + ' meses en mora';
+                    },
+                    title: function title(tooltipItems, data) {
+                      var tooltipItem = tooltipItems[0];
+                      var datasetLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                      return datasetLabel.toLocaleString() + '%';
+                    }
+                  }
+                }
+              }
+            });
+            break;
+
+          case 2:
+            break;
+
+          case 3:
+            break;
+        }
+      }
+
+      promises.classModal.openModal('factorviewgarante');
+    });
+  });
+}
+function setgraficoLista(socio, promises) {
+  var datafactor = socio.datafactor;
+  $("#detallesociolistagraficos").html(datafactor['html']);
+  var vector = datafactor['pos'];
+
+  for (var idf in vector) {
+    switch (parseInt(vector[idf].tipo)) {
+      case 1:
+        var prestamosnombre = new Array();
+        var mesesenmora = new Array();
+        var porcentajeobtenido = new Array();
+
+        for (var prestamos in vector[idf].value) {
+          prestamosnombre.push(prestamos == '0' ? 'No tiene prestamos en mora' : prestamos);
+          mesesenmora.push(vector[idf].value[prestamos].m);
+          porcentajeobtenido.push(vector[idf].value[prestamos].p);
+        }
+
+        if (promises.barChartG != null) {
+          promises.barChartG.destroy();
+        }
+
+        promises.barChartG = new Chart($('#barchatdatagarante'), {
+          type: 'bar',
+          data: {
+            labels: prestamosnombre,
+            datasets: [{
+              label: 'Prestamos en mora',
+              backgroundColor: 'rgb(32, 168, 216)',
+              borderColor: 'rgba(220, 220, 220, 0.8)',
+              highlightFill: 'rgba(220, 220, 220, 0.75)',
+              highlightStroke: 'rgba(220, 220, 220, 1)',
+              data: porcentajeobtenido,
+              meses: mesesenmora
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              yAxes: [{
+                ticks: {
+                  max: parseInt(datafactor['datahtml'].h1),
+                  min: 0,
+                  stepSize: 5,
+                  callback: function callback(value, index, values) {
+                    return value + ' %';
+                  }
+                }
+              }],
+              xAxes: [{
+                maxBarThickness: 90
+              }]
+            },
+            tooltips: {
+              mode: 'index',
+              intersect: false,
+              callbacks: {
+                label: function label(tooltipItem, data) {
+                  var datasetLabelmes = data.datasets[tooltipItem.datasetIndex].meses[tooltipItem.index];
+                  return 'Tiene ' + datasetLabelmes.toLocaleString() + ' meses en mora';
+                },
+                title: function title(tooltipItems, data) {
+                  var tooltipItem = tooltipItems[0];
+                  var datasetLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                  return datasetLabel.toLocaleString() + '%';
+                }
+              }
+            }
+          }
+        });
+        break;
+
+      case 2:
+        break;
+
+      case 3:
+        break;
+    }
+  }
+
+  promises.classModal.openModal('factorviewgaranteLista');
+}
+function getcriterioGarantesLista(promises, socio, cuotai) {
+  // var monto = (promises.montosolicitado * promises.tipocambio);
+  // var modelo = _fff3512_23622(promises.fecha_actual, promises.fechasjson, promises.tasaanual, monto, promises.plazomeses, promises.fechacorte, socio.totalcuotas, promises.tipocambio, promises.arrayFormulasProducto, socio.idsocio);
+  $.get("/getcriteriosgarantes", {
+    idpro: promises.producto,
+    idmoneda: promises.moneda,
+    factor: promises.factorid,
+    cuota: cuotai,
+    id: socio.idsocio,
+    socioAportes: socio.cantaportes
+  }, function (datafactor) {
+    var factor = redondeo_valor(parseFloat(datafactor['total']), 2, false);
+    socio.factor = factor;
+    socio.datafactor = datafactor;
+    promises.setlistasocio(socio);
+  });
+}
+
+function getArray(tam) {
+  var out = [];
+
+  for (var i = 1; i <= tam; i++) {
+    out.push(i + '');
+  }
+
+  return out;
+}
+
+function _vm2154_12185_145(idpres, me) {
+  $.get("/getprestamoRefi", {
+    id: idpres
+  }, function (response) {
+    var ventanas = [];
+    var tamao = getArray(response.refi.length + 1);
+    ventanas.push({
+      html: '<div id="framepdf" style="display:none;">' + '<div style=" width: 100%; "> <div class="row justify-content-center"><button id="reloadedFrame" class="icon-reload btn btn-sm"></button> </div> </div>' + '<iframe   id="printpdf" name="printpdf" src="' + me['REP_DESEMBOLSO'] + idpres + '" style="width:100%;height:800px;" allowfullscreen></iframe></div>',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      confirmButtonText: 'Siguiente',
+      progressSteps: tamao,
+      onBeforeOpen: function onBeforeOpen() {
+        swal.showLoading();
+        swal.disableButtons();
+        $("#reloadedFrame").click(function () {
+          $('#printpdf').attr("src", $('#printpdf').attr("src"));
+        });
+        $('#printpdf').on('load', function () {
+          $("#framepdf").css("display", "inline");
+          swal.hideLoading();
+          $(".swal2-popup").css("width", "85%");
+          $(".swal2-popup").css("padding", "0px 0px 20px 0px");
+          $(".swal2-progresssteps").css("margin", "15px 0 0 0");
+        });
+      }
+    });
+    response.refi.forEach(function (value) {
+      ventanas.push({
+        html: '<div id="framepdf" style="display:none;">' + '<div style=" width: 100%; "> <div class="row justify-content-center"><button id="reloadedFrame" class="icon-reload btn btn-sm"></button> </div> </div>' + '<iframe   id="printpdf" name="printpdf" src="' + me['REP_COBRANZA'] + value.idprestamo + '" style="width:100%;height:800px;" allowfullscreen></iframe></div>',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        confirmButtonText: 'Siguiente',
+        progressSteps: tamao,
+        onBeforeOpen: function onBeforeOpen() {
+          swal.showLoading();
+          swal.disableButtons();
+          $("#reloadedFrame").click(function () {
+            $('#printpdf').attr("src", $('#printpdf').attr("src"));
+          });
+          $('#printpdf').on('load', function () {
+            $("#framepdf").css("display", "inline");
+            swal.hideLoading();
+            $(".swal2-popup").css("width", "85%");
+            $(".swal2-popup").css("padding", "0px 0px 20px 0px");
+            $(".swal2-progresssteps").css("margin", "15px 0 0 0");
+          });
+        }
+      });
+    });
+    swal.queue(ventanas).then(function (result) {
+      if (result.value) {
+        swal("¡Se registro los datos correctamente!", "", "success");
+      }
+    });
+  });
+}
+function _vm2154_12186_135(id, titulo) {
+  return swal({
+    html: '<div id="framepdf" style="display:none;">' + '<div style=" width: 100%; "><label style="display: inline;padding-left: 23px;font-weight: 500;float: left;">' + titulo + '</label><div class="row justify-content-end"><button id="reloadedFrame" class="icon-reload btn btn-sm"></button>' + '<button id="close_id_swal" class="close" style="float: right; margin: 0 15px 2px 5px; ">X</button></div> </div>' + '<iframe id="printpdf" name="printpdf" src="' + id + '" style="width:100%;height:800px;" allowfullscreen></iframe></div>',
+    showConfirmButton: false,
+    showCancelButton: true,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    confirmButtonText: 'Ok',
+    cancelButtonText: 'Cerrar',
+    confirmButtonColor: '#4dbd74',
+    cancelButtonColor: '#f86c6b',
+    buttonsStyling: true,
+    reverseButtons: true,
+    onBeforeOpen: function onBeforeOpen() {
+      swal.showLoading();
+      swal.disableButtons();
+      $("#close_id_swal").click(function () {
+        swal.close();
+      });
+      $("#reloadedFrame").click(function () {
+        $('#printpdf').attr("src", $('#printpdf').attr("src"));
+      });
+      $('#printpdf').on('load', function () {
+        $("#framepdf").css("display", "inline");
+        swal.hideLoading();
+        $(".swal2-popup").css("width", "85%");
+        $(".swal2-popup").css("padding", "0px 0px 20px 0px");
+      });
+    }
+  });
+}
+function _vm2999158_1fgf_135(id, titulo) {
+  return swal({
+    html: '<div id="framepdf" style="display:none;">' + '<div style=" width: 100%; "><label style="display: inline;padding-left: 23px;font-weight: 500;float: left;">' + titulo + '</label><div class="row justify-content-end"><button id="reloadedFrame" class="icon-reload btn btn-sm"></button>' + '<button id="close_id_swal" class="close" style="float: right; margin: 0 15px 2px 5px; ">X</button></div> </div>' + '<iframe id="printpdf" name="printpdf" src="' + id + '" style="width:100%;height:800px;" allowfullscreen></iframe></div>',
+    showConfirmButton: true,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    showCancelButton: true,
+    confirmButtonText: 'Seguir',
+    cancelButtonText: 'Cancelar',
+    confirmButtonColor: '#4dbd74',
+    cancelButtonColor: '#f86c6b',
+    buttonsStyling: true,
+    reverseButtons: true,
+    onBeforeOpen: function onBeforeOpen() {
+      swal.showLoading();
+      swal.disableButtons();
+      $("#close_id_swal").click(function () {
+        swal.close();
+      });
+      $("#reloadedFrame").click(function () {
+        $('#printpdf').attr("src", $('#printpdf').attr("src"));
+      });
+      $('#printpdf').on('load', function () {
+        $("#framepdf").css("display", "inline");
+        swal.hideLoading();
+        $(".swal2-popup").css("width", "85%");
+        $(".swal2-popup").css("padding", "0px 0px 20px 0px");
+      });
+    }
+  });
+}
+function _vm2154_12185(promise) {
+  $('.listadogarantes').html('');
+  promise.garantesseleccionados.forEach(function (value) {
+    var valuehtml = '<li id="' + value.idsocio + '" class="list-group-item garantesid active" style="padding: 5px 0 5px 0;" >' + '<div class="input-group" style="align-items: center;">' + '<div class="col-md-1">' + '<img   src="storage/socio/' + (value.rutafoto != null ? value.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' + '</div>' + '<div class="col-md-8"> ' + '<p style="margin:0">' + value.nombre + ' ' + value.apaterno + ' ' + value.amaterno + ' ( ' + value.factorg + '% )</p>' + '</div>' + '<div class="col-md-3 resultado"  id="botones" style="text-align: right;" >' + '<button id="eliminargarante" type="button" class="btn btn-danger  btn-sm" > Quitar Registro</button>';
+    $('.listadogarantes').append(valuehtml + '</div></div></li>');
+    $('.garantesid[id="' + value.idsocio + '"] div[id="botones"]').children("#eliminargarante").click(function () {
+      promise.garantesseleccionados["delete"](value.idsocio);
+      promise.totalgarantesseleccionados = promise.garantesseleccionados.size;
+
+      _vm2154_12185(promise);
+    });
+  });
+  promise.arraygarantes.forEach(function (element) {
+    if (!promise.garantesseleccionados.has(element.idsocio) && promise.totalgarantesseleccionados < parseInt(promise.garantesporproducto)) {
+      var valuehtml = '<li id="' + element.idsocio + '" class="list-group-item garantesid ' + (promise.garantesseleccionados.has(element.idsocio) ? 'active"' : '"') + ' style="padding: 5px 0 5px 0;" >' + '<div class="input-group" style="align-items: center;">' + '<div class="col-md-1">' + '<img   src="storage/socio/' + (element.rutafoto != null ? element.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' + '</div>' + '<div class="col-md-8"> ' + '<p style="margin:0">' + element.nombre + ' ' + element.apaterno + ' ' + element.amaterno + '</p>' + '</div>' + '<div class="col-md-3 resultado"  id="botones" style="text-align: right;" >';
+
+      if (promise.totalgarantesseleccionados < parseInt(promise.garantesporproducto)) {
+        valuehtml += '<button  id="verificarbutton" type="button" class="btn btn-warning btn-sm">Verificar </button>';
+      }
+
+      $('.listadogarantes').append(valuehtml + '</div></div></li>');
+      $('.garantesid[id="' + element.idsocio + '"] div[id="botones"]').children("#verificarbutton").click(function () {
+        $('.garantesid[id="' + element.idsocio + '"] div[id="botones"]').html('<div id="spinner" class="spinner-border " style="vertical-align: middle;" role="status" aria-hidden="true"></div>');
+        getcriterioGarantes(promise, element);
+      });
+    }
+  });
+}
+function datapicker(id, fechamin, fechamax, fechaini) {
+  $("#" + id).daterangepicker({
+    singleDatePicker: true,
+    forceUpdate: true,
+    autoUpdateInput: true,
+    autoApply: true,
+    showDropdowns: true,
+    maxDate: fechamax,
+    minDate: fechamin,
+    startDate: fechaini,
+    locale: {
+      separator: "   |   ",
+      format: "YYYY-MM-DD",
+      applyLabel: "Seleccionar",
+      cancelLabel: "cancelar",
+      fromLabel: "Desde",
+      toLabel: "Hasta",
+      customRangeLabel: "Seleccionar rango",
+      daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+      monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+      firstDay: 1
+    }
+  });
+}
+function datatime(id) {
+  $("#" + id).datetimepicker({
+    autoclose: 1,
+    startView: 3,
+    minView: 3,
+    pickerPosition: 'bottom-right',
+    format: 'MM - yyyy'
+  });
+}
+function getdatapicker(id) {
+  return $("#" + id).val();
+}
+function _mg3612152_215(promise) {
+  var valuehtml = '';
+  promise.forEach(function (value) {
+    valuehtml += '<div class="col-md-12 row " style="justify-content: center;margin-top: 5px;">' + '<div class="col-md-1" style=" text-align: center;border: 1px solid gray; padding: 5px;">' + '<img   src="storage/socio/' + (value.rutafoto != null ? value.rutafoto : 'avatar.png') + '"  class="rounded-circle fotosociomini" alt="Cinque Terre">' + '  </div>' + '<div class="col-md-5 input-group" style="align-items: center;border: 1px solid gray; padding: 5px;">' + '<p style="margin:0">' + value.nomgrado + ' ' + value.nombre + ' ' + value.apaterno + ' ' + value.amaterno + '</p>' + '<p class="col-md-12" style="margin:0;text-align: right;">Factor obtenido: ' + value.factorg + '%</p>' + '</div>' + '</div>';
+  });
+  return valuehtml.length > 0 ? ' <div class="form-group row "><p class="col-md-12 titulo" >Datos de los Garantes:</p> ' + valuehtml + '</div>' : '';
+}
+var Modals = /*#__PURE__*/function () {
+  function Modals() {
+    _classCallCheck(this, Modals);
+
+    this.modales = new Map();
+  }
+
+  _createClass(Modals, [{
+    key: "addModal",
+    value: function addModal(id) {
+      var funOpen = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var funClose = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      $("#" + id).children(".modal-dialog").addClass("modal-dialog-centered");
+      $("#" + id).attr('data-backdrop', 'static');
+      $("#" + id).attr('data-keyboard', 'false');
+
+      if (jQuery.isFunction(funOpen)) {
+        $("#" + id).on('shown.bs.modal', function () {
+          funOpen();
+        });
+      }
+
+      if (jQuery.isFunction(funClose)) {
+        $("#" + id).on('hidden.bs.modal', function () {
+          funClose();
+        });
+      }
+
+      this.modales.set(id, {
+        openPrimary: function openPrimary() {
+          $("#" + id).modal("show");
+        },
+        close: function close() {
+          $("#" + id).modal("hide");
+        },
+        openInfo: function openInfo() {
+          $("#" + id).modal({
+            backdrop: true,
+            keyboard: true
+          });
+        }
+      });
+    }
+  }, {
+    key: "openModal",
+    value: function openModal(id) {
+      if (this.modales.has(id)) {
+        this.closeOthers(id);
+        this.modales.get(id).openPrimary();
+      }
+    }
+  }, {
+    key: "openModalInfo",
+    value: function openModalInfo(id) {
+      if (this.modales.has(id)) {
+        this.closeOthers(id);
+        this.modales.get(id).openInfo();
+      }
+    }
+  }, {
+    key: "closeModal",
+    value: function closeModal(id) {
+      if (this.modales.has(id)) {
+        this.modales.get(id).close();
+      }
+    }
+  }, {
+    key: "closeOthers",
+    value: function closeOthers(id) {
+      var _iterator = _createForOfIteratorHelper(this.modales),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var _step$value = _slicedToArray(_step.value, 2),
+              key = _step$value[0],
+              data = _step$value[1];
+
+          if (key != id) {
+            data.close();
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+    }
+  }]);
+
+  return Modals;
+}();
+var Slider = /*#__PURE__*/function () {
+  function Slider() {
+    _classCallCheck(this, Slider);
+  }
+
+  _createClass(Slider, [{
+    key: "addSlider",
+    value: function addSlider(id) {
+      $('#' + id).ionRangeSlider();
+    }
+  }, {
+    key: "getValue",
+    value: function getValue(id) {
+      return $('#' + id).data().from;
+    }
+  }]);
+
+  return Slider;
+}(); // https://simonbengtsson.github.io/jsPDF-AutoTable/
+// https://github.com/MrRio/jsPDF
+// http://www.rotisedapsales.com/snr/cloud2/website/jsPDF-master/docs/global.html#viewerPreferences
+// https://developer.tizen.org/community/tip-tech/creating-pdf-documents-jspdf
+// https://github.com/simonbengtsson/jsPDF-AutoTable
+// ejemplos http://raw.githack.com/MrRio/jsPDF/master/#
+//https://rawgit.com/MrRio/jsPDF/master/docs/jsPDF.html#line
+//lineas en la tabla https://stackoverflow.com/questions/55293032/how-to-give-borders-to-jspdf-autotable-content-generated-dynamically-as-in-templ
+
+function imgToBase64(src, callback) {
+  var outputFormat = src.substr(-3) === 'png' ? 'image/png' : 'image/jpeg';
+  var img = new Image();
+  img.crossOrigin = 'Anonymous';
+
+  img.onload = function () {
+    var canvas = document.createElement('CANVAS');
+    var ctx = canvas.getContext('2d');
+    var dataURL;
+    canvas.height = this.naturalHeight;
+    canvas.width = this.naturalWidth;
+    ctx.drawImage(this, 0, 0);
+    dataURL = canvas.toDataURL(outputFormat);
+    callback(dataURL);
+  };
+
+  img.src = src;
+
+  if (img.complete || img.complete === undefined) {
+    img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+    img.src = src;
+  }
+}
+
+function centrarText(doc, texto, posvertical) {
+  var pageSize = doc.internal.pageSize;
+  var pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth();
+  var dime = doc.getTextDimensions(texto);
+  doc.text(texto, pageWidth / 2 - dime.w / 2, posvertical);
+}
+
+function centrarTextTo(doc, texto, poshorizontal, posvertical) {
+  var pageWidth = 5.3;
+  var dime = doc.getTextDimensions(texto);
+  var nuevaposH = pageWidth / 2 - dime.w / 2 + poshorizontal;
+  doc.text(texto, nuevaposH, posvertical);
+}
+
+function centrarTextTo2(doc, texto, poshorizontal, posvertical) {
+  var pageWidth = 5.5;
+  var dime = doc.getTextDimensions(texto);
+  var nuevaposH = posvertical - (pageWidth / 2 - dime.w / 2);
+  doc.text(texto, poshorizontal, nuevaposH, null, 90);
+}
+
+function textToBase64Barcode(text) {
+  var canvas = document.createElement("canvas");
+  JsBarcode(canvas, text, {
+    format: "CODE39",
+    displayValue: false
+  });
+  return canvas.toDataURL("image/png");
+}
+
+function _vvp2521_cr01(ta, fotocr, funn) {
+  var idview = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'planout';
+  $("#" + idview).attr("src", '');
+  $("#2" + idview).attr("src", '');
+  var fondo = fotocr.foto;
+  var fondodos = fotocr.fotoa;
+  imgToBase64(ta.rutafoto ? 'storage/socio/' + ta.rutafoto : fotocr.avatar, function (fotosocio) {
+    var qr = new QRious();
+    qr.value = (ta.codsocio ? ta.codsocio : '') + '|' + (ta.carnetmilitar ? ta.carnetmilitar : '') + '|' + ta.numpapeleta;
+    qr.mime = 'image/jpeg'; // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
+
+    var doc = new jsPDF('p', 'cm', 'a4'); //216mm X 279mm (carta)
+
+    doc.setProperties({
+      title: 'Carnet socio'
+    });
+    doc.addImage(fondo, 'JPEG', 3.2, 0.9, 8.6, 5.5);
+    doc.addImage(fotosocio, 'JPEG', 3.99, 2.37, 2.31, 2.31);
+    doc.setFontSize(10);
+    doc.setFontStyle('bold');
+    doc.setTextColor(52, 52, 52);
+    centrarTextTo(doc, ta.nomgrado + ' ' + ta.nomespecialidad ? ta.nomgrado + ' ' + ta.nomespecialidad : '___', 6.5, 2.7);
+    centrarTextTo(doc, ta.nombre ? ta.nombre : '___', 6.5, 3.1);
+    centrarTextTo(doc, ta.apaterno + " " + ta.amaterno ? ta.apaterno + " " + ta.amaterno : '______', 6.5, 3.5);
+    doc.setFontStyle('normal');
+    doc.setFontSize(7);
+    doc.text(ta.nomfuerza, 7, 4.55);
+    doc.text(ta.fechanacimiento ? moment(ta.fechanacimiento).format("DD/MM/YYYY") : '___', 7, 5.35);
+    doc.text(ta.nomtiposocio ? ta.nomtiposocio : '___', 9.65, 4.55);
+    doc.text((ta.ci ? ta.ci : '___') + ' ' + (ta.abrvdep ? ta.abrvdep : '__'), 9.65, 5.35);
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(6);
+    doc.text(ta.codsocio ? ta.codsocio : '___', 4.54, 5.1);
+    doc.text(ta.carnetmilitar ? ta.carnetmilitar : '___', 4.54, 5.34);
+    doc.addImage(textToBase64Barcode(ta.numpapeleta ? ta.numpapeleta : '0'), 'JPEG', 8.5, 5.8, 3, 0.5);
+    $("#" + idview).attr("src", doc.output('datauristring'));
+    var doc2 = new jsPDF('p', 'cm', 'a4');
+    doc2.setProperties({
+      title: 'Carnet socio posterior'
+    });
+    doc2.addImage(fondodos, 'JPEG', 3.2, 0.9, 8.6, 5.5);
+    doc2.addImage(qr.toDataURL(), 'JPEG', 8.62, 2.37, 2.18, 2.18);
+    $("#2" + idview).attr("src", doc2.output('datauristring'));
+    funn();
+  });
+}
+function _vvp2521_cr02_b(ta, fotocr, funn) {
+  var idview = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'planout';
+  $("#" + idview).attr("src", '');
+  $("#2" + idview).attr("src", '');
+  var fondo = fotocr.foto;
+  var fondodos = fotocr.fotoa;
+  var fotosocio = fotocr.avatar;
+  var qr = new QRious();
+  qr.value = (ta.codsocio ? ta.codsocio : '') + '|' + (ta.ci ? ta.ci : '') + '|' + ta.numpapeleta;
+  qr.mime = 'image/jpeg'; // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
+
+  var doc = new jsPDF('p', 'cm', 'a4'); //216mm X 279mm (carta)
+
+  doc.setProperties({
+    title: 'Carnet beneficiario'
+  });
+  doc.addImage(fondo, 'JPEG', 3.17, 0.9, 8.6, 5.5);
+  doc.addImage(fotosocio, 'JPEG', 6.95, 2.5, 2.31, 2.31, 'socio', 'NONE', 90);
+  doc.setFontSize(10);
+  doc.setFontStyle('bold');
+  doc.setTextColor(52, 52, 52); // centrarTextTo2(doc, (ta.nombre)?ta.nombre:'___', 8.2,6.4); 
+
+  centrarTextTo2(doc, ta.nombre ? ta.nombre : '___', 7.8, 6.4);
+  centrarTextTo2(doc, ta.apaterno + " " + ta.amaterno ? ta.apaterno + " " + ta.amaterno : '______', 8.2, 6.4);
+  doc.setFontStyle('normal');
+  doc.setFontSize(7);
+  doc.text(ta.codsocio ? ta.codsocio : '', 9.1, 5.9, null, 90);
+  doc.text(ta.parentesco ? ta.parentesco : '___', 9.1, 3.15, null, 90);
+  doc.text(ta.fechanac ? moment(ta.fechanac).format("DD/MM/YYYY") : '___', 9.93, 5.9, null, 90);
+  doc.text((ta.ci ? ta.ci : '___') + ' ' + (ta.abrvdep ? ta.abrvdep : '__'), 9.93, 3.15, null, 90);
+  doc.setFontSize(6);
+  centrarTextTo2(doc, ta.idtiposocio == 1 ? 'BENEFICIARIO(A)' : 'BENEFICIARIO(A) - SP', 10.77, 6.4);
+  doc.addImage(textToBase64Barcode(ta.numpapeleta ? ta.numpapeleta : '0'), 'JPEG', 11.3, 4.6, 3, 0.5, 'barra', 'NONE', 90);
+  doc.setFontSize(5);
+  doc.setTextColor(255, 255, 255);
+  centrarTextTo2(doc, ('Válido hasta Diciembre - ' + moment().add(1, 'years').format("YYYY")).toUpperCase(), 11.5, 6.4);
+  $("#" + idview).attr("src", doc.output('datauristring'));
+  var doc2 = new jsPDF('p', 'cm', 'a4');
+  doc2.setProperties({
+    title: 'Carnet beneficiario posterior'
+  });
+  doc2.addImage(fondodos, 'JPEG', 3.17, 0.9, 8.6, 5.5);
+  doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31, 'socio', 'NONE', 90);
+  $("#2" + idview).attr("src", doc2.output('datauristring'));
+  funn();
+}
+function _vvp2521_cr02(ta, fotocr, funn) {
+  var idview = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'planout';
+  $("#" + idview).attr("src", '');
+  $("#2" + idview).attr("src", '');
+  var fondo = fotocr.foto;
+  var fondodos = fotocr.fotoa;
+  imgToBase64(ta.rutafoto ? 'storage/socio/' + ta.rutafoto : fotocr.avatar, function (fotosocio) {
+    var qr = new QRious();
+    qr.value = (ta.codsocio ? ta.codsocio : '') + '|' + (ta.carnetmilitar ? ta.carnetmilitar : '') + '|' + ta.numpapeleta;
+    qr.mime = 'image/jpeg'; // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
+
+    var doc = new jsPDF('p', 'cm', 'a4'); //216mm X 279mm (carta)
+
+    doc.setProperties({
+      title: 'Carnet socio'
+    });
+    doc.addImage(fondo, 'JPEG', 3.17, 0.9, 8.6, 5.5);
+    doc.addImage(fotosocio, 'JPEG', 6.95, 2.5, 2.31, 2.31, 'socio', 'NONE', 90);
+    doc.setFontSize(10);
+    doc.setFontStyle('bold');
+    doc.setTextColor(52, 52, 52);
+
+    if (ta.idfuerza == 5) {
+      // solo valida fuera armada para imprimir la abreviacion
+      centrarTextTo2(doc, ta.abrev + ' ' + ta.nomespecialidad ? ta.abrev + ' ' + ta.nomespecialidad : '___', 8.05, 6.4);
+    } else {
+      centrarTextTo2(doc, ta.nomgrado + ' ' + ta.nomespecialidad ? ta.nomgrado + ' ' + ta.nomespecialidad : '___', 8.05, 6.4);
+    }
+
+    centrarTextTo2(doc, ta.nombre ? ta.nombre : '___', 8.45, 6.4);
+    centrarTextTo2(doc, ta.apaterno + " " + ta.amaterno ? ta.apaterno + " " + ta.amaterno : '______', 8.85, 6.4);
+    doc.setFontStyle('normal');
+    doc.setFontSize(7);
+    doc.text(ta.nomfuerza, 9.7, 5.9, null, 90);
+    doc.text(ta.fechanacimiento ? moment(ta.fechanacimiento).format("DD/MM/YYYY") : '___', 10.53, 5.9, null, 90);
+    doc.text(ta.nomtiposocio ? ta.nomtiposocio : '___', 9.7, 3.15, null, 90);
+    doc.text((ta.ci ? ta.ci : '___') + ' ' + (ta.abrvdep ? ta.abrvdep : '__'), 10.53, 3.15, null, 90);
+    doc.setFontSize(6);
+    doc.text(ta.codsocio ? ta.codsocio : '___', 7.24, 4.1, null, 90);
+    doc.text(ta.carnetmilitar ? ta.carnetmilitar : '___', 7.46, 4.1, null, 90);
+    centrarTextTo2(doc, ta.idtiposocio == 1 ? 'TITULAR' : 'TITULAR - SP', 10.87, 6.4);
+    doc.addImage(textToBase64Barcode(ta.numpapeleta ? ta.numpapeleta : '0'), 'JPEG', 11.4, 4.7, 3, 0.5, 'barra', 'NONE', 90); // centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.77,6.4);
+    // doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.3, 4.6, 3,0.5,'barra','NONE',90);   
+
+    doc.setFontSize(5);
+    doc.setTextColor(255, 255, 255);
+    centrarTextTo2(doc, ('Válido hasta Diciembre - ' + moment().add(3, 'years').format("YYYY")).toUpperCase(), 11.63, 6.4);
+    $("#" + idview).attr("src", doc.output('datauristring'));
+    var doc2 = new jsPDF('p', 'cm', 'a4');
+    doc2.setProperties({
+      title: 'Carnet socio posterior'
+    });
+    doc2.addImage(fondodos, 'JPEG', 3.17, 0.9, 8.6, 5.5);
+    doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31, 'socio', 'NONE', 90);
+    $("#2" + idview).attr("src", doc2.output('datauristring'));
+    funn();
+  });
+}
+function _vvp2521_cr0egresados(ta, fotocr, funn) {
+  var idview = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'planout';
+  $("#" + idview).attr("src", '');
+  $("#2" + idview).attr("src", '');
+  var fondo = fotocr.foto;
+  var fondodos = fotocr.fotoa;
+  imgToBase64(ta.rutafoto ? 'storage/socio/e/' + ta.rutafoto : fotocr.avatar, function (fotosocio) {
+    var qr = new QRious();
+    qr.value = (ta.codsocio ? ta.codsocio : '') + '|' + (ta.carnetmilitar ? ta.carnetmilitar : '') + '|' + ta.numpapeleta;
+    qr.mime = 'image/jpeg'; // var doc = new jsPDF('l', 'mm', [86,55]); //216mm X 279mm (carta)
+
+    var doc = new jsPDF('p', 'cm', 'a4'); //216mm X 279mm (carta)
+
+    doc.setProperties({
+      title: 'Carnet socio'
+    });
+    doc.addImage(fondo, 'JPEG', 3.17, 0.9, 8.6, 5.5);
+    doc.addImage(fotosocio, 'JPEG', 6.95, 2.5, 2.31, 2.31, 'socio', 'NONE', 90);
+    doc.setFontSize(10);
+    doc.setFontStyle('bold');
+    doc.setTextColor(52, 52, 52);
+
+    if (ta.idfuerza == 5) {
+      // solo valida fuera armada para imprimir la abreviacion
+      centrarTextTo2(doc, ta.abrev + ' ' + ta.nomespecialidad ? ta.abrev + ' ' + ta.nomespecialidad : '___', 8.05, 6.4);
+    } else {
+      centrarTextTo2(doc, ta.nomgrado + ' ' + ta.nomespecialidad ? ta.nomgrado + ' ' + ta.nomespecialidad : '___', 8.05, 6.4);
+    }
+
+    centrarTextTo2(doc, ta.nombre ? ta.nombre : '___', 8.45, 6.4);
+    centrarTextTo2(doc, ta.apaterno + " " + ta.amaterno ? ta.apaterno + " " + ta.amaterno : '______', 8.85, 6.4);
+    doc.setFontStyle('normal');
+    doc.setFontSize(7);
+    doc.text(ta.nomfuerza, 9.7, 5.9, null, 90);
+    doc.text(ta.fechanacimiento ? moment(ta.fechanacimiento).format("DD/MM/YYYY") : '___', 10.53, 5.9, null, 90);
+    doc.text(ta.nomtiposocio ? ta.nomtiposocio : '___', 9.7, 3.15, null, 90);
+    doc.text((ta.ci ? ta.ci : '___') + ' ' + (ta.abrvdep ? ta.abrvdep : '__'), 10.53, 3.15, null, 90);
+    doc.setFontSize(6);
+    doc.text(ta.codsocio ? ta.codsocio : '___', 7.24, 4.1, null, 90);
+    doc.text(ta.carnetmilitar ? ta.carnetmilitar : '___', 7.46, 4.1, null, 90);
+    centrarTextTo2(doc, ta.idtiposocio == 1 ? 'TITULAR' : 'TITULAR - SP', 10.87, 6.4);
+    doc.addImage(textToBase64Barcode(ta.numpapeleta ? ta.numpapeleta : '0'), 'JPEG', 11.4, 4.7, 3, 0.5, 'barra', 'NONE', 90); // centrarTextTo2(doc, (ta.idtiposocio==1)?'TITULAR':'TITULAR - SP', 10.77,6.4);
+    // doc.addImage(textToBase64Barcode(ta.numpapeleta?ta.numpapeleta:'0'), 'JPEG',11.3, 4.6, 3,0.5,'barra','NONE',90);   
+
+    doc.setFontSize(5);
+    doc.setTextColor(255, 255, 255);
+    centrarTextTo2(doc, ('Válido hasta Diciembre - ' + moment().add(3, 'years').format("YYYY")).toUpperCase(), 11.63, 6.4);
+    $("#" + idview).attr("src", doc.output('datauristring'));
+    var doc2 = new jsPDF('p', 'cm', 'a4');
+    doc2.setProperties({
+      title: 'Carnet socio posterior'
+    });
+    doc2.addImage(fondodos, 'JPEG', 3.17, 0.9, 8.6, 5.5);
+    doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31, 'socio', 'NONE', 90);
+    $("#2" + idview).attr("src", doc2.output('datauristring'));
+    funn();
+  });
+}
+function _vvp2521_cr_emp(ta, fotocr) {
+  var idview = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'contenedorframes';
+  var finn = arguments.length > 3 ? arguments[3] : undefined;
+  var fondo = fotocr.foto;
+  var fondodos = fotocr.fotoa;
+  var fotosocio = fotocr.avatar;
+  var qr = new QRious();
+  qr.value = (ta.codempleado ? ta.codempleado : '') + '|' + (ta.ci ? ta.ci : '') + '|' + (ta.nomcargo ? ta.nomcargo : '');
+  qr.mime = 'image/jpeg';
+  var doc = new jsPDF('p', 'cm', 'a4');
+  doc.setProperties({
+    title: 'Credencial'
+  });
+  doc.addImage(fondo, 'JPEG', 3.17, 0.9, 8.6, 5.5);
+  doc.addImage(fotosocio, 'JPEG', 6.95, 2.5, 2.31, 2.31, 'socio', 'NONE', 90);
+  doc.setFontSize(9);
+  doc.setFontStyle('normal');
+  doc.setTextColor(52, 52, 52);
+
+  if (ta.nomprofesion) {
+    centrarTextTo2(doc, ta.nomprofesion ? ta.nomprofesion : '', 8.1, 6.4);
+    centrarTextTo2(doc, ta.nombre ? ta.nombre : '___', 8.5, 6.4);
+    centrarTextTo2(doc, ta.apaterno + " " + ta.amaterno ? ta.apaterno + " " + ta.amaterno : '___', 8.9, 6.4);
+  } else {
+    centrarTextTo2(doc, ta.nombre ? ta.nombre : '___', 8.3, 6.4);
+    centrarTextTo2(doc, ta.apaterno + " " + ta.amaterno ? ta.apaterno + " " + ta.amaterno : '___', 8.7, 6.4);
+  }
+
+  doc.setFontSize(6);
+  doc.text(ta.ci ? ta.ci + ' ' + (ta.abrvdep ? ta.abrvdep : '') : '0', 7.24, 4.1, null, 90);
+  doc.text(ta.codempleado ? ta.codempleado : '-', 7.46, 4.1, null, 90);
+  doc.setFontStyle('bold');
+  doc.setFontSize(11);
+  var splitText = doc.splitTextToSize(ta.nomcargo.replace(/[^a-zA-ZÀ-ÿ\u00f1\u00d1 0-9.]+/g, ' ').toUpperCase(), 4.7);
+  var posi = splitText.length == 1 ? 10 : splitText.length == 2 ? 9.73 : splitText.length >= 3 ? 9.63 : 9.63;
+
+  _.forEach(splitText, function (value) {
+    centrarTextTo2(doc, value, posi, 6.4);
+    posi += 0.4;
+  });
+
+  doc.setFontSize(6);
+  centrarTextTo2(doc, 'TITULAR', 10.87, 6.4);
+  doc.addImage(textToBase64Barcode(ta.codempleado ? ta.codempleado : '0'), 'JPEG', 11.4, 4.7, 3, 0.5, 'barra', 'NONE', 90);
+  doc.setFontSize(5);
+  doc.setTextColor(255, 255, 255); // centrarTextTo2(doc, ( ('Válido hasta Diciembre - '+ moment().format("YYYY")).toUpperCase()), 11.63,6.4); 
+
+  centrarTextTo2(doc, ('Válido hasta Diciembre - ' + moment().add(1, 'years').format("YYYY")).toUpperCase(), 11.63, 6.4);
+  var diva = $('<div>').css('padding', '0').addClass("col-md-6");
+  var cre1 = $('<iframe>').attr('src', doc.output('datauristring')).attr('height', '500px').attr('width', '100%');
+  cre1.appendTo(diva);
+  var botones1 = $('<div>').css('bottom', '0').css('position', 'absolute').css('margin', '3%');
+  $('<button/>').addClass("btn btn-primary").text('Ampliar').click(function () {
+    window.open(doc.output('bloburl'), '_blank', "fullscreen=yes, scrollbars=auto");
+  }).appendTo(botones1);
+  $('<button/>').addClass("btn btn-primary").css('margin-left', '7px').text('Recargar').click(function () {
+    cre1.attr('src', doc.output('datauristring'));
+  }).appendTo(botones1);
+  botones1.appendTo(diva);
+  diva.appendTo('#' + idview);
+  var doc2 = new jsPDF('p', 'cm', 'a4');
+  doc2.setProperties({
+    title: 'Credencial posterior'
+  });
+  doc2.addImage(fondodos, 'JPEG', 3.17, 0.9, 8.6, 5.5);
+  doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31, 'socio', 'NONE', 90);
+  var divv = $('<div>').css('padding', '0').addClass("col-md-6");
+  var cre = $('<iframe>').attr('src', doc2.output('datauristring')).attr('height', '500px').attr('width', '100%');
+  cre.appendTo(divv);
+  var botones = $('<div>').css('bottom', '0').css('position', 'absolute').css('margin', '3%');
+  $('<button/>').addClass("btn btn-primary").text('Ampliar').click(function () {
+    window.open(doc2.output('bloburl'), '_blank', "fullscreen=yes, scrollbars=auto");
+  }).appendTo(botones);
+  $('<button/>').addClass("btn btn-primary").css('margin-left', '7px').text('Recargar').click(function () {
+    cre.attr('src', doc2.output('datauristring'));
+  }).appendTo(botones);
+  botones.appendTo(divv);
+  divv.appendTo('#' + idview);
+  finn();
+}
+function _vvp2521_cr_cen_emp(ta, fotocr) {
+  var idview = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'contenedorframes';
+  var fondo = fotocr.foto;
+  var fondodos = fotocr.fotoa;
+  var fotosocio = fotocr.avatar;
+  var qr = new QRious();
+  qr.value = (ta.codsocio ? ta.codsocio : '') + '|' + (ta.abrvdep ? ta.abrvdep : '') + '|' + (ta.carnetmilitar ? ta.carnetmilitar : '') + '|' + ta.cargo;
+  qr.mime = 'image/jpeg';
+  var doc = new jsPDF('p', 'cm', 'a4');
+  doc.setProperties({
+    title: 'Credencial'
+  });
+  doc.addImage(fondo, 'JPEG', 3.17, 0.9, 8.6, 5.5);
+  doc.addImage(fotosocio, 'JPEG', 6.95, 2.5, 2.31, 2.31, 'socio', 'NONE', 90);
+  doc.setFontSize(9);
+  doc.setFontStyle('normal');
+  doc.setTextColor(52, 52, 52);
+  centrarTextTo2(doc, ta.nomgrado + ' ' + ta.nomespecialidad ? ta.nomgrado + ' ' + ta.nomespecialidad : '___', 8.2, 6.4);
+  centrarTextTo2(doc, ta.nombre ? ta.nombre : '___', 8.6, 6.4);
+  centrarTextTo2(doc, ta.apaterno + " " + ta.amaterno ? ta.apaterno + " " + ta.amaterno : '___', 9, 6.4);
+  doc.setFontSize(6);
+  doc.text(ta.ci ? ta.ci + ' ' + (ta.abrvdep ? ta.abrvdep : '') : '0', 7.24, 4.1, null, 90);
+  doc.text(ta.carnetmilitar ? ta.carnetmilitar : '-', 7.46, 4.1, null, 90);
+  doc.setFontStyle('bold');
+  doc.setFontSize(11);
+  var posi = 9.8;
+  var splitText = doc.splitTextToSize(ta.cargo.replace(/[^a-zA-ZÀ-ÿ\u00f1\u00d1 0-9.]+/g, ' '), 4.8);
+
+  _.forEach(splitText, function (value) {
+    centrarTextTo2(doc, value, posi, 6.4);
+    posi += 0.4;
+  });
+
+  doc.setFontSize(6);
+  centrarTextTo2(doc, ta.validate ? 'Válido hasta ' + moment(ta.validate).format("MMMM - YYYY").toUpperCase() : ' ', 10.8, 6.4);
+  doc.addImage(textToBase64Barcode(ta.codsocio ? ta.codsocio : '0'), 'JPEG', 11.4, 4.6, 3, 0.5, 'barra', 'NONE', 90);
+  var diva = $('<div>').css('padding', '0').addClass("col-md-6");
+  var cre1 = $('<iframe>').attr('src', doc.output('datauristring')).attr('height', '500px').attr('width', '100%');
+  cre1.appendTo(diva);
+  var botones1 = $('<div>').css('bottom', '0').css('position', 'absolute').css('margin', '3%');
+  $('<button/>').addClass("btn btn-primary").text('Ampliar').click(function () {
+    window.open(doc.output('bloburl'), '_blank', "fullscreen=yes, scrollbars=auto");
+  }).appendTo(botones1);
+  $('<button/>').addClass("btn btn-primary").css('margin-left', '7px').text('Recargar').click(function () {
+    cre1.attr('src', doc.output('datauristring'));
+  }).appendTo(botones1);
+  botones1.appendTo(diva);
+  diva.appendTo('#' + idview);
+  var doc2 = new jsPDF('p', 'cm', 'a4');
+  doc2.setProperties({
+    title: 'Credencial posterior'
+  });
+  doc2.addImage(fondodos, 'JPEG', 3.17, 0.9, 8.6, 5.5);
+  doc2.addImage(qr.toDataURL(), 'JPEG', 6.97, 2.5, 2.31, 2.31, 'socio', 'NONE', 90);
+  var divv = $('<div>').css('padding', '0').addClass("col-md-6");
+  var cre = $('<iframe>').attr('src', doc2.output('datauristring')).attr('height', '500px').attr('width', '100%');
+  cre.appendTo(divv);
+  var botones = $('<div>').css('bottom', '0').css('position', 'absolute').css('margin', '3%');
+  $('<button/>').addClass("btn btn-primary").text('Ampliar').click(function () {
+    window.open(doc2.output('bloburl'), '_blank', "fullscreen=yes, scrollbars=auto");
+  }).appendTo(botones);
+  $('<button/>').addClass("btn btn-primary").css('margin-left', '7px').text('Recargar').click(function () {
+    cre.attr('src', doc2.output('datauristring'));
+  }).appendTo(botones);
+  botones.appendTo(divv);
+  divv.appendTo('#' + idview);
+}
+function _vvp2521_bio01(fotocr, funn) {
+  var idview = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'biometricoframe';
+  $("#" + idview).attr("src", '');
+  var fondo = fotocr.foto;
+  var doc = new jsPDF('p', 'cm', 'a4'); //216mm X 279mm (carta)
+
+  doc.setProperties({
+    title: 'Carnet asistencia'
+  });
+  doc.addImage(fondo, 'JPEG', 3.17, 0.9, 8.6, 5.5);
+  $("#" + idview).attr("src", doc.output('datauristring'));
+  funn();
+  z;
+}
+function _vvp2521_00001(ta) {
+  var idview = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'planout';
+  imgToBase64('img/iconad.png', function (base64) {
+    var doc = new jsPDF('p', 'mm', 'letter'); //216mm X 279mm (carta)
+
+    doc.setProperties({
+      title: 'Plan De Pagos'
+    });
+    doc.addImage(base64, 'JPEG', 14, 14, 32, 20);
+    doc.setFontSize(9);
+    centrarText(doc, "ASOCIACION NACIONAL DE SUBOFICIALES Y SARGENTOS", 20);
+    centrarText(doc, "DE LAS FUERZAS ARMADAS", 25);
+    doc.setFontSize(11);
+    centrarText(doc, '"ASCINALSS"', 30);
+    doc.setFontSize(12);
+    doc.setFontStyle('bold');
+    centrarText(doc, '"PLAN DE PAGOS"', 40);
+    doc.autoTable({
+      head: [{
+        pe: 'Periodo',
+        fp: 'Fecha de Pago',
+        di: 'Dias',
+        am: 'Capital',
+        "in": 'Interes',
+        indi: 'Interes Diferido',
+        seg: 'Seguro',
+        car: 'Cargos',
+        cu: 'Total Cuota',
+        ca: 'Saldo'
+      }],
+      body: generateBodyTable(ta),
+      foot: [{
+        pe: {
+          content: 'Totales : ',
+          colSpan: 3,
+          styles: {
+            halign: 'right'
+          }
+        },
+        car: getTotal(ta, 'car'),
+        cu: getTotal(ta, 'cut'),
+        "in": getTotal(ta, 'in'),
+        indi: getTotal(ta, 'indi'),
+        seg: getTotal(ta, 'seg'),
+        am: getTotal(ta, 'am'),
+        ca: {
+          content: ''
+        }
+      }],
+      theme: 'grid',
+      styles: {
+        lineColor: [211, 211, 211],
+        lineWidth: 0.2,
+        halign: 'center'
+      },
+      headStyles: {
+        fillColor: [203, 207, 212],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      },
+      footStyles: {
+        fillColor: [231, 234, 238],
+        textColor: [0, 0, 0],
+        fontStyle: 'normal'
+      },
+      showFoot: 'lastPage',
+      showHead: 'firstPage',
+      startY: 51
+    });
+    $("#" + idview).attr("src", doc.output('datauristring'));
+  });
+}
+function _vvp2521_00002(ta) {
+  var idview = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'planout';
+  imgToBase64('img/iconad.png', function (base64) {
+    var doc = new jsPDF('p', 'mm', 'letter'); //216mm X 279mm (carta)
+
+    doc.setProperties({
+      title: 'Cargar Ascii'
+    });
+    var positicon = 0;
+    doc.autoTable({
+      head: [{
+        no: 'No.',
+        num: 'Papeleta',
+        gra: 'Grado',
+        nom: 'Nombre',
+        est: 'Estado',
+        mon: 'Moneda',
+        cut: 'Cuota',
+        pla: 'Plzo'
+      }],
+      body: generateBodyTablepdfDetalle(JSON.parse(ta.file)),
+      theme: 'grid',
+      bodyStyles: _defineProperty({
+        textColor: [0, 0, 0],
+        lineColor: [211, 211, 211],
+        lineWidth: 0,
+        halign: 'center',
+        cellPadding: 1,
+        fontSize: 8
+      }, "cellPadding", 0.5),
+      headStyles: {
+        fillColor: [203, 207, 212],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold',
+        halign: 'center',
+        fontSize: 10
+      },
+      showHead: 'everyPage',
+      startY: 40,
+      margin: {
+        top: 40
+      },
+      didDrawCell: function didDrawCell(data) {
+        if (data.section === 'body' && data.column.index === 'no' && data.row.cells.no.colSpan == 6) {
+          positicon = data.row.cells.no.y;
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.3);
+          doc.line(data.row.cells.no.x, data.row.cells.no.y, data.row.cells.no.x + data.row.cells.no.width, data.row.cells.no.y);
+        }
+
+        if (data.section === 'body' && data.column.index === 'cut' && positicon == data.row.cells.cut.y) {
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.3);
+          doc.line(data.row.cells.cut.x, data.row.cells.cut.y, data.row.cells.cut.x + data.row.cells.cut.width, data.row.cells.cut.y);
+        }
+
+        if (data.section === 'body' && data.column.index === 'pla' && positicon == data.row.cells.pla.y) {
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.3);
+          doc.line(data.row.cells.pla.x, data.row.cells.pla.y, data.row.cells.pla.x + data.row.cells.pla.width, data.row.cells.pla.y);
+        }
+      }
+    });
+    var pageCount = doc.internal.getNumberOfPages();
+
+    for (var i = 0; i < pageCount; i++) {
+      doc.setPage(i);
+      doc.addImage(base64, 'JPEG', 14, 14, 32, 20);
+      doc.setFontSize(12);
+      doc.setFontStyle('bold');
+      centrarText(doc, '"DETALLE DE ALTAS POR PRESTAMOS"', 25);
+      doc.setFontSize(9);
+      doc.setFontStyle('normal');
+      centrarText(doc, "Correspondiente a " + JSON.parse(ta.file).mes + " de " + JSON.parse(ta.file).anio, 29);
+      doc.text(ta.fecha, 170, 24);
+      doc.setFontSize(8);
+      doc.text('Pagina ' + doc.internal.getCurrentPageInfo().pageNumber + " de " + pageCount, 170, 27);
+    }
+
+    $("#" + idview).attr("src", doc.output('datauristring'));
+  });
+}
+function _vvp2521_00003(ta) {
+  var idview = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'planout';
+  imgToBase64('img/iconad.png', function (base64) {
+    var doc = new jsPDF('p', 'mm', 'letter'); //216mm X 279mm (carta)
+
+    doc.setProperties({
+      title: 'Cargar Ascii'
+    });
+    var positicon = 0;
+    doc.autoTable({
+      head: [{
+        fue: 'Fuerza',
+        cod: 'Codigo',
+        can: 'Cantidad',
+        mon: 'Monto Total'
+      }],
+      body: generateBodyTablepdfResumen(JSON.parse(ta.file)),
+      theme: 'grid',
+      bodyStyles: _defineProperty({
+        textColor: [0, 0, 0],
+        lineColor: [211, 211, 211],
+        lineWidth: 0,
+        halign: 'center',
+        cellPadding: 1,
+        fontSize: 8
+      }, "cellPadding", 0.5),
+      headStyles: {
+        fillColor: [203, 207, 212],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold',
+        halign: 'center',
+        fontSize: 10
+      },
+      showHead: 'everyPage',
+      startY: 40,
+      margin: {
+        top: 40
+      },
+      didDrawCell: function didDrawCell(data) {
+        if (data.section === 'body' && data.column.index === 'fue' && data.row.cells.fue.colSpan == 2) {
+          positicon = data.row.cells.fue.y;
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.3);
+          doc.line(data.row.cells.fue.x, data.row.cells.fue.y, data.row.cells.fue.x + data.row.cells.fue.width, data.row.cells.fue.y);
+        }
+
+        if (data.section === 'body' && data.column.index === 'can' && positicon == data.row.cells.can.y) {
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.3);
+          doc.line(data.row.cells.can.x, data.row.cells.can.y, data.row.cells.can.x + data.row.cells.can.width, data.row.cells.can.y);
+        }
+
+        if (data.section === 'body' && data.column.index === 'mon' && positicon == data.row.cells.mon.y) {
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.3);
+          doc.line(data.row.cells.mon.x, data.row.cells.mon.y, data.row.cells.mon.x + data.row.cells.mon.width, data.row.cells.mon.y);
+        }
+      }
+    });
+    var pageCount = doc.internal.getNumberOfPages();
+
+    for (var i = 0; i < pageCount; i++) {
+      doc.setPage(i);
+      doc.addImage(base64, 'JPEG', 14, 14, 32, 20);
+      doc.setFontSize(12);
+      doc.setFontStyle('bold');
+      centrarText(doc, '"RESUMEN DE ALTAS POR PRESTAMOS"', 25);
+      doc.setFontSize(9);
+      doc.setFontStyle('normal');
+      centrarText(doc, "Correspondiente a " + JSON.parse(ta.file).mes + " de " + JSON.parse(ta.file).anio, 29);
+      doc.text(ta.fecha, 170, 24);
+      doc.setFontSize(8);
+      doc.text('Pagina ' + doc.internal.getCurrentPageInfo().pageNumber + " de " + pageCount, 170, 27);
+    }
+
+    $("#" + idview).attr("src", doc.output('datauristring'));
+  });
+}
+function _vvp2521_00004(ta, user, date) {
+  var idview = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'planout';
+  imgToBase64('img/iconad.png', function (base64) {
+    var doc = new jsPDF('p', 'mm', 'letter'); //216mm X 279mm (carta)
+
+    doc.setProperties({
+      title: 'Reporte de la configuración de perfiles de cuentas'
+    });
+    var positicon = 0;
+    doc.autoTable({
+      head: [{
+        nom: 'Nombre del perfil',
+        tip: 'tipo',
+        mod: 'Modulo',
+        deb: {
+          content: 'Cuentas',
+          colSpan: 2,
+          styles: {
+            halign: 'center',
+            cellWidth: 45
+          }
+        },
+        hab: {
+          content: '',
+          styles: {
+            cellWidth: 45
+          }
+        }
+      }],
+      body: function () {
+        var out = [];
+        ta.forEach(function (valor) {
+          out.push({
+            nom: {
+              content: '',
+              colSpan: 4
+            }
+          });
+          out.push({
+            nom: {
+              content: valor.nombre,
+              rowSpan: valor.data.length + 1,
+              styles: {
+                halign: 'left',
+                valign: 'center'
+              }
+            },
+            tip: {
+              content: valor.tipo,
+              rowSpan: valor.data.length + 1,
+              styles: {
+                halign: 'center',
+                valign: 'center'
+              }
+            },
+            mod: {
+              content: valor.modulo,
+              rowSpan: valor.data.length + 1,
+              styles: {
+                halign: 'center',
+                valign: 'center'
+              }
+            },
+            deb: {
+              content: 'Debe',
+              styles: {
+                fillColor: [203, 207, 212],
+                textColor: [0, 0, 0],
+                fontStyle: 'bold',
+                halign: 'center'
+              }
+            },
+            hab: {
+              content: 'Haber',
+              styles: {
+                fillColor: [203, 207, 212],
+                textColor: [0, 0, 0],
+                fontStyle: 'bold',
+                halign: 'center'
+              }
+            }
+          });
+          valor.data.forEach(function (element) {
+            if (element.tipocargo == 'd') {
+              out.push({
+                deb: {
+                  content: element.codcuenta + '-' + element.nomcuenta,
+                  styles: {
+                    halign: 'left',
+                    fontSize: 6,
+                    cellWidth: 45
+                  }
+                },
+                hab: {
+                  content: '',
+                  styles: {
+                    cellWidth: 45
+                  }
+                }
+              });
+            } else {
+              out.push({
+                deb: {
+                  content: '',
+                  styles: {
+                    cellWidth: 45
+                  }
+                },
+                hab: {
+                  content: element.codcuenta + '-' + element.nomcuenta,
+                  styles: {
+                    halign: 'left',
+                    fontSize: 6,
+                    cellWidth: 45
+                  }
+                }
+              });
+            }
+          });
+          out.push({
+            nom: {
+              content: '',
+              colSpan: 4
+            }
+          });
+          out.push({
+            nom: {
+              content: '',
+              colSpan: 5
+            }
+          });
+        });
+        return out;
+      }(),
+      theme: 'grid',
+      bodyStyles: _defineProperty({
+        textColor: [0, 0, 0],
+        lineColor: [211, 211, 211],
+        lineWidth: 0,
+        halign: 'center',
+        cellPadding: 1,
+        fontSize: 8
+      }, "cellPadding", 0.5),
+      headStyles: {
+        fillColor: [203, 207, 212],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold',
+        halign: 'center',
+        fontSize: 10
+      },
+      showHead: 'everyPage',
+      startY: 40,
+      margin: {
+        top: 40
+      },
+      didDrawCell: function didDrawCell(data) {
+        if (data.section === 'body' && data.column.index === 'nom' && data.row.cells.nom.colSpan == 5) {
+          positicon = data.row.cells.nom.y;
+          doc.setDrawColor(0, 0, 0);
+          doc.setLineWidth(0.3);
+          doc.line(data.row.cells.nom.x, data.row.cells.nom.y, data.row.cells.nom.x + data.row.cells.nom.width, data.row.cells.nom.y);
+        }
+      }
+    });
+    var pageCount = doc.internal.getNumberOfPages();
+
+    for (var i = 0; i < pageCount; i++) {
+      doc.setPage(i);
+      doc.addImage(base64, 'JPEG', 14, 14, 32, 20);
+      doc.setFontSize(12);
+      doc.setFontStyle('bold');
+      centrarText(doc, 'REPORTE DE LA CONFIGURACIÓN ', 25);
+      centrarText(doc, "DE PERFILES DE CUENTAS", 29);
+      doc.setFontSize(9);
+      doc.setFontStyle('normal');
+      doc.text('Usuario: ' + user, 170, 24);
+      doc.setFontSize(8);
+      doc.text('Pagina ' + doc.internal.getCurrentPageInfo().pageNumber + " de " + pageCount, 170, 27);
+      doc.text('Imp.: ' + date, 170, 31);
+    }
+
+    $("#" + idview).attr("src", doc.output('datauristring'));
+  });
+}
+
+function generateBodyTablepdfResumen(datas) {
+  var body = [];
+
+  _.forEach(datas.data, function (datageneral) {
+    body.push({
+      fue: {
+        content: datageneral.nombre,
+        styles: {
+          halign: 'left'
+        }
+      },
+      cod: datageneral.cod,
+      can: datageneral.cantidad,
+      mon: {
+        content: datageneral.total,
+        styles: {
+          halign: 'right'
+        }
+      }
+    });
+  });
+
+  body.push({
+    no: {
+      content: '',
+      colSpan: 8,
+      styles: {
+        halign: 'left',
+        lineWidth: 0,
+        fontSize: 1,
+        cellPadding: 1
+      }
+    }
+  });
+  body.push({
+    fue: {
+      content: 'Total general en Bolivianos',
+      colSpan: 2,
+      styles: {
+        halign: 'right',
+        fontSize: 10,
+        fontStyle: 'bold',
+        cellPadding: 1,
+        lineWidth: 0
+      }
+    },
+    can: {
+      content: datas.cantidad,
+      styles: {
+        halign: 'center',
+        fontStyle: 'bold'
+      }
+    },
+    mon: {
+      content: datas.monto,
+      styles: {
+        halign: 'right',
+        fontStyle: 'bold'
+      }
+    }
+  });
+  return body;
+}
+
+function generateBodyTablepdfDetalle(datas) {
+  var body = [];
+  var numero = 0;
+
+  _.forEach(datas.data, function (datageneral) {
+    body.push({
+      no: {
+        content: '  FUERZA : ' + datageneral.nombre,
+        colSpan: 8,
+        styles: {
+          halign: 'left',
+          textColor: [0, 0, 0],
+          fontStyle: 'bold',
+          fontSize: 11,
+          cellPadding: 1
+        }
+      }
+    });
+
+    _.forEach(datageneral.value, function (datosfuerza) {
+      numero++;
+      body.push({
+        no: numero,
+        num: datosfuerza.numpapeleta,
+        gra: {
+          content: datosfuerza.grado,
+          styles: {
+            halign: 'left'
+          }
+        },
+        nom: {
+          content: datosfuerza.nombre,
+          styles: {
+            halign: 'left'
+          }
+        },
+        est: datosfuerza.estado,
+        mon: datosfuerza.moneda,
+        cut: {
+          content: fillDecimals(datosfuerza.cuota),
+          styles: {
+            halign: 'right'
+          }
+        },
+        pla: datosfuerza.plazo
+      });
+    });
+
+    body.push({
+      no: {
+        content: '',
+        colSpan: 8,
+        styles: {
+          halign: 'left',
+          lineWidth: 0,
+          fontSize: 1,
+          cellPadding: 1
+        }
+      }
+    });
+    body.push({
+      no: {
+        content: 'Total ' + datageneral.nombre + ' : ',
+        colSpan: 6,
+        styles: {
+          halign: 'right',
+          fontSize: 10,
+          fontStyle: 'bold',
+          cellPadding: 1,
+          lineWidth: 0
+        }
+      },
+      cut: {
+        content: datageneral.total,
+        styles: {
+          halign: 'right',
+          cellPadding: 1,
+          lineWidth: 0
+        }
+      },
+      pla: {
+        content: '',
+        styles: {
+          halign: 'right',
+          cellPadding: 1,
+          lineWidth: 0
+        }
+      }
+    });
+    body.push({
+      no: {
+        content: '',
+        colSpan: 8,
+        styles: {
+          halign: 'left',
+          lineWidth: 0,
+          fontSize: 5,
+          cellPadding: 1
+        }
+      }
+    });
+  });
+
+  return body;
+}
+
+function generateBodyTable(datas) {
+  var body = [];
+
+  var _iterator2 = _createForOfIteratorHelper(datas.values()),
+      _step2;
+
+  try {
+    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+      var valor = _step2.value;
+      body.push({
+        pe: valor.pe,
+        fp: valor.fp,
+        di: valor.di,
+        car: redondeo_valor(valor.car),
+        cu: redondeo_valor(valor.cut),
+        "in": redondeo_valor(valor["in"]),
+        indi: redondeo_valor(valor.indi),
+        seg: redondeo_valor(valor.seg),
+        am: redondeo_valor(valor.am),
+        ca: redondeo_valor(valor.ca)
+      });
+    }
+  } catch (err) {
+    _iterator2.e(err);
+  } finally {
+    _iterator2.f();
+  }
+
+  return body;
+}
+
+function getTotal(datas, id) {
+  var out = 0;
+
+  var _iterator3 = _createForOfIteratorHelper(datas.values()),
+      _step3;
+
+  try {
+    for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+      var valor = _step3.value;
+      out += parseFloat(valor[id]);
+    }
+  } catch (err) {
+    _iterator3.e(err);
+  } finally {
+    _iterator3.f();
+  }
+
+  return redondeo_valor(out);
+}
+
+function redondeo_valor(num) {
+  var decimales = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+  var redoncero = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+  var signo = num >= 0 ? 1 : -1;
+  num = num * signo;
+  if (decimales === 0) return signo * Math.round(num);
+  num = num.toString().split('e');
+  num = Math.round(+(num[0] + 'e' + (num[1] ? +num[1] + decimales : decimales)));
+  num = num.toString().split('e');
+
+  if (redoncero) {
+    return fillDecimals(signo * (num[0] + 'e' + (num[1] ? +num[1] - decimales : -decimales)), decimales);
+  } else {
+    return signo * (num[0] + 'e' + (num[1] ? +num[1] - decimales : -decimales));
+  }
+}
+function fillDecimals(number) {
+  var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+
+  function pad(input, length, padding) {
+    var str = input + "";
+    return length <= str.length ? str : pad(str + padding, length, padding);
+  }
+
+  var str = number + "";
+  var dot = str.lastIndexOf('.');
+  var isDecimal = dot != -1;
+  var integer = isDecimal ? str.substr(0, dot) : str;
+  var decimals = isDecimal ? str.substr(dot + 1) : "";
+  decimals = pad(decimals, length, 0);
+  return integer + '.' + decimals;
+}
+function ppppp() {
+  var sumw = new Function('return function foo(a,b) { alert("native function: "+a); return "Hello, serialised world!"+b; }')();
+  alert(sumw(1, 2));
+}
+/******************************************************************************************************************************************* */
+
+/******************************************************************************************************************************************* */
+
+/******************************************************************************************************************************************* */
+
+/******************************************************************************************************************************************* */
+
+/*******************************************************************************************************************************************  
+                             
+                             _____                                      _                       _         _     
+                            |  __ \                                    | |                     | |       | |      
+                            | |  \/  ___  _ __   ___  _ __    __ _   __| |  ___   _ __       __| |  ___  | |      
+                            | | __  / _ \| '__| / _ \| '_ \  / _` | / _` | / _ \ | '__|     / _` | / _ \ | |      
+                            | |_\ \|  __/| |   |  __/| | | || (_| || (_| || (_) || |       | (_| ||  __/ | |      
+                             \____/ \___||_|    \___||_| |_| \__,_| \__,_| \___/ |_|        \__,_| \___| |_|      
+                                                                                                              
+                                                                                                              
+                                                 __  _  _                          _           _      _       
+                                                / _|(_)| |                        | |         | |    | |      
+                             _ __    ___  _ __ | |_  _ | |      ___   ___   _ __  | |_   __ _ | |__  | |  ___ 
+                            | '_ \  / _ \| '__||  _|| || |     / __| / _ \ | '_ \ | __| / _` || '_ \ | | / _ \
+                            | |_) ||  __/| |   | |  | || |    | (__ | (_) || | | || |_ | (_| || |_) || ||  __/
+                            | .__/  \___||_|   |_|  |_||_|     \___| \___/ |_| |_| \__| \__,_||_.__/ |_| \___|
+                            | |                                                                               
+                            |_|          
+
+                            
+                                8888888                               888888                                   .d8888b.                   888                   
+                                  888                                   "88b                                  d88P  Y88b                  888                   
+                                  888                                    888                                  888    888                  888                   
+88888b.   .d88b.  888d888         888   88888b.   .d88b.                 888 888  888  8888b.  88888b.        888         8888b.  888d888 888  .d88b.  .d8888b  
+888 "88b d88""88b 888P"           888   888 "88b d88P"88b                888 888  888     "88b 888 "88b       888            "88b 888P"   888 d88""88b 88K      
+888  888 888  888 888             888   888  888 888  888                888 888  888 .d888888 888  888       888    888 .d888888 888     888 888  888 "Y8888b. 
+888 d88P Y88..88P 888             888   888  888 Y88b 888 d8b            88P Y88b 888 888  888 888  888       Y88b  d88P 888  888 888     888 Y88..88P      X88 
+88888P"   "Y88P"  888           8888888 888  888  "Y88888 Y8P            888  "Y88888 "Y888888 888  888        "Y8888P"  "Y888888 888     888  "Y88P"   88888P' 
+888                                                   888              .d88P                                                                                    
+888                                              Y8b d88P            .d88P"                                                                                     
+888                                               "Y88P"            888P"                                                                                       
+          
+/******************************************************************************************************************************************* */
+
+/******************************************************************************************************************************************* */
+
+/******************************************************************************************************************************************* */
+
+/******************************************************************************************************************************************* */
+
+/******************************************************************************************************************************************* */
+
+/******************************************************************************************************************************************* */
+
+/******************************************************************************************************************************************* */
+
+var abc = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "U", "V", "W", "X", "Y", "Z"];
+var funciones = {
+  input: function input(id, nombre, css) {
+    var operador = $('<span v-type="' + id + '" v-data="input" style="' + css + '"><strong style="padding-left: 4px;">' + nombre + '</strong></span>');
+    $('<div id="values"><input type="number" placeholder="0" name="input" value="1" autofocus> </div>').appendTo(operador);
+    return operador;
+  },
+  inputSi: function inputSi(id, nombre, css) {
+    var operador = $('<span v-type="' + id + '" v-data="inputSi" style="' + css + '"><strong style="padding-left: 4px;">' + nombre + '</strong></span>');
+    $('<div id="values"><input id="i1" type="number" placeholder="0" name="input" value="1" autofocus><i class="icons font-lg  mt-5 cui-arrow-right"></i><input id="i2" type="number" placeholder="0" name="input" value="1" autofocus></div><strong style="font-weight: bold;font-size: 17px;">=</strong>').appendTo(operador);
+    return operador;
+  },
+  operador: function operador(id, nombre, css) {
+    var operador = $('<span v-data="funcion" style="' + css + '"><strong style="padding-left: 4px;">' + nombre + '</strong></span>');
+    $('<div id="values" v-type="' + id + '" ></div>').droppable({
+      accept: "div,span",
+      greedy: true,
+      classes: {
+        'ui-droppable-hover': 'hoverdropfunctions'
+      },
+      drop: function drop(event, ui) {
+        if ($(ui.draggable).is('div') && $(ui.draggable).attr('v-tipo') == "1") {
+          var variable = $('<span v-data="perfil">' + $(ui.draggable).text() + '</span>').css('border', '2px solid').draggable({
+            revert: "invalid",
+            containment: "document",
+            helper: "clone",
+            zIndex: 10000,
+            start: function start(event, ui) {
+              $(this).draggable('instance').offset.click = {
+                left: Math.floor(ui.helper.width() / 2),
+                top: Math.floor(ui.helper.height() / 2)
+              };
+            }
+          }).fadeOut("fast");
+          ui.draggable.fadeOut("fast", function () {
+            variable.appendTo(event.target).fadeIn();
+            ui.draggable.fadeIn();
+          });
+        } else if ($(ui.draggable).is('span')) {
+          ui.draggable.fadeOut(function () {
+            $(ui.draggable).css('border', '2px solid').appendTo(event.target).fadeIn();
+          });
+        } else if ($(ui.draggable).is('div') && $(ui.draggable).attr('v-tipo') == "0") {
+          var variable = $('<span v-data="datain" v-key="' + $(ui.draggable).attr('v-value') + '">' + $(ui.draggable).attr('v-view') + '</span>').fadeOut("fast");
+          ui.draggable.fadeOut("fast", function () {
+            variable.appendTo(event.target).fadeIn();
+            ui.draggable.fadeIn();
+          });
+        } else if ($(ui.draggable).is('div') && $(ui.draggable).attr('v-tipo') == "6") {
+          ui.draggable.fadeOut("fast", function () {
+            var funcion = funciones.input(2, "Natural", "");
+            ui.draggable.fadeIn();
+            funcion.fadeOut("fast", function () {
+              funcion.appendTo(event.target).fadeIn();
+              $('>div', funcion).find('input').focus();
+            });
+          });
+        } else {
+          $(event.target).effect("pulsate", "slow");
+          $(ui.draggable).effect("pulsate", "slow");
+        }
+      }
+    }).appendTo(operador);
+    return operador;
+  },
+  operadorG: function operadorG(id, nombre, css) {
+    var operador = $('<span v-data="funcion"  style="' + css + '"><strong style="padding-left: 4px;">' + nombre + '</strong></span>');
+    $('<div id="values" v-type="' + id + '"></div>').droppable({
+      accept: "div,span",
+      greedy: true,
+      classes: {
+        'ui-droppable-hover': 'hoverdropfunctions'
+      },
+      drop: function drop(event, ui) {
+        if ($(ui.draggable).is('div') && $(ui.draggable).attr('v-tipo') == "1") {
+          var variable = $('<span v-data="perfil" >' + $(ui.draggable).text() + '</span>').draggable({
+            revert: "invalid",
+            containment: "document",
+            helper: "clone",
+            zIndex: 10000,
+            start: function start(event, ui) {
+              $(this).draggable('instance').offset.click = {
+                left: Math.floor(ui.helper.width() / 2),
+                top: Math.floor(ui.helper.height() / 2)
+              };
+            }
+          }).fadeOut("fast");
+          ui.draggable.fadeOut("fast", function () {
+            variable.appendTo(event.target).fadeIn();
+            ui.draggable.fadeIn();
+          });
+        } else if ($(ui.draggable).is('span')) {
+          ui.draggable.fadeOut(function () {
+            $(ui.draggable).appendTo(event.target).fadeIn();
+          });
+        } else {
+          switch ($(ui.draggable).attr('v-tipo')) {
+            case "0":
+              var variable = $('<span v-data="datain" v-key="' + $(ui.draggable).attr('v-value') + '">' + $(ui.draggable).attr('v-view') + '</span>').fadeOut("fast");
+              ui.draggable.fadeOut("fast", function () {
+                variable.appendTo(event.target).fadeIn();
+                ui.draggable.fadeIn();
+              });
+              break;
+
+            case "2":
+              var variable = $('<span v-data="operador" v-value="' + $(ui.draggable).attr('v-value') + '" ></span>').append($(ui.draggable).find('i').clone()).fadeOut("fast");
+              ui.draggable.fadeOut("fast", function () {
+                variable.appendTo(event.target).fadeIn();
+                ui.draggable.fadeIn();
+              });
+              break;
+
+            case "3":
+              ui.draggable.fadeOut("fast", function () {
+                var funcion = funciones.operador(3, "suma", "color: #bb5b20;");
+                ui.draggable.fadeIn();
+                funcion.fadeOut("fast", function () {
+                  funcion.appendTo(event.target).fadeIn();
+                });
+              });
+              break;
+
+            case "4":
+              ui.draggable.fadeOut("fast", function () {
+                var funcion = funciones.operador(4, "resta", "color: #1d9009e0;");
+                ui.draggable.fadeIn();
+                funcion.fadeOut("fast", function () {
+                  funcion.appendTo(event.target).fadeIn();
+                });
+              });
+              break;
+
+            case "5":
+              ui.draggable.fadeOut("fast", function () {
+                var funcion = funciones.operadorG(5, "grupo", "");
+                ui.draggable.fadeIn();
+                funcion.fadeOut("fast", function () {
+                  funcion.appendTo(event.target).fadeIn();
+                });
+              });
+              break;
+
+            case "6":
+              ui.draggable.fadeOut("fast", function () {
+                var funcion = funciones.input(2, "Natural", "color: #20a8d8;");
+                ui.draggable.fadeIn();
+                funcion.fadeOut("fast", function () {
+                  funcion.appendTo(event.target).fadeIn();
+                  $('>div', funcion).find('input').focus();
+                });
+              });
+              break;
+
+            case "7":
+              $(event.target).effect("pulsate", "slow");
+              $(ui.draggable).effect("pulsate", "slow");
+              break;
+          }
+        }
+      }
+    }).appendTo(operador);
+    return operador;
+  }
+};
+function generaperfil(mapinto) {
+  var values = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  var padre = arguments.length > 2 ? arguments[2] : undefined;
+  var idvista = generateKey();
+  var idvalores = generateKey();
+  var id_vista = '#' + idvista;
+  var id_valores = '#' + idvalores;
+  $('#' + padre).empty();
+  $('<div class="col-md-3" style="padding: 16px !important;text-align: center;" id="' + idvalores + '" > </div>').appendTo($('#' + padre));
+  $('<div class="col-md-9" style="padding: 0 !important;overflow-x: hidden; overflow-y: scroll; height: 100%;" id="' + idvista + '" ></div>').appendTo($('#' + padre));
+  $(id_valores).css('border', '1px solid #40464a52');
+  $(id_vista).empty();
+  $(id_valores).empty();
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Datos de Entrada</h6> </u>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="monto" v-data="perfil" v-view="Monto">Monto<span class="tooltiptext tooltip-bottom">Monto total.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="cuota" v-data="perfil" v-view="Cuota">Cuota<span class="tooltiptext tooltip-bottom">Cuota base perteneciente al periodo \'X\'.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="cuotaf" v-data="perfil" v-view="Cuota Final">Cuota Final<span class="tooltiptext tooltip-bottom">Cuota final perteneciente al periodo \'X\' contiene (interes, interes diferido, cargos adicionales).</span></div>'); //$(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="prestamos" v-data="perfil" v-view="Prestamos">Prestamos<span class="tooltiptext tooltip-bottom">Es la suma de saldos de prestamos vigentes.</span></div>');
+
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="capital" v-data="perfil" v-view="Capital">Capital<span class="tooltiptext tooltip-bottom">Es el monto que ira a amortizar a capital.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="intereses" v-data="perfil" v-view="Interes">Interes<span class="tooltiptext tooltip-bottom">Es la suma de los intereses generados.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="interes_diferido" v-data="perfil" v-view="Interes diferido">Interes diferido<span class="tooltiptext tooltip-bottom">Es la acumulación del interes del anterior prestamo.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="total_cuotas" v-data="perfil" v-view="Total cuotas">Total cuotas<span class="tooltiptext tooltip-bottom">Es el numero de cuotas del prestamo.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="total_refinanciar" v-data="perfil" v-view="Total saldo capital de prestamos vigentes">Total saldo capital de prestamos vigentes<span class="tooltiptext tooltip-bottom">Es la suma total del saldo capital de todos lo prestamos vigentes.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="segurodesgravamen" v-data="perfil" v-view="Total seguro desgravamen">Total seguro desgravamen<span class="tooltiptext tooltip-bottom">Es el calculo que se realiza al saldo capital del prestamo.</span></div>');
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Cuentas del perfil</h6> </u>');
+  values.forEach(function (element, index) {
+    element.data = abc[index];
+    element.data_php = '$' + abc[index];
+    element.key = element.data + element.idperfilcuentadetalle;
+    mapinto.set(index, element);
+    $(id_vista).append((element.tipocargo == 'd' ? '<div id="' + index + '" class="row itemrow" style=" border: 1px solid grey;padding: 5px 0 5px 0;margin: 5px 0 5px 6px;background-color: #c0e0f5ba;">' + '<div class="col-md-1" style="margin: 0 0 0 -7px;display: inline-grid;align-content: center;"><span class="handle"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></span></div><div class="col-md-11 row" style="margin: 0px;padding: 0px;"><h4 class="col-md-2">' + (element.tipocargo == 'd' ? 'Debe' : 'Haber') + '</h4><div class="col-md-10" style="text-align: left;font-weight: 700;font-size: 16px;">' + element.nomcuenta + '</div><div class="col-md-12" style="text-align: left;margin-bottom: 4px;"><div id="' + element.key + '" class="asig"><div  v-tipo="titulo">' + element.data + '</div><i class="fas fa-equals"></i></div><div id="' + element.key + '" class="divdrag" v-pos="left"></div>' : '<div id="' + index + '" class="row itemrow" style="border: 1px solid grey; padding: 5px 0 5px 0;margin: 5px 0 5px 6px;background-color: #e4e5e6;">' + '<div class="col-md-1" style="margin: 0 0 0 -7px;display: inline-grid;align-content: center;"><span class="handle"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></span></div><div class="col-md-11 row" style="margin: 0px;padding: 0px;"><div class="col-md-10" style="text-align: right;font-weight: 700;font-size: 16px;">' + element.nomcuenta + '</div><h4 class="col-md-2">' + (element.tipocargo == 'd' ? 'Debe' : 'Haber') + '</h4><div class="col-md-12" style="text-align: right;margin-bottom: 4px;"><div id="' + element.key + '" class="asig"><div  v-tipo="titulo">' + element.data + '</div><i class="fas fa-equals"></i></div><div id="' + element.key + '" class="divdrag" v-pos="right"></div>') + '<button  v-clear="button" type="button"  class=" btn btn-danger btn-sm" ><i class="icon-trash"></i></button>' + '<div  v-type="checkconten" class="col-md-4" style="padding: 2px 0 2px 11px;border-radius: 20px;height: 28px;margin-top: 5px;display: inline-flex;    border: 1px solid rgb(194, 207, 214);"> <label style="padding-right: 9px;font-weight: 600;">Aplica a cargo adicional :</label> <label class="switch switch-sm switch-label switch-pill switch-primary"> <input v-type="check" class="switch-input" type="checkbox"> <span class="switch-slider" data-checked="Si" data-unchecked="No"></span> </label></div>' + '<div  v-type="checkcontencomision" class="col-md-4" style="padding: 2px 0 2px 11px;border-radius: 20px;height: 28px;margin-top: 5px;display: inline-flex;    border: 1px solid rgb(194, 207, 214);"> <label style="padding-right: 9px;font-weight: 600;">Aplica a comisión :</label> <label class="switch switch-sm switch-label switch-pill switch-primary"> <input v-type="check" class="switch-input" type="checkbox"> <span class="switch-slider" data-checked="Si" data-unchecked="No"></span> </label></div>' + '</div></div>');
+    $(id_valores).append('<div v-tipo="1" v-data="perfil">' + element.data + '</div>');
+  });
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Operadores</h6> </u>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="+"><i class="fa fa-plus"></i></div>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="-"><i class="fa fa-minus"></i></div>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="*"><i class="fa fa-times"></i></div>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="/"><i class="fa fa-divide"></i></div>');
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Funciones</h6> </u>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="3" style="color:white;background: #bb5b20;padding: 3px;" v-data="perfil">SUMA&nbsp;(&nbsp;)<span class="tooltiptext tooltip-bottom">Obtiene la suma total de todos los componentes ingresados.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="4" style="color:white;background: #1d9009e0;padding: 3px;" v-data="perfil">RESTA&nbsp;(&nbsp;)<span class="tooltiptext tooltip-bottom">Obtiene la resta total de todos los componentes ingresados (el resultado siempre sera positivo).</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="5" style="padding: 3px;" v-data="perfil">GRUPO&nbsp;(&nbsp;)<span class="tooltiptext tooltip-bottom">Permite la agrupacion de componentes para facilitar la operacion matematica.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="6" style="color:white;background: #20a8d8;padding: 3px;" v-data="perfil">INPUT&nbsp;(int)<span class="tooltiptext tooltip-bottom">Permite la insercion de valores numericos.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="7" style="color:#151b1e;background: rgb(197, 149, 5);padding: 3px;" v-data="perfil">SI&nbsp;(int->int) = proceso<span class="tooltiptext tooltip-bottom">Valida el resultado de un proceso en un rango admitido, valor por defecto 0.</span></div>');
+  $("div,label", id_valores).draggable({
+    revert: "invalid",
+    containment: "document",
+    helper: "clone",
+    zIndex: 10000,
+    start: function start(event, ui) {
+      $(ui.helper).find('.tooltiptext').remove();
+      $(this).draggable('instance').offset.click = {
+        left: Math.floor(ui.helper.width() / 2),
+        top: Math.floor(ui.helper.height() / 2)
+      };
+    }
+  });
+  Sortable.create(document.getElementById(idvista), {
+    handle: '.handle',
+    animation: 150,
+    onEnd: function onEnd(evt) {
+      var paso = true;
+
+      while (paso) {
+        paso = false;
+
+        var _iterator4 = _createForOfIteratorHelper(mapinto),
+            _step4;
+
+        try {
+          for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+            var _step4$value = _slicedToArray(_step4.value, 2),
+                key = _step4$value[0],
+                value = _step4$value[1];
+
+            var item = $('.itemrow[id="' + key + '"]').index();
+
+            if (item != key) {
+              var valuitemkey = mapinto.get(key);
+
+              if ($('.itemrow[id="' + key + '"] .divdrag[id="' + valuitemkey.key + '"]').find('[v-data="perfil"]').length > 0) {
+                $('.itemrow[id="' + key + '"] .divdrag[id="' + valuitemkey.key + '"]').empty();
+              }
+
+              $('.itemrow[id="' + key + '"] .divdrag[id="' + valuitemkey.key + '"]').attr('id', abc[item] + valuitemkey.idperfilcuentadetalle);
+              $('.itemrow[id="' + key + '"] .asig[id="' + valuitemkey.key + '"] div[v-tipo="titulo"]').text(abc[item]);
+              $('.itemrow[id="' + key + '"] .asig[id="' + valuitemkey.key + '"]').attr('id', abc[item] + valuitemkey.idperfilcuentadetalle);
+              valuitemkey.data = abc[item];
+              valuitemkey.key = valuitemkey.data + valuitemkey.idperfilcuentadetalle;
+              var valuitem = mapinto.get(item);
+
+              if ($('.itemrow[id="' + item + '"] .divdrag[id="' + valuitem.key + '"]').find('[v-data="perfil"]').length > 0) {
+                $('.itemrow[id="' + item + '"] .divdrag[id="' + valuitem.key + '"]').empty();
+              }
+
+              $('.itemrow[id="' + item + '"] .divdrag[id="' + valuitem.key + '"]').attr('id', abc[key] + valuitem.idperfilcuentadetalle);
+              $('.itemrow[id="' + item + '"] .asig[id="' + valuitem.key + '"] div[v-tipo="titulo"]').text(abc[key]);
+              $('.itemrow[id="' + item + '"] .asig[id="' + valuitem.key + '"]').attr('id', abc[key] + valuitem.idperfilcuentadetalle);
+              valuitem.data = abc[key];
+              valuitem.key = valuitem.data + valuitem.idperfilcuentadetalle;
+              mapinto.set(key, valuitem);
+              mapinto.set(item, valuitemkey);
+              var mainkey = $('.itemrow[id="' + key + '"]');
+              var mainitem = $('.itemrow[id="' + item + '"]');
+              mainkey.attr('id', item);
+              mainitem.attr('id', key);
+              paso = true;
+              break;
+            }
+          }
+        } catch (err) {
+          _iterator4.e(err);
+        } finally {
+          _iterator4.f();
+        }
+      }
+    }
+  });
+  $('button[v-clear="button"]').click(function () {
+    $(this).siblings('.divdrag').empty();
+  });
+  isdroppable(id_vista);
+}
+function _mff82sdf_mjd(mapinto, padre) {
+  var idvista = generateKey();
+  var idvalores = generateKey();
+  var id_vista = '#' + idvista;
+  var id_valores = '#' + idvalores;
+  $('#' + padre).empty();
+  $('<div class="col-md-3" style="padding: 16px !important;text-align: center;" id="' + idvalores + '" > </div>').appendTo($('#' + padre));
+  $('<div class="col-md-9" style="padding: 0 !important;overflow-x: hidden; overflow-y: scroll; height: 555px;" id="' + idvista + '" ></div>').appendTo($('#' + padre));
+  $(id_valores).css('border', '1px solid #40464a52');
+  $(id_vista).empty();
+  $(id_valores).empty();
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Datos de Entrada</h6> </u>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="monto" v-data="perfil" v-view="Monto">Monto<span class="tooltiptext tooltip-bottom">Monto total.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="cuota" v-data="perfil" v-view="Cuota">Cuota<span class="tooltiptext tooltip-bottom">Cuota perteneciente al periodo \'X\'.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="cuotaf" v-data="perfil" v-view="Cuota Final">Cuota Final<span class="tooltiptext tooltip-bottom">Cuota final perteneciente al periodo \'X\' contiene (interes, interes diferido, cargos adicionales).</span></div>'); //$(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="prestamos" v-data="perfil" v-view="Prestamos">Prestamos<span class="tooltiptext tooltip-bottom">Es la suma de saldos de prestamos vigentes.</span></div>');
+
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="capital" v-data="perfil" v-view="Capital">Capital<span class="tooltiptext tooltip-bottom">Es el monto que ira a amortizar a capital.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="intereses" v-data="perfil" v-view="Interes">Interes<span class="tooltiptext tooltip-bottom">Es la suma de los intereses generados.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="interes_diferido" v-data="perfil" v-view="Interes diferido">Interes diferido<span class="tooltiptext tooltip-bottom">Es la acumulación del interes del anterior prestamo.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="total_cuotas" v-data="perfil" v-view="Total cuotas">Total cuotas<span class="tooltiptext tooltip-bottom">Es el numero de cuotas del prestamo.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="total_refinanciar" v-data="perfil" v-view="Total saldo capital de prestamos vigentes">Total saldo capital de prestamos vigentes<span class="tooltiptext tooltip-bottom">Es la suma total del saldo capital de todos lo prestamos vigentes.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="0" v-value="segurodesgravamen" v-data="perfil" v-view="Total seguro desgravamen">Total seguro desgravamen<span class="tooltiptext tooltip-bottom">Es el calculo que se realiza al saldo capital del prestamo.</span></div>');
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Cuentas del perfil</h6> </u>');
+
+  var _iterator5 = _createForOfIteratorHelper(mapinto),
+      _step5;
+
+  try {
+    for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+      var _step5$value = _slicedToArray(_step5.value, 2),
+          index = _step5$value[0],
+          element = _step5$value[1];
+
+      $(id_vista).append(element.item);
+      $(id_valores).append('<div v-tipo="1" v-data="perfil">' + element.data + '</div>');
+      var item = $('.itemrow[id="' + index + '"] .divdrag[id="' + element.key + '"]');
+
+      if (element.adi) {
+        item.siblings('div[v-type="checkconten"]').find('input[v-type="check"]').attr('checked', true);
+      } else {
+        item.siblings('div[v-type="checkconten"]').find('input[v-type="check"]').attr('checked', false);
+      }
+
+      if (element.comision) {
+        item.siblings('div[v-type="checkcontencomision"]').find('input[v-type="check"]').attr('checked', true);
+      } else {
+        item.siblings('div[v-type="checkcontencomision"]').find('input[v-type="check"]').attr('checked', false);
+      }
+    }
+  } catch (err) {
+    _iterator5.e(err);
+  } finally {
+    _iterator5.f();
+  }
+
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Operadores</h6> </u>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="+"><i class="fa fa-plus"></i></div>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="-"><i class="fa fa-minus"></i></div>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="*"><i class="fa fa-times"></i></div>');
+  $(id_valores).append('<div v-tipo="2" v-data="perfil" v-value="/"><i class="fa fa-divide"></i></div>');
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Funciones</h6> </u>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="3" style="color:white;background: #bb5b20;padding: 3px;" v-data="perfil">SUMA&nbsp;(&nbsp;)<span class="tooltiptext tooltip-bottom">Obtiene la suma total de todos los componentes ingresados.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="4" style="color:white;background: #1d9009e0;padding: 3px;" v-data="perfil">RESTA&nbsp;(&nbsp;)<span class="tooltiptext tooltip-bottom">Obtiene la resta total de todos los componentes ingresados (el resultado siempre sera positivo).</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="5" style="padding: 3px;" v-data="perfil">GRUPO&nbsp;(&nbsp;)<span class="tooltiptext tooltip-bottom">Permite la agrupacion de componentes para facilitar la operacion matematica.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="6" style="color:white;background: #20a8d8;padding: 3px;" v-data="perfil">INPUT&nbsp;(int)<span class="tooltiptext tooltip-bottom">Permite la insercion de valores numericos.</span></div>');
+  $(id_valores).append('<div class="tooltipdiv" v-tipo="7" style="color:#151b1e;background: rgb(197, 149, 5);padding: 3px;" v-data="perfil">SI&nbsp;(int->int) = proceso<span class="tooltiptext tooltip-bottom">Valida el resultado de un proceso en un rango admitido, valor por defecto 0.</span></div>');
+  $("div,label", id_valores).draggable({
+    revert: "invalid",
+    containment: "document",
+    helper: "clone",
+    zIndex: 10000,
+    start: function start(event, ui) {
+      $(ui.helper).find('.tooltiptext').remove();
+      $(this).draggable('instance').offset.click = {
+        left: Math.floor(ui.helper.width() / 2),
+        top: Math.floor(ui.helper.height() / 2)
+      };
+    }
+  });
+  Sortable.create(document.getElementById(idvista), {
+    handle: '.handle',
+    animation: 150,
+    onEnd: function onEnd(evt) {
+      var paso = true;
+
+      while (paso) {
+        paso = false;
+
+        var _iterator6 = _createForOfIteratorHelper(mapinto),
+            _step6;
+
+        try {
+          for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+            var _step6$value = _slicedToArray(_step6.value, 2),
+                key = _step6$value[0],
+                value = _step6$value[1];
+
+            var item = $('.itemrow[id="' + key + '"]').index();
+
+            if (item != key) {
+              var valuitemkey = mapinto.get(key);
+
+              if ($('.itemrow[id="' + key + '"] .divdrag[id="' + valuitemkey.key + '"]').find('[v-data="perfil"]').length > 0) {
+                $('.itemrow[id="' + key + '"] .divdrag[id="' + valuitemkey.key + '"]').empty();
+              }
+
+              $('.itemrow[id="' + key + '"] .divdrag[id="' + valuitemkey.key + '"]').attr('id', abc[item] + valuitemkey.idperfilcuentadetalle);
+              $('.itemrow[id="' + key + '"] .asig[id="' + valuitemkey.key + '"] div[v-tipo="titulo"]').text(abc[item]);
+              $('.itemrow[id="' + key + '"] .asig[id="' + valuitemkey.key + '"]').attr('id', abc[item] + valuitemkey.idperfilcuentadetalle);
+              valuitemkey.data = abc[item];
+              valuitemkey.key = valuitemkey.data + valuitemkey.idperfilcuentadetalle;
+              var valuitem = mapinto.get(item);
+
+              if ($('.itemrow[id="' + item + '"] .divdrag[id="' + valuitem.key + '"]').find('[v-data="perfil"]').length > 0) {
+                $('.itemrow[id="' + item + '"] .divdrag[id="' + valuitem.key + '"]').empty();
+              }
+
+              $('.itemrow[id="' + item + '"] .divdrag[id="' + valuitem.key + '"]').attr('id', abc[key] + valuitem.idperfilcuentadetalle);
+              $('.itemrow[id="' + item + '"] .asig[id="' + valuitem.key + '"] div[v-tipo="titulo"]').text(abc[key]);
+              $('.itemrow[id="' + item + '"] .asig[id="' + valuitem.key + '"]').attr('id', abc[key] + valuitem.idperfilcuentadetalle);
+              valuitem.data = abc[key];
+              valuitem.key = valuitem.data + valuitem.idperfilcuentadetalle;
+              mapinto.set(key, valuitem);
+              mapinto.set(item, valuitemkey);
+              var mainkey = $('.itemrow[id="' + key + '"]');
+              var mainitem = $('.itemrow[id="' + item + '"]');
+              mainkey.attr('id', item);
+              mainitem.attr('id', key);
+              paso = true;
+              break;
+            }
+          }
+        } catch (err) {
+          _iterator6.e(err);
+        } finally {
+          _iterator6.f();
+        }
+      }
+    }
+  });
+  $('button[v-clear="button"]').click(function () {
+    $(this).siblings('.divdrag').empty();
+  });
+  isdroppable(id_vista);
+}
+
+function isdroppable(id) {
+  $('.divdrag', id).droppable({
+    accept: "div,span,label",
+    greedy: true,
+    classes: {
+      'ui-droppable-hover': 'hoverdrop'
+    },
+    drop: function drop(event, ui) {
+      $(event.target).removeClass('noF');
+
+      if ($(ui.draggable).is('div')) {
+        switch ($(ui.draggable).attr('v-tipo')) {
+          case "0":
+            var variable = $('<span v-data="datain" v-key="' + $(ui.draggable).attr('v-value') + '">' + $(ui.draggable).attr('v-view') + '</span>').fadeOut("fast");
+            ui.draggable.fadeOut("fast", function () {
+              variable.appendTo(event.target).fadeIn();
+              ui.draggable.fadeIn();
+            });
+            break;
+
+          case "1":
+            var variable = $('<span v-data="perfil">' + $(ui.draggable).text() + '</span>').draggable({
+              revert: "invalid",
+              containment: "document",
+              helper: "clone",
+              zIndex: 10000,
+              start: function start(event, ui) {
+                $(this).draggable('instance').offset.click = {
+                  left: Math.floor(ui.helper.width() / 2),
+                  top: Math.floor(ui.helper.height() / 2)
+                };
+              }
+            }).fadeOut("fast");
+            ui.draggable.fadeOut("fast", function () {
+              variable.appendTo(event.target).fadeIn();
+              ui.draggable.fadeIn();
+            });
+            break;
+
+          case "2":
+            var variable = $('<span v-data="operador" v-value="' + $(ui.draggable).attr('v-value') + '" ></span>').append($(ui.draggable).find('i').clone()).fadeOut("fast");
+            ui.draggable.fadeOut("fast", function () {
+              variable.appendTo(event.target).fadeIn();
+              ui.draggable.fadeIn();
+            });
+            break;
+
+          case "3":
+            ui.draggable.fadeOut("fast", function () {
+              var funcion = funciones.operador(3, "suma", "color: #bb5b20;");
+              ui.draggable.fadeIn();
+              funcion.fadeOut("fast", function () {
+                funcion.appendTo(event.target).fadeIn();
+              });
+            });
+            break;
+
+          case "4":
+            ui.draggable.fadeOut("fast", function () {
+              var funcion = funciones.operador(4, "resta", "color: #1d9009e0;");
+              ui.draggable.fadeIn();
+              funcion.fadeOut("fast", function () {
+                funcion.appendTo(event.target).fadeIn();
+              });
+            });
+            break;
+
+          case "5":
+            ui.draggable.fadeOut("fast", function () {
+              var funcion = funciones.operadorG(5, "grupo", "");
+              ui.draggable.fadeIn();
+              funcion.fadeOut("fast", function () {
+                funcion.appendTo(event.target).fadeIn();
+              });
+            });
+            break;
+
+          case "6":
+            ui.draggable.fadeOut("fast", function () {
+              var funcion = funciones.input(2, "Natural", "color: #20a8d8;");
+              ui.draggable.fadeIn();
+              funcion.fadeOut("fast", function () {
+                funcion.appendTo(event.target).fadeIn();
+                $('>div', funcion).find('input').focus();
+              });
+            });
+            break;
+
+          case "7":
+            if (event.target.childElementCount == 0) {
+              ui.draggable.fadeOut("fast", function () {
+                var funcion = funciones.inputSi(7, "Si", "color:rgb(197, 149, 5);");
+                ui.draggable.fadeIn();
+                funcion.fadeOut("fast", function () {
+                  funcion.appendTo(event.target).fadeIn();
+                });
+              });
+            } else {
+              $(event.target).effect("pulsate", "slow");
+              $(ui.draggable).effect("pulsate", "slow");
+            }
+
+            break;
+        }
+      } else {
+        ui.draggable.fadeOut(function () {
+          $(ui.draggable).css('border', '1px solid').appendTo(event.target).fadeIn();
+        });
+      }
+    }
+  });
+}
+
+function _perff_00125(buscar) {
+  var pasoSi = false;
+  var formula = '';
+  $(buscar).children("span").each(function (i, elm) {
+    switch ($(elm).attr('v-data')) {
+      case 'datain':
+        formula += $(elm).attr('v-key');
+        break;
+
+      case 'perfil':
+        formula += $(elm).text();
+        break;
+
+      case 'operador':
+        formula += $(elm).attr('v-value');
+        break;
+
+      case 'funcion':
+        var item = $('>div', elm);
+
+        switch (item.attr('v-type')) {
+          case '3':
+            var salida = '';
+            $(item).children("span").each(function (i, element) {
+              switch ($(element).attr('v-data')) {
+                case 'perfil':
+                  if (salida.length == 0) {
+                    salida += $(element).text();
+                  } else {
+                    salida += '+' + $(element).text();
+                  }
+
+                  break;
+
+                case 'input':
+                  var valor = $(element).find('input').val();
+                  $(element).find('input').attr('value', valor);
+
+                  switch ($(element).attr('v-type')) {
+                    case '1':
+                      if (salida.length == 0) {
+                        salida += 'operador(' + valor + '*tipodecambio)';
+                      } else {
+                        salida += '+operador(' + valor + '*tipodecambio)';
+                      }
+
+                      break;
+
+                    default:
+                      if (salida.length == 0) {
+                        salida += valor;
+                      } else {
+                        salida += valor;
+                      }
+
+                      break;
+                  }
+
+                  break;
+
+                case 'datain':
+                  if (salida.length == 0) {
+                    salida += $(element).attr('v-key');
+                  } else {
+                    salida += '+' + $(element).attr('v-key');
+                  }
+
+                  break;
+              }
+            });
+            formula += 'operador("' + salida + '")';
+            break;
+
+          case '4':
+            var salida = '';
+            $(item).children("span").each(function (i, element) {
+              switch ($(element).attr('v-data')) {
+                case 'perfil':
+                  if (salida.length == 0) {
+                    salida += $(element).text();
+                  } else {
+                    salida += '-' + $(element).text();
+                  }
+
+                  break;
+
+                case 'input':
+                  var valor = $(element).find('input').val();
+                  $(element).find('input').attr('value', valor);
+
+                  switch ($(element).attr('v-type')) {
+                    case '1':
+                      if (salida.length == 0) {
+                        salida += 'operador(' + valor + '*tipodecambio)';
+                      } else {
+                        salida += '+operador(' + valor + '*tipodecambio)';
+                      }
+
+                      break;
+
+                    default:
+                      if (salida.length == 0) {
+                        salida += valor;
+                      } else {
+                        salida += valor;
+                      }
+
+                      break;
+                  }
+
+                  break;
+
+                case 'datain':
+                  if (salida.length == 0) {
+                    salida += $(element).attr('v-key');
+                  } else {
+                    salida += '+' + $(element).attr('v-key');
+                  }
+
+                  break;
+              }
+            });
+            formula += 'operador("' + salida + '")';
+            break;
+
+          case '5':
+            formula += 'operador(' + _perff_00125(item) + ')';
+            break;
+        }
+
+        break;
+
+      case 'input':
+        var valor = $(elm).find('input').val();
+        $(elm).find('input').attr('value', valor);
+
+        switch ($(elm).attr('v-type')) {
+          case '1':
+            formula += 'operador(' + valor + '*tipodecambio)';
+            break;
+
+          default:
+            formula += valor;
+            break;
+        }
+
+        break;
+
+      case 'inputSi':
+        var valor1 = $(elm).find('input[id="i1"]').val();
+        var valor2 = $(elm).find('input[id="i2"]').val();
+        $(elm).find('input[id="i1"]').attr('value', valor1);
+        $(elm).find('input[id="i2"]').attr('value', valor2);
+        formula += 'si(' + valor1 + ' , ' + valor2 + ',';
+        pasoSi = true;
+        break;
+    }
+  });
+  return pasoSi ? formula += ')' : formula;
+}
+function _perff_00126(buscar) {
+  var pasoSi = false;
+  var formula = '';
+  $(buscar).children("span").each(function (i, elm) {
+    switch ($(elm).attr('v-data')) {
+      case 'datain':
+        formula += '$' + $(elm).attr('v-key');
+        break;
+
+      case 'perfil':
+        formula += '$' + $(elm).text();
+        break;
+
+      case 'operador':
+        formula += $(elm).attr('v-value');
+        break;
+
+      case 'funcion':
+        var item = $('>div', elm);
+
+        switch (item.attr('v-type')) {
+          case '3':
+            var salida = '';
+            $(item).children("span").each(function (i, element) {
+              switch ($(element).attr('v-data')) {
+                case 'perfil':
+                  if (salida.length == 0) {
+                    salida += '$' + $(element).text();
+                  } else {
+                    salida += '+$' + $(element).text();
+                  }
+
+                  break;
+
+                case 'input':
+                  var valor = $(element).find('input').val();
+                  $(element).find('input').attr('value', valor);
+
+                  switch ($(element).attr('v-type')) {
+                    case '1':
+                      if (salida.length == 0) {
+                        salida += '(' + valor + '*$tipodecambio)';
+                      } else {
+                        salida += '+(' + valor + '*$tipodecambio)';
+                      }
+
+                      break;
+
+                    default:
+                      if (salida.length == 0) {
+                        salida += valor;
+                      } else {
+                        salida += valor;
+                      }
+
+                      break;
+                  }
+
+                  break;
+
+                case 'datain':
+                  if (salida.length == 0) {
+                    salida += '$' + $(element).attr('v-key');
+                  } else {
+                    salida += '+$' + $(element).attr('v-key');
+                  }
+
+                  break;
+              }
+            });
+            formula += '(' + salida + ')';
+            break;
+
+          case '4':
+            var salida = '';
+            $(item).children("span").each(function (i, element) {
+              switch ($(element).attr('v-data')) {
+                case 'perfil':
+                  if (salida.length == 0) {
+                    salida += '$' + $(element).text();
+                  } else {
+                    salida += '-$' + $(element).text();
+                  }
+
+                  break;
+
+                case 'input':
+                  var valor = $(element).find('input').val();
+                  $(element).find('input').attr('value', valor);
+
+                  switch ($(element).attr('v-type')) {
+                    case '1':
+                      if (salida.length == 0) {
+                        salida += '(' + valor + '*$tipodecambio)';
+                      } else {
+                        salida += '+(' + valor + '*$tipodecambio)';
+                      }
+
+                      break;
+
+                    default:
+                      if (salida.length == 0) {
+                        salida += valor;
+                      } else {
+                        salida += valor;
+                      }
+
+                      break;
+                  }
+
+                  break;
+
+                case 'datain':
+                  if (salida.length == 0) {
+                    salida += '$' + $(element).attr('v-key');
+                  } else {
+                    salida += '+$' + $(element).attr('v-key');
+                  }
+
+                  break;
+              }
+            });
+            formula += '(' + salida + ')';
+            break;
+
+          case '5':
+            formula += '(' + _perff_00126(item) + ')';
+            break;
+        }
+
+        break;
+
+      case 'input':
+        var valor = $(elm).find('input').val();
+        $(elm).find('input').attr('value', valor);
+
+        switch ($(elm).attr('v-type')) {
+          case '1':
+            formula += '(' + valor + '*$tipodecambio)';
+            break;
+
+          default:
+            formula += valor;
+            break;
+        }
+
+        break;
+
+      case 'inputSi':
+        var valor1 = $(elm).find('input[id="i1"]').val();
+        var valor2 = $(elm).find('input[id="i2"]').val();
+        $(elm).find('input[id="i1"]').attr('value', valor1);
+        $(elm).find('input[id="i2"]').attr('value', valor2);
+        formula += '$this->si(' + valor1 + ' , ' + valor2 + ',';
+        pasoSi = true;
+        break;
+    }
+  });
+  return pasoSi ? formula += ')' : formula;
+}
+function _mmf2251_3325(mapinto) {
+  closeRam();
+  window.monto = 15000;
+  window.cuota = 196.44;
+  window.cuotaf = 197.13;
+  window.prestamos = 0;
+  window.capital = 52.44;
+  window.intereses = 144;
+  window.interes_diferido = 144;
+  window.total_cuotas = 120;
+  window.total_refinanciar = 1000;
+  window.segurodesgravamen = 0;
+  window.tipodecambio = 1;
+  mapinto.forEach(function (element, key) {
+    try {
+      jQuery.globalEval(element.data + '=' + redondeo_valor(eval(element.formula)) + ';');
+    } catch (error) {
+      var e = new Error(error.message);
+      e.name = '<div  v-tipo="titulo"><span style="font-weight: 400;">' + error.name + ' in </span>' + element.data + '</div> ';
+      e.stack = error.stack;
+      throw e;
+    }
+  });
+}
+
+function closeRam() {
+  abc.forEach(function (element) {
+    try {
+      if (eval(element)) {
+        jQuery.globalEval('delete ' + element + ';');
+      }
+    } catch (error) {}
+  });
+}
+
+function _mf362353_225(mapinto, padre, tipoc, cod, namep) {
+  closeRam();
+  window.monto = 15000;
+  window.cuota = 196.44;
+  window.cuotaf = 197.13;
+  window.prestamos = 0;
+  window.capital = 52.44;
+  window.intereses = 144;
+  window.interes_diferido = 0;
+  window.total_cuotas = 120;
+  window.total_refinanciar = 1000;
+  window.segurodesgravamen = 0;
+  window.tipodecambio = tipoc;
+  var idvista = generateKey();
+  var pie = generateKey();
+  var idvalores = generateKey();
+  var id_vista = '#' + idvista;
+  var id_pie = '#' + pie;
+  var id_valores = '#' + idvalores;
+  $('#' + padre).empty();
+  $('<div class="col-md-12" style="padding: 10px !important;text-align: center;font-size: 18px;margin: 6px;font-weight: bold;text-decoration-line: underline;" >PRODUCTO : ' + namep + '</div>').appendTo($('#' + padre));
+  $('<div class="col-md-3" style="padding: 16px !important;text-align: center;" id="' + idvalores + '" > </div>').appendTo($('#' + padre));
+  $('<div class="col-md-9" style="padding: 0 !important;overflow-x: hidden; overflow-y: scroll; height: 444px;" id="' + idvista + '" ></div>').appendTo($('#' + padre));
+  $('<div class="col-md-12" style="margin-top: 5px;padding: 10px !important;text-align: right;background-color: #25d82029;border: 1px solid rgba(64, 70, 74, 0.32);" id="' + pie + '" ></div>').appendTo($('#' + padre));
+  $(id_valores).css('border', '1px solid #40464a52');
+  $(id_vista).empty();
+  $(id_valores).empty();
+  $(id_valores).append(' <u><h6 class="col-md-12" style="text-align: center;padding: 12px 0 12px 0;">Datos del prestamo</h6> </u>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Monto&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 15px;color: #007bff;">' + monto + '&nbsp;' + cod + '</span></div>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Cuota&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 15px;color: #007bff;">' + cuota + '&nbsp;' + cod + '</span></div>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Cuota final&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 15px;color: #007bff;">' + cuotaf + '&nbsp;' + cod + '</span></div>'); //$(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Prestamos&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 15px;color: #007bff;">'+prestamos+'&nbsp;'+cod+'</span></div>');
+
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Capital&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 15px;color: #007bff;">' + capital + '&nbsp;' + cod + '</span></div>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Interes&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 15px;color: #007bff;">' + intereses + '&nbsp;' + cod + '</span></div>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Interes diferido&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 15px;color: #007bff;">' + interes_diferido + '&nbsp;' + cod + '</span></div>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Total cuotas&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 18px;color: #007bff;">' + total_cuotas + '</span></div>');
+  $(id_valores).append('<div class="col-md-12" style="text-align: left !important;" v-data="perfil" >Total saldo capital&nbsp;=&nbsp;<span style="font-weight: 600;font-size: 18px;color: #007bff;">' + total_refinanciar + '&nbsp;BOB</span></div>');
+  monto = redondeo_valor(monto * tipodecambio);
+  cuota = redondeo_valor(cuota * tipodecambio);
+  cuotaf = redondeo_valor(cuotaf * tipodecambio);
+  capital = redondeo_valor(capital * tipodecambio);
+  intereses = redondeo_valor(intereses * tipodecambio);
+  interes_diferido = redondeo_valor(interes_diferido * tipodecambio);
+  mapinto.forEach(function (element, key) {
+    // console.log('formula: ' + element.formula);
+    try {
+      jQuery.globalEval(element.data + '=' + redondeo_valor(eval(element.formula)) + ';');
+    } catch (error) {
+      var e = new Error(error.message);
+      e.name = '<div  v-tipo="titulo"><span style="font-weight: 400;">' + error.name + ' in </span>' + element.data + '</div> ';
+      e.stack = error.stack;
+      throw e;
+    }
+  });
+  var countDebe = 0;
+  var countHaber = 0;
+  var totalcodmoneda = '';
+  mapinto.forEach(function (element, key) {
+    var iddrop = '#' + element.key + '.view';
+    $(id_vista).append((element.tipocargo == 'd' ? '<div class="row" style=" padding: 5px 0 5px 0;margin: 5px 0 5px 6px;background-color: #c0e0f5ba;"><h4 class="col-md-2">' + (element.tipocargo == 'd' ? 'Debe' : 'Haber') + '</h4><div class="col-md-10">' + element.nomcuenta + '</div><div class="col-md-12" style="text-align: left;margin-bottom: 4px;"><div id="' + element.key + '" class="asig"><div  v-tipo="titulo">' + element.data + '</div><i class="fas fa-equals"></i></div><div id="' + element.key + '" class="divdrag view" v-pos="left"></div>' : '<div class="row" style=" padding: 5px 0 5px 0;margin: 5px 0 5px 6px;background-color: #e4e5e6;"><div class="col-md-10" style="text-align: right;">' + element.nomcuenta + '</div><h4 class="col-md-2">' + (element.tipocargo == 'd' ? 'Debe' : 'Haber') + '</h4><div class="col-md-12" style="text-align: right;margin-bottom: 4px;"><div id="' + element.key + '" class="asig"><div  v-tipo="titulo">' + element.data + '</div><i class="fas fa-equals"></i></div><div id="' + element.key + '" class="divdrag view" v-pos="right"></div>') + '</div></div>');
+
+    try {
+      var valuecuenta = eval(element.data) / element.tipocambio;
+      $(iddrop).append('<b>' + valuecuenta + '</b>&nbsp;<b>' + element.codmoneda + '</b>');
+      totalcodmoneda = element.codmoneda;
+
+      if (element.tipocargo == 'd') {
+        countDebe += valuecuenta;
+      } else {
+        countHaber += valuecuenta;
+      }
+    } catch (error) {
+      var e = new Error(error.message);
+      e.name = '<div  v-tipo="titulo"><span style="font-weight: 400;">' + error.name + ' when assigning </span>' + element.data + '</div> ';
+      e.stack = error.stack;
+      throw e;
+    }
+  });
+  $(id_pie).append('<div class="col-md-3" style="display: inline-block;text-align: left;"><strong style="font-size: 18px;">Totales</strong> </div>' + '<div class="col-md-4" style="display: inline-block;text-align: left;margin-right: 60px;"><strong style="font-size: 18px;">Debe : </strong> ' + countDebe + '&nbsp;' + totalcodmoneda + '</div><div class="col-md-4" style="display: inline-block;"><strong style="font-size: 18px;">Haber : </strong>' + countHaber + '&nbsp;' + totalcodmoneda + '</div>');
+}
+
+function operador(into) {
+  var value = into + '';
+
+  if (value.trim().length == 0) {
+    throw new Error('The function does not contain data.');
+  }
+
+  return redondeo_valor(eval(value));
+}
+
+function si(v, b, e) {
+  var outnum = 0;
+
+  if (typeof e === 'undefined') {
+    throw new Error("Exist an error in the function syntax.(The function it's not complete)");
+  }
+
+  if (b > v) {
+    outnum = v <= e && e <= b ? e : 0;
+  } else {
+    throw new Error('Exist an error in the function syntax.(' + b + ' its not higher to ' + v + ')');
+  }
+
+  return redondeo_valor(outnum < 0 ? outnum * -1 : outnum);
+}
+
+function valueformulacargos(arrayformulas, tcuo, tipoc, mon, cuo, prs, cap, _int, intdif) {
+  closeRam();
+  window.total_cuotas = tcuo;
+  window.tipodecambio = tipoc;
+  window.monto = mon;
+  window.cuota = cuo;
+  window.cuotaf = cuo;
+  window.prestamos = prs;
+  window.total_refinanciar = prs;
+  window.segurodesgravamen = 0;
+  window.capital = cap;
+  window.intereses = _int;
+  window.interes_diferido = intdif;
+  var cargos = [];
+
+  for (var index in arrayformulas) {
+    try {
+      var element = arrayformulas[index];
+      jQuery.globalEval(element.valor_abc + '=' + redondeo_valor(eval(element.formula)) + ';');
+
+      if (element.iscargo) {
+        var out = eval(element.valor_abc);
+
+        if (parseFloat(out) > 0) {
+          cargos.push({
+            id: element.idperfilcuentadetalle,
+            value: out,
+            rev: element.formula.includes("total_cuotas") ? 1 : 0
+          });
+        }
+      }
+    } catch (error) {
+      var e = new Error(error.message);
+      e.name = '<div  v-tipo="titulo"><span style="font-weight: 400;">' + error.name + ' in </span>' + element.valor_abc + '</div> ';
+      e.stack = error.stack;
+      throw e;
+    }
+  }
+
+  return cargos;
+}
+
+function valueformulaDesembolso(arrayformulas, tcuo, tipoc, mon, cuo, prs, numpa) {
+  closeRam();
+  window.total_cuotas = tcuo;
+  window.total_refinanciar = prs;
+  window.segurodesgravamen = 0;
+  window.tipodecambio = tipoc;
+  window.monto = mon;
+  window.cuota = cuo;
+  window.cuotaf = cuo;
+  window.prestamos = prs; // console.log('desembolso');
+  // console.log(arrayformulas);
+
+  var cargos = [];
+
+  for (var index in arrayformulas) {
+    try {
+      var element = arrayformulas[index];
+      jQuery.globalEval(element.valor_abc + '=' + redondeo_valor(eval(element.formula)) + ';');
+      var out = parseFloat(eval(element.valor_abc)); // console.log(element.valor_abc + '=' + out);
+
+      if (parseFloat(out) > 0) {
+        if (parseFloat(tipoc) > 1) {
+          out = parseFloat(out) * parseFloat(tipoc);
+        }
+
+        out = parseFloat(redondeo_valor(out));
+
+        if (element.tipocargo === 'h') {
+          out *= -1;
+        }
+
+        cargos.push({
+          num: numpa,
+          idmaestro: element.desembolso_perfil,
+          iddetalle: element.idperfilcuentadetalle,
+          value: out,
+          id: element.idcuenta
+        });
+      } else {
+        out *= -1;
+
+        if (out > 0) {
+          cargos.push({
+            num: numpa,
+            idmaestro: element.desembolso_perfil,
+            iddetalle: element.idperfilcuentadetalle,
+            value: out,
+            id: element.idcuenta
+          });
+        }
+      }
+    } catch (error) {
+      var e = new Error(error.message);
+      e.name = '<div  v-tipo="titulo"><span style="font-weight: 400;">' + error.name + ' in </span>' + element.valor_abc + '</div> ';
+      e.stack = error.stack;
+      throw e;
+    }
+  }
+
+  return cargos;
+}
+
+function _mf36265_25421(arrayformulas, capitalin, cuo, interesin, interesdifin, mon, numpa, tcuo, cuoota, tipodecambio) {
+  closeRam();
+  window.total_cuotas = tcuo;
+  window.total_refinanciar = 0;
+  window.segurodesgravamen = 0;
+  window.tipodecambio = 1;
+  window.monto = mon;
+  window.cuota = cuoota;
+  window.cuotaf = cuo;
+  window.prestamos = 0;
+  window.capital = capitalin;
+  window.intereses = interesin;
+  window.interes_diferido = interesdifin; // console.log('cobranza');
+  // console.log(arrayformulas);
+
+  var cargos = [];
+
+  for (var index in arrayformulas) {
+    try {
+      var element = arrayformulas[index]; //   if (element.iscargo) {
+      //    jQuery.globalEval(element.valor_abc + '=0;');
+      //  } else {
+
+      jQuery.globalEval(element.valor_abc + '=' + redondeo_valor(eval(element.formula)) + ';'); //  }
+
+      var out = parseFloat(eval(element.valor_abc)) * tipodecambio;
+      out = parseFloat(redondeo_valor(out)); //console.log(element.valor_abc + '=' + out); 
+
+      if (out > 0) {
+        if (element.tipocargo === 'h') {
+          out *= -1;
+        }
+
+        cargos.push({
+          num: numpa,
+          idmaestro: element.cobranza_perfil,
+          iddetalle: element.idperfilcuentadetalle,
+          value: out,
+          id: element.idcuenta
+        });
+      } else {
+        out *= -1;
+
+        if (out > 0) {
+          cargos.push({
+            num: numpa,
+            idmaestro: element.cobranza_perfil,
+            iddetalle: element.idperfilcuentadetalle,
+            value: out,
+            id: element.idcuenta
+          });
+        }
+      }
+    } catch (error) {
+      var e = new Error(error.message);
+      e.name = '<div  v-tipo="titulo"><span style="font-weight: 400;">' + error.name + ' in </span>' + element.valor_abc + '</div> ';
+      e.stack = error.stack;
+      throw e;
+    }
+  }
+
+  return cargos;
+}
+/**************************************************************************************************************************************** */
+
+/**************************************************************************************************************************************** */
+
+/**************************************************************************************************************************************** */
+
+/**************************************************************************************************************************************** */
+
+/**************************************************************************************************************************************** */
+
+/**************************************************************************************************************************************** 
+
+  __  _        
+ / _|(_)       
+| |_  _  _ __  
+|  _|| || '_ \ 
+| |  | || | | |
+|_|  |_||_| |_| 
+ * *************************************************************************************************************************************** */
+
+/**************************************************************************************************************************************** */
+
+/**************************************************************************************************************************************** */
+
+/**************************************************************************************************************************************** */
+
+/**************************************************************************************************************************************** */
+
+/**************************************************************************************************************************************** */
+
+/**************************************************************************************************************************************** */
+
+/**************************************************************************************************************************************** */
+
+/**************************************************************************************************************************************** */
 
 /***/ }),
 

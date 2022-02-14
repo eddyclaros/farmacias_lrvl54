@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAreasTable extends Migration
+class CreatePrestacionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,8 @@ class CreateAreasTable extends Migration
      */
     public function up()
     {
-        Schema::create('areas', function (Blueprint $table) {
+        Schema::create('prestacions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('correlativo')->unsigned();
-            $table->string('codigo',2);
-            $table->string('nombre',100);
-            $table->string('descripcion',256)->nullable();
-            $table->boolean('activo')->default(1);
             $table->timestamps();
         });
     }
@@ -31,6 +26,6 @@ class CreateAreasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('areas');
+        Schema::dropIfExists('prestacions');
     }
 }
