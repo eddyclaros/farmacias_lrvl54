@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('contenido/contenido');
 });
+
+Route::get('/area','AreaController@index');
+Route::post('/area/registrar', 'AreaController@store');
+Route::put('/area/actualizar', 'AreaController@update');
+Route::put('/area/desactivar', 'AreaController@desactivar');
+Route::put('/area/activar', 'AreaController@activar');
