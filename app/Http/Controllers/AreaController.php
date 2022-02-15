@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Area;
+use App\Http\Controllers\Countable;
 use Illuminate\Support\Facades\DB;
 
 
@@ -20,21 +21,24 @@ class AreaController extends Controller
         $buscararray=array();
         if(!empty($request->buscar)){
             $buscararray = explode(" ",$request->buscar);
-        }
-        if(sizeof($buscararray>0)){
-            $sqls='';
-            foreach($buscararray as $valor){
-                if(empty($sqls)){
-                    $sqls="(codigo like '%".$valor."%' or nombre like '%".$valor."%' or descripcion like '%".$valor."%')" ;
+            //dd($buscararray);
+            $valor=sizeof($buscararray);
+            if($valor > 0){
+                $sqls='';
+                foreach($buscararray as $valor){
+                    if(empty($sqls)){
+                        $sqls="(codigo like '%".$valor."%' or nombre like '%".$valor."%' or descripcion like '%".$valor."%')" ;
+                    }
+                    else
+                    {
+                        $sqls.=" and (codigo like '%".$valor."%' or nombre like '%".$valor."%' or descripcion like '%".$valor."%')" ;
+                    }
+    
                 }
-                else
-                {
-                    $sqls.=" and (codigo like '%".$valor."%' or nombre like '%".$valor."%' or descripcion like '%".$valor."%')" ;
-                }
-
+                $areas= Area::orderby('codigo','asc')->whereraw($sqls)->paginate(10);
             }
-            $areas= Area::orderby('codigo','asc')->whereraw($sqls)->paginate(10);
         }
+        
         else
         {
             $areas= Area::orderby('codigo','asc')->paginate(10);

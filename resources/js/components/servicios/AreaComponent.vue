@@ -19,8 +19,8 @@
                     <div class="form-group row">
                         <div class="col-md-6">
                             <div class="input-group">
-                                <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar">
-                                <button type="submit" class="btn btn-primary" @click="listarAreas(1)"><i class="fa fa-search"></i> Buscar</button>
+                                <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar"  @keyup.enter="listarAreas(1)">
+                                <button type="submit" class="btn btn-primary" @click="listarAreas(1)"><i class="fa fa-search" ></i> Buscar</button>
                             </div>
                         </div>
                     </div>
