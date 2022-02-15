@@ -63,6 +63,18 @@ return [
             ]) : [],
         ],
 
+        'farma' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST_F'),
+            'port' => env('DB__PORT_F'),
+            'database' => env('DB_DATABASE_F'),
+            'username' => env('DB_USERNAME_F'),
+            'password' => env('DB__PASSWORD_F'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),

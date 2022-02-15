@@ -4,9 +4,9 @@
             <li @click="menu=0" class="nav-item">
                 <a class="nav-link active" href="#"><i class="icon-speedometer"></i> Escritorio</a>
             </li>
-            <li class="nav-title">
+            <!-- <li class="nav-title">
                 Mantenimiento
-            </li>
+            </li> -->
             <li class="nav-item nav-dropdown">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i> Servicios</a>
                 <ul class="nav-dropdown-items">
@@ -19,14 +19,14 @@
                 </ul>
             </li>
             <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wallet"></i> Almacen</a>
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wallet"></i> Configuraciones</a>
                 <ul class="nav-dropdown-items">
                     <li @click="menu=3" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-wallet"></i> Registro</a>
+                        <a class="nav-link" href="#"><i class="icon-wallet"></i> Descuentos</a>
                     </li>
-                    <li @click="menu=4" class="nav-item">
+                    <!-- <li @click="menu=4" class="nav-item">
                         <a class="nav-link" href="#"><i class="icon-notebook"></i> Validaciones</a>
-                    </li>
+                    </li> -->
                 </ul>
             </li>
             <!-- <li class="nav-item nav-dropdown">

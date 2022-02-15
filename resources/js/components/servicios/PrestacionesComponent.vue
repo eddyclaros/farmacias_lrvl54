@@ -10,17 +10,29 @@
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Areas
-                    <button type="button" class="btn btn-secondary" @click="abrirModal('registrar')">
-                        <i class="icon-plus"></i>&nbsp;Nuevo
-                    </button>
+                    <i class="fa fa-align-justify"></i> Prestaciones
+                    <button type="button" class="btn btn-secondary" @click="abrirModal('registrar')" :disabled="areaselected==0">
+                        <i class="icon-plus"></i>&nbsp;Nuevo 
+                    </button><span  v-if="!siarealesected" class="error"> &nbsp; &nbsp;Debe Seleccionar un Area</span>
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
+                        <div class="col-md-2" style="text-align:center">
+                            <label for="" >Area:</label>
+                        </div>
                         <div class="col-md-6">
                             <div class="input-group">
-                                <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar"  @keyup.enter="listarAreas(1)">
-                                <button type="submit" class="btn btn-primary" @click="listarAreas(1)"><i class="fa fa-search" ></i> Buscar</button>
+                                <select class="form-control" @change="listarPrestaciones(1,buscar)"
+                                    v-model="areaselected">
+                                    <option value="0" disabled>Seleccionar...</option>
+                                    <option v-for="area in arrayAreas" :key="area.id" :value="area.id" v-text="area.area"></option>
+                                </select>                              
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar"  @keyup.enter="listarPrestaciones(1)">
+                                <button type="submit" class="btn btn-primary" @click="listarPrestaciones(1)"><i class="fa fa-search" ></i> Buscar</button>
                             </div>
                         </div>
                     </div>
@@ -30,28 +42,30 @@
                                 <th>Opciones</th>
                                 <th>Codigo</th>
                                 <th>Nombre</th>
+                                <th>Precio</th>
                                 <th>Descripción</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="area in arrayAreas" :key="area.id">
+                            <tr v-for="prestacion in arrayPrestacion" :key="prestacion.id">
                                 <td>
-                                    <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('actualizar',area)">
+                                    <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('actualizar',prestacion)">
                                         <i class="icon-pencil"></i>
                                     </button> &nbsp;
-                                    <button v-if="area.activo==1" type="button" class="btn btn-danger btn-sm" @click="eliminarArea(area.id)" >
+                                    <button v-if="prestacion.activo==1" type="button" class="btn btn-danger btn-sm" @click="eliminarPrestacion(prestacion.id)" >
                                         <i class="icon-trash"></i>
                                     </button>
-                                    <button v-else type="button" class="btn btn-info btn-sm" @click="activarArea(area.id)" >
+                                    <button v-else type="button" class="btn btn-info btn-sm" @click="activarPrestacion(prestacion.id)" >
                                         <i class="icon-check"></i>
                                     </button>
                                 </td>
-                                <td v-text="area.codigo"></td>
-                                <td v-text="area.nombre"></td>
-                                <td v-text="area.descripcion"></td>
+                                <td v-text="prestacion.codigo"></td>
+                                <td v-text="prestacion.nombre"></td>
+                                <td v-text="prestacion.precio + ' Bs.'" style="text-align:right"></td>
+                                <td v-text="prestacion.descripcion"></td>
                                 <td>
-                                    <div v-if="area.activo==1">
+                                    <div v-if="prestacion.activo==1">
                                         <span class="badge badge-success">Activo</span>
                                     </div>
                                     <div v-else>
@@ -95,8 +109,15 @@
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre <span  v-if="!sicompleto" class="error">(*)</span></label>
                                 <div class="col-md-9">
-                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del Area" v-model="nombre" v-on:focus="selectAll" >
-                                    <span  v-if="!sicompleto" class="error">Debe Ingresar el Nombre del Area</span>
+                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre de la Prestacion" v-model="nombre" v-on:focus="selectAll">
+                                    <span  v-if="!sicompleto" class="error">Debe Ingresar el Nombre de la Prestacion</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 form-control-label" for="text-input">Precio <span  v-if="!sicompletoprecio" class="error">(*)</span></label>
+                                <div class="col-md-9">
+                                    <input type="number" id="precio" name="precio" class="form-control" placeholder="0.0" v-model="precio" style="text-align:right" v-on:focus="selectAll" >
+                                    <span  v-if="!sicompletoprecio" class="error">Debe Ingresar el Precio de la prestacion</span>
                                 </div>
                             </div>
                             
@@ -110,8 +131,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"  @click="cerrarModal('registrar')">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarArea()" :disabled="!sicompleto">Guardar</button>
-                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarArea()">Actualizar</button>
+                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarPrestacion()" :disabled="!sicompleto || !sicompletoprecio">Guardar</button>
+                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarPrestacion()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -146,13 +167,31 @@ import Swal from 'sweetalert2'
                 arrayAreas:[],
                 tituloModal:'',
                 tipoAccion:1,
-                idarea:'',
-                buscar:''
+                idprestacion:'',
+                buscar:'',
+
+                arrayPrestacion:[],
+                areaselected:0,
+                precio:'',
                 
             }
 
         },
         computed:{
+            siarealesected(){
+                let me=this;
+                if (me.areaselected!=0)
+                    return true;
+                else
+                    return false;
+            },
+            sicompletoprecio(){
+                let me=this;
+                if (me.precio!=0)
+                    return true;
+                else
+                    return false;
+            },
             sicompleto(){
                 let me=this;
                 if (me.nombre!='')
@@ -186,17 +225,26 @@ import Swal from 'sweetalert2'
 
         },
         methods :{
-            listarAreas(page){
+            listarPrestaciones(page){
                 let me=this;
-                var url='/area?page='+page+'&buscar='+me.buscar;
+                var url='/prestacion?page='+page+'&idarea='+me.areaselected+'&buscar='+me.buscar;
                 axios.get(url).then(function(response){
                     var respuesta=response.data;
-                    //console.log(respuesta.areas);
+                    me.arrayPrestacion=respuesta.prestaciones.data;
                     me.pagination=respuesta.pagination;
-                    //console.log(me.areas.data);
-                    me.arrayAreas=respuesta.areas.data;
                     me.correlativo=respuesta.maxcorrelativo[0].maximo;
-                    //console.log(me.arrayAreas);
+                })
+                .catch(function(error){
+                    console.log(error);
+                });
+
+            },
+            selectAreas(){
+                let me=this;
+                var url='/area/selectarea';
+                axios.get(url).then(function(response){
+                    var respuesta=response.data;
+                    me.arrayAreas=respuesta;
                 })
                 .catch(function(error){
                     console.log(error);
@@ -205,9 +253,9 @@ import Swal from 'sweetalert2'
             cambiarPagina(page){
                 let me =this;
                 me.pagination.current_page = page;
-                me.listarAreas(page);
+                me.listarPrestaciones(page);
             },
-            registrarArea(){
+            registrarPrestacion(){
                 let me = this;
                 if(me.correlativo=='')
                     me.correlativo=1;
@@ -215,22 +263,27 @@ import Swal from 'sweetalert2'
                     me.correlativo++;
                 
                 if(me.correlativo<10)
-                    me.codigo='0'+me.correlativo;
+                    me.codigo='00'+me.correlativo;
+                
+                if(me.correlativo<100 && me.correlativo>9)
+                    me.codigo='0'+ me.correlativo;
 
-                axios.post('/area/registrar',{
+                axios.post('/prestacion/registrar',{
+                    'idarea':me.areaselected,
                     'nombre':me.nombre,
+                    'precio':me.precio,
                     'descripcion':me.descripcion,
                     'codigo':me.codigo,
                     'correlativo':me.correlativo
                 }).then(function(response){
                     me.cerrarModal('registrar');
-                    me.listarAreas();
+                    me.listarPrestaciones(1);
                 }).catch(function(error){
                     console.log(error);
                 });
 
             },
-            eliminarArea(idarea){
+            eliminarPrestacion(idprestacion){
                 let me=this;
                 //console.log("prueba");
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -251,8 +304,8 @@ import Swal from 'sweetalert2'
                 reverseButtons: true
                 }).then((result) => {
                 if (result.isConfirmed) {
-                     axios.put('/area/desactivar',{
-                        'id': idarea
+                     axios.put('/prestacion/desactivar',{
+                        'id': idprestacion
                     }).then(function (response) {
                         
                         swalWithBootstrapButtons.fire(
@@ -260,7 +313,7 @@ import Swal from 'sweetalert2'
                             'El registro a sido desactivado Correctamente',
                             'success'
                         )
-                        me.listarAreas();
+                        me.listarPrestaciones(1);
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -279,7 +332,7 @@ import Swal from 'sweetalert2'
                 }
                 })
             },
-            activarArea(idarea){
+            activarPrestacion(idprestacion){
                 let me=this;
                 //console.log("prueba");
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -300,8 +353,8 @@ import Swal from 'sweetalert2'
                 reverseButtons: true
                 }).then((result) => {
                 if (result.isConfirmed) {
-                     axios.put('/area/activar',{
-                        'id': idarea
+                     axios.put('/prestacion/activar',{
+                        'id': idprestacion
                     }).then(function (response) {
                         
                         swalWithBootstrapButtons.fire(
@@ -309,7 +362,7 @@ import Swal from 'sweetalert2'
                             'El registro a sido Activado Correctamente',
                             'success'
                         )
-                        me.listarAreas();
+                        me.listarPrestaciones(1);
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -328,12 +381,13 @@ import Swal from 'sweetalert2'
                 }
                 })
             },
-            actualizarArea(){
+            actualizarPrestacion(){
                // const Swal = require('sweetalert2')
                 let me =this;
-                axios.put('/area/actualizar',{
-                    'id':me.idarea,
+                axios.put('/prestacion/actualizar',{
+                    'id':me.idprestacion,
                     'nombre':me.nombre,
+                    'precio':me.precio,
                     'descripcion':me.descripcion,
                     
                 }).then(function (response) {
@@ -343,7 +397,7 @@ import Swal from 'sweetalert2'
                     else{
                             Swal.fire('Actualizado Correctamente')
 
-                        me.listarAreas();
+                        me.listarPrestaciones(1);
                     } 
                 }).catch(function (error) {
                    
@@ -354,23 +408,35 @@ import Swal from 'sweetalert2'
             },
             abrirModal(accion,data= []){
                 let me=this;
+                let respuesta=me.arrayAreas.find(element=>element.id==me.areaselected);
                 switch(accion){
                     case 'registrar':
                     {
-                        me.tituloModal='Registar Area'
-                        me.tipoAccion=1;
-                        me.nombre='';
-                        me.descripcion='';
-                        me.classModal.openModal('registrar');
+                        if(me.areaselected!=0)
+                        {
+                            
+                            me.tituloModal='Registar Prestacion para: '+ respuesta.area;
+                            me.tipoAccion=1;
+                            me.nombre='';
+                            me.precio='';
+                            me.descripcion='';
+                            me.classModal.openModal('registrar');
+                        }
+                        else
+                        {
+                            Swal.fire('Debe Seleccionar un Area')
+                        }
+                        
                         break;
                     }
                     
                     case 'actualizar':
                     {
-                        me.idarea=data.id;
+                        me.idprestacion=data.id;
                         me.tipoAccion=2;
-                        me.tituloModal='Actualizar Area'
+                        me.tituloModal='Actualizar Prestacion para: '+ respuesta.area
                         me.nombre=data.nombre;
+                        me.precio=data.precio;
                         me.descripcion=data.descripcion;
                         me.classModal.openModal('registrar');
                         break;
@@ -383,6 +449,7 @@ import Swal from 'sweetalert2'
                 let me = this;
                 me.classModal.closeModal(accion);
                 me.nombre='';
+                me.precio=''
                 me.descripcion='';
                 me.tipoAccion=1;
                 
@@ -392,11 +459,12 @@ import Swal from 'sweetalert2'
                     event.target.select()
                 }, 0)
             },  
+            
 
 
         },
         mounted() {
-            this.listarAreas(1);
+            this.selectAreas();
             this.classModal = new _pl.Modals();
             this.classModal.addModal('registrar');
             //console.log('Component mounted.')

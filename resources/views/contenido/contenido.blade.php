@@ -9,11 +9,11 @@
 </template>
     
 <template v-if="menu==2">
-    <h1>Contenido menu 2</h1>
+    <prestaciones-component></prestaciones-component>
 </template>
 
 <template v-if="menu==3">
-    <h1>Contenido menu 3</h1>
+    <descuentos-component></descuentos-component>
 </template>
 
 <template v-if="menu==4">

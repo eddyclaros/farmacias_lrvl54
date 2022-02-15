@@ -54,7 +54,7 @@ https://www.aspsnippets.com/Articles/Read-Parse-Excel-File-XLS-and-XLSX-using-Ja
         });
         //sirve para controlar tiempo de inactividad
         */
-
+       
 function generateofuscation(){
   var encodedData = window.btoa('_pl=require("./func_10251.js");');
  

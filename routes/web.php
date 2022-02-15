@@ -20,3 +20,14 @@ Route::post('/area/registrar', 'AreaController@store');
 Route::put('/area/actualizar', 'AreaController@update');
 Route::put('/area/desactivar', 'AreaController@desactivar');
 Route::put('/area/activar', 'AreaController@activar');
+Route::get('/area/selectarea','AreaController@selectArea');
+
+
+Route::get('/prestacion','PrestacionController@index');
+Route::post('/prestacion/registrar', 'PrestacionController@store');
+Route::put('/prestacion/actualizar', 'PrestacionController@update');
+Route::put('/prestacion/desactivar', 'PrestacionController@desactivar');
+Route::put('/prestacion/activar', 'PrestacionController@activar');
+//Route::get('/prestacion/selectarea','PrestacionController@selectArea');
+
+Route::get('/clientes','ClientesController@ingex');

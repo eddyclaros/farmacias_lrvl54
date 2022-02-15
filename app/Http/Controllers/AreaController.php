@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Area;
-use App\Http\Controllers\Countable;
 use Illuminate\Support\Facades\DB;
 
 
@@ -112,6 +111,16 @@ class AreaController extends Controller
         $area = Area::findOrFail($request->id);
         $area->activo=1;
         $area->save();
+    }
+    public function selectArea()
+    {
+        $areas=Area::select(DB::raw('concat(codigo, " - ",nombre) as area'),
+                            'id')
+                    ->orderby('codigo','asc')
+                    ->get();
+        return $areas;
+        
+
     }
    
 }
