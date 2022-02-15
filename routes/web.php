@@ -30,4 +30,4 @@ Route::put('/prestacion/desactivar', 'PrestacionController@desactivar');
 Route::put('/prestacion/activar', 'PrestacionController@activar');
 //Route::get('/prestacion/selectarea','PrestacionController@selectArea');
 
-Route::get('/clientes','ClientesController@ingex');
+Route::get('/clientes','ClientesController@index');
