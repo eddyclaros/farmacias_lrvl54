@@ -148,7 +148,7 @@ class DescuentoController extends Controller
     }
     public function selectDescuento()
     {
-        $descuentos=Descuento::select('id',DB::raw('concat(nombre, "-",monto,IF(siporcentaje=1, " %", " Bs.")) as nombre'))
+        $descuentos=Descuento::select('id',DB::raw('concat(nombre, "-",monto,IF(siporcentaje=1, "%", "Bs.")) as nombre'))
                     ->where('activo',1)
                     ->orderby('siporcentaje','desc')
                     ->orderby('monto','desc')

@@ -27,8 +27,9 @@ window._pl = require("./func_10251.js");
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('area-component', require('./components/servicios/AreaComponent.vue').default);
-Vue.component('descuentos-component', require('./components/servicios/DescuentosComponent.vue').default);
+Vue.component('descuentos-component', require('./components/configuraciones/DescuentosComponent.vue').default);
 Vue.component('prestaciones-component', require('./components/servicios/PrestacionesComponent.vue').default);
+Vue.component('ventas-component', require('./components/servicios/VentaServiciosComponent.vue').default);
 
 
 /**
