@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Descuento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class DescuentoController extends Controller
 {
@@ -12,9 +14,46 @@ class DescuentoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $buscararray=array();
+        if(!empty($request->buscar)){
+            $buscararray = explode(" ",$request->buscar);
+            //dd($buscararray);
+            $valor=sizeof($buscararray);
+            if($valor > 0){
+                $sqls='';
+                foreach($buscararray as $valor){
+                    if(empty($sqls)){
+                        $sqls="(monto like '%".$valor."%' or nombre like '%".$valor."%' or descripcion like '%".$valor."%')" ;
+                    }
+                    else
+                    {
+                        $sqls.=" and (monto like '%".$valor."%' or nombre like '%".$valor."%' or descripcion like '%".$valor."%')" ;
+                    }
+    
+                }
+                $descuentos= Descuento::orderby('nombre','asc')->whereraw($sqls)->paginate(20);
+            }
+        }
+        
+        else
+        {
+            $descuentos= Descuento::orderby('nombre','asc')->paginate(20);
+        }
+        
+        //$areas = Descuento::all();
+        
+        return ['pagination'=>[
+            'total'         =>    $descuentos->total(),
+            'current_page'  =>    $descuentos->currentPage(),
+            'per_page'      =>    $descuentos->perPage(),
+            'last_page'     =>    $descuentos->lastPage(),
+            'from'          =>    $descuentos->firstItem(),
+            'to'            =>    $descuentos->lastItem(),
+
+        ] ,
+                'descuentos'=>$descuentos];
     }
 
     /**
@@ -35,7 +74,13 @@ class DescuentoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $descuento = new Descuento();
+
+        $descuento->nombre=$request->nombre;
+        $descuento->descripcion=$request->descripcion;
+        $descuento->monto=$request->monto;
+        $descuento->siporcentaje=$request->siporcentaje;
+        $descuento->save();
     }
 
     /**
@@ -67,9 +112,15 @@ class DescuentoController extends Controller
      * @param  \App\Descuento  $descuento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Descuento $descuento)
+    public function update(Request $request)
     {
-        //
+        $descuento = Descuento::findOrFail($request->id);
+
+        $descuento->nombre=$request->nombre;
+        $descuento->descripcion=$request->descripcion;
+        $descuento->monto=$request->monto;
+        $descuento->siporcentaje=$request->siporcentaje;
+        $descuento->save();
     }
 
     /**
@@ -81,5 +132,29 @@ class DescuentoController extends Controller
     public function destroy(Descuento $descuento)
     {
         //
+    }
+    public function desactivar(Request $request)
+    {
+        $descuento = Descuento::findOrFail($request->id);
+        $descuento->activo=0;
+        $descuento->save();
+    }
+
+    public function activar(Request $request)
+    {
+        $descuento = Descuento::findOrFail($request->id);
+        $descuento->activo=1;
+        $descuento->save();
+    }
+    public function selectDescuento()
+    {
+        $descuentos=Descuento::select('id',DB::raw('concat(nombre, "-",monto,IF(siporcentaje=1, " %", " Bs.")) as nombre'))
+                    ->where('activo',1)
+                    ->orderby('siporcentaje','desc')
+                    ->orderby('monto','desc')
+                    ->get();
+        return $descuentos;
+        
+
     }
 }

@@ -30,4 +30,15 @@ Route::put('/prestacion/desactivar', 'PrestacionController@desactivar');
 Route::put('/prestacion/activar', 'PrestacionController@activar');
 //Route::get('/prestacion/selectarea','PrestacionController@selectArea');
 
+
+Route::get('/descuento','DescuentoController@index');
+Route::post('/descuento/registrar', 'DescuentoController@store');
+Route::put('/descuento/actualizar', 'DescuentoController@update');
+Route::put('/descuento/desactivar', 'DescuentoController@desactivar');
+Route::put('/descuento/activar', 'DescuentoController@activar');
+Route::get('/decuento/selectdecuento','DescuentoController@selectDescuento');
+
+//////////////////*****Conexion con base de datos db_farma******///////////////////// */
 Route::get('/clientes','ClientesController@index');
+
+

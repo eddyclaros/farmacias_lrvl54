@@ -116,6 +116,7 @@ class AreaController extends Controller
     {
         $areas=Area::select(DB::raw('concat(codigo, " - ",nombre) as area'),
                             'id')
+                    ->where('activo',1)
                     ->orderby('codigo','asc')
                     ->get();
         return $areas;

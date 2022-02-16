@@ -19,7 +19,7 @@ class CreateDescuentosTable extends Migration
             $table->string('descripcion',);
             $table->boolean('siporcentaje')->default(1);
             $table->decimal('monto');
-            $table->boolean('activo');
+            $table->boolean('activo')->default(1);
             $table->timestamps();
         });
     }
