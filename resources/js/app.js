@@ -25,6 +25,9 @@ window._pl = require("./func_10251.js");
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
+Vue.component('Ajaxselect', require('./components/plugin_vue/selectAjax.vue',).default);
+
+
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('area-component', require('./components/servicios/AreaComponent.vue').default);
 Vue.component('descuentos-component', require('./components/configuraciones/DescuentosComponent.vue').default);

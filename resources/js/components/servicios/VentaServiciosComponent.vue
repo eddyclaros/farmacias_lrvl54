@@ -10,13 +10,48 @@
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Prestaciones
-                    <button type="button" class="btn btn-secondary" @click="abrirModal('registrar')" :disabled="areaselected==0">
-                        <i class="icon-plus"></i>&nbsp;Nuevo 
-                    </button><span  v-if="!siarealesected" class="error"> &nbsp; &nbsp;Debe Seleccionar un Area</span>
+                    <i class="fa fa-align-justify"></i> Venta de Servicios
+                    
                 </div>
                 <div class="card-body">
-                    <div class="form-group row">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width:450px">Prestacion</th>
+                                <th>Precio</th>
+                                <th>Descuento</th>
+                                <th>Precio Final</th>
+                                <th>Agregar</th>
+                           </tr>
+                        </thead>
+                        <tr>
+                            <td>
+                                <Ajaxselect  v-if="clearSelected"
+                                    ruta="/prestacion/selectprestaciones?buscar=" @found="prestaciones" @cleaning="cleanprestaciones"
+                                    resp_ruta="prestaciones"
+                                    labels="cod"
+                                    placeholder="Ingrese Texto..." 
+                                    idtabla="id"
+                                    :id="idprestacionselected"
+                                    :clearable='true'>
+                                </Ajaxselect>
+                            </td>
+                            
+                            <td v-if="idprestaciones.length>0">{{ idprestaciones[3] }} Bs.</td>
+                            <td v-else></td>
+                            <td><select v-model="descuentoSelected"  class="form-control" @change="listarVenta()">
+                                        <option value="0">Seleccionar...</option>
+                                        <option v-for="descuento in arrayDescuentos" v-bind:key="descuento.id" :value="descuento.id" v-text="descuento.nombre"></option>
+                                    </select></td>
+                            <td v-text="preciofinal"></td>
+                            <td><button type="button" class="btn btn-info btn-sm" @click="agregarVenta()" :disabled="idprestaciones.length==0" >
+                                        <i class="icon-check"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                    </table>
+                    <!-- <div class="form-group row">
                         <div class="col-md-2" style="text-align:center">
                             <label for="" >Area:</label>
                         </div>
@@ -35,7 +70,7 @@
                                 <button type="submit" class="btn btn-primary" @click="listarPrestaciones(1)"><i class="fa fa-search" ></i> Buscar</button>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <table class="table table-bordered table-striped table-sm">
                         <thead>
                             <tr>
@@ -147,6 +182,8 @@
 
 <script>
 import Swal from 'sweetalert2'
+import vSelect from 'vue-select';
+Vue.component('v-select',vSelect);
 //Vue.use(VeeValidate);
     export default {
         data(){
@@ -173,11 +210,27 @@ import Swal from 'sweetalert2'
                 arrayPrestacion:[],
                 areaselected:0,
                 precio:'',
+                idprestacionselected:'',
+                idprestaciones:[],
+                clearSelected:1,
+                descuentoSelected:0,
+                arrayDescuentos:[]
                 
             }
 
         },
         computed:{
+            presfinal(){
+                let me=this;
+                if(me.idprestaciones.length>0)
+                {
+                    if(me.descuentoSelected!=0)
+                    {
+                        
+                    }
+                }
+
+            },
             siarealesected(){
                 let me=this;
                 if (me.areaselected!=0)
@@ -225,6 +278,35 @@ import Swal from 'sweetalert2'
 
         },
         methods :{
+            cambiaprestacion(){
+                let me=this;
+                me.clearSelected=0;
+                setTimeout(me.tiempo, 200); 
+                //me.directivo=valor;
+                me.ideprestacion=[];
+                
+               
+            },
+            tiempo(){
+            this.clearSelected=1;
+            }, 
+            prestaciones(prestaciones){
+                this.idprestaciones=[];
+                for (const key in prestaciones) {
+                    if (prestaciones.hasOwnProperty(key)) {
+                        const element = prestaciones[key];
+                        //console.log(element);
+                        this.idprestaciones.push(element);
+                    }
+                }
+                //console.log(this.idprestaciones);
+            },
+            cleanprestaciones(){
+                this.idprestaciones=[];
+                //this.idempleadorespuesta=0;
+            //console.log('clean')
+            
+            },
             listarPrestaciones(page){
                 let me=this;
                 var url='/prestacion?page='+page+'&idarea='+me.areaselected+'&buscar='+me.buscar;
@@ -239,12 +321,12 @@ import Swal from 'sweetalert2'
                 });
 
             },
-            selectAreas(){
+            selectDescuentos(){
                 let me=this;
-                var url='/area/selectarea';
+                var url='/descuento/selectdescuento';
                 axios.get(url).then(function(response){
                     var respuesta=response.data;
-                    me.arrayAreas=respuesta;
+                    me.arrayDescuentos=respuesta;
                 })
                 .catch(function(error){
                     console.log(error);
@@ -464,7 +546,7 @@ import Swal from 'sweetalert2'
 
         },
         mounted() {
-            this.selectAreas();
+            this.selectDescuentos();
             this.classModal = new _pl.Modals();
             this.classModal.addModal('registrar');
             //console.log('Component mounted.')

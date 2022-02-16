@@ -158,4 +158,71 @@ class PrestacionController extends Controller
         $prestacion->activo=1;
         $prestacion->save();
     }
+    public function selectPrestacion()
+    {
+        $prestaciones=Prestacion::join('areas','areas.id','prestacions.idarea')
+                                ->select(DB::raw('concat(areas.codigo,prestacions.codigo) as cod'),
+                                        'prestacions.nombre',
+                                        'prestacions.id',
+                                        'prestacions.precio')
+                                ->where('areas.activo',1)
+                                ->where('prestacions.activo',1)
+                                ->orderby('prestacions.nombre','asc')
+                                ->get();
+        return $prestaciones;
+    }
+    public function selectPrestaciones(Request $request)  //AjaxSelect
+    {
+        $buscararray = array(); 
+        if(!empty($request->buscar)) $buscararray = explode(" ",$request->buscar); 
+        $raw=DB::raw(DB::raw('concat(areas.codigo,prestacions.codigo," ",prestacions.nombre) as cod'));
+        if (sizeof($buscararray)>0) { 
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls))
+                    $sqls="(areas.codigo like '%".$valor."%' or prestacions.codigo like '%".$valor."%' or prestacions.nombre like '%".$valor."%' )";
+                else
+                    $sqls.=" and (areas.codigo like '%".$valor."%' or prestacions.codigo like '%".$valor."%' or prestacions.nombre like '%".$valor."%')";
+            }   
+            $prestaciones = Prestacion::join('areas','areas.id','prestacions.idarea')
+                                            ->select($raw,
+                                                    'prestacions.nombre',
+                                                    'prestacions.id',
+                                                    'prestacions.precio')
+                                            ->where('areas.activo',1)
+                                            ->where('prestacions.activo',1)
+                                            ->whereraw($sqls)
+                                            ->orderby('prestacions.codigo','asc')
+                                            ->get();
+        }
+        else {
+            if ($request->id){
+                    $prestaciones = Prestacion::join('areas','areas.id','prestacions.idarea')
+                                                ->select($raw,
+                                                        'prestacions.nombre',
+                                                        'prestacions.id',
+                                                        'prestacions.precio')
+                                                ->where('areas.activo',1)
+                                                ->where('prestacions.activo',1)
+                                                ->where('prestacions.id',$request->id)
+                                                ->orderby('prestacions.codigo','asc')
+                                                ->get();
+            }
+
+            else
+            {
+                $prestaciones = Prestacion::join('areas','areas.id','prestacions.idarea')
+                ->select($raw,
+                        'prestacions.nombre',
+                        'prestacions.id',
+                        'prestacions.precio')
+                ->where('areas.activo',1)
+                ->where('prestacions.activo',1)
+                ->orderby('prestacions.codigo','asc')
+                ->get();
+            }
+              
+        }
+        return ['prestaciones' => $prestaciones];
+    }
 }

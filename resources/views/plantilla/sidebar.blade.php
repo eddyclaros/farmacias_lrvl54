@@ -16,6 +16,9 @@
                     <li @click="menu=2" class="nav-item">
                         <a class="nav-link" href="#"><i class="icon-bag"></i> Prestaciones</a>
                     </li>
+                    <li @click="menu=4" class="nav-item">
+                        <a class="nav-link" href="#"><i class="icon-bag"></i> Venta Servicios</a>
+                    </li>
                 </ul>
             </li>
             <li class="nav-item nav-dropdown">

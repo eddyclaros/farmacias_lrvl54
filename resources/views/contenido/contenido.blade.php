@@ -17,7 +17,7 @@
 </template>
 
 <template v-if="menu==4">
-    <h1>Contenido menu 4</h1>
+    <ventas-component></ventas-component>
 </template>
 
 <template v-if="menu==5">
