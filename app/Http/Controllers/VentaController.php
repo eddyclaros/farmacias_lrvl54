@@ -124,5 +124,12 @@ class VentaController extends Controller
         $venta->estado=2;
         $venta->save();
     }
+    public function registrarVenta()
+    {
+        //$venta=Venta::
+        DB::table('ventas')
+                ->where('estado', 0)
+                ->update(['estado' => 1]);
+    }
 
 }

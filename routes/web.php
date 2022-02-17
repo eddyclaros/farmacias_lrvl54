@@ -43,6 +43,7 @@ Route::get('/descuento/selectdescuento','DescuentoController@selectDescuento');
 Route::get('/ventas/listar','VentaController@ventasListar');
 Route::post('/ventas/registrar', 'VentaController@store');
 Route::put('/ventas/desactivar', 'VentaController@desactivar');
+Route::put('/ventas/registrarventa', 'DescuentoController@registrarventa');
 
 //////////////////*****Conexion con base de datos db_farma******///////////////////// */
 Route::get('/clientes','ClientesController@index');

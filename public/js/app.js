@@ -3743,6 +3743,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     };
   },
   computed: {
+    sicancelado: function sicancelado() {
+      var me = this;
+      me.preciofinal = Number(me.sumatotal);
+      me.efectivo = Number(me.efectivo);
+      if (me.efectivo < me.sumatotal) return true;else return false;
+    },
     presfinal: function presfinal() {
       var me = this;
 
@@ -3805,7 +3811,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
   methods: {
     restartotal: function restartotal() {
       var me = this;
-      me.cambio = Number(me.efectivo - me.sumatotal);
+      if (me.efectivo != 0) me.cambio = Number(me.efectivo - me.sumatotal);else me.cambio = 0;
     },
     cambiaprestacion: function cambiaprestacion() {
       var me = this;
@@ -3899,6 +3905,19 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         me.idprestaciones = [];
         me.descuentoSelected = 0;
         me.preciofinal = 0;
+        me.listarVenta();
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    registrarVenta: function registrarVenta() {
+      var me = this;
+      axios.put('/ventas/registrarventa', {}).then(function (response) {
+        /* swalWithBootstrapButtons.fire(
+            'Desactivado!',
+            'El registro a sido desactivado Correctamente',
+            'success'
+        ) */
         me.listarVenta();
       })["catch"](function (error) {
         console.log(error);
@@ -46563,7 +46582,7 @@ var render = function () {
                             disabled:
                               _vm.arrayVentas.length == 0 ||
                               _vm.idclientes.length == 0 ||
-                              _vm.efectivo > _vm.sumatotal,
+                              !_vm.sicancelado,
                           },
                           on: {
                             click: function ($event) {

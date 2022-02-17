@@ -120,7 +120,7 @@
                                         :clearable='true'>
                                     </Ajaxselect></th>
                                 <th style="text-align:center">
-                                    <button type="submit" class="btn btn-success" @click="registrarVenta()" :disabled="arrayVentas.length==0 || idclientes.length==0 || efectivo > sumatotal">
+                                    <button type="submit" class="btn btn-success" @click="registrarVenta()" :disabled="arrayVentas.length==0 || idclientes.length==0 || !sicancelado">
                                         <i class="icon check" ></i> Registrar Venta
                                     </button>
                                 </th>
@@ -245,6 +245,16 @@ Vue.component('v-select',vSelect);
 
         },
         computed:{
+            sicancelado(){
+                let me=this;
+                me.preciofinal=Number(me.sumatotal);
+                me.efectivo=Number(me.efectivo);
+                if(me.efectivo<me.sumatotal)
+                    return true
+                else
+                    return false
+
+            },
             
             presfinal(){
                 let me=this;
@@ -320,7 +330,10 @@ Vue.component('v-select',vSelect);
         methods :{
             restartotal(){
                 let me=this;
-                me.cambio=Number(me.efectivo-me.sumatotal);
+                if(me.efectivo!=0)
+                    me.cambio=Number(me.efectivo-me.sumatotal);
+                else
+                    me.cambio=0;
             },
             
             cambiaprestacion(){
@@ -430,6 +443,24 @@ Vue.component('v-select',vSelect);
                 }).catch(function(error){
                     console.log(error);
                 });
+
+            },
+            registrarVenta(){
+                let me=this;
+                axios.put('/ventas/registrarventa',{
+                        
+                    }).then(function (response) {
+                        
+                        /* swalWithBootstrapButtons.fire(
+                            'Desactivado!',
+                            'El registro a sido desactivado Correctamente',
+                            'success'
+                        ) */
+                        me.listarVenta();
+                        
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
 
             },
             eliminarVenta(idventa){
