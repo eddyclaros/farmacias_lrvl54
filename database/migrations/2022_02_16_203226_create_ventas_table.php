@@ -22,6 +22,8 @@ class CreateVentasTable extends Migration
             $table->decimal('monto_cancelado');
             $table->biginteger('idcliente');
             $table->integer('idusuario');
+            $table->tinyInteger('estado')->default(0)->comment('0->en proceso,1->venta correcta,2->venta cancelada eliminada');
+            $table->bigInteger('idsucursal');
             $table->timestamps();
             $table->foreign('idprestacion')->references('id')->on('prestacions');
             //$table->foreign('iddescuento')->references('id')->on('descuentos');

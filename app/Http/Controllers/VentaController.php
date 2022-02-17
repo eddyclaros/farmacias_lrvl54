@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Venta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VentaController extends Controller
 {
@@ -44,7 +45,7 @@ class VentaController extends Controller
         $venta->monto_cancelado=$request->monto_cancelado;
         $venta->idcliente=1;
         $venta->idusuario=1;
-        
+        $venta->idsucursal=1;
         $venta->save();
     }
 
@@ -92,4 +93,36 @@ class VentaController extends Controller
     {
         //
     }
+    public function ventasListar()
+    {
+        $raw=DB::raw('concat(areas.codigo,prestacions.codigo) as cod');
+        $raw2=DB::raw('concat(descuentos.nombre," ",monto,IF(siporcentaje=1, "%", "Bs.")) as descuento');
+        $ventas=Venta::select($raw,$raw2,
+                        'ventas.id as id',
+                        'prestacions.nombre as nompres',
+                        'prestacions.precio',
+                        'descuentos.nombre as nomdesc',
+                        'monto_cancelado',
+                        'estado')
+                        ->join('prestacions','prestacions.id','ventas.idprestacion')
+                        ->join('areas','areas.id','prestacions.idarea')
+                        ->leftjoin('descuentos','descuentos.id','ventas.iddescuento')
+                        ->where('estado',0)
+                        ->orderby('ventas.created_at','asc')
+                        ->get();
+
+        $raw =DB::raw('sum(monto_cancelado) as total');                       
+        $sumatotal=Venta::select($raw)
+                            ->where('estado',0)
+                            ->get();
+        return ['ventas'=>$ventas,
+                'sumatotal'=>$sumatotal];
+    }
+    public function desactivar(Request $request)
+    {
+        $venta = Venta::findOrFail($request->id);
+        $venta->estado=2;
+        $venta->save();
+    }
+
 }

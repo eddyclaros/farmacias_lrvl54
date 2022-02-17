@@ -76,41 +76,57 @@
                             <tr>
                                 <th>Opciones</th>
                                 <th>Codigo</th>
-                                <th>Nombre</th>
+                                <th>Prestacion</th>
                                 <th>Precio</th>
-                                <th>Descripción</th>
-                                <th>Estado</th>
+                                <th>Descuento</th>
+                                <th style="width:150px">Sub Total</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="prestacion in arrayPrestacion" :key="prestacion.id">
+                            <tr v-for="venta in arrayVentas" :key="venta.id">
                                 <td>
-                                    <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('actualizar',prestacion)">
-                                        <i class="icon-pencil"></i>
-                                    </button> &nbsp;
-                                    <button v-if="prestacion.activo==1" type="button" class="btn btn-danger btn-sm" @click="eliminarPrestacion(prestacion.id)" >
+                                    <button v-if="venta.estado==0" type="button" class="btn btn-danger btn-sm" @click="eliminarVenta(venta.id)" >
                                         <i class="icon-trash"></i>
                                     </button>
-                                    <button v-else type="button" class="btn btn-info btn-sm" @click="activarPrestacion(prestacion.id)" >
-                                        <i class="icon-check"></i>
-                                    </button>
                                 </td>
-                                <td v-text="prestacion.codigo"></td>
-                                <td v-text="prestacion.nombre"></td>
-                                <td v-text="prestacion.precio + ' Bs.'" style="text-align:right"></td>
-                                <td v-text="prestacion.descripcion"></td>
-                                <td>
-                                    <div v-if="prestacion.activo==1">
-                                        <span class="badge badge-success">Activo</span>
-                                    </div>
-                                    <div v-else>
-                                        <span class="badge badge-warning">Desactivado</span>
-                                    </div>
-                                    
-                                </td>
+                                <td v-text="venta.cod"></td>
+                                <td v-text="venta.nompres"></td>
+                                <td v-text="venta.precio + ' Bs.'" style="text-align:right"></td>
+                                <td v-text="venta.descuento"></td>
+                                <td v-text="venta.monto_cancelado + ' Bs.'" style="text-align:right"></td>
                             </tr>
-                           
+                            <tr>
+                                <th colspan="5" style="text-align:right">Suma Total:</th>
+                                <th v-text="sumatotal + ' Bs.'" style="text-align:right"></th>
+                            </tr>
+                            <tr>
+                                <th colspan="5" style="text-align:right">Efectivo:</th>
+                                <th><input type="number" v-model="efectivo" v-on:focus="selectAll" @keyup="restartotal()" style="text-align:right"></th>
+                            </tr>
+                            <tr>
+                                <th colspan="5" style="text-align:right">Cambio:</th>
+                                <th v-text="cambio + ' Bs.'" style="text-align:right"></th>
+                            </tr>
+                            <tr>
+                                <th colspan="5" >Cliente:
+                                    
+                                    <Ajaxselect  v-if="clearSelected1"
+                                        ruta="/clientes/selectclientes?buscar=" @found="clientes" @cleaning="cleanclientes"
+                                        resp_ruta="clientes"
+                                        labels="nombres"
+                                        placeholder="Ingrese Texto..." 
+                                        idtabla="id"
+                                        :id="idclienteselected"
+                                        :clearable='true'>
+                                    </Ajaxselect></th>
+                                <th style="text-align:center">
+                                    <button type="submit" class="btn btn-success" @click="registrarVenta()" :disabled="arrayVentas.length==0 || idclientes.length==0 || efectivo > sumatotal">
+                                        <i class="icon check" ></i> Registrar Venta
+                                    </button>
+                                </th>
+                            </tr>
                         </tbody>
+
                     </table>
                     <nav>
                         <ul class="pagination">
@@ -213,14 +229,23 @@ Vue.component('v-select',vSelect);
                 idprestacionselected:'',
                 idprestaciones:[],
                 clearSelected:1,
+                clearSelected1:1,
                 descuentoSelected:0,
                 arrayDescuentos:[],
                 preciofinal:0,
+                arrayVentas:[],
+                sumatotal:0,
+                efectivo:0,
+                cambio:0,
+
+                idclientes:[],
+                idclienteselected:''
                 
             }
 
         },
         computed:{
+            
             presfinal(){
                 let me=this;
                 if(me.idprestaciones.length>0)
@@ -255,7 +280,7 @@ Vue.component('v-select',vSelect);
             },
             sicompletoprecio(){
                 let me=this;
-                if (me.precio!=0)
+                if (me.preciofinal!=0)
                     return true;
                 else
                     return false;
@@ -293,6 +318,11 @@ Vue.component('v-select',vSelect);
 
         },
         methods :{
+            restartotal(){
+                let me=this;
+                me.cambio=Number(me.efectivo-me.sumatotal);
+            },
+            
             cambiaprestacion(){
                 let me=this;
                 me.clearSelected=0;
@@ -302,8 +332,20 @@ Vue.component('v-select',vSelect);
                 
                
             },
+            cambiacliente(){
+                let me=this;
+                me.clearSelected1=0;
+                setTimeout(me.tiempo1, 200); 
+                //me.directivo=valor;
+                me.ideprestacion=[];
+                
+               
+            },
             tiempo(){
             this.clearSelected=1;
+            }, 
+            tiempo1(){
+            this.clearSelected1=1;
             }, 
             prestaciones(prestaciones){
                 this.idprestaciones=[];
@@ -316,20 +358,37 @@ Vue.component('v-select',vSelect);
                 }
                 //console.log(this.idprestaciones);
             },
+            clientes(clientes){
+                this.idcientes=[];
+                for (const key in clientes) {
+                    if (clientes.hasOwnProperty(key)) {
+                        const element = clientes[key];
+                        //console.log(element);
+                        this.idclientes.push(element);
+                    }
+                }
+                //console.log(this.idprestaciones);
+            },
             cleanprestaciones(){
                 this.idprestaciones=[];
+                this.descuentoSelected=0;
                 //this.idempleadorespuesta=0;
             //console.log('clean')
             
             },
-            listarVenta(page){
+            cleanclientes(){
+                this.idclientes=[];
+            
+            },
+            listarVenta(){
                 let me=this;
-                var url='/prestacion?page='+page+'&idarea='+me.areaselected+'&buscar='+me.buscar;
+                var url='/ventas/listar';
                 axios.get(url).then(function(response){
                     var respuesta=response.data;
-                    me.arrayPrestacion=respuesta.prestaciones.data;
-                    me.pagination=respuesta.pagination;
-                    me.correlativo=respuesta.maxcorrelativo[0].maximo;
+                    //console.log(respuesta);
+                    me.arrayVentas=respuesta.ventas;
+                    me.sumatotal=respuesta.sumatotal[0].total;
+                    me.restartotal();
                 })
                 .catch(function(error){
                     console.log(error);
@@ -367,13 +426,13 @@ Vue.component('v-select',vSelect);
                     me.idprestaciones=[];
                     me.descuentoSelected=0;
                     me.preciofinal=0;
-                    me.listarPrestaciones(1);
+                    me.listarVenta();
                 }).catch(function(error){
                     console.log(error);
                 });
 
             },
-            eliminarPrestacion(idprestacion){
+            eliminarVenta(idventa){
                 let me=this;
                 //console.log("prueba");
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -385,8 +444,7 @@ Vue.component('v-select',vSelect);
                 })
 
                 swalWithBootstrapButtons.fire({
-                title: 'Esta Seguro de Desactivar?',
-                text: "Es una eliminacion logica",
+                title: 'Esta Seguro?',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Si, Desactivar',
@@ -394,16 +452,16 @@ Vue.component('v-select',vSelect);
                 reverseButtons: true
                 }).then((result) => {
                 if (result.isConfirmed) {
-                     axios.put('/prestacion/desactivar',{
-                        'id': idprestacion
+                     axios.put('/ventas/desactivar',{
+                        'id': idventa
                     }).then(function (response) {
                         
-                        swalWithBootstrapButtons.fire(
+                        /* swalWithBootstrapButtons.fire(
                             'Desactivado!',
                             'El registro a sido desactivado Correctamente',
                             'success'
-                        )
-                        me.listarPrestaciones(1);
+                        ) */
+                        me.listarVenta();
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -422,128 +480,10 @@ Vue.component('v-select',vSelect);
                 }
                 })
             },
-            activarPrestacion(idprestacion){
-                let me=this;
-                //console.log("prueba");
-                const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-                })
-
-                swalWithBootstrapButtons.fire({
-                title: 'Esta Seguro de Activar?',
-                text: "Es una Activacion logica",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Si, Activar',
-                cancelButtonText: 'No, Cancelar',
-                reverseButtons: true
-                }).then((result) => {
-                if (result.isConfirmed) {
-                     axios.put('/prestacion/activar',{
-                        'id': idprestacion
-                    }).then(function (response) {
-                        
-                        swalWithBootstrapButtons.fire(
-                            'Activado!',
-                            'El registro a sido Activado Correctamente',
-                            'success'
-                        )
-                        me.listarPrestaciones(1);
-                        
-                    }).catch(function (error) {
-                        console.log(error);
-                    });
-                    
-                    
-                } else if (
-                    /* Read more about handling dismissals below */
-                    result.dismiss === Swal.DismissReason.cancel
-                ) {
-                    /* swalWithBootstrapButtons.fire(
-                    'Cancelado!',
-                    'El Registro no fue Activado',
-                    'error'
-                    ) */
-                }
-                })
-            },
-            actualizarPrestacion(){
-               // const Swal = require('sweetalert2')
-                let me =this;
-                axios.put('/prestacion/actualizar',{
-                    'id':me.idprestacion,
-                    'nombre':me.nombre,
-                    'precio':me.precio,
-                    'descripcion':me.descripcion,
-                    
-                }).then(function (response) {
-                    if(response.data.length){
-                    }
-                    // console.log(response)
-                    else{
-                            Swal.fire('Actualizado Correctamente')
-
-                        me.listarPrestaciones(1);
-                    } 
-                }).catch(function (error) {
-                   
-                });
-                me.cerrarModal('registrar');
-
-
-            },
-            abrirModal(accion,data= []){
-                let me=this;
-                let respuesta=me.arrayAreas.find(element=>element.id==me.areaselected);
-                switch(accion){
-                    case 'registrar':
-                    {
-                        if(me.areaselected!=0)
-                        {
-                            
-                            me.tituloModal='Registar Prestacion para: '+ respuesta.area;
-                            me.tipoAccion=1;
-                            me.nombre='';
-                            me.precio='';
-                            me.descripcion='';
-                            me.classModal.openModal('registrar');
-                        }
-                        else
-                        {
-                            Swal.fire('Debe Seleccionar un Area')
-                        }
-                        
-                        break;
-                    }
-                    
-                    case 'actualizar':
-                    {
-                        me.idprestacion=data.id;
-                        me.tipoAccion=2;
-                        me.tituloModal='Actualizar Prestacion para: '+ respuesta.area
-                        me.nombre=data.nombre;
-                        me.precio=data.precio;
-                        me.descripcion=data.descripcion;
-                        me.classModal.openModal('registrar');
-                        break;
-                    }
-
-                }
-                
-            },
-            cerrarModal(accion){
-                let me = this;
-                me.classModal.closeModal(accion);
-                me.nombre='';
-                me.precio=''
-                me.descripcion='';
-                me.tipoAccion=1;
-                
-            },
+            
+            
+            
+          
             selectAll: function (event) {
                 setTimeout(function () {
                     event.target.select()
@@ -555,6 +495,7 @@ Vue.component('v-select',vSelect);
         },
         mounted() {
             this.selectDescuentos();
+            this.listarVenta();
             this.classModal = new _pl.Modals();
             this.classModal.addModal('registrar');
             //console.log('Component mounted.')

@@ -3683,6 +3683,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //Vue.use(VeeValidate);
@@ -3714,9 +3730,16 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       idprestacionselected: '',
       idprestaciones: [],
       clearSelected: 1,
+      clearSelected1: 1,
       descuentoSelected: 0,
       arrayDescuentos: [],
-      preciofinal: 0
+      preciofinal: 0,
+      arrayVentas: [],
+      sumatotal: 0,
+      efectivo: 0,
+      cambio: 0,
+      idclientes: [],
+      idclienteselected: ''
     };
   },
   computed: {
@@ -3743,7 +3766,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     },
     sicompletoprecio: function sicompletoprecio() {
       var me = this;
-      if (me.precio != 0) return true;else return false;
+      if (me.preciofinal != 0) return true;else return false;
     },
     sicompleto: function sicompleto() {
       var me = this;
@@ -3780,6 +3803,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     }
   },
   methods: {
+    restartotal: function restartotal() {
+      var me = this;
+      me.cambio = Number(me.efectivo - me.sumatotal);
+    },
     cambiaprestacion: function cambiaprestacion() {
       var me = this;
       me.clearSelected = 0;
@@ -3787,8 +3814,18 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
       me.ideprestacion = [];
     },
+    cambiacliente: function cambiacliente() {
+      var me = this;
+      me.clearSelected1 = 0;
+      setTimeout(me.tiempo1, 200); //me.directivo=valor;
+
+      me.ideprestacion = [];
+    },
     tiempo: function tiempo() {
       this.clearSelected = 1;
+    },
+    tiempo1: function tiempo1() {
+      this.clearSelected1 = 1;
     },
     prestaciones: function prestaciones(_prestaciones) {
       this.idprestaciones = [];
@@ -3802,18 +3839,35 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       } //console.log(this.idprestaciones);
 
     },
+    clientes: function clientes(_clientes) {
+      this.idcientes = [];
+
+      for (var key in _clientes) {
+        if (_clientes.hasOwnProperty(key)) {
+          var element = _clientes[key]; //console.log(element);
+
+          this.idclientes.push(element);
+        }
+      } //console.log(this.idprestaciones);
+
+    },
     cleanprestaciones: function cleanprestaciones() {
-      this.idprestaciones = []; //this.idempleadorespuesta=0;
+      this.idprestaciones = [];
+      this.descuentoSelected = 0; //this.idempleadorespuesta=0;
       //console.log('clean')
     },
-    listarVenta: function listarVenta(page) {
+    cleanclientes: function cleanclientes() {
+      this.idclientes = [];
+    },
+    listarVenta: function listarVenta() {
       var me = this;
-      var url = '/prestacion?page=' + page + '&idarea=' + me.areaselected + '&buscar=' + me.buscar;
+      var url = '/ventas/listar';
       axios.get(url).then(function (response) {
-        var respuesta = response.data;
-        me.arrayPrestacion = respuesta.prestaciones.data;
-        me.pagination = respuesta.pagination;
-        me.correlativo = respuesta.maxcorrelativo[0].maximo;
+        var respuesta = response.data; //console.log(respuesta);
+
+        me.arrayVentas = respuesta.ventas;
+        me.sumatotal = respuesta.sumatotal[0].total;
+        me.restartotal();
       })["catch"](function (error) {
         console.log(error);
       });
@@ -3845,12 +3899,12 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         me.idprestaciones = [];
         me.descuentoSelected = 0;
         me.preciofinal = 0;
-        me.listarPrestaciones(1);
+        me.listarVenta();
       })["catch"](function (error) {
         console.log(error);
       });
     },
-    eliminarPrestacion: function eliminarPrestacion(idprestacion) {
+    eliminarVenta: function eliminarVenta(idventa) {
       var me = this; //console.log("prueba");
 
       var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
@@ -3861,8 +3915,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         buttonsStyling: false
       });
       swalWithBootstrapButtons.fire({
-        title: 'Esta Seguro de Desactivar?',
-        text: "Es una eliminacion logica",
+        title: 'Esta Seguro?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si, Desactivar',
@@ -3870,11 +3923,15 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          axios.put('/prestacion/desactivar', {
-            'id': idprestacion
+          axios.put('/ventas/desactivar', {
+            'id': idventa
           }).then(function (response) {
-            swalWithBootstrapButtons.fire('Desactivado!', 'El registro a sido desactivado Correctamente', 'success');
-            me.listarPrestaciones(1);
+            /* swalWithBootstrapButtons.fire(
+                'Desactivado!',
+                'El registro a sido desactivado Correctamente',
+                'success'
+            ) */
+            me.listarVenta();
           })["catch"](function (error) {
             console.log(error);
           });
@@ -3889,107 +3946,6 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
         }
       });
     },
-    activarPrestacion: function activarPrestacion(idprestacion) {
-      var me = this; //console.log("prueba");
-
-      var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
-        customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-      });
-      swalWithBootstrapButtons.fire({
-        title: 'Esta Seguro de Activar?',
-        text: "Es una Activacion logica",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Si, Activar',
-        cancelButtonText: 'No, Cancelar',
-        reverseButtons: true
-      }).then(function (result) {
-        if (result.isConfirmed) {
-          axios.put('/prestacion/activar', {
-            'id': idprestacion
-          }).then(function (response) {
-            swalWithBootstrapButtons.fire('Activado!', 'El registro a sido Activado Correctamente', 'success');
-            me.listarPrestaciones(1);
-          })["catch"](function (error) {
-            console.log(error);
-          });
-        } else if (
-        /* Read more about handling dismissals below */
-        result.dismiss === sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.DismissReason.cancel) {
-          /* swalWithBootstrapButtons.fire(
-          'Cancelado!',
-          'El Registro no fue Activado',
-          'error'
-          ) */
-        }
-      });
-    },
-    actualizarPrestacion: function actualizarPrestacion() {
-      // const Swal = require('sweetalert2')
-      var me = this;
-      axios.put('/prestacion/actualizar', {
-        'id': me.idprestacion,
-        'nombre': me.nombre,
-        'precio': me.precio,
-        'descripcion': me.descripcion
-      }).then(function (response) {
-        if (response.data.length) {} // console.log(response)
-        else {
-          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Actualizado Correctamente');
-          me.listarPrestaciones(1);
-        }
-      })["catch"](function (error) {});
-      me.cerrarModal('registrar');
-    },
-    abrirModal: function abrirModal(accion) {
-      var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-      var me = this;
-      var respuesta = me.arrayAreas.find(function (element) {
-        return element.id == me.areaselected;
-      });
-
-      switch (accion) {
-        case 'registrar':
-          {
-            if (me.areaselected != 0) {
-              me.tituloModal = 'Registar Prestacion para: ' + respuesta.area;
-              me.tipoAccion = 1;
-              me.nombre = '';
-              me.precio = '';
-              me.descripcion = '';
-              me.classModal.openModal('registrar');
-            } else {
-              sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Debe Seleccionar un Area');
-            }
-
-            break;
-          }
-
-        case 'actualizar':
-          {
-            me.idprestacion = data.id;
-            me.tipoAccion = 2;
-            me.tituloModal = 'Actualizar Prestacion para: ' + respuesta.area;
-            me.nombre = data.nombre;
-            me.precio = data.precio;
-            me.descripcion = data.descripcion;
-            me.classModal.openModal('registrar');
-            break;
-          }
-      }
-    },
-    cerrarModal: function cerrarModal(accion) {
-      var me = this;
-      me.classModal.closeModal(accion);
-      me.nombre = '';
-      me.precio = '';
-      me.descripcion = '';
-      me.tipoAccion = 1;
-    },
     selectAll: function selectAll(event) {
       setTimeout(function () {
         event.target.select();
@@ -3998,6 +3954,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
   },
   mounted: function mounted() {
     this.selectDescuentos();
+    this.listarVenta();
     this.classModal = new _pl.Modals();
     this.classModal.addModal('registrar'); //console.log('Component mounted.')
   }
@@ -46447,87 +46404,184 @@ var render = function () {
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(_vm.arrayPrestacion, function (prestacion) {
-                  return _c("tr", { key: prestacion.id }, [
-                    _c("td", [
+                [
+                  _vm._l(_vm.arrayVentas, function (venta) {
+                    return _c("tr", { key: venta.id }, [
+                      _c("td", [
+                        venta.estado == 0
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger btn-sm",
+                                attrs: { type: "button" },
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.eliminarVenta(venta.id)
+                                  },
+                                },
+                              },
+                              [_c("i", { staticClass: "icon-trash" })]
+                            )
+                          : _vm._e(),
+                      ]),
+                      _vm._v(" "),
+                      _c("td", {
+                        domProps: { textContent: _vm._s(venta.cod) },
+                      }),
+                      _vm._v(" "),
+                      _c("td", {
+                        domProps: { textContent: _vm._s(venta.nompres) },
+                      }),
+                      _vm._v(" "),
+                      _c("td", {
+                        staticStyle: { "text-align": "right" },
+                        domProps: {
+                          textContent: _vm._s(venta.precio + " Bs."),
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("td", {
+                        domProps: { textContent: _vm._s(venta.descuento) },
+                      }),
+                      _vm._v(" "),
+                      _c("td", {
+                        staticStyle: { "text-align": "right" },
+                        domProps: {
+                          textContent: _vm._s(venta.monto_cancelado + " Bs."),
+                        },
+                      }),
+                    ])
+                  }),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c(
+                      "th",
+                      {
+                        staticStyle: { "text-align": "right" },
+                        attrs: { colspan: "5" },
+                      },
+                      [_vm._v("Suma Total:")]
+                    ),
+                    _vm._v(" "),
+                    _c("th", {
+                      staticStyle: { "text-align": "right" },
+                      domProps: { textContent: _vm._s(_vm.sumatotal + " Bs.") },
+                    }),
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c(
+                      "th",
+                      {
+                        staticStyle: { "text-align": "right" },
+                        attrs: { colspan: "5" },
+                      },
+                      [_vm._v("Efectivo:")]
+                    ),
+                    _vm._v(" "),
+                    _c("th", [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.efectivo,
+                            expression: "efectivo",
+                          },
+                        ],
+                        staticStyle: { "text-align": "right" },
+                        attrs: { type: "number" },
+                        domProps: { value: _vm.efectivo },
+                        on: {
+                          focus: _vm.selectAll,
+                          keyup: function ($event) {
+                            return _vm.restartotal()
+                          },
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.efectivo = $event.target.value
+                          },
+                        },
+                      }),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c(
+                      "th",
+                      {
+                        staticStyle: { "text-align": "right" },
+                        attrs: { colspan: "5" },
+                      },
+                      [_vm._v("Cambio:")]
+                    ),
+                    _vm._v(" "),
+                    _c("th", {
+                      staticStyle: { "text-align": "right" },
+                      domProps: { textContent: _vm._s(_vm.cambio + " Bs.") },
+                    }),
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c(
+                      "th",
+                      { attrs: { colspan: "5" } },
+                      [
+                        _vm._v(
+                          "Cliente:\n                                \n                                "
+                        ),
+                        _vm.clearSelected1
+                          ? _c("Ajaxselect", {
+                              attrs: {
+                                ruta: "/clientes/selectclientes?buscar=",
+                                resp_ruta: "clientes",
+                                labels: "nombres",
+                                placeholder: "Ingrese Texto...",
+                                idtabla: "id",
+                                id: _vm.idclienteselected,
+                                clearable: true,
+                              },
+                              on: {
+                                found: _vm.clientes,
+                                cleaning: _vm.cleanclientes,
+                              },
+                            })
+                          : _vm._e(),
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c("th", { staticStyle: { "text-align": "center" } }, [
                       _c(
                         "button",
                         {
-                          staticClass: "btn btn-warning btn-sm",
-                          attrs: { type: "button" },
+                          staticClass: "btn btn-success",
+                          attrs: {
+                            type: "submit",
+                            disabled:
+                              _vm.arrayVentas.length == 0 ||
+                              _vm.idclientes.length == 0 ||
+                              _vm.efectivo > _vm.sumatotal,
+                          },
                           on: {
                             click: function ($event) {
-                              return _vm.abrirModal("actualizar", prestacion)
+                              return _vm.registrarVenta()
                             },
                           },
                         },
-                        [_c("i", { staticClass: "icon-pencil" })]
-                      ),
-                      _vm._v("  \n                                "),
-                      prestacion.activo == 1
-                        ? _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-danger btn-sm",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function ($event) {
-                                  return _vm.eliminarPrestacion(prestacion.id)
-                                },
-                              },
-                            },
-                            [_c("i", { staticClass: "icon-trash" })]
-                          )
-                        : _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-info btn-sm",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function ($event) {
-                                  return _vm.activarPrestacion(prestacion.id)
-                                },
-                              },
-                            },
-                            [_c("i", { staticClass: "icon-check" })]
+                        [
+                          _c("i", { staticClass: "icon check" }),
+                          _vm._v(
+                            " Registrar Venta\n                                "
                           ),
+                        ]
+                      ),
                     ]),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(prestacion.codigo) },
-                    }),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(prestacion.nombre) },
-                    }),
-                    _vm._v(" "),
-                    _c("td", {
-                      staticStyle: { "text-align": "right" },
-                      domProps: {
-                        textContent: _vm._s(prestacion.precio + " Bs."),
-                      },
-                    }),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(prestacion.descripcion) },
-                    }),
-                    _vm._v(" "),
-                    _c("td", [
-                      prestacion.activo == 1
-                        ? _c("div", [
-                            _c("span", { staticClass: "badge badge-success" }, [
-                              _vm._v("Activo"),
-                            ]),
-                          ])
-                        : _c("div", [
-                            _c("span", { staticClass: "badge badge-warning" }, [
-                              _vm._v("Desactivado"),
-                            ]),
-                          ]),
-                    ]),
-                  ])
-                }),
-                0
+                  ]),
+                ],
+                2
               ),
             ]
           ),
@@ -46937,13 +46991,13 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Codigo")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Nombre")]),
+        _c("th", [_vm._v("Prestacion")]),
         _vm._v(" "),
         _c("th", [_vm._v("Precio")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Descripción")]),
+        _c("th", [_vm._v("Descuento")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Estado")]),
+        _c("th", { staticStyle: { width: "150px" } }, [_vm._v("Sub Total")]),
       ]),
     ])
   },
@@ -63202,7 +63256,7 @@ function _mf36265_25421(arrayformulas, capitalin, cuo, interesin, interesdifin, 
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\proyectos\farmacia5_4\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\Desarrollo_Eddy_Claros\farmacia5_4\resources\js\app.js */"./resources/js/app.js");
 
 
 /***/ })
