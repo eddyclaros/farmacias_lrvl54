@@ -35,7 +35,17 @@ class VentaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $venta = new Venta();
+
+        $venta->num_documento=1;
+        $venta->tipodocumento=1;
+        $venta->idprestacion=$request->idprestacion;
+        $venta->iddescuento=$request->iddescuento;
+        $venta->monto_cancelado=$request->monto_cancelado;
+        $venta->idcliente=1;
+        $venta->idusuario=1;
+        
+        $venta->save();
     }
 
     /**

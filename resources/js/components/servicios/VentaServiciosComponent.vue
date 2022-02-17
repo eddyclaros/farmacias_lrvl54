@@ -38,12 +38,12 @@
                             </td>
                             
                             <td v-if="idprestaciones.length>0">{{ idprestaciones[3] }} Bs.</td>
-                            <td v-else></td>
+                            <td v-else>-</td>
                             <td><select v-model="descuentoSelected"  class="form-control" @change="listarVenta()">
                                         <option value="0">Seleccionar...</option>
                                         <option v-for="descuento in arrayDescuentos" v-bind:key="descuento.id" :value="descuento.id" v-text="descuento.nombre"></option>
                                     </select></td>
-                            <td v-text="preciofinal"></td>
+                            <td  style="text-align:right">{{preciofinal}} &nbsp;Bs.</td>
                             <td><button type="button" class="btn btn-info btn-sm" @click="agregarVenta()" :disabled="idprestaciones.length==0" >
                                         <i class="icon-check"></i>
                                 </button>
@@ -214,7 +214,8 @@ Vue.component('v-select',vSelect);
                 idprestaciones:[],
                 clearSelected:1,
                 descuentoSelected:0,
-                arrayDescuentos:[]
+                arrayDescuentos:[],
+                preciofinal:0,
                 
             }
 
@@ -226,9 +227,23 @@ Vue.component('v-select',vSelect);
                 {
                     if(me.descuentoSelected!=0)
                     {
-                        
+                        let respuesta=me.arrayDescuentos.find(element=>element.id==me.descuentoSelected);
+                        //console.log(respuesta)
+                        let descuento = respuesta.monto;
+                        let siporcentaje=respuesta.siporcentaje;
+                        let precio=Number(me.idprestaciones[3]);
+
+                        //console.log(precio,descuento);
+                        if(siporcentaje)
+                            me.preciofinal=Number(precio-(precio*(descuento/100)).toFixed(2));
+                        else
+                            me.preciofinal= precio-descuento;
                     }
+                    else
+                        me.preciofinal=me.idprestaciones[3];
                 }
+                else
+                    me.preciofinal=0;
 
             },
             siarealesected(){
@@ -307,7 +322,7 @@ Vue.component('v-select',vSelect);
             //console.log('clean')
             
             },
-            listarPrestaciones(page){
+            listarVenta(page){
                 let me=this;
                 var url='/prestacion?page='+page+'&idarea='+me.areaselected+'&buscar='+me.buscar;
                 axios.get(url).then(function(response){
@@ -337,28 +352,21 @@ Vue.component('v-select',vSelect);
                 me.pagination.current_page = page;
                 me.listarPrestaciones(page);
             },
-            registrarPrestacion(){
+            agregarVenta(){
                 let me = this;
-                if(me.correlativo=='')
-                    me.correlativo=1;
-                else
-                    me.correlativo++;
                 
-                if(me.correlativo<10)
-                    me.codigo='00'+me.correlativo;
-                
-                if(me.correlativo<100 && me.correlativo>9)
-                    me.codigo='0'+ me.correlativo;
 
-                axios.post('/prestacion/registrar',{
-                    'idarea':me.areaselected,
-                    'nombre':me.nombre,
-                    'precio':me.precio,
-                    'descripcion':me.descripcion,
-                    'codigo':me.codigo,
-                    'correlativo':me.correlativo
+                axios.post('/ventas/registrar',{
+                    'idprestacion':me.idprestaciones[2],
+                    'iddescuento':me.descuentoSelected,
+                    'monto_cancelado':me.preciofinal,
+                    
                 }).then(function(response){
-                    me.cerrarModal('registrar');
+                    //me.cerrarModal('registrar');
+                    me.cambiaprestacion();
+                    me.idprestaciones=[];
+                    me.descuentoSelected=0;
+                    me.preciofinal=0;
                     me.listarPrestaciones(1);
                 }).catch(function(error){
                     console.log(error);

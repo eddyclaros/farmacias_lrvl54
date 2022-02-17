@@ -3715,7 +3715,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       idprestaciones: [],
       clearSelected: 1,
       descuentoSelected: 0,
-      arrayDescuentos: []
+      arrayDescuentos: [],
+      preciofinal: 0
     };
   },
   computed: {
@@ -3723,8 +3724,18 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       var me = this;
 
       if (me.idprestaciones.length > 0) {
-        if (me.descuentoSelected != 0) {}
-      }
+        if (me.descuentoSelected != 0) {
+          var respuesta = me.arrayDescuentos.find(function (element) {
+            return element.id == me.descuentoSelected;
+          }); //console.log(respuesta)
+
+          var descuento = respuesta.monto;
+          var siporcentaje = respuesta.siporcentaje;
+          var precio = Number(me.idprestaciones[3]); //console.log(precio,descuento);
+
+          if (siporcentaje) me.preciofinal = Number(precio - (precio * (descuento / 100)).toFixed(2));else me.preciofinal = precio - descuento;
+        } else me.preciofinal = me.idprestaciones[3];
+      } else me.preciofinal = 0;
     },
     siarealesected: function siarealesected() {
       var me = this;
@@ -3795,7 +3806,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       this.idprestaciones = []; //this.idempleadorespuesta=0;
       //console.log('clean')
     },
-    listarPrestaciones: function listarPrestaciones(page) {
+    listarVenta: function listarVenta(page) {
       var me = this;
       var url = '/prestacion?page=' + page + '&idarea=' + me.areaselected + '&buscar=' + me.buscar;
       axios.get(url).then(function (response) {
@@ -3822,20 +3833,18 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       me.pagination.current_page = page;
       me.listarPrestaciones(page);
     },
-    registrarPrestacion: function registrarPrestacion() {
+    agregarVenta: function agregarVenta() {
       var me = this;
-      if (me.correlativo == '') me.correlativo = 1;else me.correlativo++;
-      if (me.correlativo < 10) me.codigo = '00' + me.correlativo;
-      if (me.correlativo < 100 && me.correlativo > 9) me.codigo = '0' + me.correlativo;
-      axios.post('/prestacion/registrar', {
-        'idarea': me.areaselected,
-        'nombre': me.nombre,
-        'precio': me.precio,
-        'descripcion': me.descripcion,
-        'codigo': me.codigo,
-        'correlativo': me.correlativo
+      axios.post('/ventas/registrar', {
+        'idprestacion': me.idprestaciones[2],
+        'iddescuento': me.descuentoSelected,
+        'monto_cancelado': me.preciofinal
       }).then(function (response) {
-        me.cerrarModal('registrar');
+        //me.cerrarModal('registrar');
+        me.cambiaprestacion();
+        me.idprestaciones = [];
+        me.descuentoSelected = 0;
+        me.preciofinal = 0;
         me.listarPrestaciones(1);
       })["catch"](function (error) {
         console.log(error);
@@ -46350,7 +46359,7 @@ var render = function () {
               _vm._v(" "),
               _vm.idprestaciones.length > 0
                 ? _c("td", [_vm._v(_vm._s(_vm.idprestaciones[3]) + " Bs.")])
-                : _c("td"),
+                : _c("td", [_vm._v("-")]),
               _vm._v(" "),
               _c("td", [
                 _c(
@@ -46405,7 +46414,9 @@ var render = function () {
                 ),
               ]),
               _vm._v(" "),
-              _c("td", { domProps: { textContent: _vm._s(_vm.preciofinal) } }),
+              _c("td", { staticStyle: { "text-align": "right" } }, [
+                _vm._v(_vm._s(_vm.preciofinal) + "  Bs."),
+              ]),
               _vm._v(" "),
               _c("td", [
                 _c(
@@ -63191,7 +63202,7 @@ function _mf36265_25421(arrayformulas, capitalin, cuo, interesin, interesdifin, 
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\Desarrollo_Eddy_Claros\farmacia5_4\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\proyectos\farmacia5_4\resources\js\app.js */"./resources/js/app.js");
 
 
 /***/ })

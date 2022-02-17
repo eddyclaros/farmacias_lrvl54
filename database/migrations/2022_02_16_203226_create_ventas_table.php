@@ -18,13 +18,13 @@ class CreateVentasTable extends Migration
             $table->bigInteger('num_documento')->unsigned();
             $table->tinyinteger('tipodocumento')->unsigned();
             $table->bigInteger('idprestacion')->unsigned();
-            $table->bigInteger('iddescuento')->unsigned();
+            $table->bigInteger('iddescuento')->unsigned()->nullable();
             $table->decimal('monto_cancelado');
             $table->biginteger('idcliente');
             $table->integer('idusuario');
             $table->timestamps();
             $table->foreign('idprestacion')->references('id')->on('prestacions');
-            $table->foreign('iddescuento')->references('id')->on('descuentos');
+            //$table->foreign('iddescuento')->references('id')->on('descuentos');
         });
     }
 
