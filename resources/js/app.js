@@ -33,6 +33,7 @@ Vue.component('area-component', require('./components/servicios/AreaComponent.vu
 Vue.component('descuentos-component', require('./components/configuraciones/DescuentosComponent.vue').default);
 Vue.component('prestaciones-component', require('./components/servicios/PrestacionesComponent.vue').default);
 Vue.component('ventas-component', require('./components/servicios/VentaServiciosComponent.vue').default);
+Vue.component('histventas-component', require('./components/servicios/HistorialVentasComponent.vue').default);
 
 
 /**
