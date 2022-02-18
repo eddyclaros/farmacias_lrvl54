@@ -37,9 +37,9 @@
                                 </Ajaxselect>
                             </td>
                             
-                            <td v-if="idprestaciones.length>0">{{ idprestaciones[3] }} Bs.</td>
+                            <td v-if="idprestaciones.length>0" @change="presfinal">{{ idprestaciones[3] }} Bs.</td>
                             <td v-else>-</td>
-                            <td><select v-model="descuentoSelected"  class="form-control" @change="listarVenta()">
+                            <td><select v-model="descuentoSelected"  class="form-control" @change="presfinal">
                                         <option value="0">Seleccionar...</option>
                                         <option v-for="descuento in arrayDescuentos" v-bind:key="descuento.id" :value="descuento.id" v-text="descuento.nombre"></option>
                                     </select></td>
@@ -113,7 +113,7 @@
                                     <Ajaxselect  v-if="clearSelected1"
                                         ruta="/clientes/selectclientes?buscar=" @found="clientes" @cleaning="cleanclientes"
                                         resp_ruta="clientes"
-                                        labels="nombres"
+                                        labels="nom"
                                         placeholder="Ingrese Texto..." 
                                         idtabla="id"
                                         :id="idclienteselected"
@@ -247,40 +247,16 @@ Vue.component('v-select',vSelect);
         computed:{
             sicancelado(){
                 let me=this;
-                me.preciofinal=Number(me.sumatotal);
+                me.sumatotal=Number(me.sumatotal);
                 me.efectivo=Number(me.efectivo);
                 if(me.efectivo<me.sumatotal)
-                    return true
-                else
                     return false
+                else
+                    return true
 
             },
             
-            presfinal(){
-                let me=this;
-                if(me.idprestaciones.length>0)
-                {
-                    if(me.descuentoSelected!=0)
-                    {
-                        let respuesta=me.arrayDescuentos.find(element=>element.id==me.descuentoSelected);
-                        //console.log(respuesta)
-                        let descuento = respuesta.monto;
-                        let siporcentaje=respuesta.siporcentaje;
-                        let precio=Number(me.idprestaciones[3]);
-
-                        //console.log(precio,descuento);
-                        if(siporcentaje)
-                            me.preciofinal=Number(precio-(precio*(descuento/100)).toFixed(2));
-                        else
-                            me.preciofinal= precio-descuento;
-                    }
-                    else
-                        me.preciofinal=me.idprestaciones[3];
-                }
-                else
-                    me.preciofinal=0;
-
-            },
+            
             siarealesected(){
                 let me=this;
                 if (me.areaselected!=0)
@@ -328,6 +304,31 @@ Vue.component('v-select',vSelect);
 
         },
         methods :{
+            presfinal(){
+                let me=this;
+                if(me.idprestaciones.length>0)
+                {
+                    if(me.descuentoSelected!=0)
+                    {
+                        let respuesta=me.arrayDescuentos.find(element=>element.id==me.descuentoSelected);
+                        //console.log(respuesta)
+                        let descuento = respuesta.monto;
+                        let siporcentaje=respuesta.siporcentaje;
+                        let precio=Number(me.idprestaciones[3]);
+
+                        //console.log(precio,descuento);
+                        if(siporcentaje)
+                            me.preciofinal=Number(precio-(precio*(descuento/100)).toFixed(2));
+                        else
+                            me.preciofinal= precio-descuento;
+                    }
+                    else
+                        me.preciofinal=me.idprestaciones[3];
+                }
+                else
+                    me.preciofinal=0;
+
+            },
             restartotal(){
                 let me=this;
                 if(me.efectivo!=0)
@@ -361,6 +362,7 @@ Vue.component('v-select',vSelect);
             this.clearSelected1=1;
             }, 
             prestaciones(prestaciones){
+                let me=this;
                 this.idprestaciones=[];
                 for (const key in prestaciones) {
                     if (prestaciones.hasOwnProperty(key)) {
@@ -369,6 +371,7 @@ Vue.component('v-select',vSelect);
                         this.idprestaciones.push(element);
                     }
                 }
+                me.preciofinal=this.idprestaciones[3];
                 //console.log(this.idprestaciones);
             },
             clientes(clientes){
@@ -447,16 +450,27 @@ Vue.component('v-select',vSelect);
             },
             registrarVenta(){
                 let me=this;
-                axios.put('/ventas/registrarventa',{
+                axios.post('/ventamaestro/registrarventamaestro',{
+                    'idcliente':me.idclientes[1],
+                    'total':me.sumatotal,
+                    'efectivo':me.efectivo,
+                    'cambio':me.cambio
+
                         
                     }).then(function (response) {
-                        
-                        /* swalWithBootstrapButtons.fire(
-                            'Desactivado!',
-                            'El registro a sido desactivado Correctamente',
-                            'success'
-                        ) */
-                        me.listarVenta();
+                        //console.log(response);
+                        if(response.data=='correcto')
+                        {
+                            //console.log('correcto');
+                            Swal.fire('Registrado Correctamente');
+                            me.listarVenta();
+                            me.arrayVentas=[];
+                            me.clearSelected1;
+                            me.cambio=0;
+                            me.efectivo=0;
+                            me.preciofinal=0;
+                            me.clearSelected;
+                         }
                         
                     }).catch(function (error) {
                         console.log(error);

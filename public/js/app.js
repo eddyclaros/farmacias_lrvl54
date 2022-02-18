@@ -3745,26 +3745,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
   computed: {
     sicancelado: function sicancelado() {
       var me = this;
-      me.preciofinal = Number(me.sumatotal);
+      me.sumatotal = Number(me.sumatotal);
       me.efectivo = Number(me.efectivo);
-      if (me.efectivo < me.sumatotal) return true;else return false;
-    },
-    presfinal: function presfinal() {
-      var me = this;
-
-      if (me.idprestaciones.length > 0) {
-        if (me.descuentoSelected != 0) {
-          var respuesta = me.arrayDescuentos.find(function (element) {
-            return element.id == me.descuentoSelected;
-          }); //console.log(respuesta)
-
-          var descuento = respuesta.monto;
-          var siporcentaje = respuesta.siporcentaje;
-          var precio = Number(me.idprestaciones[3]); //console.log(precio,descuento);
-
-          if (siporcentaje) me.preciofinal = Number(precio - (precio * (descuento / 100)).toFixed(2));else me.preciofinal = precio - descuento;
-        } else me.preciofinal = me.idprestaciones[3];
-      } else me.preciofinal = 0;
+      if (me.efectivo < me.sumatotal) return false;else return true;
     },
     siarealesected: function siarealesected() {
       var me = this;
@@ -3809,6 +3792,23 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     }
   },
   methods: {
+    presfinal: function presfinal() {
+      var me = this;
+
+      if (me.idprestaciones.length > 0) {
+        if (me.descuentoSelected != 0) {
+          var respuesta = me.arrayDescuentos.find(function (element) {
+            return element.id == me.descuentoSelected;
+          }); //console.log(respuesta)
+
+          var descuento = respuesta.monto;
+          var siporcentaje = respuesta.siporcentaje;
+          var precio = Number(me.idprestaciones[3]); //console.log(precio,descuento);
+
+          if (siporcentaje) me.preciofinal = Number(precio - (precio * (descuento / 100)).toFixed(2));else me.preciofinal = precio - descuento;
+        } else me.preciofinal = me.idprestaciones[3];
+      } else me.preciofinal = 0;
+    },
     restartotal: function restartotal() {
       var me = this;
       if (me.efectivo != 0) me.cambio = Number(me.efectivo - me.sumatotal);else me.cambio = 0;
@@ -3834,6 +3834,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       this.clearSelected1 = 1;
     },
     prestaciones: function prestaciones(_prestaciones) {
+      var me = this;
       this.idprestaciones = [];
 
       for (var key in _prestaciones) {
@@ -3842,8 +3843,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
           this.idprestaciones.push(element);
         }
-      } //console.log(this.idprestaciones);
+      }
 
+      me.preciofinal = this.idprestaciones[3]; //console.log(this.idprestaciones);
     },
     clientes: function clientes(_clientes) {
       this.idcientes = [];
@@ -3912,13 +3914,24 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     },
     registrarVenta: function registrarVenta() {
       var me = this;
-      axios.put('/ventas/registrarventa', {}).then(function (response) {
-        /* swalWithBootstrapButtons.fire(
-            'Desactivado!',
-            'El registro a sido desactivado Correctamente',
-            'success'
-        ) */
-        me.listarVenta();
+      axios.post('/ventamaestro/registrarventamaestro', {
+        'idcliente': me.idclientes[1],
+        'total': me.sumatotal,
+        'efectivo': me.efectivo,
+        'cambio': me.cambio
+      }).then(function (response) {
+        //console.log(response);
+        if (response.data == 'correcto') {
+          //console.log('correcto');
+          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Registrado Correctamente');
+          me.listarVenta();
+          me.arrayVentas = [];
+          me.clearSelected1;
+          me.cambio = 0;
+          me.efectivo = 0;
+          me.preciofinal = 0;
+          me.clearSelected;
+        }
       })["catch"](function (error) {
         console.log(error);
       });
@@ -46334,7 +46347,9 @@ var render = function () {
               ),
               _vm._v(" "),
               _vm.idprestaciones.length > 0
-                ? _c("td", [_vm._v(_vm._s(_vm.idprestaciones[3]) + " Bs.")])
+                ? _c("td", { on: { change: _vm.presfinal } }, [
+                    _vm._v(_vm._s(_vm.idprestaciones[3]) + " Bs."),
+                  ])
                 : _c("td", [_vm._v("-")]),
               _vm._v(" "),
               _c("td", [
@@ -46365,9 +46380,7 @@ var render = function () {
                             ? $$selectedVal
                             : $$selectedVal[0]
                         },
-                        function ($event) {
-                          return _vm.listarVenta()
-                        },
+                        _vm.presfinal,
                       ],
                     },
                   },
@@ -46556,7 +46569,7 @@ var render = function () {
                               attrs: {
                                 ruta: "/clientes/selectclientes?buscar=",
                                 resp_ruta: "clientes",
-                                labels: "nombres",
+                                labels: "nom",
                                 placeholder: "Ingrese Texto...",
                                 idtabla: "id",
                                 id: _vm.idclienteselected,
@@ -63275,7 +63288,7 @@ function _mf36265_25421(arrayformulas, capitalin, cuo, interesin, interesdifin, 
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\Desarrollo_Eddy_Claros\farmacia5_4\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\proyectos\farmacia5_4\resources\js\app.js */"./resources/js/app.js");
 
 
 /***/ })

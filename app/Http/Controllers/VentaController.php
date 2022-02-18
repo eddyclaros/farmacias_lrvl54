@@ -38,12 +38,11 @@ class VentaController extends Controller
     {
         $venta = new Venta();
 
-        $venta->num_documento=1;
-        $venta->tipodocumento=1;
+        
         $venta->idprestacion=$request->idprestacion;
         $venta->iddescuento=$request->iddescuento;
         $venta->monto_cancelado=$request->monto_cancelado;
-        $venta->idcliente=1;
+        $venta->idventamaestro=1;
         $venta->idusuario=1;
         $venta->idsucursal=1;
         $venta->save();
@@ -124,12 +123,6 @@ class VentaController extends Controller
         $venta->estado=2;
         $venta->save();
     }
-    public function registrarVenta()
-    {
-        //$venta=Venta::
-        DB::table('ventas')
-                ->where('estado', 0)
-                ->update(['estado' => 1]);
-    }
+    
 
 }

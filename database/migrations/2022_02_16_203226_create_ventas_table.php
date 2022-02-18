@@ -15,12 +15,10 @@ class CreateVentasTable extends Migration
     {
         Schema::create('ventas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('num_documento')->unsigned();
-            $table->tinyinteger('tipodocumento')->unsigned();
             $table->bigInteger('idprestacion')->unsigned();
             $table->bigInteger('iddescuento')->unsigned()->nullable();
             $table->decimal('monto_cancelado');
-            $table->biginteger('idcliente');
+            $table->biginteger('idventamaestro')->nullable();
             $table->integer('idusuario');
             $table->tinyInteger('estado')->default(0)->comment('0->en proceso,1->venta correcta,2->venta cancelada eliminada');
             $table->bigInteger('idsucursal');

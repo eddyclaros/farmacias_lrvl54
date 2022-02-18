@@ -45,6 +45,8 @@ Route::post('/ventas/registrar', 'VentaController@store');
 Route::put('/ventas/desactivar', 'VentaController@desactivar');
 Route::put('/ventas/registrarventa', 'VentaController@registrarVenta');
 
+Route::post('/ventamaestro/registrarventamaestro', 'VentaMaestroController@store');
+
 //////////////////*****Conexion con base de datos db_farma******///////////////////// */
 Route::get('/clientes','ClientesController@index');
 Route::get('/clientes/selectclientes','ClientesController@selectClientes');
