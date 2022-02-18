@@ -10,48 +10,74 @@
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Areas
-                    <button type="button" class="btn btn-secondary" @click="abrirModal('registrar')">
+                    <i class="fa fa-align-justify"></i> Historial de Ventas
+                    <!-- <button type="button" class="btn btn-secondary" @click="abrirModal('registrar')">
                         <i class="icon-plus"></i>&nbsp;Nuevo
-                    </button>
+                    </button> -->
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class="form-control-label" for="date-input">Fecha Inicial:</label>
+                            <input class="form-control" 
+                                type="date" v-model="fechainicio"
+                                :max="fechafin"
+                                :min="fechamin">
+                            <span class="text-error" v-if="!verificarfechainicio">La Fecha debe ser menor a la fecha actual o fecha final</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-control-label" for="date-input">Fecha Final:</label>
+                            <input class="form-control" 
+                                type="date" v-model="fechafin"
+                                :max="fechahoy"
+                                :min="fechainicio">
+                            <span class="text-error" v-if="!verificarfechafin">La Fecha debe ser menor a la fecha actual</span>
+                        </div>
                         <div class="col-md-6">
-                            <div class="input-group">
-                                <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar"  @keyup.enter="listarAreas(1)">
-                                <button type="submit" class="btn btn-primary" @click="listarAreas(1)"><i class="fa fa-search" ></i> Buscar</button>
+                            <div class="form-group row">
+                                <label class="form-control-label">Buscador:</label>
+                                <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar"  @keyup.enter="listarVentas(1)">
+                                <button type="submit" class="btn btn-primary" @click="listarVentas(1)"><i class="fa fa-search" ></i> Buscar</button>
                             </div>
+                            
+                            
                         </div>
                     </div>
+                    
                     <table class="table table-bordered table-striped table-sm">
                         <thead>
                             <tr>
                                 <th>Opciones</th>
-                                <th>Codigo</th>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
+                                <th>Usuario</th>
+                                <th>Fecha Venta</th>
+                                <th>Cliente</th>
+                                <th>Precio Total</th>
+                                <th>Efectivo</th>
+                                <th>Cambio</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="area in arrayAreas" :key="area.id">
+                            <tr v-for="venta in arrayVentas" :key="venta.id">
                                 <td>
-                                    <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('actualizar',area)">
-                                        <i class="icon-pencil"></i>
+                                    <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('detalle',venta)">
+                                        <i class="icon-eye"></i>
                                     </button> &nbsp;
-                                    <button v-if="area.activo==1" type="button" class="btn btn-danger btn-sm" @click="eliminarArea(area.id)" >
+                                    <button v-if="venta.activo==1" type="button" class="btn btn-danger btn-sm" @click="eliminarVenta(venta.id)" >
                                         <i class="icon-trash"></i>
                                     </button>
-                                    <button v-else type="button" class="btn btn-info btn-sm" @click="activarArea(area.id)" >
+                                    <button v-else type="button" class="btn btn-info btn-sm" @click="activarVenta(venta.id)" >
                                         <i class="icon-check"></i>
                                     </button>
                                 </td>
-                                <td v-text="area.codigo"></td>
-                                <td v-text="area.nombre"></td>
-                                <td v-text="area.descripcion"></td>
+                                <td>Admin</td>
+                                <td v-text="venta.created_at"></td>
+                                <td v-text="venta.nombres"></td>
+                                <td v-text="venta.total +' Bs.'" style="text-align:right"></td>
+                                <td v-text="venta.efectivo +' Bs.'" style="text-align:right"></td>
+                                <td v-text="venta.cambio +' Bs.'" style="text-align:right"></td>
                                 <td>
-                                    <div v-if="area.activo==1">
+                                    <div v-if="venta.activo==1">
                                         <span class="badge badge-success">Activo</span>
                                     </div>
                                     <div v-else>
@@ -59,6 +85,10 @@
                                     </div>
                                     
                                 </td>
+                            </tr>
+                            <tr>
+                                <th colspan="4" style="text-align:right">Suma Total:</th>
+                                <th style="text-align:right">{{sumatotal}} &nbsp;Bs.</th>
                             </tr>
                            
                         </tbody>
@@ -81,37 +111,71 @@
             <!-- Fin ejemplo de tabla Listado -->
         </div>
         <!--Inicio del modal agregar/actualizar-->
-        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="registrar" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="detalle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-primary modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">{{ tituloModal }}</h4>
-                        <button type="button" class="close"  aria-label="Close" @click="cerrarModal('registrar')">
+                        <button type="button" class="close"  aria-label="Close" @click="cerrarModal('detalle')">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Nombre <span  v-if="!sicompleto" class="error">(*)</span></label>
-                                <div class="col-md-9">
-                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del Area" v-model="nombre" v-on:focus="selectAll" >
-                                    <span  v-if="!sicompleto" class="error">Debe Ingresar el Nombre del Area</span>
+                                <div class="col-md-12">
+                                    <table class="table">
+                                    <tr style="background-color: antiquewhite;">
+                                        <td ><b>Cliente:</b> <br />  {{ cliente }}</td>
+                                        <td ><b>Fecha de Venta:</b> <br />  {{ fechaventa }}</td>
+                                    </tr>
+                                    </table>
+                                    <table class="table table-bordered table-striped table-sm">
+                                    
+                                    
+                                        <tr style="background-color: bisque;">
+                                            <th>#</th>
+                                            <th>Codigo</th>
+                                            <th>Prestacion</th>
+                                            <th>Precio</th>
+                                            <th>Descuento</th>
+                                            <th>Total Cancelado</th>
+                                        </tr>
+                                        <tr v-for="ventadetalle in arrayVentasDetalle" :key="ventadetalle.id">
+                                            <td>1</td>
+                                            <td v-text="ventadetalle.cod"></td>
+                                            <td v-text="ventadetalle.nompres"></td>
+                                            <td v-text="ventadetalle.precio + ' Bs.'" style="text-align:right"></td>
+                                            <td v-text="ventadetalle.descuento"></td>
+                                            <td v-text="ventadetalle.monto_cancelado + ' Bs.'" style="text-align:right"></td>
+                                        </tr>
+                                        <tr style="background-color: lightblue;">
+                                            <td colspan="5" style="text-align:right"><b>Venta Total:</b> </td>
+                                            <td style="text-align:right">{{ ventatotal + ' Bs.' }}</td>
+                                        </tr>
+                                        <tr style="background-color: lightgoldenrodyellow;">
+                                            <td colspan="5" style="text-align:right"><b>Efectivo:</b> </td>
+                                            <td style="text-align:right">{{ efectivo + ' Bs.' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5" style="text-align:right"><b>Cambio:</b> </td>
+                                            <td style="text-align:right">{{ cambio + ' Bs.' }}</td>
+                                        </tr>
+
+                                        
+
+                                    </table>
+
                                 </div>
-                            </div>
-                            
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Descripción</label>
-                                <div class="col-md-9">
-                                    <input type="text" id="descripcion" name="descripcion" class="form-control" placeholder="Ingrese una Descripción" v-model="descripcion" v-on:focus="selectAll">
-                                </div>
+                                
+                                
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary"  @click="cerrarModal('registrar')">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarArea()" :disabled="!sicompleto">Guardar</button>
-                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarArea()">Actualizar</button>
+                        <button type="button" class="btn btn-secondary"  @click="cerrarModal('detalle')">Cerrar</button>
+                        <!-- <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarArea()" :disabled="!sicompleto">Guardar</button>
+                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarArea()">Actualizar</button> -->
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -143,16 +207,49 @@ import Swal from 'sweetalert2'
                 descripcion:'',
                 codigo:'',
                 correlativo:0,
-                arrayAreas:[],
+                arrayVentas:[],
                 tituloModal:'',
                 tipoAccion:1,
                 idarea:'',
-                buscar:''
+                buscar:'',
+
+                fechainicio:'',
+                fechafin:'',
+                fechamin:'',
+                anio:'',
+                mes:'',
+                dia:'',
+                fechahoy:'',
+                sumatotal:0,
+                fechaventa:'',
+                cliente:'',
+                ventatotal:0,
+                efectivo:0,
+                cambio:0,
+                arrayVentasDetalle:[],
+                contador:0,
+
                 
             }
 
         },
         computed:{
+            verificarfechainicio:function(){
+                let me=this;
+                var correcto=true;
+                if(me.fechainicio>me.fechahoy || me.fechainicio>me.fechafin)
+                    correcto=false;    
+                return correcto
+
+            },
+            verificarfechafin:function(){
+                let me=this;
+                var correcto=true;
+                if(me.fechafin>me.fechahoy || me.fechafin<me.fechainicio)
+                    correcto=false;    
+                return correcto
+
+            },
             sicompleto(){
                 let me=this;
                 if (me.nombre!='')
@@ -186,17 +283,42 @@ import Swal from 'sweetalert2'
 
         },
         methods :{
-            listarAreas(page){
+            obtenerfecha(valor){
+                let me = this;
+                var url= '/obtenerfecha';
+                axios.get(url).then(function (response) {
+                    var respuesta= response.data; 
+                    me.fechaactual=respuesta[0].fecha;
+                    
+                    
+                    var arrayfechas = me.fechaactual.split("-");
+                    me.anio=arrayfechas[0];//año
+                    me.mes=arrayfechas[1];//mes
+                    me.dia=arrayfechas[2];//dia
+                    me.fechainicio=me.fechaactual;
+                    me.fechafin=me.fechaactual;
+                    me.fechahoy=me.fechaactual;
+                    if(valor==1)
+                     me.listarVentas(1);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+                
+                
+                //me.fechafactura=me.fechaactual;
+            },
+            listarVentas(page){
                 let me=this;
-                var url='/area?page='+page+'&buscar='+me.buscar;
+                var url='/ventasmaestro?page='+page+'&buscar='+me.buscar+'&fechainicio='+me.fechainicio+'&fechafin='+me.fechafin;
                 axios.get(url).then(function(response){
                     var respuesta=response.data;
                     //console.log(respuesta.areas);
                     me.pagination=respuesta.pagination;
                     //console.log(me.areas.data);
-                    me.arrayAreas=respuesta.areas.data;
-                    me.correlativo=respuesta.maxcorrelativo[0].maximo;
-                    //console.log(me.arrayAreas);
+                    me.arrayVentas=respuesta.ventamaestro.data;
+                    me.sumatotal=respuesta.sumatotal;
+                    //console.log(me.arrayVentas);
                 })
                 .catch(function(error){
                     console.log(error);
@@ -205,32 +327,10 @@ import Swal from 'sweetalert2'
             cambiarPagina(page){
                 let me =this;
                 me.pagination.current_page = page;
-                me.listarAreas(page);
+                me.listarVentas(page);
             },
-            registrarArea(){
-                let me = this;
-                if(me.correlativo=='')
-                    me.correlativo=1;
-                else
-                    me.correlativo++;
-                
-                if(me.correlativo<10)
-                    me.codigo='0'+me.correlativo;
-
-                axios.post('/area/registrar',{
-                    'nombre':me.nombre,
-                    'descripcion':me.descripcion,
-                    'codigo':me.codigo,
-                    'correlativo':me.correlativo
-                }).then(function(response){
-                    me.cerrarModal('registrar');
-                    me.listarAreas();
-                }).catch(function(error){
-                    console.log(error);
-                });
-
-            },
-            eliminarArea(idarea){
+            
+            eliminarVenta(idventamaestro){
                 let me=this;
                 //console.log("prueba");
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -251,8 +351,8 @@ import Swal from 'sweetalert2'
                 reverseButtons: true
                 }).then((result) => {
                 if (result.isConfirmed) {
-                     axios.put('/area/desactivar',{
-                        'id': idarea
+                     axios.put('/ventasmaestro/desactivar',{
+                        'id': idventamaestro
                     }).then(function (response) {
                         
                         swalWithBootstrapButtons.fire(
@@ -260,7 +360,7 @@ import Swal from 'sweetalert2'
                             'El registro a sido desactivado Correctamente',
                             'success'
                         )
-                        me.listarAreas();
+                        me.listarVentas();
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -279,7 +379,7 @@ import Swal from 'sweetalert2'
                 }
                 })
             },
-            activarArea(idarea){
+            activarVenta(idventamaestro){
                 let me=this;
                 //console.log("prueba");
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -300,8 +400,8 @@ import Swal from 'sweetalert2'
                 reverseButtons: true
                 }).then((result) => {
                 if (result.isConfirmed) {
-                     axios.put('/area/activar',{
-                        'id': idarea
+                     axios.put('/ventasmaestro/activar',{
+                        'id': idventamaestro
                     }).then(function (response) {
                         
                         swalWithBootstrapButtons.fire(
@@ -309,7 +409,7 @@ import Swal from 'sweetalert2'
                             'El registro a sido Activado Correctamente',
                             'success'
                         )
-                        me.listarAreas();
+                        me.listarVentas();
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -328,40 +428,32 @@ import Swal from 'sweetalert2'
                 }
                 })
             },
-            actualizarArea(){
-               // const Swal = require('sweetalert2')
-                let me =this;
-                axios.put('/area/actualizar',{
-                    'id':me.idarea,
-                    'nombre':me.nombre,
-                    'descripcion':me.descripcion,
-                    
-                }).then(function (response) {
-                    if(response.data.length){
-                    }
-                    // console.log(response)
-                    else{
-                            Swal.fire('Actualizado Correctamente')
-
-                        me.listarAreas();
-                    } 
-                }).catch(function (error) {
-                   
-                });
-                me.cerrarModal('registrar');
-
-
-            },
+            
             abrirModal(accion,data= []){
                 let me=this;
                 switch(accion){
-                    case 'registrar':
+                    case 'detalle':
                     {
-                        me.tituloModal='Registar Area'
-                        me.tipoAccion=1;
-                        me.nombre='';
-                        me.descripcion='';
-                        me.classModal.openModal('registrar');
+                        let me=this;
+                        var url='/ventas/detalle?id='+data.id;
+                        axios.get(url).then(function(response){
+                            var respuesta=response.data;
+                            me.arrayVentasDetalle=respuesta;
+                            me.tituloModal='Detalle Venta'
+                            me.fechaventa=data.created_at;
+                            me.cliente=data.nombres;
+                            me.ventatotal=data.total;
+                            me.efectivo=data.efectivo;
+                            me.cambio=data.cambio;
+                            me.contador=0;
+                            me.classModal.openModal('detalle');
+
+                        })
+                        .catch(function(error){
+                            console.log(error);
+                        });
+                        
+                        
                         break;
                     }
                     
@@ -382,9 +474,12 @@ import Swal from 'sweetalert2'
             cerrarModal(accion){
                 let me = this;
                 me.classModal.closeModal(accion);
-                me.nombre='';
-                me.descripcion='';
-                me.tipoAccion=1;
+                me.fechaventa='';
+                me.cliente='';
+                me.ventatotal='';
+                me.efectivo='';
+                me.cambio='';
+                me.contador=0;
                 
             },
             selectAll: function (event) {
@@ -396,9 +491,12 @@ import Swal from 'sweetalert2'
 
         },
         mounted() {
-            this.listarAreas(1);
+            
+            this.obtenerfecha(1);
+            
             this.classModal = new _pl.Modals();
-            this.classModal.addModal('registrar');
+            this.classModal.addModal('detalle');
+            //this.listarVentas(1);
             //console.log('Component mounted.')
         }
     }

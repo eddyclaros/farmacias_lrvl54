@@ -157,4 +157,12 @@ class DescuentoController extends Controller
         
 
     }
+    public function obtenerFecha()
+    {
+        
+        
+        return  DB::select('select curdate() as fecha');     
+        
+
+    }
 }

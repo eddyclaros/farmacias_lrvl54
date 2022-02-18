@@ -3194,6 +3194,70 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
  //Vue.use(VeeValidate);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3212,14 +3276,41 @@ __webpack_require__.r(__webpack_exports__);
       descripcion: '',
       codigo: '',
       correlativo: 0,
-      arrayAreas: [],
+      arrayVentas: [],
       tituloModal: '',
       tipoAccion: 1,
       idarea: '',
-      buscar: ''
+      buscar: '',
+      fechainicio: '',
+      fechafin: '',
+      fechamin: '',
+      anio: '',
+      mes: '',
+      dia: '',
+      fechahoy: '',
+      sumatotal: 0,
+      fechaventa: '',
+      cliente: '',
+      ventatotal: 0,
+      efectivo: 0,
+      cambio: 0,
+      arrayVentasDetalle: [],
+      contador: 0
     };
   },
   computed: {
+    verificarfechainicio: function verificarfechainicio() {
+      var me = this;
+      var correcto = true;
+      if (me.fechainicio > me.fechahoy || me.fechainicio > me.fechafin) correcto = false;
+      return correcto;
+    },
+    verificarfechafin: function verificarfechafin() {
+      var me = this;
+      var correcto = true;
+      if (me.fechafin > me.fechahoy || me.fechafin < me.fechainicio) correcto = false;
+      return correcto;
+    },
     sicompleto: function sicompleto() {
       var me = this;
       if (me.nombre != '') return true;else return false;
@@ -3255,16 +3346,37 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    listarAreas: function listarAreas(page) {
+    obtenerfecha: function obtenerfecha(valor) {
       var me = this;
-      var url = '/area?page=' + page + '&buscar=' + me.buscar;
+      var url = '/obtenerfecha';
+      axios.get(url).then(function (response) {
+        var respuesta = response.data;
+        me.fechaactual = respuesta[0].fecha;
+        var arrayfechas = me.fechaactual.split("-");
+        me.anio = arrayfechas[0]; //año
+
+        me.mes = arrayfechas[1]; //mes
+
+        me.dia = arrayfechas[2]; //dia
+
+        me.fechainicio = me.fechaactual;
+        me.fechafin = me.fechaactual;
+        me.fechahoy = me.fechaactual;
+        if (valor == 1) me.listarVentas(1);
+      })["catch"](function (error) {
+        console.log(error);
+      }); //me.fechafactura=me.fechaactual;
+    },
+    listarVentas: function listarVentas(page) {
+      var me = this;
+      var url = '/ventasmaestro?page=' + page + '&buscar=' + me.buscar + '&fechainicio=' + me.fechainicio + '&fechafin=' + me.fechafin;
       axios.get(url).then(function (response) {
         var respuesta = response.data; //console.log(respuesta.areas);
 
         me.pagination = respuesta.pagination; //console.log(me.areas.data);
 
-        me.arrayAreas = respuesta.areas.data;
-        me.correlativo = respuesta.maxcorrelativo[0].maximo; //console.log(me.arrayAreas);
+        me.arrayVentas = respuesta.ventamaestro.data;
+        me.sumatotal = respuesta.sumatotal; //console.log(me.arrayVentas);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -3272,25 +3384,9 @@ __webpack_require__.r(__webpack_exports__);
     cambiarPagina: function cambiarPagina(page) {
       var me = this;
       me.pagination.current_page = page;
-      me.listarAreas(page);
+      me.listarVentas(page);
     },
-    registrarArea: function registrarArea() {
-      var me = this;
-      if (me.correlativo == '') me.correlativo = 1;else me.correlativo++;
-      if (me.correlativo < 10) me.codigo = '0' + me.correlativo;
-      axios.post('/area/registrar', {
-        'nombre': me.nombre,
-        'descripcion': me.descripcion,
-        'codigo': me.codigo,
-        'correlativo': me.correlativo
-      }).then(function (response) {
-        me.cerrarModal('registrar');
-        me.listarAreas();
-      })["catch"](function (error) {
-        console.log(error);
-      });
-    },
-    eliminarArea: function eliminarArea(idarea) {
+    eliminarVenta: function eliminarVenta(idventamaestro) {
       var me = this; //console.log("prueba");
 
       var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
@@ -3310,11 +3406,11 @@ __webpack_require__.r(__webpack_exports__);
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          axios.put('/area/desactivar', {
-            'id': idarea
+          axios.put('/ventasmaestro/desactivar', {
+            'id': idventamaestro
           }).then(function (response) {
             swalWithBootstrapButtons.fire('Desactivado!', 'El registro a sido desactivado Correctamente', 'success');
-            me.listarAreas();
+            me.listarVentas();
           })["catch"](function (error) {
             console.log(error);
           });
@@ -3329,7 +3425,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    activarArea: function activarArea(idarea) {
+    activarVenta: function activarVenta(idventamaestro) {
       var me = this; //console.log("prueba");
 
       var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
@@ -3349,11 +3445,11 @@ __webpack_require__.r(__webpack_exports__);
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          axios.put('/area/activar', {
-            'id': idarea
+          axios.put('/ventasmaestro/activar', {
+            'id': idventamaestro
           }).then(function (response) {
             swalWithBootstrapButtons.fire('Activado!', 'El registro a sido Activado Correctamente', 'success');
-            me.listarAreas();
+            me.listarVentas();
           })["catch"](function (error) {
             console.log(error);
           });
@@ -3368,34 +3464,31 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    actualizarArea: function actualizarArea() {
-      // const Swal = require('sweetalert2')
-      var me = this;
-      axios.put('/area/actualizar', {
-        'id': me.idarea,
-        'nombre': me.nombre,
-        'descripcion': me.descripcion
-      }).then(function (response) {
-        if (response.data.length) {} // console.log(response)
-        else {
-          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Actualizado Correctamente');
-          me.listarAreas();
-        }
-      })["catch"](function (error) {});
-      me.cerrarModal('registrar');
-    },
     abrirModal: function abrirModal(accion) {
       var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
       var me = this;
 
       switch (accion) {
-        case 'registrar':
+        case 'detalle':
           {
-            me.tituloModal = 'Registar Area';
-            me.tipoAccion = 1;
-            me.nombre = '';
-            me.descripcion = '';
-            me.classModal.openModal('registrar');
+            var _me = this;
+
+            var url = '/ventas/detalle?id=' + data.id;
+            axios.get(url).then(function (response) {
+              var respuesta = response.data;
+              _me.arrayVentasDetalle = respuesta;
+              _me.tituloModal = 'Detalle Venta';
+              _me.fechaventa = data.created_at;
+              _me.cliente = data.nombres;
+              _me.ventatotal = data.total;
+              _me.efectivo = data.efectivo;
+              _me.cambio = data.cambio;
+              _me.contador = 0;
+
+              _me.classModal.openModal('detalle');
+            })["catch"](function (error) {
+              console.log(error);
+            });
             break;
           }
 
@@ -3414,9 +3507,12 @@ __webpack_require__.r(__webpack_exports__);
     cerrarModal: function cerrarModal(accion) {
       var me = this;
       me.classModal.closeModal(accion);
-      me.nombre = '';
-      me.descripcion = '';
-      me.tipoAccion = 1;
+      me.fechaventa = '';
+      me.cliente = '';
+      me.ventatotal = '';
+      me.efectivo = '';
+      me.cambio = '';
+      me.contador = 0;
     },
     selectAll: function selectAll(event) {
       setTimeout(function () {
@@ -3425,9 +3521,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.listarAreas(1);
+    this.obtenerfecha(1);
     this.classModal = new _pl.Modals();
-    this.classModal.addModal('registrar'); //console.log('Component mounted.')
+    this.classModal.addModal('detalle'); //this.listarVentas(1);
+    //console.log('Component mounted.')
   }
 });
 
@@ -46082,31 +46179,100 @@ var render = function () {
     _vm._v(" "),
     _c("div", { staticClass: "container-fluid" }, [
       _c("div", { staticClass: "card" }, [
-        _c("div", { staticClass: "card-header" }, [
-          _c("i", { staticClass: "fa fa-align-justify" }),
-          _vm._v(" Areas\n                "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-secondary",
-              attrs: { type: "button" },
-              on: {
-                click: function ($event) {
-                  return _vm.abrirModal("registrar")
-                },
-              },
-            },
-            [
-              _c("i", { staticClass: "icon-plus" }),
-              _vm._v(" Nuevo\n                "),
-            ]
-          ),
-        ]),
+        _vm._m(1),
         _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
           _c("div", { staticClass: "form-group row" }, [
+            _c("div", { staticClass: "col-md-3" }, [
+              _c(
+                "label",
+                {
+                  staticClass: "form-control-label",
+                  attrs: { for: "date-input" },
+                },
+                [_vm._v("Fecha Inicial:")]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.fechainicio,
+                    expression: "fechainicio",
+                  },
+                ],
+                staticClass: "form-control",
+                attrs: { type: "date", max: _vm.fechafin, min: _vm.fechamin },
+                domProps: { value: _vm.fechainicio },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.fechainicio = $event.target.value
+                  },
+                },
+              }),
+              _vm._v(" "),
+              !_vm.verificarfechainicio
+                ? _c("span", { staticClass: "text-error" }, [
+                    _vm._v(
+                      "La Fecha debe ser menor a la fecha actual o fecha final"
+                    ),
+                  ])
+                : _vm._e(),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-3" }, [
+              _c(
+                "label",
+                {
+                  staticClass: "form-control-label",
+                  attrs: { for: "date-input" },
+                },
+                [_vm._v("Fecha Final:")]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.fechafin,
+                    expression: "fechafin",
+                  },
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "date",
+                  max: _vm.fechahoy,
+                  min: _vm.fechainicio,
+                },
+                domProps: { value: _vm.fechafin },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.fechafin = $event.target.value
+                  },
+                },
+              }),
+              _vm._v(" "),
+              !_vm.verificarfechafin
+                ? _c("span", { staticClass: "text-error" }, [
+                    _vm._v("La Fecha debe ser menor a la fecha actual"),
+                  ])
+                : _vm._e(),
+            ]),
+            _vm._v(" "),
             _c("div", { staticClass: "col-md-6" }, [
-              _c("div", { staticClass: "input-group" }, [
+              _c("div", { staticClass: "form-group row" }, [
+                _c("label", { staticClass: "form-control-label" }, [
+                  _vm._v("Buscador:"),
+                ]),
+                _vm._v(" "),
                 _c("input", {
                   directives: [
                     {
@@ -46132,7 +46298,7 @@ var render = function () {
                       ) {
                         return null
                       }
-                      return _vm.listarAreas(1)
+                      return _vm.listarVentas(1)
                     },
                     input: function ($event) {
                       if ($event.target.composing) {
@@ -46150,7 +46316,7 @@ var render = function () {
                     attrs: { type: "submit" },
                     on: {
                       click: function ($event) {
-                        return _vm.listarAreas(1)
+                        return _vm.listarVentas(1)
                       },
                     },
                   },
@@ -46164,84 +46330,122 @@ var render = function () {
             "table",
             { staticClass: "table table-bordered table-striped table-sm" },
             [
-              _vm._m(1),
+              _vm._m(2),
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(_vm.arrayAreas, function (area) {
-                  return _c("tr", { key: area.id }, [
-                    _c("td", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-warning btn-sm",
-                          attrs: { type: "button" },
-                          on: {
-                            click: function ($event) {
-                              return _vm.abrirModal("actualizar", area)
+                [
+                  _vm._l(_vm.arrayVentas, function (venta) {
+                    return _c("tr", { key: venta.id }, [
+                      _c("td", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-warning btn-sm",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function ($event) {
+                                return _vm.abrirModal("detalle", venta)
+                              },
                             },
                           },
+                          [_c("i", { staticClass: "icon-eye" })]
+                        ),
+                        _vm._v("  \n                                "),
+                        venta.activo == 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger btn-sm",
+                                attrs: { type: "button" },
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.eliminarVenta(venta.id)
+                                  },
+                                },
+                              },
+                              [_c("i", { staticClass: "icon-trash" })]
+                            )
+                          : _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-info btn-sm",
+                                attrs: { type: "button" },
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.activarVenta(venta.id)
+                                  },
+                                },
+                              },
+                              [_c("i", { staticClass: "icon-check" })]
+                            ),
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v("Admin")]),
+                      _vm._v(" "),
+                      _c("td", {
+                        domProps: { textContent: _vm._s(venta.created_at) },
+                      }),
+                      _vm._v(" "),
+                      _c("td", {
+                        domProps: { textContent: _vm._s(venta.nombres) },
+                      }),
+                      _vm._v(" "),
+                      _c("td", {
+                        staticStyle: { "text-align": "right" },
+                        domProps: { textContent: _vm._s(venta.total + " Bs.") },
+                      }),
+                      _vm._v(" "),
+                      _c("td", {
+                        staticStyle: { "text-align": "right" },
+                        domProps: {
+                          textContent: _vm._s(venta.efectivo + " Bs."),
                         },
-                        [_c("i", { staticClass: "icon-pencil" })]
-                      ),
-                      _vm._v("  \n                                "),
-                      area.activo == 1
-                        ? _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-danger btn-sm",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function ($event) {
-                                  return _vm.eliminarArea(area.id)
-                                },
-                              },
-                            },
-                            [_c("i", { staticClass: "icon-trash" })]
-                          )
-                        : _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-info btn-sm",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function ($event) {
-                                  return _vm.activarArea(area.id)
-                                },
-                              },
-                            },
-                            [_c("i", { staticClass: "icon-check" })]
-                          ),
-                    ]),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(area.codigo) },
-                    }),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(area.nombre) },
-                    }),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(area.descripcion) },
-                    }),
-                    _vm._v(" "),
-                    _c("td", [
-                      area.activo == 1
-                        ? _c("div", [
-                            _c("span", { staticClass: "badge badge-success" }, [
-                              _vm._v("Activo"),
+                      }),
+                      _vm._v(" "),
+                      _c("td", {
+                        staticStyle: { "text-align": "right" },
+                        domProps: {
+                          textContent: _vm._s(venta.cambio + " Bs."),
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("td", [
+                        venta.activo == 1
+                          ? _c("div", [
+                              _c(
+                                "span",
+                                { staticClass: "badge badge-success" },
+                                [_vm._v("Activo")]
+                              ),
+                            ])
+                          : _c("div", [
+                              _c(
+                                "span",
+                                { staticClass: "badge badge-warning" },
+                                [_vm._v("Desactivado")]
+                              ),
                             ]),
-                          ])
-                        : _c("div", [
-                            _c("span", { staticClass: "badge badge-warning" }, [
-                              _vm._v("Desactivado"),
-                            ]),
-                          ]),
+                      ]),
+                    ])
+                  }),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c(
+                      "th",
+                      {
+                        staticStyle: { "text-align": "right" },
+                        attrs: { colspan: "4" },
+                      },
+                      [_vm._v("Suma Total:")]
+                    ),
+                    _vm._v(" "),
+                    _c("th", { staticStyle: { "text-align": "right" } }, [
+                      _vm._v(_vm._s(_vm.sumatotal) + "  Bs."),
                     ]),
-                  ])
-                }),
-                0
+                  ]),
+                ],
+                2
               ),
             ]
           ),
@@ -46332,7 +46536,7 @@ var render = function () {
           tabindex: "-1",
           role: "dialog",
           "aria-labelledby": "myModalLabel",
-          id: "registrar",
+          id: "detalle",
           "aria-hidden": "true",
           "data-backdrop": "static",
           "data-keyboard": "false",
@@ -46359,7 +46563,7 @@ var render = function () {
                     attrs: { type: "button", "aria-label": "Close" },
                     on: {
                       click: function ($event) {
-                        return _vm.cerrarModal("registrar")
+                        return _vm.cerrarModal("detalle")
                       },
                     },
                   },
@@ -46384,97 +46588,137 @@ var render = function () {
                   },
                   [
                     _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "col-md-3 form-control-label",
-                          attrs: { for: "text-input" },
-                        },
-                        [
-                          _vm._v("Nombre "),
-                          !_vm.sicompleto
-                            ? _c("span", { staticClass: "error" }, [
-                                _vm._v("(*)"),
-                              ])
-                            : _vm._e(),
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
-                        _c("input", {
-                          directives: [
+                      _c("div", { staticClass: "col-md-12" }, [
+                        _c("table", { staticClass: "table" }, [
+                          _c(
+                            "tr",
                             {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.nombre,
-                              expression: "nombre",
+                              staticStyle: {
+                                "background-color": "antiquewhite",
+                              },
                             },
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "text",
-                            id: "nombre",
-                            name: "nombre",
-                            placeholder: "Nombre del Area",
-                          },
-                          domProps: { value: _vm.nombre },
-                          on: {
-                            focus: _vm.selectAll,
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.nombre = $event.target.value
-                            },
-                          },
-                        }),
+                            [
+                              _c("td", [
+                                _c("b", [_vm._v("Cliente:")]),
+                                _vm._v(" "),
+                                _c("br"),
+                                _vm._v("  " + _vm._s(_vm.cliente)),
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _c("b", [_vm._v("Fecha de Venta:")]),
+                                _vm._v(" "),
+                                _c("br"),
+                                _vm._v("  " + _vm._s(_vm.fechaventa)),
+                              ]),
+                            ]
+                          ),
+                        ]),
                         _vm._v(" "),
-                        !_vm.sicompleto
-                          ? _c("span", { staticClass: "error" }, [
-                              _vm._v("Debe Ingresar el Nombre del Area"),
-                            ])
-                          : _vm._e(),
-                      ]),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "col-md-3 form-control-label",
-                          attrs: { for: "text-input" },
-                        },
-                        [_vm._v("Descripción")]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.descripcion,
-                              expression: "descripcion",
-                            },
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "text",
-                            id: "descripcion",
-                            name: "descripcion",
-                            placeholder: "Ingrese una Descripción",
+                        _c(
+                          "table",
+                          {
+                            staticClass:
+                              "table table-bordered table-striped table-sm",
                           },
-                          domProps: { value: _vm.descripcion },
-                          on: {
-                            focus: _vm.selectAll,
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
+                          [
+                            _vm._m(3),
+                            _vm._v(" "),
+                            _vm._l(
+                              _vm.arrayVentasDetalle,
+                              function (ventadetalle) {
+                                return _c("tr", { key: ventadetalle.id }, [
+                                  _c("td", [_vm._v("1")]),
+                                  _vm._v(" "),
+                                  _c("td", {
+                                    domProps: {
+                                      textContent: _vm._s(ventadetalle.cod),
+                                    },
+                                  }),
+                                  _vm._v(" "),
+                                  _c("td", {
+                                    domProps: {
+                                      textContent: _vm._s(ventadetalle.nompres),
+                                    },
+                                  }),
+                                  _vm._v(" "),
+                                  _c("td", {
+                                    staticStyle: { "text-align": "right" },
+                                    domProps: {
+                                      textContent: _vm._s(
+                                        ventadetalle.precio + " Bs."
+                                      ),
+                                    },
+                                  }),
+                                  _vm._v(" "),
+                                  _c("td", {
+                                    domProps: {
+                                      textContent: _vm._s(
+                                        ventadetalle.descuento
+                                      ),
+                                    },
+                                  }),
+                                  _vm._v(" "),
+                                  _c("td", {
+                                    staticStyle: { "text-align": "right" },
+                                    domProps: {
+                                      textContent: _vm._s(
+                                        ventadetalle.monto_cancelado + " Bs."
+                                      ),
+                                    },
+                                  }),
+                                ])
                               }
-                              _vm.descripcion = $event.target.value
-                            },
-                          },
-                        }),
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "tr",
+                              {
+                                staticStyle: {
+                                  "background-color": "lightblue",
+                                },
+                              },
+                              [
+                                _vm._m(4),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticStyle: { "text-align": "right" } },
+                                  [_vm._v(_vm._s(_vm.ventatotal + " Bs."))]
+                                ),
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "tr",
+                              {
+                                staticStyle: {
+                                  "background-color": "lightgoldenrodyellow",
+                                },
+                              },
+                              [
+                                _vm._m(5),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticStyle: { "text-align": "right" } },
+                                  [_vm._v(_vm._s(_vm.efectivo + " Bs."))]
+                                ),
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("tr", [
+                              _vm._m(6),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                { staticStyle: { "text-align": "right" } },
+                                [_vm._v(_vm._s(_vm.cambio + " Bs."))]
+                              ),
+                            ]),
+                          ],
+                          2
+                        ),
                       ]),
                     ]),
                   ]
@@ -46489,44 +46733,12 @@ var render = function () {
                     attrs: { type: "button" },
                     on: {
                       click: function ($event) {
-                        return _vm.cerrarModal("registrar")
+                        return _vm.cerrarModal("detalle")
                       },
                     },
                   },
                   [_vm._v("Cerrar")]
                 ),
-                _vm._v(" "),
-                _vm.tipoAccion == 1
-                  ? _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-primary",
-                        attrs: { type: "button", disabled: !_vm.sicompleto },
-                        on: {
-                          click: function ($event) {
-                            return _vm.registrarArea()
-                          },
-                        },
-                      },
-                      [_vm._v("Guardar")]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.tipoAccion == 2
-                  ? _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-primary",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function ($event) {
-                            return _vm.actualizarArea()
-                          },
-                        },
-                      },
-                      [_vm._v("Actualizar")]
-                    )
-                  : _vm._e(),
               ]),
             ]),
           ]
@@ -46556,19 +46768,82 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("i", { staticClass: "fa fa-align-justify" }),
+      _vm._v(" Historial de Ventas\n                "),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
         _c("th", [_vm._v("Opciones")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Codigo")]),
+        _c("th", [_vm._v("Usuario")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Nombre")]),
+        _c("th", [_vm._v("Fecha Venta")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Descripción")]),
+        _c("th", [_vm._v("Cliente")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Precio Total")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Efectivo")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Cambio")]),
         _vm._v(" "),
         _c("th", [_vm._v("Estado")]),
       ]),
     ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", { staticStyle: { "background-color": "bisque" } }, [
+      _c("th", [_vm._v("#")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Codigo")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Prestacion")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Precio")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Descuento")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Total Cancelado")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "td",
+      { staticStyle: { "text-align": "right" }, attrs: { colspan: "5" } },
+      [_c("b", [_vm._v("Venta Total:")])]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "td",
+      { staticStyle: { "text-align": "right" }, attrs: { colspan: "5" } },
+      [_c("b", [_vm._v("Efectivo:")])]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "td",
+      { staticStyle: { "text-align": "right" }, attrs: { colspan: "5" } },
+      [_c("b", [_vm._v("Cambio:")])]
+    )
   },
 ]
 render._withStripped = true

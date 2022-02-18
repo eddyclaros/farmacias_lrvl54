@@ -123,6 +123,28 @@ class VentaController extends Controller
         $venta->estado=2;
         $venta->save();
     }
+    public function ventasDetalle(Request $request)
+    {
+        $id=$request->id;
+        $raw=DB::raw('concat(areas.codigo,prestacions.codigo) as cod');
+        $raw2=DB::raw('concat(descuentos.nombre," ",monto,IF(siporcentaje=1, "%", "Bs.")) as descuento');
+        $ventadetalle=Venta::select($raw,$raw2,
+                        'ventas.id as id',
+                        'prestacions.nombre as nompres',
+                        'prestacions.precio',
+                        'descuentos.nombre as nomdesc',
+                        'monto_cancelado',
+                        'estado')
+                        ->join('prestacions','prestacions.id','ventas.idprestacion')
+                        ->join('areas','areas.id','prestacions.idarea')
+                        ->leftjoin('descuentos','descuentos.id','ventas.iddescuento')
+                        ->where('estado',1)
+                        ->where('idventamaestro',$id)
+                        ->orderby('ventas.created_at','asc')
+                        ->get();
+        return $ventadetalle;
+
+    }
     
 
 }

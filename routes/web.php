@@ -44,8 +44,17 @@ Route::get('/ventas/listar','VentaController@ventasListar');
 Route::post('/ventas/registrar', 'VentaController@store');
 Route::put('/ventas/desactivar', 'VentaController@desactivar');
 Route::put('/ventas/registrarventa', 'VentaController@registrarVenta');
+Route::get('/ventas/detalle','VentaController@ventasDetalle');
 
 Route::post('/ventamaestro/registrarventamaestro', 'VentaMaestroController@store');
+Route::get('/ventasmaestro','VentaMaestroController@index');
+Route::put('/ventasmaestro/desactivar', 'VentaMaestroController@desactivar');
+Route::put('/ventasmaestro/registrarventa', 'VentaMaestroController@activar');
+
+
+Route::get('/obtenerfecha', 'DescuentoController@obtenerFecha');
+
+
 
 //////////////////*****Conexion con base de datos db_farma******///////////////////// */
 Route::get('/clientes','ClientesController@index');
