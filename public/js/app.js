@@ -3375,8 +3375,9 @@ __webpack_require__.r(__webpack_exports__);
 
         me.pagination = respuesta.pagination; //console.log(me.areas.data);
 
-        me.arrayVentas = respuesta.ventamaestro.data;
-        me.sumatotal = respuesta.sumatotal; //console.log(me.arrayVentas);
+        me.arrayVentas = respuesta.ventamaestro.data; //porcenit=Number((me.invoice_subtotal * me.porcentajeit).toFixed(2));
+
+        me.sumatotal = Number(respuesta.sumatotal.toFixed(2)); //console.log(me.arrayVentas);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -64591,7 +64592,7 @@ function _mf36265_25421(arrayformulas, capitalin, cuo, interesin, interesdifin, 
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\Desarrollo_Eddy_Claros\farmacia5_4\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\proyectos\farmacia5_4\resources\js\app.js */"./resources/js/app.js");
 
 
 /***/ })

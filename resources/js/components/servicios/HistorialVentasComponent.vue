@@ -317,7 +317,8 @@ import Swal from 'sweetalert2'
                     me.pagination=respuesta.pagination;
                     //console.log(me.areas.data);
                     me.arrayVentas=respuesta.ventamaestro.data;
-                    me.sumatotal=respuesta.sumatotal;
+                    //porcenit=Number((me.invoice_subtotal * me.porcentajeit).toFixed(2));
+                    me.sumatotal=Number((respuesta.sumatotal).toFixed(2));
                     //console.log(me.arrayVentas);
                 })
                 .catch(function(error){
