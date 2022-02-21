@@ -118,9 +118,14 @@
                                         idtabla="id"
                                         :id="idclienteselected"
                                         :clearable='true'>
-                                    </Ajaxselect></th>
+                                    </Ajaxselect>
+                                    <div class="col-md-1" style="padding-left: 0px;">
+                                        <button type="button" class="btn btn-primary" @click="abrirModalClientes()" >
+                                            <i class="icon-plus"></i>
+                                        </button>
+                                    </div></th>
                                 <th style="text-align:center">
-                                    <button type="submit" class="btn btn-success" @click="registrarVenta()" :disabled="arrayVentas.length==0 || idclientes.length==0 || !sicancelado">
+                                    <button type="submit" class="btn btn-success" @click="registrarVenta()" :disabled="arrayVentas.length==0 || !sicliente || !sicancelado">
                                         <i class="icon check" ></i> Registrar Venta
                                     </button>
                                 </th>
@@ -191,6 +196,61 @@
             <!-- /.modal-dialog -->
         </div>
         <!--Fin del modal-->
+        <!-- MODAL CLIENTE MODAL CLIENTE MODAL CLIENTE MODAL CLIENTE MODAL CLIENTE  -->
+        <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="cliente"  data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-primary">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Registro de cliente</h4>
+                        <button class="close" @click="cerrarModalCliente()">x</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <strong>Nombre cliente:</strong>
+                                <input type="text" class="form-control" v-model="nombre">
+                                <span class="error" v-if="nombre==''">Nombre de cliente no debe estar Vacio</span>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <strong>Apellido Paterno:</strong>
+                                <input type="text" class="form-control" v-model="apaterno">
+                                <span class="error" v-if="apaterno=='' && amaterno == '' ">Apellido no debe estar vacio</span>
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <strong>Apellido Materno</strong>
+                                <input type="text" class="form-control" v-model="amaterno">
+                                <span class="error" v-if="apaterno=='' && amaterno == '' ">Apellido no debe estar vacio</span>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <strong>CI:</strong>
+                                <input type="text" class="form-control" v-model="ci">
+                                <span class="error" v-if="ci==''">CI no debe estar vacio</span>
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <strong>NIT:</strong>
+                                <input type="text" class="form-control" v-model="nit">
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <strong>Teléfono:</strong>
+                                <input type="text" class="form-control" v-model="telefono">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="cerrarModalCliente()">Cerrar</button>
+                        <button :disabled="!iscompletecliente" class="btn btn-primary" @click="registrarCliente()">Guardar</button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- fin modal add cliente -->
         
         
     </main>
@@ -239,12 +299,26 @@ Vue.component('v-select',vSelect);
                 cambio:0,
 
                 idclientes:[],
-                idclienteselected:''
+                idclienteselected:'',
+                nombre:'',
+                apaterno:'',
+                amaterno:'',
+                ci:'',
+                telefono:'',
+                nit:''
                 
             }
 
         },
         computed:{
+            iscompletecliente(){
+                let me=this;
+                if (me.nombre!='' && (me.apaterno!='' || me.amaterno!='') && me.ci!='')
+                    return true;
+                else
+                    return false;
+
+            },
             sicancelado(){
                 let me=this;
                 me.sumatotal=Number(me.sumatotal);
@@ -253,6 +327,19 @@ Vue.component('v-select',vSelect);
                     return false
                 else
                     return true
+
+            },
+            sicliente(){
+                let me=this;
+                if(me.idclientes.length==0)
+                    if(me.idclienteselected =='')
+                        return false;
+                    else
+                        return true;
+                else
+                    return true;
+
+
 
             },
             
@@ -304,6 +391,28 @@ Vue.component('v-select',vSelect);
 
         },
         methods :{
+            abrirModalClientes(){
+                let me=this;
+                me.tituloModal='Registro de Clientes';
+                me.nombre='';
+                me.apaterno='';
+                me.amaterno='';
+                me.nit='';
+                me.ci='';
+                me.telefono='';
+                me.classModal.openModal('cliente');
+            },
+            cerrarModalCliente(){
+                let me = this;
+                me.classModal.closeModal('cliente');
+                me.nombre='';
+                me.apaterno='';
+                me.amaterno='';
+                me.nit='';
+                me.ci='';
+                me.telefono='';
+                
+            },
             presfinal(){
                 let me=this;
                 if(me.idprestaciones.length>0)
@@ -394,6 +503,7 @@ Vue.component('v-select',vSelect);
             },
             cleanclientes(){
                 this.idclientes=[];
+                this.idclienteselected='';
             
             },
             listarVenta(){
@@ -450,8 +560,14 @@ Vue.component('v-select',vSelect);
             },
             registrarVenta(){
                 let me=this;
+                let idclient
+                if(me.idclientes.length>0)
+                    idclient=me.idclientes[1];
+                else
+                    idclient=me.idclienteselected;
+
                 axios.post('/ventamaestro/registrarventamaestro',{
-                    'idcliente':me.idclientes[1],
+                    'idcliente':idclient,
                     'total':me.sumatotal,
                     'efectivo':me.efectivo,
                     'cambio':me.cambio
@@ -465,11 +581,42 @@ Vue.component('v-select',vSelect);
                             Swal.fire('Registrado Correctamente');
                             me.listarVenta();
                             me.arrayVentas=[];
-                            me.clearSelected1;
+                            me.clearSelected1=0;
+                            setTimeout(me.tiempo1, 100);
+                            me.idclienteselected='';
                             me.cambio=0;
                             me.efectivo=0;
                             me.preciofinal=0;
-                            me.clearSelected;
+                            me.clearSelected=0;
+                            setTimeout(me.tiempo,100);
+                         }
+                        
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+
+            },
+            registrarCliente(){
+                let me=this;
+                axios.post('/clientes/registrar',{
+                    'nombre':me.nombre,
+                    'apaterno':me.apaterno,
+                    'amaterno':me.amaterno,
+                    'ci':me.ci,
+                    'nit':me.nit,
+                    'telefono':me.telefono,
+
+                    }).then(function (response) {
+                        //console.log(response);
+                        if(response.data)
+                        {
+                            me.clearSelected1=0;
+                            setTimeout(me.tiempo1, 100);
+                            Swal.fire('Registrado Correctamente');
+                            me.cerrarModalCliente();
+                            
+                            
+                            me.idclienteselected=response.data
                          }
                         
                     }).catch(function (error) {
@@ -543,6 +690,7 @@ Vue.component('v-select',vSelect);
             this.listarVenta();
             this.classModal = new _pl.Modals();
             this.classModal.addModal('registrar');
+            this.classModal.addModal('cliente');
             //console.log('Component mounted.')
         }
     }

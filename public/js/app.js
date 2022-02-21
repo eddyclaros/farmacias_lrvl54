@@ -3975,6 +3975,68 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-select */ "./node_modules/vue-select/dist/vue-select.js");
 /* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_1__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4179,7 +4241,9 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
+    var _ref;
+
+    return _ref = {
       pagination: {
         'total': 0,
         'current_page': 0,
@@ -4214,14 +4278,24 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
       cambio: 0,
       idclientes: [],
       idclienteselected: ''
-    };
+    }, _defineProperty(_ref, "nombre", ''), _defineProperty(_ref, "apaterno", ''), _defineProperty(_ref, "amaterno", ''), _defineProperty(_ref, "ci", ''), _defineProperty(_ref, "telefono", ''), _defineProperty(_ref, "nit", ''), _ref;
   },
   computed: {
+    iscompletecliente: function iscompletecliente() {
+      var me = this;
+      if (me.nombre != '' && (me.apaterno != '' || me.amaterno != '') && me.ci != '') return true;else return false;
+    },
     sicancelado: function sicancelado() {
       var me = this;
       me.sumatotal = Number(me.sumatotal);
       me.efectivo = Number(me.efectivo);
       if (me.efectivo < me.sumatotal) return false;else return true;
+    },
+    sicliente: function sicliente() {
+      var me = this;
+      if (me.idclientes.length == 0) {
+        if (me.idclienteselected == '') return false;else return true;
+      } else return true;
     },
     siarealesected: function siarealesected() {
       var me = this;
@@ -4266,6 +4340,27 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     }
   },
   methods: {
+    abrirModalClientes: function abrirModalClientes() {
+      var me = this;
+      me.tituloModal = 'Registro de Clientes';
+      me.nombre = '';
+      me.apaterno = '';
+      me.amaterno = '';
+      me.nit = '';
+      me.ci = '';
+      me.telefono = '';
+      me.classModal.openModal('cliente');
+    },
+    cerrarModalCliente: function cerrarModalCliente() {
+      var me = this;
+      me.classModal.closeModal('cliente');
+      me.nombre = '';
+      me.apaterno = '';
+      me.amaterno = '';
+      me.nit = '';
+      me.ci = '';
+      me.telefono = '';
+    },
     presfinal: function presfinal() {
       var me = this;
 
@@ -4340,6 +4435,7 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     },
     cleanclientes: function cleanclientes() {
       this.idclientes = [];
+      this.idclienteselected = '';
     },
     listarVenta: function listarVenta() {
       var me = this;
@@ -4388,8 +4484,10 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     },
     registrarVenta: function registrarVenta() {
       var me = this;
+      var idclient;
+      if (me.idclientes.length > 0) idclient = me.idclientes[1];else idclient = me.idclienteselected;
       axios.post('/ventamaestro/registrarventamaestro', {
-        'idcliente': me.idclientes[1],
+        'idcliente': idclient,
         'total': me.sumatotal,
         'efectivo': me.efectivo,
         'cambio': me.cambio
@@ -4400,11 +4498,36 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
           sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Registrado Correctamente');
           me.listarVenta();
           me.arrayVentas = [];
-          me.clearSelected1;
+          me.clearSelected1 = 0;
+          setTimeout(me.tiempo1, 100);
+          me.idclienteselected = '';
           me.cambio = 0;
           me.efectivo = 0;
           me.preciofinal = 0;
-          me.clearSelected;
+          me.clearSelected = 0;
+          setTimeout(me.tiempo, 100);
+        }
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    registrarCliente: function registrarCliente() {
+      var me = this;
+      axios.post('/clientes/registrar', {
+        'nombre': me.nombre,
+        'apaterno': me.apaterno,
+        'amaterno': me.amaterno,
+        'ci': me.ci,
+        'nit': me.nit,
+        'telefono': me.telefono
+      }).then(function (response) {
+        //console.log(response);
+        if (response.data) {
+          me.clearSelected1 = 0;
+          setTimeout(me.tiempo1, 100);
+          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Registrado Correctamente');
+          me.cerrarModalCliente();
+          me.idclienteselected = response.data;
         }
       })["catch"](function (error) {
         console.log(error);
@@ -4462,7 +4585,8 @@ Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a); //
     this.selectDescuentos();
     this.listarVenta();
     this.classModal = new _pl.Modals();
-    this.classModal.addModal('registrar'); //console.log('Component mounted.')
+    this.classModal.addModal('registrar');
+    this.classModal.addModal('cliente'); //console.log('Component mounted.')
   }
 });
 
@@ -47797,6 +47921,29 @@ var render = function () {
                               },
                             })
                           : _vm._e(),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "col-md-1",
+                            staticStyle: { "padding-left": "0px" },
+                          },
+                          [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-primary",
+                                attrs: { type: "button" },
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.abrirModalClientes()
+                                  },
+                                },
+                              },
+                              [_c("i", { staticClass: "icon-plus" })]
+                            ),
+                          ]
+                        ),
                       ],
                       1
                     ),
@@ -47810,7 +47957,7 @@ var render = function () {
                             type: "submit",
                             disabled:
                               _vm.arrayVentas.length == 0 ||
-                              _vm.idclientes.length == 0 ||
+                              !_vm.sicliente ||
                               !_vm.sicancelado,
                           },
                           on: {
@@ -48181,6 +48328,263 @@ var render = function () {
             ]),
           ]
         ),
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          tabindex: "-1",
+          role: "dialog",
+          "aria-hidden": "true",
+          id: "cliente",
+          "data-backdrop": "static",
+          "data-keyboard": "false",
+        },
+      },
+      [
+        _c("div", { staticClass: "modal-dialog modal-primary" }, [
+          _c("div", { staticClass: "modal-content animated fadeIn" }, [
+            _c("div", { staticClass: "modal-header" }, [
+              _c("h4", { staticClass: "modal-title" }, [
+                _vm._v("Registro de cliente"),
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "close",
+                  on: {
+                    click: function ($event) {
+                      return _vm.cerrarModalCliente()
+                    },
+                  },
+                },
+                [_vm._v("x")]
+              ),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "form-group col-sm-6" }, [
+                  _c("strong", [_vm._v("Nombre cliente:")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.nombre,
+                        expression: "nombre",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.nombre },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.nombre = $event.target.value
+                      },
+                    },
+                  }),
+                  _vm._v(" "),
+                  _vm.nombre == ""
+                    ? _c("span", { staticClass: "error" }, [
+                        _vm._v("Nombre de cliente no debe estar Vacio"),
+                      ])
+                    : _vm._e(),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group col-sm-6" }, [
+                  _c("strong", [_vm._v("Apellido Paterno:")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.apaterno,
+                        expression: "apaterno",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.apaterno },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.apaterno = $event.target.value
+                      },
+                    },
+                  }),
+                  _vm._v(" "),
+                  _vm.apaterno == "" && _vm.amaterno == ""
+                    ? _c("span", { staticClass: "error" }, [
+                        _vm._v("Apellido no debe estar vacio"),
+                      ])
+                    : _vm._e(),
+                ]),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "form-group col-sm-6" }, [
+                  _c("strong", [_vm._v("Apellido Materno")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.amaterno,
+                        expression: "amaterno",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.amaterno },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.amaterno = $event.target.value
+                      },
+                    },
+                  }),
+                  _vm._v(" "),
+                  _vm.apaterno == "" && _vm.amaterno == ""
+                    ? _c("span", { staticClass: "error" }, [
+                        _vm._v("Apellido no debe estar vacio"),
+                      ])
+                    : _vm._e(),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group col-sm-6" }, [
+                  _c("strong", [_vm._v("CI:")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.ci,
+                        expression: "ci",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.ci },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.ci = $event.target.value
+                      },
+                    },
+                  }),
+                  _vm._v(" "),
+                  _vm.ci == ""
+                    ? _c("span", { staticClass: "error" }, [
+                        _vm._v("CI no debe estar vacio"),
+                      ])
+                    : _vm._e(),
+                ]),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "form-group col-sm-6" }, [
+                  _c("strong", [_vm._v("NIT:")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.nit,
+                        expression: "nit",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.nit },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.nit = $event.target.value
+                      },
+                    },
+                  }),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group col-sm-6" }, [
+                  _c("strong", [_vm._v("Teléfono:")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.telefono,
+                        expression: "telefono",
+                      },
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.telefono },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.telefono = $event.target.value
+                      },
+                    },
+                  }),
+                ]),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-secondary",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function ($event) {
+                      return _vm.cerrarModalCliente()
+                    },
+                  },
+                },
+                [_vm._v("Cerrar")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  attrs: { disabled: !_vm.iscompletecliente },
+                  on: {
+                    click: function ($event) {
+                      return _vm.registrarCliente()
+                    },
+                  },
+                },
+                [_vm._v("Guardar")]
+              ),
+            ]),
+          ]),
+        ]),
       ]
     ),
   ])
@@ -64592,7 +64996,7 @@ function _mf36265_25421(arrayformulas, capitalin, cuo, interesin, interesdifin, 
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\proyectos\farmacia5_4\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\Desarrollo_Eddy_Claros\farmacia_heroku\resources\js\app.js */"./resources/js/app.js");
 
 
 /***/ })

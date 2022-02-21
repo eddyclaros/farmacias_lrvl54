@@ -59,7 +59,7 @@ Route::get('/obtenerfecha', 'DescuentoController@obtenerFecha');
 //////////////////*****Conexion con base de datos db_farma******///////////////////// */
 Route::get('/clientes','ClientesController@index');
 Route::get('/clientes/selectclientes','ClientesController@selectClientes');
-
+Route::post('/clientes/registrar', 'ClientesController@store');
 
 
 

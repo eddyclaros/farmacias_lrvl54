@@ -17,7 +17,7 @@ class ClientesController extends Controller
     {
         $buscararray = array(); 
         if(!empty($request->buscar)) $buscararray = explode(" ",$request->buscar); 
-        $raw=DB::raw(DB::raw('concat(apaterno," ",amaterno," ",nombre) as nom'));
+        $raw=DB::raw(DB::raw('concat(if(ISNULL(apaterno)=1," ",apaterno)," ",if(ISNULL(amaterno)=1," ",amaterno)," ",nombre) as nom'));
         if (sizeof($buscararray)>0) { 
             $sqls=''; 
             foreach($buscararray as $valor){
@@ -57,5 +57,20 @@ class ClientesController extends Controller
               
         }
         return ['clientes' => $clientes];
+    }
+    public function store(Request $request)
+    {
+        $cliente = new Cliente();
+
+        $cliente->nombre=$request->nombre;
+        $cliente->apaterno=$request->apaterno;
+        $cliente->amaterno=$request->amaterno;
+        $cliente->nit=$request->nit;
+        $cliente->ci=$request->ci;
+        $cliente->telefono=$request->telefono;
+        $cliente->tipo_cliente=1;
+        $cliente->save();
+        
+        return $cliente->id;
     }
 }
