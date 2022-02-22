@@ -45138,7 +45138,10 @@ var render = function () {
           _vm._v(" "),
           _c(
             "table",
-            { staticClass: "table table-bordered table-striped table-sm" },
+            {
+              staticClass:
+                "table table-bordered table-striped table-sm table-responsive",
+            },
             [
               _vm._m(1),
               _vm._v(" "),
@@ -45869,7 +45872,10 @@ var render = function () {
           _vm._v(" "),
           _c(
             "table",
-            { staticClass: "table table-bordered table-striped table-sm" },
+            {
+              staticClass:
+                "table table-bordered table-striped table-sm table-responsive",
+            },
             [
               _vm._m(1),
               _vm._v(" "),
@@ -46453,7 +46459,10 @@ var render = function () {
           _vm._v(" "),
           _c(
             "table",
-            { staticClass: "table table-bordered table-striped table-sm" },
+            {
+              staticClass:
+                "table table-bordered table-striped table-sm table-responsive",
+            },
             [
               _vm._m(2),
               _vm._v(" "),
@@ -46714,7 +46723,7 @@ var render = function () {
                   [
                     _c("div", { staticClass: "form-group row" }, [
                       _c("div", { staticClass: "col-md-12" }, [
-                        _c("table", { staticClass: "table" }, [
+                        _c("table", { staticClass: "table table-responsive" }, [
                           _c(
                             "tr",
                             {
@@ -46744,7 +46753,7 @@ var render = function () {
                           "table",
                           {
                             staticClass:
-                              "table table-bordered table-striped table-sm",
+                              "table table-bordered table-striped table-sm table-responsive",
                           },
                           [
                             _vm._m(3),
@@ -47139,7 +47148,10 @@ var render = function () {
           _vm._v(" "),
           _c(
             "table",
-            { staticClass: "table table-bordered table-striped table-sm" },
+            {
+              staticClass:
+                "table table-bordered table-striped table-sm table-responsive",
+            },
             [
               _vm._m(2),
               _vm._v(" "),
@@ -47658,7 +47670,7 @@ var render = function () {
         _vm._m(1),
         _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
-          _c("table", { staticClass: "table" }, [
+          _c("table", { staticClass: "table table-responsive" }, [
             _vm._m(2),
             _vm._v(" "),
             _c("tr", [
@@ -47770,7 +47782,10 @@ var render = function () {
           _vm._v(" "),
           _c(
             "table",
-            { staticClass: "table table-bordered table-striped table-sm" },
+            {
+              staticClass:
+                "table table-bordered table-striped table-sm table-responsive",
+            },
             [
               _vm._m(3),
               _vm._v(" "),

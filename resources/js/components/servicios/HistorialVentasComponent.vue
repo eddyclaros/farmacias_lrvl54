@@ -44,7 +44,7 @@
                         </div>
                     </div>
                     
-                    <table class="table table-bordered table-striped table-sm">
+                    <table class="table table-bordered table-striped table-sm table-responsive">
                         <thead>
                             <tr>
                                 <th>Opciones</th>
@@ -124,13 +124,13 @@
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group row">
                                 <div class="col-md-12">
-                                    <table class="table">
+                                    <table class="table table-responsive">
                                     <tr style="background-color: antiquewhite;">
                                         <td ><b>Cliente:</b> <br />  {{ cliente }}</td>
                                         <td ><b>Fecha de Venta:</b> <br />  {{ fechaventa }}</td>
                                     </tr>
                                     </table>
-                                    <table class="table table-bordered table-striped table-sm">
+                                    <table class="table table-bordered table-striped table-sm table-responsive">
                                     
                                     
                                         <tr style="background-color: bisque;">

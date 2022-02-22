@@ -14,7 +14,7 @@
                     
                 </div>
                 <div class="card-body">
-                    <table class="table">
+                    <table class="table table-responsive">
                         <thead>
                             <tr>
                                 <th style="width:450px">Prestacion</th>
@@ -71,7 +71,7 @@
                             </div>
                         </div>
                     </div> -->
-                    <table class="table table-bordered table-striped table-sm">
+                    <table class="table table-bordered table-striped table-sm table-responsive">
                         <thead>
                             <tr>
                                 <th>Opciones</th>
