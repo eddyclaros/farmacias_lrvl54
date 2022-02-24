@@ -16,7 +16,7 @@ class CreateAreasTable extends Migration
         Schema::create('areas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('correlativo')->unsigned();
-            $table->string('codigo',2);
+            $table->string('codigo',5);
             $table->string('nombre',100);
             $table->string('descripcion',256)->nullable();
             $table->boolean('activo')->default(1);

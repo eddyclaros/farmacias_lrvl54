@@ -74,7 +74,7 @@ class AreaController extends Controller
 
         $area->nombre=$request->nombre;
         $area->descripcion=$request->descripcion;
-        $area->codigo=$request->codigo;
+        $area->codigo="S".$request->codigo;
         $area->correlativo=$request->correlativo;
         $area->save();
     }

@@ -36,6 +36,9 @@ Vue.component('ventas-component', require('./components/servicios/VentaServicios
 Vue.component('histventas-component', require('./components/servicios/HistorialVentasComponent.vue').default);
 
 
+Vue.component('linea-component', require('./components/productos/LineaComponent.vue').default);
+
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

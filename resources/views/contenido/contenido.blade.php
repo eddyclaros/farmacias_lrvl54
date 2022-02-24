@@ -24,8 +24,12 @@
     <histventas-component></histventas-component>
 </template>
 
-<template v-if="menu==6">
-    <h1>Contenido menu 6</h1>
+<template v-if="menu==60">
+    <linea-component></linea-component>
+</template>
+
+<template v-if="menu==61">
+<h1>Contenido menu 7</h1>
 </template>
 
 <template v-if="menu==7">
