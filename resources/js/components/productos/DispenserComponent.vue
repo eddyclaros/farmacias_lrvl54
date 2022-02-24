@@ -10,7 +10,7 @@
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Areas
+                    <i class="fa fa-align-justify"></i> Dispenser
                     <button type="button" class="btn btn-secondary" @click="abrirModal('registrar')">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
@@ -19,8 +19,8 @@
                     <div class="form-group row">
                         <div class="col-md-6">
                             <div class="input-group">
-                                <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar"  @keyup.enter="listarAreas(1)">
-                                <button type="submit" class="btn btn-primary" @click="listarAreas(1)"><i class="fa fa-search" ></i> Buscar</button>
+                                <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar"  @keyup.enter="listarDispenser(1)">
+                                <button type="submit" class="btn btn-primary" @click="listarDispenser(1)"><i class="fa fa-search" ></i> Buscar</button>
                             </div>
                         </div>
                     </div>
@@ -28,39 +28,33 @@
                         <thead>
                             <tr>
                                 <th>Opciones</th>
-                                <th>Codigo</th>
                                 <th>Nombre</th>
-                                <th>Descripción</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="area in arrayAreas" :key="area.id">
+                            <tr v-for="dispenser in arrayDispenser" :key="dispenser.id">
                                 <td>
-                                    <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('actualizar',area)">
+                                    <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('actualizar',dispenser)">
                                         <i class="icon-pencil"></i>
                                     </button> &nbsp;
-                                    <button v-if="area.activo==1" type="button" class="btn btn-danger btn-sm" @click="eliminarArea(area.id)" >
+                                    <button v-if="dispenser.activo==1" type="button" class="btn btn-danger btn-sm" @click="eliminarDispenser(dispenser.id)" >
                                         <i class="icon-trash"></i>
                                     </button>
-                                    <button v-else type="button" class="btn btn-info btn-sm" @click="activarArea(area.id)" >
+                                    <button v-else type="button" class="btn btn-info btn-sm" @click="activarDispenser(dispenser.id)" >
                                         <i class="icon-check"></i>
                                     </button>
                                 </td>
-                                <td v-text="area.codigo"></td>
-                                <td v-text="area.nombre"></td>
-                                <td v-text="area.descripcion"></td>
+                                <td v-text="dispenser.nombre"></td>
                                 <td>
-                                    <div v-if="area.activo==1">
+                                    <div v-if="dispenser.activo==1">
                                         <span class="badge badge-success">Activo</span>
                                     </div>
                                     <div v-else>
                                         <span class="badge badge-warning">Desactivado</span>
                                     </div>
-                                    
                                 </td>
                             </tr>
-                           
                         </tbody>
                     </table>
                     <nav>
@@ -91,27 +85,20 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                        
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre <span  v-if="!sicompleto" class="error">(*)</span></label>
                                 <div class="col-md-9">
-                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del Area" v-model="nombre" v-on:focus="selectAll" >
-                                    <span  v-if="!sicompleto" class="error">Debe Ingresar el Nombre del Area</span>
+                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del Dispenser" v-model="nombre" v-on:focus="selectAll" @keyup.enter="registrarDispenser()" >
+                                    <span  v-if="!sicompleto" class="error">Debe Ingresar el Nombre del Dispenser</span>
                                 </div>
                             </div>
-                            
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Descripción</label>
-                                <div class="col-md-9">
-                                    <input type="text" id="descripcion" name="descripcion" class="form-control" placeholder="Ingrese una Descripción" v-model="descripcion" v-on:focus="selectAll">
-                                </div>
-                            </div>
-                        </form>
+                        
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"  @click="cerrarModal('registrar')">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarArea()" :disabled="!sicompleto">Guardar</button>
-                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarArea()">Actualizar</button>
+                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarDispenser()" :disabled="!sicompleto">Guardar</button>
+                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarDispenser()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -140,15 +127,11 @@ import Swal from 'sweetalert2'
                 },
                 offset:3,
                 nombre:'',
-                descripcion:'',
-                codigo:'',
-                correlativo:0,
-                arrayAreas:[],
+                arrayDispenser:[],
                 tituloModal:'',
                 tipoAccion:1,
-                idarea:'',
+                iddispenser:'',
                 buscar:''
-                
             }
 
         },
@@ -186,17 +169,14 @@ import Swal from 'sweetalert2'
 
         },
         methods :{
-            listarAreas(page){
+            listarDispenser(page){
                 let me=this;
-                var url='/area?page='+page+'&buscar='+me.buscar;
+                var url='/dispenser?page='+page+'&buscar='+me.buscar;
                 axios.get(url).then(function(response){
                     var respuesta=response.data;
-                    //console.log(respuesta.areas);
                     me.pagination=respuesta.pagination;
-                    //console.log(me.areas.data);
-                    me.arrayAreas=respuesta.areas.data;
-                    me.correlativo=respuesta.maxcorrelativo[0].maximo;
-                    //console.log(me.arrayAreas);
+                    me.arrayDispenser=respuesta.dispenser.data;
+                    
                 })
                 .catch(function(error){
                     console.log(error);
@@ -205,32 +185,21 @@ import Swal from 'sweetalert2'
             cambiarPagina(page){
                 let me =this;
                 me.pagination.current_page = page;
-                me.listarAreas(page);
+                me.listarDispenser(page);
             },
-            registrarArea(){
+            registrarDispenser(){
                 let me = this;
-                if(me.correlativo=='')
-                    me.correlativo=1;
-                else
-                    me.correlativo++;
-                
-                if(me.correlativo<10)
-                    me.codigo='0'+me.correlativo;
-
-                axios.post('/area/registrar',{
+                axios.post('/dispenser/registrar',{
                     'nombre':me.nombre,
-                    'descripcion':me.descripcion,
-                    'codigo':me.codigo,
-                    'correlativo':me.correlativo
                 }).then(function(response){
                     me.cerrarModal('registrar');
-                    me.listarAreas();
+                    me.listarDispenser();
                 }).catch(function(error){
                     console.log(error);
                 });
 
             },
-            eliminarArea(idarea){
+            eliminarDispenser(iddispenser){
                 let me=this;
                 //console.log("prueba");
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -251,8 +220,8 @@ import Swal from 'sweetalert2'
                 reverseButtons: true
                 }).then((result) => {
                 if (result.isConfirmed) {
-                     axios.put('/area/desactivar',{
-                        'id': idarea
+                     axios.put('/dispenser/desactivar',{
+                        'id': iddispenser
                     }).then(function (response) {
                         
                         swalWithBootstrapButtons.fire(
@@ -260,7 +229,7 @@ import Swal from 'sweetalert2'
                             'El registro a sido desactivado Correctamente',
                             'success'
                         )
-                        me.listarAreas();
+                        me.listarDispenser();
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -279,7 +248,7 @@ import Swal from 'sweetalert2'
                 }
                 })
             },
-            activarArea(idarea){
+            activarDispenser(iddispenser){
                 let me=this;
                 //console.log("prueba");
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -300,8 +269,8 @@ import Swal from 'sweetalert2'
                 reverseButtons: true
                 }).then((result) => {
                 if (result.isConfirmed) {
-                     axios.put('/area/activar',{
-                        'id': idarea
+                     axios.put('/dispenser/activar',{
+                        'id': iddispenser
                     }).then(function (response) {
                         
                         swalWithBootstrapButtons.fire(
@@ -309,7 +278,7 @@ import Swal from 'sweetalert2'
                             'El registro a sido Activado Correctamente',
                             'success'
                         )
-                        me.listarAreas();
+                        me.listarDispenser();
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -328,13 +297,12 @@ import Swal from 'sweetalert2'
                 }
                 })
             },
-            actualizarArea(){
+            actualizarDispenser(){
                // const Swal = require('sweetalert2')
                 let me =this;
-                axios.put('/area/actualizar',{
-                    'id':me.idarea,
+                axios.put('/dispenser/actualizar',{
+                    'id':me.iddispenser,
                     'nombre':me.nombre,
-                    'descripcion':me.descripcion,
                     
                 }).then(function (response) {
                     if(response.data.length){
@@ -343,7 +311,7 @@ import Swal from 'sweetalert2'
                     else{
                             Swal.fire('Actualizado Correctamente')
 
-                        me.listarAreas();
+                        me.listarDispenser();
                     } 
                 }).catch(function (error) {
                    
@@ -357,21 +325,19 @@ import Swal from 'sweetalert2'
                 switch(accion){
                     case 'registrar':
                     {
-                        me.tituloModal='Registar Area'
+                        me.tituloModal='Registar Dispenser'
                         me.tipoAccion=1;
                         me.nombre='';
-                        me.descripcion='';
                         me.classModal.openModal('registrar');
                         break;
                     }
                     
                     case 'actualizar':
                     {
-                        me.idarea=data.id;
+                        me.iddispenser=data.id;
                         me.tipoAccion=2;
-                        me.tituloModal='Actualizar Area'
+                        me.tituloModal='Actualizar Dispenser'
                         me.nombre=data.nombre;
-                        me.descripcion=data.descripcion;
                         me.classModal.openModal('registrar');
                         break;
                     }
@@ -383,7 +349,6 @@ import Swal from 'sweetalert2'
                 let me = this;
                 me.classModal.closeModal(accion);
                 me.nombre='';
-                me.descripcion='';
                 me.tipoAccion=1;
                 
             },
@@ -396,7 +361,7 @@ import Swal from 'sweetalert2'
 
         },
         mounted() {
-            this.listarAreas(1);
+            this.listarDispenser(1);
             this.classModal = new _pl.Modals();
             this.classModal.addModal('registrar');
             //console.log('Component mounted.')

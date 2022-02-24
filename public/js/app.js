@@ -2805,19 +2805,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
  //Vue.use(VeeValidate);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2833,13 +2820,10 @@ __webpack_require__.r(__webpack_exports__);
       },
       offset: 3,
       nombre: '',
-      descripcion: '',
-      codigo: '',
-      correlativo: 0,
-      arrayAreas: [],
+      arrayDispenser: [],
       tituloModal: '',
       tipoAccion: 1,
-      idarea: '',
+      iddispenser: '',
       buscar: ''
     };
   },
@@ -2879,16 +2863,13 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    listarAreas: function listarAreas(page) {
+    listarDispenser: function listarDispenser(page) {
       var me = this;
-      var url = '/area?page=' + page + '&buscar=' + me.buscar;
+      var url = '/dispenser?page=' + page + '&buscar=' + me.buscar;
       axios.get(url).then(function (response) {
-        var respuesta = response.data; //console.log(respuesta.areas);
-
-        me.pagination = respuesta.pagination; //console.log(me.areas.data);
-
-        me.arrayAreas = respuesta.areas.data;
-        me.correlativo = respuesta.maxcorrelativo[0].maximo; //console.log(me.arrayAreas);
+        var respuesta = response.data;
+        me.pagination = respuesta.pagination;
+        me.arrayDispenser = respuesta.dispenser.data;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2896,25 +2877,20 @@ __webpack_require__.r(__webpack_exports__);
     cambiarPagina: function cambiarPagina(page) {
       var me = this;
       me.pagination.current_page = page;
-      me.listarAreas(page);
+      me.listarDispenser(page);
     },
-    registrarArea: function registrarArea() {
+    registrarDispenser: function registrarDispenser() {
       var me = this;
-      if (me.correlativo == '') me.correlativo = 1;else me.correlativo++;
-      if (me.correlativo < 10) me.codigo = '0' + me.correlativo;
-      axios.post('/area/registrar', {
-        'nombre': me.nombre,
-        'descripcion': me.descripcion,
-        'codigo': me.codigo,
-        'correlativo': me.correlativo
+      axios.post('/dispenser/registrar', {
+        'nombre': me.nombre
       }).then(function (response) {
         me.cerrarModal('registrar');
-        me.listarAreas();
+        me.listarDispenser();
       })["catch"](function (error) {
         console.log(error);
       });
     },
-    eliminarArea: function eliminarArea(idarea) {
+    eliminarDispenser: function eliminarDispenser(iddispenser) {
       var me = this; //console.log("prueba");
 
       var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
@@ -2934,11 +2910,11 @@ __webpack_require__.r(__webpack_exports__);
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          axios.put('/area/desactivar', {
-            'id': idarea
+          axios.put('/dispenser/desactivar', {
+            'id': iddispenser
           }).then(function (response) {
             swalWithBootstrapButtons.fire('Desactivado!', 'El registro a sido desactivado Correctamente', 'success');
-            me.listarAreas();
+            me.listarDispenser();
           })["catch"](function (error) {
             console.log(error);
           });
@@ -2953,7 +2929,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    activarArea: function activarArea(idarea) {
+    activarDispenser: function activarDispenser(iddispenser) {
       var me = this; //console.log("prueba");
 
       var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
@@ -2973,11 +2949,11 @@ __webpack_require__.r(__webpack_exports__);
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          axios.put('/area/activar', {
-            'id': idarea
+          axios.put('/dispenser/activar', {
+            'id': iddispenser
           }).then(function (response) {
             swalWithBootstrapButtons.fire('Activado!', 'El registro a sido Activado Correctamente', 'success');
-            me.listarAreas();
+            me.listarDispenser();
           })["catch"](function (error) {
             console.log(error);
           });
@@ -2992,18 +2968,17 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    actualizarArea: function actualizarArea() {
+    actualizarDispenser: function actualizarDispenser() {
       // const Swal = require('sweetalert2')
       var me = this;
-      axios.put('/area/actualizar', {
-        'id': me.idarea,
-        'nombre': me.nombre,
-        'descripcion': me.descripcion
+      axios.put('/dispenser/actualizar', {
+        'id': me.iddispenser,
+        'nombre': me.nombre
       }).then(function (response) {
         if (response.data.length) {} // console.log(response)
         else {
           sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Actualizado Correctamente');
-          me.listarAreas();
+          me.listarDispenser();
         }
       })["catch"](function (error) {});
       me.cerrarModal('registrar');
@@ -3015,21 +2990,19 @@ __webpack_require__.r(__webpack_exports__);
       switch (accion) {
         case 'registrar':
           {
-            me.tituloModal = 'Registar Area';
+            me.tituloModal = 'Registar Dispenser';
             me.tipoAccion = 1;
             me.nombre = '';
-            me.descripcion = '';
             me.classModal.openModal('registrar');
             break;
           }
 
         case 'actualizar':
           {
-            me.idarea = data.id;
+            me.iddispenser = data.id;
             me.tipoAccion = 2;
-            me.tituloModal = 'Actualizar Area';
+            me.tituloModal = 'Actualizar Dispenser';
             me.nombre = data.nombre;
-            me.descripcion = data.descripcion;
             me.classModal.openModal('registrar');
             break;
           }
@@ -3039,7 +3012,6 @@ __webpack_require__.r(__webpack_exports__);
       var me = this;
       me.classModal.closeModal(accion);
       me.nombre = '';
-      me.descripcion = '';
       me.tipoAccion = 1;
     },
     selectAll: function selectAll(event) {
@@ -3049,7 +3021,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.listarAreas(1);
+    this.listarDispenser(1);
     this.classModal = new _pl.Modals();
     this.classModal.addModal('registrar'); //console.log('Component mounted.')
   }
@@ -3181,19 +3153,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
  //Vue.use(VeeValidate);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3209,13 +3168,10 @@ __webpack_require__.r(__webpack_exports__);
       },
       offset: 3,
       nombre: '',
-      descripcion: '',
-      codigo: '',
-      correlativo: 0,
-      arrayAreas: [],
+      arrayFormaFarm: [],
       tituloModal: '',
       tipoAccion: 1,
-      idarea: '',
+      idformafarm: '',
       buscar: ''
     };
   },
@@ -3255,16 +3211,13 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    listarAreas: function listarAreas(page) {
+    listarFormaFarm: function listarFormaFarm(page) {
       var me = this;
-      var url = '/area?page=' + page + '&buscar=' + me.buscar;
+      var url = '/formafarm?page=' + page + '&buscar=' + me.buscar;
       axios.get(url).then(function (response) {
-        var respuesta = response.data; //console.log(respuesta.areas);
-
-        me.pagination = respuesta.pagination; //console.log(me.areas.data);
-
-        me.arrayAreas = respuesta.areas.data;
-        me.correlativo = respuesta.maxcorrelativo[0].maximo; //console.log(me.arrayAreas);
+        var respuesta = response.data;
+        me.pagination = respuesta.pagination;
+        me.arrayFormaFarm = respuesta.formafarm.data;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -3272,25 +3225,20 @@ __webpack_require__.r(__webpack_exports__);
     cambiarPagina: function cambiarPagina(page) {
       var me = this;
       me.pagination.current_page = page;
-      me.listarAreas(page);
+      me.listarFormaFarm(page);
     },
-    registrarArea: function registrarArea() {
+    registrarFormaFarm: function registrarFormaFarm() {
       var me = this;
-      if (me.correlativo == '') me.correlativo = 1;else me.correlativo++;
-      if (me.correlativo < 10) me.codigo = '0' + me.correlativo;
-      axios.post('/area/registrar', {
-        'nombre': me.nombre,
-        'descripcion': me.descripcion,
-        'codigo': me.codigo,
-        'correlativo': me.correlativo
+      axios.post('/formafarm/registrar', {
+        'nombre': me.nombre
       }).then(function (response) {
         me.cerrarModal('registrar');
-        me.listarAreas();
+        me.listarFormaFarm();
       })["catch"](function (error) {
         console.log(error);
       });
     },
-    eliminarArea: function eliminarArea(idarea) {
+    eliminarFormaFarm: function eliminarFormaFarm(idformafarm) {
       var me = this; //console.log("prueba");
 
       var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
@@ -3310,11 +3258,11 @@ __webpack_require__.r(__webpack_exports__);
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          axios.put('/area/desactivar', {
-            'id': idarea
+          axios.put('/formafarm/desactivar', {
+            'id': idformafarm
           }).then(function (response) {
             swalWithBootstrapButtons.fire('Desactivado!', 'El registro a sido desactivado Correctamente', 'success');
-            me.listarAreas();
+            me.listarFormaFarm();
           })["catch"](function (error) {
             console.log(error);
           });
@@ -3329,7 +3277,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    activarArea: function activarArea(idarea) {
+    activarFormaFarm: function activarFormaFarm(idformafarm) {
       var me = this; //console.log("prueba");
 
       var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
@@ -3349,11 +3297,11 @@ __webpack_require__.r(__webpack_exports__);
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          axios.put('/area/activar', {
-            'id': idarea
+          axios.put('/formafarm/activar', {
+            'id': idformafarm
           }).then(function (response) {
             swalWithBootstrapButtons.fire('Activado!', 'El registro a sido Activado Correctamente', 'success');
-            me.listarAreas();
+            me.listarFormaFarm();
           })["catch"](function (error) {
             console.log(error);
           });
@@ -3368,18 +3316,17 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    actualizarArea: function actualizarArea() {
+    actualizarFormaFarm: function actualizarFormaFarm() {
       // const Swal = require('sweetalert2')
       var me = this;
-      axios.put('/area/actualizar', {
-        'id': me.idarea,
-        'nombre': me.nombre,
-        'descripcion': me.descripcion
+      axios.put('/formafarm/actualizar', {
+        'id': me.idformafarm,
+        'nombre': me.nombre
       }).then(function (response) {
         if (response.data.length) {} // console.log(response)
         else {
           sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Actualizado Correctamente');
-          me.listarAreas();
+          me.listarFormaFarm();
         }
       })["catch"](function (error) {});
       me.cerrarModal('registrar');
@@ -3391,21 +3338,19 @@ __webpack_require__.r(__webpack_exports__);
       switch (accion) {
         case 'registrar':
           {
-            me.tituloModal = 'Registar Area';
+            me.tituloModal = 'Registar FormaFarm';
             me.tipoAccion = 1;
             me.nombre = '';
-            me.descripcion = '';
             me.classModal.openModal('registrar');
             break;
           }
 
         case 'actualizar':
           {
-            me.idarea = data.id;
+            me.idformafarm = data.id;
             me.tipoAccion = 2;
-            me.tituloModal = 'Actualizar Area';
+            me.tituloModal = 'Actualizar FormaFarm';
             me.nombre = data.nombre;
-            me.descripcion = data.descripcion;
             me.classModal.openModal('registrar');
             break;
           }
@@ -3415,7 +3360,6 @@ __webpack_require__.r(__webpack_exports__);
       var me = this;
       me.classModal.closeModal(accion);
       me.nombre = '';
-      me.descripcion = '';
       me.tipoAccion = 1;
     },
     selectAll: function selectAll(event) {
@@ -3425,7 +3369,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.listarAreas(1);
+    this.listarFormaFarm(1);
     this.classModal = new _pl.Modals();
     this.classModal.addModal('registrar'); //console.log('Component mounted.')
   }
@@ -47088,7 +47032,7 @@ var render = function () {
       _c("div", { staticClass: "card" }, [
         _c("div", { staticClass: "card-header" }, [
           _c("i", { staticClass: "fa fa-align-justify" }),
-          _vm._v(" Areas\n                "),
+          _vm._v(" Dispenser\n                "),
           _c(
             "button",
             {
@@ -47136,7 +47080,7 @@ var render = function () {
                       ) {
                         return null
                       }
-                      return _vm.listarAreas(1)
+                      return _vm.listarDispenser(1)
                     },
                     input: function ($event) {
                       if ($event.target.composing) {
@@ -47154,7 +47098,7 @@ var render = function () {
                     attrs: { type: "submit" },
                     on: {
                       click: function ($event) {
-                        return _vm.listarAreas(1)
+                        return _vm.listarDispenser(1)
                       },
                     },
                   },
@@ -47175,8 +47119,8 @@ var render = function () {
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(_vm.arrayAreas, function (area) {
-                  return _c("tr", { key: area.id }, [
+                _vm._l(_vm.arrayDispenser, function (dispenser) {
+                  return _c("tr", { key: dispenser.id }, [
                     _c("td", [
                       _c(
                         "button",
@@ -47185,14 +47129,14 @@ var render = function () {
                           attrs: { type: "button" },
                           on: {
                             click: function ($event) {
-                              return _vm.abrirModal("actualizar", area)
+                              return _vm.abrirModal("actualizar", dispenser)
                             },
                           },
                         },
                         [_c("i", { staticClass: "icon-pencil" })]
                       ),
                       _vm._v("  \n                                "),
-                      area.activo == 1
+                      dispenser.activo == 1
                         ? _c(
                             "button",
                             {
@@ -47200,7 +47144,7 @@ var render = function () {
                               attrs: { type: "button" },
                               on: {
                                 click: function ($event) {
-                                  return _vm.eliminarArea(area.id)
+                                  return _vm.eliminarDispenser(dispenser.id)
                                 },
                               },
                             },
@@ -47213,7 +47157,7 @@ var render = function () {
                               attrs: { type: "button" },
                               on: {
                                 click: function ($event) {
-                                  return _vm.activarArea(area.id)
+                                  return _vm.activarDispenser(dispenser.id)
                                 },
                               },
                             },
@@ -47222,19 +47166,11 @@ var render = function () {
                     ]),
                     _vm._v(" "),
                     _c("td", {
-                      domProps: { textContent: _vm._s(area.codigo) },
-                    }),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(area.nombre) },
-                    }),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(area.descripcion) },
+                      domProps: { textContent: _vm._s(dispenser.nombre) },
                     }),
                     _vm._v(" "),
                     _c("td", [
-                      area.activo == 1
+                      dispenser.activo == 1
                         ? _c("div", [
                             _c("span", { staticClass: "badge badge-success" }, [
                               _vm._v("Activo"),
@@ -47379,113 +47315,72 @@ var render = function () {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
-                _c(
-                  "form",
-                  {
-                    staticClass: "form-horizontal",
-                    attrs: {
-                      action: "",
-                      method: "post",
-                      enctype: "multipart/form-data",
+                _c("div", { staticClass: "form-group row" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "col-md-3 form-control-label",
+                      attrs: { for: "text-input" },
                     },
-                  },
-                  [
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
+                    [
+                      _vm._v("Nombre "),
+                      !_vm.sicompleto
+                        ? _c("span", { staticClass: "error" }, [_vm._v("(*)")])
+                        : _vm._e(),
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-9" }, [
+                    _c("input", {
+                      directives: [
                         {
-                          staticClass: "col-md-3 form-control-label",
-                          attrs: { for: "text-input" },
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.nombre,
+                          expression: "nombre",
                         },
-                        [
-                          _vm._v("Nombre "),
-                          !_vm.sicompleto
-                            ? _c("span", { staticClass: "error" }, [
-                                _vm._v("(*)"),
-                              ])
-                            : _vm._e(),
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.nombre,
-                              expression: "nombre",
-                            },
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "text",
-                            id: "nombre",
-                            name: "nombre",
-                            placeholder: "Nombre del Area",
-                          },
-                          domProps: { value: _vm.nombre },
-                          on: {
-                            focus: _vm.selectAll,
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.nombre = $event.target.value
-                            },
-                          },
-                        }),
-                        _vm._v(" "),
-                        !_vm.sicompleto
-                          ? _c("span", { staticClass: "error" }, [
-                              _vm._v("Debe Ingresar el Nombre del Area"),
-                            ])
-                          : _vm._e(),
-                      ]),
-                    ]),
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        id: "nombre",
+                        name: "nombre",
+                        placeholder: "Nombre del Dispenser",
+                      },
+                      domProps: { value: _vm.nombre },
+                      on: {
+                        focus: _vm.selectAll,
+                        keyup: function ($event) {
+                          if (
+                            !$event.type.indexOf("key") &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          return _vm.registrarDispenser()
+                        },
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.nombre = $event.target.value
+                        },
+                      },
+                    }),
                     _vm._v(" "),
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "col-md-3 form-control-label",
-                          attrs: { for: "text-input" },
-                        },
-                        [_vm._v("Descripción")]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.descripcion,
-                              expression: "descripcion",
-                            },
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "text",
-                            id: "descripcion",
-                            name: "descripcion",
-                            placeholder: "Ingrese una Descripción",
-                          },
-                          domProps: { value: _vm.descripcion },
-                          on: {
-                            focus: _vm.selectAll,
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.descripcion = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                    ]),
-                  ]
-                ),
+                    !_vm.sicompleto
+                      ? _c("span", { staticClass: "error" }, [
+                          _vm._v("Debe Ingresar el Nombre del Dispenser"),
+                        ])
+                      : _vm._e(),
+                  ]),
+                ]),
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [
@@ -47511,7 +47406,7 @@ var render = function () {
                         attrs: { type: "button", disabled: !_vm.sicompleto },
                         on: {
                           click: function ($event) {
-                            return _vm.registrarArea()
+                            return _vm.registrarDispenser()
                           },
                         },
                       },
@@ -47527,7 +47422,7 @@ var render = function () {
                         attrs: { type: "button" },
                         on: {
                           click: function ($event) {
-                            return _vm.actualizarArea()
+                            return _vm.actualizarDispenser()
                           },
                         },
                       },
@@ -47567,11 +47462,7 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("Opciones")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Codigo")]),
-        _vm._v(" "),
         _c("th", [_vm._v("Nombre")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Descripción")]),
         _vm._v(" "),
         _c("th", [_vm._v("Estado")]),
       ]),
@@ -47606,7 +47497,7 @@ var render = function () {
       _c("div", { staticClass: "card" }, [
         _c("div", { staticClass: "card-header" }, [
           _c("i", { staticClass: "fa fa-align-justify" }),
-          _vm._v(" Areas\n                "),
+          _vm._v(" Forma Farmaceutica\n                "),
           _c(
             "button",
             {
@@ -47654,7 +47545,7 @@ var render = function () {
                       ) {
                         return null
                       }
-                      return _vm.listarAreas(1)
+                      return _vm.listarFormaFarm(1)
                     },
                     input: function ($event) {
                       if ($event.target.composing) {
@@ -47672,7 +47563,7 @@ var render = function () {
                     attrs: { type: "submit" },
                     on: {
                       click: function ($event) {
-                        return _vm.listarAreas(1)
+                        return _vm.listarFormaFarm(1)
                       },
                     },
                   },
@@ -47693,8 +47584,8 @@ var render = function () {
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(_vm.arrayAreas, function (area) {
-                  return _c("tr", { key: area.id }, [
+                _vm._l(_vm.arrayFormaFarm, function (formafarm) {
+                  return _c("tr", { key: formafarm.id }, [
                     _c("td", [
                       _c(
                         "button",
@@ -47703,14 +47594,14 @@ var render = function () {
                           attrs: { type: "button" },
                           on: {
                             click: function ($event) {
-                              return _vm.abrirModal("actualizar", area)
+                              return _vm.abrirModal("actualizar", formafarm)
                             },
                           },
                         },
                         [_c("i", { staticClass: "icon-pencil" })]
                       ),
                       _vm._v("  \n                                "),
-                      area.activo == 1
+                      formafarm.activo == 1
                         ? _c(
                             "button",
                             {
@@ -47718,7 +47609,7 @@ var render = function () {
                               attrs: { type: "button" },
                               on: {
                                 click: function ($event) {
-                                  return _vm.eliminarArea(area.id)
+                                  return _vm.eliminarFormaFarm(formafarm.id)
                                 },
                               },
                             },
@@ -47731,7 +47622,7 @@ var render = function () {
                               attrs: { type: "button" },
                               on: {
                                 click: function ($event) {
-                                  return _vm.activarArea(area.id)
+                                  return _vm.activarFormaFarm(formafarm.id)
                                 },
                               },
                             },
@@ -47740,19 +47631,11 @@ var render = function () {
                     ]),
                     _vm._v(" "),
                     _c("td", {
-                      domProps: { textContent: _vm._s(area.codigo) },
-                    }),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(area.nombre) },
-                    }),
-                    _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(area.descripcion) },
+                      domProps: { textContent: _vm._s(formafarm.nombre) },
                     }),
                     _vm._v(" "),
                     _c("td", [
-                      area.activo == 1
+                      formafarm.activo == 1
                         ? _c("div", [
                             _c("span", { staticClass: "badge badge-success" }, [
                               _vm._v("Activo"),
@@ -47940,7 +47823,7 @@ var render = function () {
                             type: "text",
                             id: "nombre",
                             name: "nombre",
-                            placeholder: "Nombre del Area",
+                            placeholder: "Nombre del FormaFarm",
                           },
                           domProps: { value: _vm.nombre },
                           on: {
@@ -47956,50 +47839,11 @@ var render = function () {
                         _vm._v(" "),
                         !_vm.sicompleto
                           ? _c("span", { staticClass: "error" }, [
-                              _vm._v("Debe Ingresar el Nombre del Area"),
+                              _vm._v(
+                                "Debe Ingresar el Nombre de la Forma Farmaceutica"
+                              ),
                             ])
                           : _vm._e(),
-                      ]),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "col-md-3 form-control-label",
-                          attrs: { for: "text-input" },
-                        },
-                        [_vm._v("Descripción")]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.descripcion,
-                              expression: "descripcion",
-                            },
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "text",
-                            id: "descripcion",
-                            name: "descripcion",
-                            placeholder: "Ingrese una Descripción",
-                          },
-                          domProps: { value: _vm.descripcion },
-                          on: {
-                            focus: _vm.selectAll,
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.descripcion = $event.target.value
-                            },
-                          },
-                        }),
                       ]),
                     ]),
                   ]
@@ -48029,7 +47873,7 @@ var render = function () {
                         attrs: { type: "button", disabled: !_vm.sicompleto },
                         on: {
                           click: function ($event) {
-                            return _vm.registrarArea()
+                            return _vm.registrarFormaFarm()
                           },
                         },
                       },
@@ -48045,7 +47889,7 @@ var render = function () {
                         attrs: { type: "button" },
                         on: {
                           click: function ($event) {
-                            return _vm.actualizarArea()
+                            return _vm.actualizarFormaFarm()
                           },
                         },
                       },
@@ -48085,11 +47929,7 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("Opciones")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Codigo")]),
-        _vm._v(" "),
         _c("th", [_vm._v("Nombre")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Descripción")]),
         _vm._v(" "),
         _c("th", [_vm._v("Estado")]),
       ]),
