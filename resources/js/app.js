@@ -37,6 +37,9 @@ Vue.component('histventas-component', require('./components/servicios/HistorialV
 
 
 Vue.component('linea-component', require('./components/productos/LineaComponent.vue').default);
+Vue.component('producto-component', require('./components/productos/ProductoComponent.vue').default);
+Vue.component('dispenser-component', require('./components/productos/DispenserComponent.vue').default);
+Vue.component('formafarm-component', require('./components/productos/FormaFarmaceuticaComponent.vue').default);
 
 
 /**

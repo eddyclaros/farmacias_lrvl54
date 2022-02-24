@@ -18,6 +18,9 @@ use App\Http\Controllers\PrestacionController;
 use App\Http\Controllers\VentaController;
 use App\Http\Controllers\VentaMaestroController;
 use App\Http\Controllers\ProdLineaController;
+use App\Http\Controllers\ProdDispenserController;
+use App\Http\Controllers\ProdFormaFarmaceuticaController;
+use App\Http\Controllers\ProdProductoController;
 
 Route::get('/', function () {
     return view('contenido/contenido');
@@ -80,3 +83,23 @@ Route::put('/linea/desactivar', [ProdLineaController::class,'desactivar']);
 Route::put('/linea/activar', [ProdLineaController::class,'activar']);
 Route::get('/linea/selectlinea',[ProdLineaController::class,'selectLinea']);
 
+Route::get('/producto',[ProdProductoController::class,'index']);
+Route::post('/producto/registrar', [ProdProductoController::class,'store']);
+Route::put('/producto/actualizar', [ProdProductoController::class,'update']);
+Route::put('/producto/desactivar', [ProdProductoController::class,'desactivar']);
+Route::put('/producto/activar', [ProdProductoController::class,'activar']);
+Route::get('/producto/selectproducto',[ProdProductoController::class,'selectProducto']);
+
+Route::get('/dispenser',[ProdDispenserController::class,'index']);
+Route::post('/dispenser/registrar', [ProdDispenserController::class,'store']);
+Route::put('/dispenser/actualizar', [ProdDispenserController::class,'update']);
+Route::put('/dispenser/desactivar', [ProdDispenserController::class,'desactivar']);
+Route::put('/dispenser/activar', [ProdDispenserController::class,'activar']);
+Route::get('/dispenser/selectdispenser',[ProdDispenserController::class,'selectDispenser']);
+
+Route::get('/formafarm',[ProdFormaFarmaceuticaController::class,'index']);
+Route::post('/formafarm/registrar', [ProdFormaFarmaceuticaController::class,'store']);
+Route::put('/formafarm/actualizar', [ProdFormaFarmaceuticaController::class,'update']);
+Route::put('/formafarm/desactivar', [ProdFormaFarmaceuticaController::class,'desactivar']);
+Route::put('/formafarm/activar', [ProdFormaFarmaceuticaController::class,'activar']);
+Route::get('/formafarm/selectformafarm',[ProdFormaFarmaceuticaController::class,'selectFormaFarm']);

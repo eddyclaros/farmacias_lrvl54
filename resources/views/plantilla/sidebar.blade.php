@@ -17,10 +17,10 @@
                         <a class="nav-link" href="#"><i class="icon-bag"></i> Prestaciones</a>
                     </li>
                     <li @click="menu=4" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-bag"></i> Venta Servicios</a>
+                        <a class="nav-link" href="#"><i class="icon-wallet"></i> Venta Servicios</a>
                     </li>
                     <li @click="menu=5" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-bag"></i> Historial Ventas</a>
+                        <a class="nav-link" href="#"><i class="icon-wallet"></i> Historial Ventas</a>
                     </li>
                 </ul>
             </li>
@@ -42,7 +42,13 @@
                         <a class="nav-link" href="#"><i class="icon-basket-loaded"></i> Lineas</a>
                     </li>
                     <li @click="menu=61" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-notebook"></i> Registro</a>
+                        <a class="nav-link" href="#"><i class="icon-notebook"></i> Registro Producto</a>
+                    </li>
+                    <li @click="menu=62" class="nav-item">
+                        <a class="nav-link" href="#"><i class="icon-info"></i> Dispenser</a>
+                    </li>
+                    <li @click="menu=63" class="nav-item">
+                        <a class="nav-link" href="#"><i class="icon-info"></i> Forma Farmaceutica</a>
                     </li>
                 </ul>
             </li>

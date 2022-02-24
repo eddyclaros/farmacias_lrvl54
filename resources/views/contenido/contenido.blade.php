@@ -29,7 +29,15 @@
 </template>
 
 <template v-if="menu==61">
-<h1>Contenido menu 7</h1>
+    <producto-component></producto-component>
+</template>
+
+<template v-if="menu==62">
+    <dispenser-component></dispenser-component>
+</template>
+
+<template v-if="menu==63">
+    <formafarm-component></formafarm-component>
 </template>
 
 <template v-if="menu==7">
