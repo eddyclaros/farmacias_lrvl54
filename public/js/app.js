@@ -2884,8 +2884,14 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/dispenser/registrar', {
         'nombre': me.nombre
       }).then(function (response) {
-        me.cerrarModal('registrar');
-        me.listarDispenser();
+        console.log(response);
+
+        if (response.data == 'error') {
+          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('El registro ya existe', 'Debe introducir uno diferente');
+        } else {
+          me.cerrarModal('registrar');
+          me.listarDispenser(me.pagination.current_page);
+        }
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2914,7 +2920,7 @@ __webpack_require__.r(__webpack_exports__);
             'id': iddispenser
           }).then(function (response) {
             swalWithBootstrapButtons.fire('Desactivado!', 'El registro a sido desactivado Correctamente', 'success');
-            me.listarDispenser();
+            me.listarDispenser(me.pagination.current_page);
           })["catch"](function (error) {
             console.log(error);
           });
@@ -2953,7 +2959,7 @@ __webpack_require__.r(__webpack_exports__);
             'id': iddispenser
           }).then(function (response) {
             swalWithBootstrapButtons.fire('Activado!', 'El registro a sido Activado Correctamente', 'success');
-            me.listarDispenser();
+            me.listarDispenser(me.pagination.current_page);
           })["catch"](function (error) {
             console.log(error);
           });
@@ -2978,7 +2984,7 @@ __webpack_require__.r(__webpack_exports__);
         if (response.data.length) {} // console.log(response)
         else {
           sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Actualizado Correctamente');
-          me.listarDispenser();
+          me.listarDispenser(me.pagination.current_page);
         }
       })["catch"](function (error) {});
       me.cerrarModal('registrar');
@@ -3232,8 +3238,12 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/formafarm/registrar', {
         'nombre': me.nombre
       }).then(function (response) {
-        me.cerrarModal('registrar');
-        me.listarFormaFarm();
+        if (response.data == 'error') {
+          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('El registro ya existe', 'Debe introducir uno diferente');
+        } else {
+          me.cerrarModal('registrar');
+          me.listarFormaFarm(1);
+        }
       })["catch"](function (error) {
         console.log(error);
       });
@@ -3262,7 +3272,7 @@ __webpack_require__.r(__webpack_exports__);
             'id': idformafarm
           }).then(function (response) {
             swalWithBootstrapButtons.fire('Desactivado!', 'El registro a sido desactivado Correctamente', 'success');
-            me.listarFormaFarm();
+            me.listarFormaFarm(me.pagination.current_page);
           })["catch"](function (error) {
             console.log(error);
           });
@@ -3301,7 +3311,7 @@ __webpack_require__.r(__webpack_exports__);
             'id': idformafarm
           }).then(function (response) {
             swalWithBootstrapButtons.fire('Activado!', 'El registro a sido Activado Correctamente', 'success');
-            me.listarFormaFarm();
+            me.listarFormaFarm(me.pagination.current_page);
           })["catch"](function (error) {
             console.log(error);
           });
@@ -3326,7 +3336,7 @@ __webpack_require__.r(__webpack_exports__);
         if (response.data.length) {} // console.log(response)
         else {
           sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Actualizado Correctamente');
-          me.listarFormaFarm();
+          me.listarFormaFarm(me.pagination.current_page);
         }
       })["catch"](function (error) {});
       me.cerrarModal('registrar');
@@ -47780,74 +47790,74 @@ var render = function () {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
-                _c(
-                  "form",
-                  {
-                    staticClass: "form-horizontal",
-                    attrs: {
-                      action: "",
-                      method: "post",
-                      enctype: "multipart/form-data",
+                _c("div", { staticClass: "form-group row" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "col-md-3 form-control-label",
+                      attrs: { for: "text-input" },
                     },
-                  },
-                  [
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
+                    [
+                      _vm._v("Nombre "),
+                      !_vm.sicompleto
+                        ? _c("span", { staticClass: "error" }, [_vm._v("(*)")])
+                        : _vm._e(),
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-9" }, [
+                    _c("input", {
+                      directives: [
                         {
-                          staticClass: "col-md-3 form-control-label",
-                          attrs: { for: "text-input" },
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.nombre,
+                          expression: "nombre",
                         },
-                        [
-                          _vm._v("Nombre "),
-                          !_vm.sicompleto
-                            ? _c("span", { staticClass: "error" }, [
-                                _vm._v("(*)"),
-                              ])
-                            : _vm._e(),
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.nombre,
-                              expression: "nombre",
-                            },
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "text",
-                            id: "nombre",
-                            name: "nombre",
-                            placeholder: "Nombre del FormaFarm",
-                          },
-                          domProps: { value: _vm.nombre },
-                          on: {
-                            focus: _vm.selectAll,
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.nombre = $event.target.value
-                            },
-                          },
-                        }),
-                        _vm._v(" "),
-                        !_vm.sicompleto
-                          ? _c("span", { staticClass: "error" }, [
-                              _vm._v(
-                                "Debe Ingresar el Nombre de la Forma Farmaceutica"
-                              ),
-                            ])
-                          : _vm._e(),
-                      ]),
-                    ]),
-                  ]
-                ),
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        id: "nombre",
+                        name: "nombre",
+                        placeholder: "Nombre del FormaFarm",
+                      },
+                      domProps: { value: _vm.nombre },
+                      on: {
+                        focus: _vm.selectAll,
+                        keyup: function ($event) {
+                          if (
+                            !$event.type.indexOf("key") &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          return _vm.registrarFormaFarm()
+                        },
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.nombre = $event.target.value
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    !_vm.sicompleto
+                      ? _c("span", { staticClass: "error" }, [
+                          _vm._v(
+                            "Debe Ingresar el Nombre de la Forma Farmaceutica"
+                          ),
+                        ])
+                      : _vm._e(),
+                  ]),
+                ]),
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Prod_FormaFarmaceutica;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProdFormaFarmaceuticaController extends Controller
 {
@@ -64,6 +65,15 @@ class ProdFormaFarmaceuticaController extends Controller
      */
     public function store(Request $request)
     {
+        $validator=Validator::make($request->all(),['nombre'=>'unique:prod__forma_farmaceuticas']);
+
+        //dd($validator->errors());
+        
+        if($validator->fails())
+        {
+            return 'error';
+        }
+        
         $formafarm = new Prod_FormaFarmaceutica();
 
         $formafarm->nombre=$request->nombre;

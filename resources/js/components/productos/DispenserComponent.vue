@@ -192,8 +192,17 @@ import Swal from 'sweetalert2'
                 axios.post('/dispenser/registrar',{
                     'nombre':me.nombre,
                 }).then(function(response){
-                    me.cerrarModal('registrar');
-                    me.listarDispenser();
+                    console.log(response);
+                    if(response.data=='error')
+                    {
+                        Swal.fire('El registro ya existe','Debe introducir uno diferente');
+                    }
+                    else
+                    {
+                        me.cerrarModal('registrar');
+                        me.listarDispenser(me.pagination.current_page);
+                    }
+                    
                 }).catch(function(error){
                     console.log(error);
                 });
@@ -229,7 +238,7 @@ import Swal from 'sweetalert2'
                             'El registro a sido desactivado Correctamente',
                             'success'
                         )
-                        me.listarDispenser();
+                        me.listarDispenser(me.pagination.current_page);
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -278,7 +287,7 @@ import Swal from 'sweetalert2'
                             'El registro a sido Activado Correctamente',
                             'success'
                         )
-                        me.listarDispenser();
+                        me.listarDispenser(me.pagination.current_page);
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -311,7 +320,7 @@ import Swal from 'sweetalert2'
                     else{
                             Swal.fire('Actualizado Correctamente')
 
-                        me.listarDispenser();
+                        me.listarDispenser(me.pagination.current_page);
                     } 
                 }).catch(function (error) {
                    

@@ -67,14 +67,20 @@ class ProdDispenserController extends Controller
     public function store(Request $request)
     {
        
-        $validador=$request->validate([
-            'nombre'=>'required|unique'
-        ]);
+        $validator=Validator::make($request->all(),['nombre'=>'unique:prod__dispensers']);
+
+        //dd($validator->errors());
+        
+        if($validator->fails())
+        {
+            return 'error';
+        }
 
         $dispenser = new Prod_Dispenser();
 
         $dispenser->nombre=$request->nombre;
         $dispenser->save();
+        //return $validador;
     }
 
    

@@ -85,15 +85,15 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                        <!-- <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"> -->
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre <span  v-if="!sicompleto" class="error">(*)</span></label>
                                 <div class="col-md-9">
-                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del FormaFarm" v-model="nombre" v-on:focus="selectAll" >
+                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del FormaFarm" v-model="nombre" v-on:focus="selectAll" @keyup.enter="registrarFormaFarm()">
                                     <span  v-if="!sicompleto" class="error">Debe Ingresar el Nombre de la Forma Farmaceutica</span>
                                 </div>
                             </div>
-                        </form>
+                        <!-- </form> -->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"  @click="cerrarModal('registrar')">Cerrar</button>
@@ -192,8 +192,15 @@ import Swal from 'sweetalert2'
                 axios.post('/formafarm/registrar',{
                     'nombre':me.nombre,
                 }).then(function(response){
-                    me.cerrarModal('registrar');
-                    me.listarFormaFarm();
+                    if(response.data=='error')
+                    {
+                        Swal.fire('El registro ya existe','Debe introducir uno diferente');
+                    }
+                    else
+                    {
+                        me.cerrarModal('registrar');
+                        me.listarFormaFarm(1);
+                    }
                 }).catch(function(error){
                     console.log(error);
                 });
@@ -229,7 +236,7 @@ import Swal from 'sweetalert2'
                             'El registro a sido desactivado Correctamente',
                             'success'
                         )
-                        me.listarFormaFarm();
+                        me.listarFormaFarm(me.pagination.current_page);
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -278,7 +285,7 @@ import Swal from 'sweetalert2'
                             'El registro a sido Activado Correctamente',
                             'success'
                         )
-                        me.listarFormaFarm();
+                        me.listarFormaFarm(me.pagination.current_page);
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -311,7 +318,7 @@ import Swal from 'sweetalert2'
                     else{
                             Swal.fire('Actualizado Correctamente')
 
-                        me.listarFormaFarm();
+                        me.listarFormaFarm(me.pagination.current_page);
                     } 
                 }).catch(function (error) {
                    
