@@ -139,14 +139,44 @@ class ProdLineaController extends Controller
         $linea->activo=1;
         $linea->save();
     }
-    public function selectLinea()
+    public function selectLinea(Request $request)
     {
-        $lineas=Prod_Linea::select(DB::raw('concat(codigo, " - ",nombre) as linea'),
-                            'id')
-                    ->where('activo',1)
-                    ->orderby('codigo','asc')
-                    ->get();
-        return $lineas;
+        $buscararray = array(); 
+        if(!empty($request->buscar)) $buscararray = explode(" ",$request->buscar); 
+        $raw=DB::raw(DB::raw('concat(codigo," ",nombre) as cod'));
+        if (sizeof($buscararray)>0) { 
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls))
+                    $sqls="(codigo like '%".$valor."%' or nombre like '%".$valor."%' )";
+                else
+                    $sqls.=" and (codigo like '%".$valor."%' or nombre like '%".$valor."%' )";
+            }   
+            $lineas = Prod_Linea::select($raw,'id','nombre')
+                                ->where('activo',1)
+                                ->whereraw($sqls)
+                                ->orderby('codigo','asc')
+                                ->get();
+        }
+        else {
+            if ($request->id){
+                    $lineas = Prod_Linea::select($raw,'id','nombre')
+                                                 ->where('activo',1)
+                                                ->where('id',$request->id)
+                                                ->orderby('codigo','asc')
+                                                ->get();
+            }
+
+            else
+            {
+                $lineas = Prod_Linea::select($raw,'id','nombre')
+                                    ->where('activo',1)
+                                    ->orderby('codigo','asc')
+                                    ->get();
+            }
+              
+        }
+        return ['lineas' => $lineas];
         
 
     }

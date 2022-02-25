@@ -10,7 +10,7 @@
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Dispenser
+                    <i class="fa fa-align-justify"></i> Registro de Productos
                     <button type="button" class="btn btn-secondary" @click="abrirModal('registrar')">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
@@ -19,8 +19,8 @@
                     <div class="form-group row">
                         <div class="col-md-6">
                             <div class="input-group">
-                                <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar"  @keyup.enter="listarDispenser(1)">
-                                <button type="submit" class="btn btn-primary" @click="listarDispenser(1)"><i class="fa fa-search" ></i> Buscar</button>
+                                <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar"  @keyup.enter="listarProducto(1)">
+                                <button type="submit" class="btn btn-primary" @click="listarProducto(1)"><i class="fa fa-search" ></i> Buscar</button>
                             </div>
                         </div>
                     </div>
@@ -33,15 +33,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="dispenser in arrayDispenser" :key="dispenser.id">
+                            <tr v-for="dispenser in arrayProducto" :key="dispenser.id">
                                 <td>
                                     <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('actualizar',dispenser)">
                                         <i class="icon-pencil"></i>
                                     </button> &nbsp;
-                                    <button v-if="dispenser.activo==1" type="button" class="btn btn-danger btn-sm" @click="eliminarDispenser(dispenser.id)" >
+                                    <button v-if="dispenser.activo==1" type="button" class="btn btn-danger btn-sm" @click="eliminarProducto(dispenser.id)" >
                                         <i class="icon-trash"></i>
                                     </button>
-                                    <button v-else type="button" class="btn btn-info btn-sm" @click="activarDispenser(dispenser.id)" >
+                                    <button v-else type="button" class="btn btn-info btn-sm" @click="activarProducto(dispenser.id)" >
                                         <i class="icon-check"></i>
                                     </button>
                                 </td>
@@ -85,20 +85,40 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                         <div class="row">
+                            <div class="form-group col-sm-7">
+                                <strong>Linea:</strong>
+                                <Ajaxselect  v-if="clearSelected"
+                                    ruta="/linea/selectlinea?buscar=" @found="lineas" @cleaning="cleanlineas"
+                                    resp_ruta="lineas"
+                                    labels="cod"
+                                    placeholder="Ingrese Texto..." 
+                                    idtabla="id"
+                                    :id="idlineaselected"
+                                    :clearable='true'>
+                                </Ajaxselect>
+                                <span class="text-error" v-if="idlineas.length==0">Debe Seleccionar la Linea</span>
+                            </div>
+                            <div class="form-group col-sm-5">
+                                <strong>NIT:</strong>
+                                <input type="text" class="form-control" v-model="valor">
+                                <span class="text-error" v-if="valor==''">NIT no debe estar Vacio</span>
+                            </div>
+                        </div>
                         
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre <span  v-if="!sicompleto" class="error">(*)</span></label>
                                 <div class="col-md-9">
-                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del Dispenser" v-model="nombre" v-on:focus="selectAll" @keyup.enter="registrarDispenser()" >
-                                    <span  v-if="!sicompleto" class="error">Debe Ingresar el Nombre del Dispenser</span>
+                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del Producto" v-model="nombre" v-on:focus="selectAll" @keyup.enter="registrarProducto()" >
+                                    <span  v-if="!sicompleto" class="error">Debe Ingresar el Nombre del Producto</span>
                                 </div>
                             </div>
                         
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"  @click="cerrarModal('registrar')">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarDispenser()" :disabled="!sicompleto">Guardar</button>
-                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarDispenser()">Actualizar</button>
+                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarProducto()" :disabled="!sicompleto">Guardar</button>
+                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarProducto()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -127,11 +147,15 @@ import Swal from 'sweetalert2'
                 },
                 offset:3,
                 nombre:'',
-                arrayDispenser:[],
+                arrayProducto:[],
                 tituloModal:'',
                 tipoAccion:1,
                 iddispenser:'',
-                buscar:''
+                buscar:'',
+                idlineas:[],
+                idlineaselected:'',
+                clearSelected:1,
+                valor:''
             }
 
         },
@@ -169,13 +193,32 @@ import Swal from 'sweetalert2'
 
         },
         methods :{
-            listarDispenser(page){
+            tiempo(){
+            this.clearSelected=1;
+            },
+            lineas(lineas){
+                this.idcientes=[];
+                for (const key in lineas) {
+                    if (lineas.hasOwnProperty(key)) {
+                        const element = lineas[key];
+                        //console.log(element);
+                        this.idlineas.push(element);
+                    }
+                }
+                //console.log(this.idprestaciones);
+            },
+            cleanlineas(){
+                this.idlineas=[];
+                this.idlineaselected='';
+            
+            },
+            listarProducto(page){
                 let me=this;
                 var url='/dispenser?page='+page+'&buscar='+me.buscar;
                 axios.get(url).then(function(response){
                     var respuesta=response.data;
                     me.pagination=respuesta.pagination;
-                    me.arrayDispenser=respuesta.dispenser.data;
+                    me.arrayProducto=respuesta.dispenser.data;
                     
                 })
                 .catch(function(error){
@@ -185,9 +228,9 @@ import Swal from 'sweetalert2'
             cambiarPagina(page){
                 let me =this;
                 me.pagination.current_page = page;
-                me.listarDispenser(page);
+                me.listarProducto(page);
             },
-            registrarDispenser(){
+            registrarProducto(){
                 let me = this;
                 axios.post('/dispenser/registrar',{
                     'nombre':me.nombre,
@@ -200,7 +243,7 @@ import Swal from 'sweetalert2'
                     else
                     {
                         me.cerrarModal('registrar');
-                        me.listarDispenser(me.pagination.current_page);
+                        me.listarProducto(me.pagination.current_page);
                     }
                     
                 }).catch(function(error){
@@ -208,7 +251,7 @@ import Swal from 'sweetalert2'
                 });
 
             },
-            eliminarDispenser(iddispenser){
+            eliminarProducto(iddispenser){
                 let me=this;
                 //console.log("prueba");
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -238,7 +281,7 @@ import Swal from 'sweetalert2'
                             'El registro a sido desactivado Correctamente',
                             'success'
                         )
-                        me.listarDispenser(me.pagination.current_page);
+                        me.listarProducto(me.pagination.current_page);
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -257,7 +300,7 @@ import Swal from 'sweetalert2'
                 }
                 })
             },
-            activarDispenser(iddispenser){
+            activarProducto(iddispenser){
                 let me=this;
                 //console.log("prueba");
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -287,7 +330,7 @@ import Swal from 'sweetalert2'
                             'El registro a sido Activado Correctamente',
                             'success'
                         )
-                        me.listarDispenser(me.pagination.current_page);
+                        me.listarProducto(me.pagination.current_page);
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -306,7 +349,7 @@ import Swal from 'sweetalert2'
                 }
                 })
             },
-            actualizarDispenser(){
+            actualizarProducto(){
                // const Swal = require('sweetalert2')
                 let me =this;
                 axios.put('/dispenser/actualizar',{
@@ -320,7 +363,7 @@ import Swal from 'sweetalert2'
                     else{
                             Swal.fire('Actualizado Correctamente')
 
-                        me.listarDispenser(me.pagination.current_page);
+                        me.listarProducto(me.pagination.current_page);
                     } 
                 }).catch(function (error) {
                    
@@ -334,7 +377,7 @@ import Swal from 'sweetalert2'
                 switch(accion){
                     case 'registrar':
                     {
-                        me.tituloModal='Registar Dispenser'
+                        me.tituloModal='Registar Producto'
                         me.tipoAccion=1;
                         me.nombre='';
                         me.classModal.openModal('registrar');
@@ -345,7 +388,7 @@ import Swal from 'sweetalert2'
                     {
                         me.iddispenser=data.id;
                         me.tipoAccion=2;
-                        me.tituloModal='Actualizar Dispenser'
+                        me.tituloModal='Actualizar Producto'
                         me.nombre=data.nombre;
                         me.classModal.openModal('registrar');
                         break;
@@ -370,7 +413,7 @@ import Swal from 'sweetalert2'
 
         },
         mounted() {
-            this.listarDispenser(1);
+            this.listarProducto(1);
             this.classModal = new _pl.Modals();
             this.classModal.addModal('registrar');
             //console.log('Component mounted.')
