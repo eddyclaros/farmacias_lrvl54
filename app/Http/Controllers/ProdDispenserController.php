@@ -115,14 +115,44 @@ class ProdDispenserController extends Controller
         $dispenser->activo=1;
         $dispenser->save();
     }
-    public function selectProd_Dispenser()
+    public function selectDispenser(Request $request)
     {
-        $dispenser=Prod_Dispenser::select('nombre',
-                            'id')
-                    ->where('activo',1)
-                    ->orderby('nombre','asc')
-                    ->get();
-        return $dispenser;
+        $buscararray = array(); 
+        if(!empty($request->buscar)) $buscararray = explode(" ",$request->buscar); 
+        if (sizeof($buscararray)>0) { 
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls))
+                    $sqls="(nombre like '%".$valor."%' )";
+                else
+                    $sqls.=" and (nombre like '%".$valor."%' )";
+            }   
+            $dispensers = Prod_Dispenser::select('id','nombre')
+                                ->where('activo',1)
+                                ->whereraw($sqls)
+                                ->orderby('nombre','asc')
+                                ->get();
+        }
+        else {
+            if ($request->id){
+                    $dispensers = Prod_Dispenser::select('id','nombre')
+                                                 ->where('activo',1)
+                                                ->where('id',$request->id)
+                                                ->orderby('nombre','asc')
+                                                ->get();
+            }
+
+            else
+            {
+                $dispensers = Prod_Dispenser::select('id','nombre')
+                                    ->where('activo',1)
+                                    ->orderby('nombre','asc')
+                                    ->get();
+            }
+              
+        }
+        return ['dispensers' => $dispensers];
+        
         
 
     }

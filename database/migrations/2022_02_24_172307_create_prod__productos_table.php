@@ -16,11 +16,11 @@ class CreateProdProductosTable extends Migration
         Schema::create('prod__productos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('idlinea')->unsigned();
-            $table->string('codigo',10);
+            $table->string('codigo',15);
             $table->integer('correlativo')->unsigned();
             $table->string('nombre',100);
             $table->bigInteger('iddispenser')->unsigned();
-            $table->string('cantidad_dispenser',15);
+            $table->string('cantidad',15);
             $table->bigInteger('idformafarm')->unsigned();
             $table->string('indicaciones')->nullable();
             $table->string('dosificacion')->nullable();

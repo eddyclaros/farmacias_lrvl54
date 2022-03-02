@@ -31,7 +31,7 @@ class FormaFarmaceuticaSeeder extends Seeder
         DB::table('prod__forma_farmaceuticas')->insert(['nombre'=>'supositorio','created_at'=>date("Y/m/d H:i:s"),'updated_at'=>date("Y/m/d H:i:s")]);
         DB::table('prod__forma_farmaceuticas')->insert(['nombre'=>'pieza','created_at'=>date("Y/m/d H:i:s"),'updated_at'=>date("Y/m/d H:i:s")]);
         DB::table('prod__forma_farmaceuticas')->insert(['nombre'=>'ampollas','created_at'=>date("Y/m/d H:i:s"),'updated_at'=>date("Y/m/d H:i:s")]);
-        DB::table('prod__forma_farmaceuticas')->insert(['nombre'=>'gotal oftalmicas','created_at'=>date("Y/m/d H:i:s"),'updated_at'=>date("Y/m/d H:i:s")]);
+        DB::table('prod__forma_farmaceuticas')->insert(['nombre'=>'gotas oftalmicas','created_at'=>date("Y/m/d H:i:s"),'updated_at'=>date("Y/m/d H:i:s")]);
         DB::table('prod__forma_farmaceuticas')->insert(['nombre'=>'gel dermico','created_at'=>date("Y/m/d H:i:s"),'updated_at'=>date("Y/m/d H:i:s")]);
         DB::table('prod__forma_farmaceuticas')->insert(['nombre'=>'elixir','created_at'=>date("Y/m/d H:i:s"),'updated_at'=>date("Y/m/d H:i:s")]);
         DB::table('prod__forma_farmaceuticas')->insert(['nombre'=>'pasta dermica','created_at'=>date("Y/m/d H:i:s"),'updated_at'=>date("Y/m/d H:i:s")]);

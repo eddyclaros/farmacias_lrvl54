@@ -28,26 +28,42 @@
                         <thead>
                             <tr>
                                 <th>Opciones</th>
+                                <th>Linea</th>
+                                <th>Codigo</th>
                                 <th>Nombre</th>
+                                <th>Cantidad</th>
+                                <th>Tiempo Pedido</th>
+                                <th>Precio Lista</th>
+                                <th>Precio Venta</th>
+                                <th>Dispenser</th>
+                                <th>Forma Farmaceutica</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="dispenser in arrayProducto" :key="dispenser.id">
+                            <tr v-for="producto in arrayProducto" :key="producto.id">
                                 <td>
-                                    <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('actualizar',dispenser)">
+                                    <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('actualizar',producto)">
                                         <i class="icon-pencil"></i>
                                     </button> &nbsp;
-                                    <button v-if="dispenser.activo==1" type="button" class="btn btn-danger btn-sm" @click="eliminarProducto(dispenser.id)" >
+                                    <button v-if="producto.activo==1" type="button" class="btn btn-danger btn-sm" @click="eliminarProducto(producto.id)" >
                                         <i class="icon-trash"></i>
                                     </button>
-                                    <button v-else type="button" class="btn btn-info btn-sm" @click="activarProducto(dispenser.id)" >
+                                    <button v-else type="button" class="btn btn-info btn-sm" @click="activarProducto(producto.id)" >
                                         <i class="icon-check"></i>
                                     </button>
                                 </td>
-                                <td v-text="dispenser.nombre"></td>
+                                <td v-text="producto.nombrelinea"></td>
+                                <td v-text="producto.codproducto"></td>
+                                <td v-text="producto.nombreproducto"></td>
+                                <td v-text="producto.cantidad"></td>
+                                <td v-text="producto.tiempo_pedido"></td>
+                                <td v-text="producto.precio_lista"></td>
+                                <td v-text="producto.precio_venta"></td>
+                                <td v-text="producto.nombredispenser"></td>
+                                <td v-text="producto.nombreformafarm"></td>
                                 <td>
-                                    <div v-if="dispenser.activo==1">
+                                    <div v-if="producto.activo==1">
                                         <span class="badge badge-success">Activo</span>
                                     </div>
                                     <div v-else>
@@ -85,8 +101,21 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                         <div class="row">
-                            <div class="form-group col-sm-7">
+                        <div class="row">
+                            <div class="form-group col-sm-8">
+                                <strong>Producto:</strong>
+                                <input type="text" class="form-control" v-model="nombre" placeholder="Nombre del Producto">
+                                <span class="error" v-if="nombre.length==0">Debe Ingresar Nombre del Producto</span>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <strong>Cantidad:</strong>
+                                <input type="text" class="form-control" v-model="cantidad" style="text-align:right" placeholder="0" v-on:focus="selectAll">
+                                <span class="error" v-if="cantidad==''">Debe ingresar Cantidad</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-sm-4">
                                 <strong>Linea:</strong>
                                 <Ajaxselect  v-if="clearSelected"
                                     ruta="/linea/selectlinea?buscar=" @found="lineas" @cleaning="cleanlineas"
@@ -97,22 +126,102 @@
                                     :id="idlineaselected"
                                     :clearable='true'>
                                 </Ajaxselect>
-                                <span class="text-error" v-if="idlineas.length==0">Debe Seleccionar la Linea</span>
+                                <span class="error" v-if="idlineas.length==0">Debe Seleccionar la Linea</span>
                             </div>
-                            <div class="form-group col-sm-5">
-                                <strong>NIT:</strong>
-                                <input type="text" class="form-control" v-model="valor">
-                                <span class="text-error" v-if="valor==''">NIT no debe estar Vacio</span>
+                            <div class="form-group col-sm-4">
+                                <strong>Dispenser:</strong>
+                                <Ajaxselect  v-if="clearSelected1"
+                                    ruta="/dispenser/selectdispenser?buscar=" @found="dispensers" @cleaning="cleandispensers"
+                                    resp_ruta="dispensers"
+                                    labels="nombre"
+                                    placeholder="Ingrese Texto..." 
+                                    idtabla="id"
+                                    :id="iddispenserselected"
+                                    :clearable='true'>
+                                </Ajaxselect>
+                                <span class="error" v-if="iddispenser.length==0">Debe Seleccionar el dispenser</span>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <strong>Forma Farmaceutica:</strong>
+                                <Ajaxselect  v-if="clearSelected2"
+                                    ruta="/formafarm/selectformafarm?buscar=" @found="formafarm" @cleaning="cleanformafarm"
+                                    resp_ruta="formafarm"
+                                    labels="nombre"
+                                    placeholder="Ingrese Texto..." 
+                                    idtabla="id"
+                                    :id="idformafarmselected"
+                                    :clearable='true'>
+                                </Ajaxselect>
+                                <span class="error" v-if="idformafarm.length==0">Debe Seleccionar la Forma Farmaceutica</span>
+                            </div>
+
+                            
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4">
+                                <strong>Precio de Lista:</strong>
+                                <vue-numeric  
+                                    class="form-control"
+                                    currency="Bs." 
+                                    separator="," 
+                                    v-model="preciolista"
+                                    v-bind:precision="2"
+                                    v-on:focus="selectAll"
+                                    style="text-align:right">
+                                </vue-numeric>
+                                <span class="error" v-if="preciolista==0">Debe Ingresar el Precio de Lista</span>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <strong>Precio de Venta:</strong>
+                                <vue-numeric  
+                                    class="form-control"
+                                    currency="Bs." 
+                                    separator="," 
+                                    v-model="precioventa"
+                                    v-bind:precision="2"
+                                    v-on:focus="selectAll"
+                                    style="text-align:right">
+                                </vue-numeric>
+                                <span class="error" v-if="precioventa==''">Debe Ingresar el Precio de Venta</span>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <strong>Tiempo de Pedido:</strong>
+                                <select v-model="tiempopedidoselected" class="form-control">
+                                    <option value="0">Seleccionar</option>
+                                    <option v-for="tiempo in tiempopedido" :key="tiempo.id" :value="tiempo.id" v-text="tiempo.dato"></option>
+                                </select>
+                                <span class="error" v-if="cantidad==''">Debe ingresar Cantidad</span>
                             </div>
                         </div>
-                        
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Nombre <span  v-if="!sicompleto" class="error">(*)</span></label>
-                                <div class="col-md-9">
-                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del Producto" v-model="nombre" v-on:focus="selectAll" @keyup.enter="registrarProducto()" >
-                                    <span  v-if="!sicompleto" class="error">Debe Ingresar el Nombre del Producto</span>
-                                </div>
+
+                        <div class="form-group row">
+                            <strong class="col-md-3 " for="text-input">Indicaciones: </strong>
+                            <div class="col-md-9">
+                                <textarea class="form-control" maxlength="255" style="resize: none;" v-model="indicaciones" placeholder="Ninguno"></textarea>
                             </div>
+                        </div>
+                        <div class="form-group row">
+                            <strong class="col-md-3 " for="text-input">Dosificacion: </strong>
+                            <div class="col-md-9">
+                                <textarea class="form-control" maxlength="255" style="resize: none;" v-model="dosificacion" placeholder="Ninguno"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <strong class="col-md-3 " for="text-input">Principio Activo: </strong>
+                            <div class="col-md-9">
+                                <textarea class="form-control" maxlength="255" style="resize: none;" v-model="principio" placeholder="Ninguno"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <strong class="col-md-3 " for="text-input">Accion Terapeutica:k </strong>
+                            <div class="col-md-9">
+                                <textarea class="form-control" maxlength="255" style="resize: none;" v-model="accion" placeholder="Ninguno"></textarea>
+                            </div>
+                        </div>
+
+                    
+                        
+                            
                         
                     </div>
                     <div class="modal-footer">
@@ -133,6 +242,10 @@
 
 <script>
 import Swal from 'sweetalert2'
+import Vue from 'vue'
+import VueNumeric from 'vue-numeric'
+
+Vue.use(VueNumeric)
 //Vue.use(VeeValidate);
     export default {
         data(){
@@ -146,7 +259,7 @@ import Swal from 'sweetalert2'
                     'to':0
                 },
                 offset:3,
-                nombre:'',
+                
                 arrayProducto:[],
                 tituloModal:'',
                 tipoAccion:1,
@@ -155,17 +268,39 @@ import Swal from 'sweetalert2'
                 idlineas:[],
                 idlineaselected:'',
                 clearSelected:1,
-                valor:''
+                
+                cantidad:0,
+                nombre:'',
+                clearSelected2:1,
+                clearSelected1:1,
+                iddispenserselected:'',
+                iddispenser:[],
+                idformafarmselected:'',
+                idformafarm:[],
+                preciolista:0,
+                precioventa:0,
+                tiempopedido:[{'id':1,'dato':'1 mes'},
+                                {'id':3,'dato':'3 meses'},
+                                {'id':6,'dato':'6 meses'},
+                                {'id':12,'dato':'12 meses'}],
+                tiempopedidoselected:0,
+                indicaciones:'',
+                dosificacion:'',
+                principio:'',
+                accion:'',
+                idproducto:'',
+
+
             }
 
         },
         computed:{
             sicompleto(){
                 let me=this;
-                if (me.nombre!='')
-                    return true;
-                else
+                if (me.nombre=='' || me.cantidad==0 || me.idlineas.length==0 || me.iddispenser.length==0 || me.idformafarm.length==0 || me.preciolista==0 || me.precioventa==0 || me.tiempopedidoselected==0)
                     return false;
+                else
+                    return true;
             },
             isActived:function(){
                 return this.pagination.current_page;
@@ -196,8 +331,14 @@ import Swal from 'sweetalert2'
             tiempo(){
             this.clearSelected=1;
             },
+            tiempo1(){
+            this.clearSelected1=1;
+            },
+            tiempo2(){
+            this.clearSelected2=1;
+            },
             lineas(lineas){
-                this.idcientes=[];
+                this.idlineas=[];
                 for (const key in lineas) {
                     if (lineas.hasOwnProperty(key)) {
                         const element = lineas[key];
@@ -212,13 +353,45 @@ import Swal from 'sweetalert2'
                 this.idlineaselected='';
             
             },
+            dispensers(dispensers){
+                this.iddispenser=[];
+                for (const key in dispensers) {
+                    if (dispensers.hasOwnProperty(key)) {
+                        const element = dispensers[key];
+                        //console.log(element);
+                        this.iddispenser.push(element);
+                    }
+                }
+                //console.log(this.idprestaciones);
+            },
+            cleandispensers(){
+                this.iddispenser=[];
+                this.iddispenserselected='';
+            
+            },
+            formafarm(formafarm){
+                this.idformafarm=[];
+                for (const key in formafarm) {
+                    if (formafarm.hasOwnProperty(key)) {
+                        const element = formafarm[key];
+                        //console.log(element);
+                        this.idformafarm.push(element);
+                    }
+                }
+                //console.log(this.idprestaciones);
+            },
+            cleanformafarm(){
+                this.idformafarm=[];
+                this.idformafarmselected='';
+            
+            },
             listarProducto(page){
                 let me=this;
-                var url='/dispenser?page='+page+'&buscar='+me.buscar;
+                var url='/producto?page='+page+'&buscar='+me.buscar;
                 axios.get(url).then(function(response){
                     var respuesta=response.data;
                     me.pagination=respuesta.pagination;
-                    me.arrayProducto=respuesta.dispenser.data;
+                    me.arrayProducto=respuesta.producto.data;
                     
                 })
                 .catch(function(error){
@@ -232,8 +405,22 @@ import Swal from 'sweetalert2'
             },
             registrarProducto(){
                 let me = this;
-                axios.post('/dispenser/registrar',{
+                axios.post('/producto/registrar',{
                     'nombre':me.nombre,
+                    'cod':me.idlineas[3],
+                    'cantidad':me.cantidad,
+                    'idlinea':me.idlineas[1],
+                    'iddispenser':me.iddispenser[0],
+                    'idformafarm':me.idformafarm[0],
+                    'precio_lista':me.preciolista,
+                    'precio_venta':me.precioventa,
+                    'tiempo_pedido':me.tiempopedidoselected,
+                    'indicaciones':me.indicaciones,
+                    'dosificacione':me.dosificacione,
+                    'principio_activo':me.principio,
+                    'accion_terapeutica':me.accion,
+
+
                 }).then(function(response){
                     console.log(response);
                     if(response.data=='error')
@@ -242,6 +429,8 @@ import Swal from 'sweetalert2'
                     }
                     else
                     {
+                        
+                        Swal.fire('Registrado Correctamente');
                         me.cerrarModal('registrar');
                         me.listarProducto(me.pagination.current_page);
                     }
@@ -251,7 +440,7 @@ import Swal from 'sweetalert2'
                 });
 
             },
-            eliminarProducto(iddispenser){
+            eliminarProducto(idproducto){
                 let me=this;
                 //console.log("prueba");
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -272,8 +461,8 @@ import Swal from 'sweetalert2'
                 reverseButtons: true
                 }).then((result) => {
                 if (result.isConfirmed) {
-                     axios.put('/dispenser/desactivar',{
-                        'id': iddispenser
+                     axios.put('/producto/desactivar',{
+                        'id': idproducto
                     }).then(function (response) {
                         
                         swalWithBootstrapButtons.fire(
@@ -300,7 +489,7 @@ import Swal from 'sweetalert2'
                 }
                 })
             },
-            activarProducto(iddispenser){
+            activarProducto(idproducto){
                 let me=this;
                 //console.log("prueba");
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -321,8 +510,8 @@ import Swal from 'sweetalert2'
                 reverseButtons: true
                 }).then((result) => {
                 if (result.isConfirmed) {
-                     axios.put('/dispenser/activar',{
-                        'id': iddispenser
+                     axios.put('/producto/activar',{
+                        'id': idproducto
                     }).then(function (response) {
                         
                         swalWithBootstrapButtons.fire(
@@ -352,9 +541,20 @@ import Swal from 'sweetalert2'
             actualizarProducto(){
                // const Swal = require('sweetalert2')
                 let me =this;
-                axios.put('/dispenser/actualizar',{
-                    'id':me.iddispenser,
+                axios.put('/producto/actualizar',{
+                    'id':me.idproducto,
                     'nombre':me.nombre,
+                    'cantidad':me.cantidad,
+                    'idlinea':me.idlineas[1],
+                    'iddispenser':me.iddispenser[0],
+                    'idformafarm':me.idformafarm[0],
+                    'precio_lista':me.preciolista,
+                    'precio_venta':me.precioventa,
+                    'tiempo_pedido':me.tiempopedidoselected,
+                    'indicaciones':me.indicaciones,
+                    'dosificacione':me.dosificacione,
+                    'principio_activo':me.principio,
+                    'accion_terapeutica':me.accion,
                     
                 }).then(function (response) {
                     if(response.data.length){
@@ -378,18 +578,56 @@ import Swal from 'sweetalert2'
                     case 'registrar':
                     {
                         me.tituloModal='Registar Producto'
-                        me.tipoAccion=1;
                         me.nombre='';
+                        me.cantidad='';
+                        me.clearSelected=0;
+                        setTimeout(me.tiempo, 200); 
+                        me.clearSelected1=0;
+                        setTimeout(me.tiempo1, 200); 
+                        me.clearSelected2=0;
+                        setTimeout(me.tiempo2, 200); 
+                        me.preciolista=0;
+                        me.precioventa=0;
+                        me.tiempopedidoselected=0;
+                        me.indicaciones='';
+                        me.dosificacione='';
+                        me.principio='';
+                        me.accion='';
+                        me.tipoAccion=1;
                         me.classModal.openModal('registrar');
                         break;
                     }
                     
                     case 'actualizar':
                     {
-                        me.iddispenser=data.id;
                         me.tipoAccion=2;
-                        me.tituloModal='Actualizar Producto'
-                        me.nombre=data.nombre;
+                        me.idproducto=data.idproducto;
+                        me.tituloModal='Actualizar Producto: ' + data.codproducto
+                        me.nombre=data.nombreproducto;
+                        me.cantidad=data.cantidad;
+                        
+                        me.clearSelected=0;
+                        setTimeout(me.tiempo, 200); 
+                        me.idlineaselected=data.idlinea;
+                        
+                        me.clearSelected1=0;
+                        setTimeout(me.tiempo1, 200);
+                        me.iddispenserselected=data.iddispenser; 
+                        
+                        me.clearSelected2=0;
+                        setTimeout(me.tiempo2, 200); 
+                        me.idformafarmselected=data.idformafarm
+                        me.idlineas=[0,data.idlinea];
+                        me.iddispenser=[data.iddispenser];
+                        me.idformafarm=[data.idformafarm];
+                        me.preciolista=data.precio_lista;
+                        me.precioventa=data.precio_venta;
+                        me.tiempopedidoselected=data.tiempo_pedido;
+                        me.indicaciones=data.indicaciones;
+                        me.dosificacione=data.dosificacione;
+                        me.principio=data.principio_activo;
+                        me.accion=data.accion_terapeutica;
+                        me.tipoAccion=2;
                         me.classModal.openModal('registrar');
                         break;
                     }
@@ -401,6 +639,20 @@ import Swal from 'sweetalert2'
                 let me = this;
                 me.classModal.closeModal(accion);
                 me.nombre='';
+                me.cantidad='';
+                me.clearSelected=0;
+                setTimeout(me.tiempo, 200); 
+                me.clearSelected1=0;
+                setTimeout(me.tiempo1, 200); 
+                me.clearSelected2=0;
+                setTimeout(me.tiempo2, 200); 
+                me.preciolista=0;
+                me.precioventa=0;
+                me.tiempopedidoselected=0;
+                me.indicaciones='';
+                me.dosificacione='';
+                me.principio='';
+                me.accion='';
                 me.tipoAccion=1;
                 
             },

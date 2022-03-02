@@ -86,6 +86,431 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./node_modules/accounting-js/dist/accounting.umd.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/accounting-js/dist/accounting.umd.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function (global, factory) {
+	 true ? factory(exports) :
+	undefined;
+}(this, function (exports) { 'use strict';
+
+	function __commonjs(fn, module) { return module = { exports: {} }, fn(module, module.exports), module.exports; }
+
+	/**
+	 * The library's settings configuration object.
+	 *
+	 * Contains default parameters for currency and number formatting
+	 */
+	var settings = {
+	  symbol: '$', // default currency symbol is '$'
+	  format: '%s%v', // controls output: %s = symbol, %v = value (can be object, see docs)
+	  decimal: '.', // decimal point separator
+	  thousand: ',', // thousands separator
+	  precision: 2, // decimal places
+	  grouping: 3, // digit grouping (not implemented yet)
+	  stripZeros: false, // strip insignificant zeros from decimal part
+	  fallback: 0 // value returned on unformat() failure
+	};
+
+	/**
+	 * Takes a string/array of strings, removes all formatting/cruft and returns the raw float value
+	 * Alias: `accounting.parse(string)`
+	 *
+	 * Decimal must be included in the regular expression to match floats (defaults to
+	 * accounting.settings.decimal), so if the number uses a non-standard decimal
+	 * separator, provide it as the second argument.
+	 *
+	 * Also matches bracketed negatives (eg. '$ (1.99)' => -1.99)
+	 *
+	 * Doesn't throw any errors (`NaN`s become 0) but this may change in future
+	 *
+	 * ```js
+	 *  accounting.unformat("£ 12,345,678.90 GBP"); // 12345678.9
+	 * ```
+	 *
+	 * @method unformat
+	 * @for accounting
+	 * @param {String|Array<String>} value The string or array of strings containing the number/s to parse.
+	 * @param {Number}               decimal Number of decimal digits of the resultant number
+	 * @return {Float} The parsed number
+	 */
+	function unformat(value) {
+	  var decimal = arguments.length <= 1 || arguments[1] === undefined ? settings.decimal : arguments[1];
+	  var fallback = arguments.length <= 2 || arguments[2] === undefined ? settings.fallback : arguments[2];
+
+	  // Recursively unformat arrays:
+	  if (Array.isArray(value)) {
+	    return value.map(function (val) {
+	      return unformat(val, decimal, fallback);
+	    });
+	  }
+
+	  // Return the value as-is if it's already a number:
+	  if (typeof value === 'number') return value;
+
+	  // Build regex to strip out everything except digits, decimal point and minus sign:
+	  var regex = new RegExp('[^0-9-(-)-' + decimal + ']', ['g']);
+	  var unformattedValueString = ('' + value).replace(regex, '') // strip out any cruft
+	  .replace(decimal, '.') // make sure decimal point is standard
+	  .replace(/\(([-]*\d*[^)]?\d+)\)/g, '-$1') // replace bracketed values with negatives
+	  .replace(/\((.*)\)/, ''); // remove any brackets that do not have numeric value
+
+	  /**
+	   * Handling -ve number and bracket, eg.
+	   * (-100) = 100, -(100) = 100, --100 = 100
+	   */
+	  var negative = (unformattedValueString.match(/-/g) || 2).length % 2,
+	      absUnformatted = parseFloat(unformattedValueString.replace(/-/g, '')),
+	      unformatted = absUnformatted * (negative ? -1 : 1);
+
+	  // This will fail silently which may cause trouble, let's wait and see:
+	  return !isNaN(unformatted) ? unformatted : fallback;
+	}
+
+	/**
+	 * Check and normalise the value of precision (must be positive integer)
+	 */
+	function _checkPrecision(val, base) {
+	  val = Math.round(Math.abs(val));
+	  return isNaN(val) ? base : val;
+	}
+
+	/**
+	 * Implementation of toFixed() that treats floats more like decimals
+	 *
+	 * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
+	 * problems for accounting- and finance-related software.
+	 *
+	 * ```js
+	 *  (0.615).toFixed(2);           // "0.61" (native toFixed has rounding issues)
+	 *  accounting.toFixed(0.615, 2); // "0.62"
+	 * ```
+	 *
+	 * @method toFixed
+	 * @for accounting
+	 * @param {Float}   value         The float to be treated as a decimal number.
+	 * @param {Number} [precision=2] The number of decimal digits to keep.
+	 * @return {String} The given number transformed into a string with the given precission
+	 */
+	function toFixed(value, precision) {
+	  precision = _checkPrecision(precision, settings.precision);
+	  var power = Math.pow(10, precision);
+
+	  // Multiply up by precision, round accurately, then divide and use native toFixed():
+	  return (Math.round((value + 1e-8) * power) / power).toFixed(precision);
+	}
+
+	var index = __commonjs(function (module) {
+	/* eslint-disable no-unused-vars */
+	'use strict';
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (Object.getOwnPropertySymbols) {
+				symbols = Object.getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+
+		return to;
+	};
+	});
+
+	var objectAssign = (index && typeof index === 'object' && 'default' in index ? index['default'] : index);
+
+	function _stripInsignificantZeros(str, decimal) {
+	  var parts = str.split(decimal);
+	  var integerPart = parts[0];
+	  var decimalPart = parts[1].replace(/0+$/, '');
+
+	  if (decimalPart.length > 0) {
+	    return integerPart + decimal + decimalPart;
+	  }
+
+	  return integerPart;
+	}
+
+	/**
+	 * Format a number, with comma-separated thousands and custom precision/decimal places
+	 * Alias: `accounting.format()`
+	 *
+	 * Localise by overriding the precision and thousand / decimal separators
+	 *
+	 * ```js
+	 * accounting.formatNumber(5318008);              // 5,318,008
+	 * accounting.formatNumber(9876543.21, { precision: 3, thousand: " " }); // 9 876 543.210
+	 * ```
+	 *
+	 * @method formatNumber
+	 * @for accounting
+	 * @param {Number}        number The number to be formatted.
+	 * @param {Object}        [opts={}] Object containing all the options of the method.
+	 * @return {String} The given number properly formatted.
+	  */
+	function formatNumber(number) {
+	  var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	  // Resursively format arrays:
+	  if (Array.isArray(number)) {
+	    return number.map(function (val) {
+	      return formatNumber(val, opts);
+	    });
+	  }
+
+	  // Build options object from second param (if object) or all params, extending defaults:
+	  opts = objectAssign({}, settings, opts);
+
+	  // Do some calc:
+	  var negative = number < 0 ? '-' : '';
+	  var base = parseInt(toFixed(Math.abs(number), opts.precision), 10) + '';
+	  var mod = base.length > 3 ? base.length % 3 : 0;
+
+	  // Format the number:
+	  var formatted = negative + (mod ? base.substr(0, mod) + opts.thousand : '') + base.substr(mod).replace(/(\d{3})(?=\d)/g, '$1' + opts.thousand) + (opts.precision > 0 ? opts.decimal + toFixed(Math.abs(number), opts.precision).split('.')[1] : '');
+
+	  return opts.stripZeros ? _stripInsignificantZeros(formatted, opts.decimal) : formatted;
+	}
+
+	var index$1 = __commonjs(function (module) {
+	'use strict';
+
+	var strValue = String.prototype.valueOf;
+	var tryStringObject = function tryStringObject(value) {
+		try {
+			strValue.call(value);
+			return true;
+		} catch (e) {
+			return false;
+		}
+	};
+	var toStr = Object.prototype.toString;
+	var strClass = '[object String]';
+	var hasToStringTag = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol';
+
+	module.exports = function isString(value) {
+		if (typeof value === 'string') { return true; }
+		if (typeof value !== 'object') { return false; }
+		return hasToStringTag ? tryStringObject(value) : toStr.call(value) === strClass;
+	};
+	});
+
+	var isString = (index$1 && typeof index$1 === 'object' && 'default' in index$1 ? index$1['default'] : index$1);
+
+	/**
+	 * Parses a format string or object and returns format obj for use in rendering
+	 *
+	 * `format` is either a string with the default (positive) format, or object
+	 * containing `pos` (required), `neg` and `zero` values
+	 *
+	 * Either string or format.pos must contain "%v" (value) to be valid
+	 *
+	 * @method _checkCurrencyFormat
+	 * @for accounting
+	 * @param {String}        [format="%s%v"] String with the format to apply, where %s is the currency symbol and %v is the value.
+	 * @return {Object} object represnting format (with pos, neg and zero attributes)
+	 */
+	function _checkCurrencyFormat(format) {
+	  // Format should be a string, in which case `value` ('%v') must be present:
+	  if (isString(format) && format.match('%v')) {
+	    // Create and return positive, negative and zero formats:
+	    return {
+	      pos: format,
+	      neg: format.replace('-', '').replace('%v', '-%v'),
+	      zero: format
+	    };
+	  }
+
+	  // Otherwise, assume format was fine:
+	  return format;
+	}
+
+	/**
+	 * Format a number into currency
+	 *
+	 * Usage: accounting.formatMoney(number, symbol, precision, thousandsSep, decimalSep, format)
+	 * defaults: (0, '$', 2, ',', '.', '%s%v')
+	 *
+	 * Localise by overriding the symbol, precision, thousand / decimal separators and format
+	 *
+	 * ```js
+	 * // Default usage:
+	 * accounting.formatMoney(12345678); // $12,345,678.00
+	 *
+	 * // European formatting (custom symbol and separators), can also use options object as second parameter:
+	 * accounting.formatMoney(4999.99, { symbol: "€", precision: 2, thousand: ".", decimal: "," }); // €4.999,99
+	 *
+	 * // Negative values can be formatted nicely:
+	 * accounting.formatMoney(-500000, { symbol: "£ ", precision: 0 }); // £ -500,000
+	 *
+	 * // Simple `format` string allows control of symbol position (%v = value, %s = symbol):
+	 * accounting.formatMoney(5318008, { symbol: "GBP",  format: "%v %s" }); // 5,318,008.00 GBP
+	 * ```
+	 *
+	 * @method formatMoney
+	 * @for accounting
+	 * @param {Number}        number Number to be formatted.
+	 * @param {Object}        [opts={}] Object containing all the options of the method.
+	 * @return {String} The given number properly formatted as money.
+	 */
+	function formatMoney(number) {
+	  var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	  // Resursively format arrays:
+	  if (Array.isArray(number)) {
+	    return number.map(function (val) {
+	      return formatMoney(val, opts);
+	    });
+	  }
+
+	  // Build options object from second param (if object) or all params, extending defaults:
+	  opts = objectAssign({}, settings, opts);
+
+	  // Check format (returns object with pos, neg and zero):
+	  var formats = _checkCurrencyFormat(opts.format);
+
+	  // Choose which format to use for this value:
+	  var useFormat = undefined;
+
+	  if (number > 0) {
+	    useFormat = formats.pos;
+	  } else if (number < 0) {
+	    useFormat = formats.neg;
+	  } else {
+	    useFormat = formats.zero;
+	  }
+
+	  // Return with currency symbol added:
+	  return useFormat.replace('%s', opts.symbol).replace('%v', formatNumber(Math.abs(number), opts));
+	}
+
+	/**
+	 * Format a list of numbers into an accounting column, padding with whitespace
+	 * to line up currency symbols, thousand separators and decimals places
+	 *
+	 * List should be an array of numbers
+	 *
+	 * Returns array of accouting-formatted number strings of same length
+	 *
+	 * NB: `white-space:pre` CSS rule is required on the list container to prevent
+	 * browsers from collapsing the whitespace in the output strings.
+	 *
+	 * ```js
+	 * accounting.formatColumn([123.5, 3456.49, 777888.99, 12345678, -5432], { symbol: "$ " });
+	 * ```
+	 *
+	 * @method formatColumn
+	 * @for accounting
+	 * @param {Array<Number>} list An array of numbers to format
+	 * @param {Object}        [opts={}] Object containing all the options of the method.
+	 * @param {Object|String} [symbol="$"] String with the currency symbol. For conveniency if can be an object containing all the options of the method.
+	 * @param {Integer}       [precision=2] Number of decimal digits
+	 * @param {String}        [thousand=','] String with the thousands separator.
+	 * @param {String}        [decimal="."] String with the decimal separator.
+	 * @param {String}        [format="%s%v"] String with the format to apply, where %s is the currency symbol and %v is the value.
+	 * @return {Array<String>} array of accouting-formatted number strings of same length
+	 */
+	function formatColumn(list) {
+	  var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	  if (!list) return [];
+
+	  // Build options object from second param (if object) or all params, extending defaults:
+	  opts = objectAssign({}, settings, opts);
+
+	  // Check format (returns object with pos, neg and zero), only need pos for now:
+	  var formats = _checkCurrencyFormat(opts.format);
+
+	  // Whether to pad at start of string or after currency symbol:
+	  var padAfterSymbol = formats.pos.indexOf('%s') < formats.pos.indexOf('%v');
+
+	  // Store value for the length of the longest string in the column:
+	  var maxLength = 0;
+
+	  // Format the list according to options, store the length of the longest string:
+	  var formatted = list.map(function (val) {
+	    if (Array.isArray(val)) {
+	      // Recursively format columns if list is a multi-dimensional array:
+	      return formatColumn(val, opts);
+	    }
+	    // Clean up the value
+	    val = unformat(val, opts.decimal);
+
+	    // Choose which format to use for this value (pos, neg or zero):
+	    var useFormat = undefined;
+
+	    if (val > 0) {
+	      useFormat = formats.pos;
+	    } else if (val < 0) {
+	      useFormat = formats.neg;
+	    } else {
+	      useFormat = formats.zero;
+	    }
+
+	    // Format this value, push into formatted list and save the length:
+	    var fVal = useFormat.replace('%s', opts.symbol).replace('%v', formatNumber(Math.abs(val), opts));
+
+	    if (fVal.length > maxLength) {
+	      maxLength = fVal.length;
+	    }
+
+	    return fVal;
+	  });
+
+	  // Pad each number in the list and send back the column of numbers:
+	  return formatted.map(function (val) {
+	    // Only if this is a string (not a nested array, which would have already been padded):
+	    if (isString(val) && val.length < maxLength) {
+	      // Depending on symbol position, pad after symbol or at index 0:
+	      return padAfterSymbol ? val.replace(opts.symbol, opts.symbol + new Array(maxLength - val.length + 1).join(' ')) : new Array(maxLength - val.length + 1).join(' ') + val;
+	    }
+	    return val;
+	  });
+	}
+
+	exports.settings = settings;
+	exports.unformat = unformat;
+	exports.toFixed = toFixed;
+	exports.formatMoney = formatMoney;
+	exports.formatNumber = formatNumber;
+	exports.formatColumn = formatColumn;
+	exports.format = formatMoney;
+	exports.parse = unformat;
+
+}));
+//# sourceMappingURL=accounting.umd.js.map
+
+/***/ }),
+
 /***/ "./node_modules/axios/index.js":
 /*!*************************************!*\
   !*** ./node_modules/axios/index.js ***!
@@ -3793,6 +4218,12 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue_numeric__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-numeric */ "./node_modules/vue-numeric/dist/vue-numeric.min.js");
+/* harmony import */ var vue_numeric__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_numeric__WEBPACK_IMPORTED_MODULE_2__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -3926,11 +4357,125 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
- //Vue.use(VeeValidate);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MODULE_2___default.a); //Vue.use(VeeValidate);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
+    var _ref;
+
+    return _ref = {
       pagination: {
         'total': 0,
         'current_page': 0,
@@ -3940,7 +4485,6 @@ __webpack_require__.r(__webpack_exports__);
         'to': 0
       },
       offset: 3,
-      nombre: '',
       arrayProducto: [],
       tituloModal: '',
       tipoAccion: 1,
@@ -3949,13 +4493,29 @@ __webpack_require__.r(__webpack_exports__);
       idlineas: [],
       idlineaselected: '',
       clearSelected: 1,
-      valor: ''
-    };
+      cantidad: 0,
+      nombre: '',
+      clearSelected2: 1,
+      clearSelected1: 1,
+      iddispenserselected: ''
+    }, _defineProperty(_ref, "iddispenser", []), _defineProperty(_ref, "idformafarmselected", ''), _defineProperty(_ref, "idformafarm", []), _defineProperty(_ref, "preciolista", 0), _defineProperty(_ref, "precioventa", 0), _defineProperty(_ref, "tiempopedido", [{
+      'id': 1,
+      'dato': '1 mes'
+    }, {
+      'id': 3,
+      'dato': '3 meses'
+    }, {
+      'id': 6,
+      'dato': '6 meses'
+    }, {
+      'id': 12,
+      'dato': '12 meses'
+    }]), _defineProperty(_ref, "tiempopedidoselected", 0), _defineProperty(_ref, "indicaciones", ''), _defineProperty(_ref, "dosificacion", ''), _defineProperty(_ref, "principio", ''), _defineProperty(_ref, "accion", ''), _defineProperty(_ref, "idproducto", ''), _ref;
   },
   computed: {
     sicompleto: function sicompleto() {
       var me = this;
-      if (me.nombre != '') return true;else return false;
+      if (me.nombre == '' || me.cantidad == 0 || me.idlineas.length == 0 || me.iddispenser.length == 0 || me.idformafarm.length == 0 || me.preciolista == 0 || me.precioventa == 0 || me.tiempopedidoselected == 0) return false;else return true;
     },
     isActived: function isActived() {
       return this.pagination.current_page;
@@ -3991,8 +4551,14 @@ __webpack_require__.r(__webpack_exports__);
     tiempo: function tiempo() {
       this.clearSelected = 1;
     },
+    tiempo1: function tiempo1() {
+      this.clearSelected1 = 1;
+    },
+    tiempo2: function tiempo2() {
+      this.clearSelected2 = 1;
+    },
     lineas: function lineas(_lineas) {
-      this.idcientes = [];
+      this.idlineas = [];
 
       for (var key in _lineas) {
         if (_lineas.hasOwnProperty(key)) {
@@ -4007,13 +4573,45 @@ __webpack_require__.r(__webpack_exports__);
       this.idlineas = [];
       this.idlineaselected = '';
     },
+    dispensers: function dispensers(_dispensers) {
+      this.iddispenser = [];
+
+      for (var key in _dispensers) {
+        if (_dispensers.hasOwnProperty(key)) {
+          var element = _dispensers[key]; //console.log(element);
+
+          this.iddispenser.push(element);
+        }
+      } //console.log(this.idprestaciones);
+
+    },
+    cleandispensers: function cleandispensers() {
+      this.iddispenser = [];
+      this.iddispenserselected = '';
+    },
+    formafarm: function formafarm(_formafarm) {
+      this.idformafarm = [];
+
+      for (var key in _formafarm) {
+        if (_formafarm.hasOwnProperty(key)) {
+          var element = _formafarm[key]; //console.log(element);
+
+          this.idformafarm.push(element);
+        }
+      } //console.log(this.idprestaciones);
+
+    },
+    cleanformafarm: function cleanformafarm() {
+      this.idformafarm = [];
+      this.idformafarmselected = '';
+    },
     listarProducto: function listarProducto(page) {
       var me = this;
-      var url = '/dispenser?page=' + page + '&buscar=' + me.buscar;
+      var url = '/producto?page=' + page + '&buscar=' + me.buscar;
       axios.get(url).then(function (response) {
         var respuesta = response.data;
         me.pagination = respuesta.pagination;
-        me.arrayProducto = respuesta.dispenser.data;
+        me.arrayProducto = respuesta.producto.data;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -4025,14 +4623,27 @@ __webpack_require__.r(__webpack_exports__);
     },
     registrarProducto: function registrarProducto() {
       var me = this;
-      axios.post('/dispenser/registrar', {
-        'nombre': me.nombre
+      axios.post('/producto/registrar', {
+        'nombre': me.nombre,
+        'cod': me.idlineas[3],
+        'cantidad': me.cantidad,
+        'idlinea': me.idlineas[1],
+        'iddispenser': me.iddispenser[0],
+        'idformafarm': me.idformafarm[0],
+        'precio_lista': me.preciolista,
+        'precio_venta': me.precioventa,
+        'tiempo_pedido': me.tiempopedidoselected,
+        'indicaciones': me.indicaciones,
+        'dosificacione': me.dosificacione,
+        'principio_activo': me.principio,
+        'accion_terapeutica': me.accion
       }).then(function (response) {
         console.log(response);
 
         if (response.data == 'error') {
           sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('El registro ya existe', 'Debe introducir uno diferente');
         } else {
+          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Registrado Correctamente');
           me.cerrarModal('registrar');
           me.listarProducto(me.pagination.current_page);
         }
@@ -4040,7 +4651,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    eliminarProducto: function eliminarProducto(iddispenser) {
+    eliminarProducto: function eliminarProducto(idproducto) {
       var me = this; //console.log("prueba");
 
       var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
@@ -4060,8 +4671,8 @@ __webpack_require__.r(__webpack_exports__);
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          axios.put('/dispenser/desactivar', {
-            'id': iddispenser
+          axios.put('/producto/desactivar', {
+            'id': idproducto
           }).then(function (response) {
             swalWithBootstrapButtons.fire('Desactivado!', 'El registro a sido desactivado Correctamente', 'success');
             me.listarProducto(me.pagination.current_page);
@@ -4079,7 +4690,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    activarProducto: function activarProducto(iddispenser) {
+    activarProducto: function activarProducto(idproducto) {
       var me = this; //console.log("prueba");
 
       var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
@@ -4099,8 +4710,8 @@ __webpack_require__.r(__webpack_exports__);
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          axios.put('/dispenser/activar', {
-            'id': iddispenser
+          axios.put('/producto/activar', {
+            'id': idproducto
           }).then(function (response) {
             swalWithBootstrapButtons.fire('Activado!', 'El registro a sido Activado Correctamente', 'success');
             me.listarProducto(me.pagination.current_page);
@@ -4121,9 +4732,20 @@ __webpack_require__.r(__webpack_exports__);
     actualizarProducto: function actualizarProducto() {
       // const Swal = require('sweetalert2')
       var me = this;
-      axios.put('/dispenser/actualizar', {
-        'id': me.iddispenser,
-        'nombre': me.nombre
+      axios.put('/producto/actualizar', {
+        'id': me.idproducto,
+        'nombre': me.nombre,
+        'cantidad': me.cantidad,
+        'idlinea': me.idlineas[1],
+        'iddispenser': me.iddispenser[0],
+        'idformafarm': me.idformafarm[0],
+        'precio_lista': me.preciolista,
+        'precio_venta': me.precioventa,
+        'tiempo_pedido': me.tiempopedidoselected,
+        'indicaciones': me.indicaciones,
+        'dosificacione': me.dosificacione,
+        'principio_activo': me.principio,
+        'accion_terapeutica': me.accion
       }).then(function (response) {
         if (response.data.length) {} // console.log(response)
         else {
@@ -4141,18 +4763,53 @@ __webpack_require__.r(__webpack_exports__);
         case 'registrar':
           {
             me.tituloModal = 'Registar Producto';
-            me.tipoAccion = 1;
             me.nombre = '';
+            me.cantidad = '';
+            me.clearSelected = 0;
+            setTimeout(me.tiempo, 200);
+            me.clearSelected1 = 0;
+            setTimeout(me.tiempo1, 200);
+            me.clearSelected2 = 0;
+            setTimeout(me.tiempo2, 200);
+            me.preciolista = 0;
+            me.precioventa = 0;
+            me.tiempopedidoselected = 0;
+            me.indicaciones = '';
+            me.dosificacione = '';
+            me.principio = '';
+            me.accion = '';
+            me.tipoAccion = 1;
             me.classModal.openModal('registrar');
             break;
           }
 
         case 'actualizar':
           {
-            me.iddispenser = data.id;
             me.tipoAccion = 2;
-            me.tituloModal = 'Actualizar Producto';
-            me.nombre = data.nombre;
+            me.idproducto = data.idproducto;
+            me.tituloModal = 'Actualizar Producto: ' + data.codproducto;
+            me.nombre = data.nombreproducto;
+            me.cantidad = data.cantidad;
+            me.clearSelected = 0;
+            setTimeout(me.tiempo, 200);
+            me.idlineaselected = data.idlinea;
+            me.clearSelected1 = 0;
+            setTimeout(me.tiempo1, 200);
+            me.iddispenserselected = data.iddispenser;
+            me.clearSelected2 = 0;
+            setTimeout(me.tiempo2, 200);
+            me.idformafarmselected = data.idformafarm;
+            me.idlineas = [0, data.idlinea];
+            me.iddispenser = [data.iddispenser];
+            me.idformafarm = [data.idformafarm];
+            me.preciolista = data.precio_lista;
+            me.precioventa = data.precio_venta;
+            me.tiempopedidoselected = data.tiempo_pedido;
+            me.indicaciones = data.indicaciones;
+            me.dosificacione = data.dosificacione;
+            me.principio = data.principio_activo;
+            me.accion = data.accion_terapeutica;
+            me.tipoAccion = 2;
             me.classModal.openModal('registrar');
             break;
           }
@@ -4162,6 +4819,20 @@ __webpack_require__.r(__webpack_exports__);
       var me = this;
       me.classModal.closeModal(accion);
       me.nombre = '';
+      me.cantidad = '';
+      me.clearSelected = 0;
+      setTimeout(me.tiempo, 200);
+      me.clearSelected1 = 0;
+      setTimeout(me.tiempo1, 200);
+      me.clearSelected2 = 0;
+      setTimeout(me.tiempo2, 200);
+      me.preciolista = 0;
+      me.precioventa = 0;
+      me.tiempopedidoselected = 0;
+      me.indicaciones = '';
+      me.dosificacione = '';
+      me.principio = '';
+      me.accion = '';
       me.tipoAccion = 1;
     },
     selectAll: function selectAll(event) {
@@ -49078,8 +49749,8 @@ var render = function () {
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(_vm.arrayProducto, function (dispenser) {
-                  return _c("tr", { key: dispenser.id }, [
+                _vm._l(_vm.arrayProducto, function (producto) {
+                  return _c("tr", { key: producto.id }, [
                     _c("td", [
                       _c(
                         "button",
@@ -49088,14 +49759,14 @@ var render = function () {
                           attrs: { type: "button" },
                           on: {
                             click: function ($event) {
-                              return _vm.abrirModal("actualizar", dispenser)
+                              return _vm.abrirModal("actualizar", producto)
                             },
                           },
                         },
                         [_c("i", { staticClass: "icon-pencil" })]
                       ),
                       _vm._v("  \n                                "),
-                      dispenser.activo == 1
+                      producto.activo == 1
                         ? _c(
                             "button",
                             {
@@ -49103,7 +49774,7 @@ var render = function () {
                               attrs: { type: "button" },
                               on: {
                                 click: function ($event) {
-                                  return _vm.eliminarProducto(dispenser.id)
+                                  return _vm.eliminarProducto(producto.id)
                                 },
                               },
                             },
@@ -49116,7 +49787,7 @@ var render = function () {
                               attrs: { type: "button" },
                               on: {
                                 click: function ($event) {
-                                  return _vm.activarProducto(dispenser.id)
+                                  return _vm.activarProducto(producto.id)
                                 },
                               },
                             },
@@ -49125,11 +49796,49 @@ var render = function () {
                     ]),
                     _vm._v(" "),
                     _c("td", {
-                      domProps: { textContent: _vm._s(dispenser.nombre) },
+                      domProps: { textContent: _vm._s(producto.nombrelinea) },
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(producto.codproducto) },
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: {
+                        textContent: _vm._s(producto.nombreproducto),
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(producto.cantidad) },
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(producto.tiempo_pedido) },
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(producto.precio_lista) },
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(producto.precio_venta) },
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: {
+                        textContent: _vm._s(producto.nombredispenser),
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: {
+                        textContent: _vm._s(producto.nombreformafarm),
+                      },
                     }),
                     _vm._v(" "),
                     _c("td", [
-                      dispenser.activo == 1
+                      producto.activo == 1
                         ? _c("div", [
                             _c("span", { staticClass: "badge badge-success" }, [
                               _vm._v("Activo"),
@@ -49275,9 +49984,80 @@ var render = function () {
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "form-group col-sm-8" }, [
+                    _c("strong", [_vm._v("Producto:")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.nombre,
+                          expression: "nombre",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        placeholder: "Nombre del Producto",
+                      },
+                      domProps: { value: _vm.nombre },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.nombre = $event.target.value
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _vm.nombre.length == 0
+                      ? _c("span", { staticClass: "error" }, [
+                          _vm._v("Debe Ingresar Nombre del Producto"),
+                        ])
+                      : _vm._e(),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group col-sm-4" }, [
+                    _c("strong", [_vm._v("Cantidad:")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.cantidad,
+                          expression: "cantidad",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      staticStyle: { "text-align": "right" },
+                      attrs: { type: "text", placeholder: "0" },
+                      domProps: { value: _vm.cantidad },
+                      on: {
+                        focus: _vm.selectAll,
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.cantidad = $event.target.value
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _vm.cantidad == ""
+                      ? _c("span", { staticClass: "error" }, [
+                          _vm._v("Debe ingresar Cantidad"),
+                        ])
+                      : _vm._e(),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
                   _c(
                     "div",
-                    { staticClass: "form-group col-sm-7" },
+                    { staticClass: "form-group col-sm-4" },
                     [
                       _c("strong", [_vm._v("Linea:")]),
                       _vm._v(" "),
@@ -49300,7 +50080,7 @@ var render = function () {
                         : _vm._e(),
                       _vm._v(" "),
                       _vm.idlineas.length == 0
-                        ? _c("span", { staticClass: "text-error" }, [
+                        ? _c("span", { staticClass: "error" }, [
                             _vm._v("Debe Seleccionar la Linea"),
                           ])
                         : _vm._e(),
@@ -49308,34 +50088,192 @@ var render = function () {
                     1
                   ),
                   _vm._v(" "),
-                  _c("div", { staticClass: "form-group col-sm-5" }, [
-                    _c("strong", [_vm._v("NIT:")]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.valor,
-                          expression: "valor",
+                  _c(
+                    "div",
+                    { staticClass: "form-group col-sm-4" },
+                    [
+                      _c("strong", [_vm._v("Dispenser:")]),
+                      _vm._v(" "),
+                      _vm.clearSelected1
+                        ? _c("Ajaxselect", {
+                            attrs: {
+                              ruta: "/dispenser/selectdispenser?buscar=",
+                              resp_ruta: "dispensers",
+                              labels: "nombre",
+                              placeholder: "Ingrese Texto...",
+                              idtabla: "id",
+                              id: _vm.iddispenserselected,
+                              clearable: true,
+                            },
+                            on: {
+                              found: _vm.dispensers,
+                              cleaning: _vm.cleandispensers,
+                            },
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.iddispenser.length == 0
+                        ? _c("span", { staticClass: "error" }, [
+                            _vm._v("Debe Seleccionar el dispenser"),
+                          ])
+                        : _vm._e(),
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-group col-sm-4" },
+                    [
+                      _c("strong", [_vm._v("Forma Farmaceutica:")]),
+                      _vm._v(" "),
+                      _vm.clearSelected2
+                        ? _c("Ajaxselect", {
+                            attrs: {
+                              ruta: "/formafarm/selectformafarm?buscar=",
+                              resp_ruta: "formafarm",
+                              labels: "nombre",
+                              placeholder: "Ingrese Texto...",
+                              idtabla: "id",
+                              id: _vm.idformafarmselected,
+                              clearable: true,
+                            },
+                            on: {
+                              found: _vm.formafarm,
+                              cleaning: _vm.cleanformafarm,
+                            },
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.idformafarm.length == 0
+                        ? _c("span", { staticClass: "error" }, [
+                            _vm._v("Debe Seleccionar la Forma Farmaceutica"),
+                          ])
+                        : _vm._e(),
+                    ],
+                    1
+                  ),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c(
+                    "div",
+                    { staticClass: "form-group col-sm-4" },
+                    [
+                      _c("strong", [_vm._v("Precio de Lista:")]),
+                      _vm._v(" "),
+                      _c("vue-numeric", {
+                        staticClass: "form-control",
+                        staticStyle: { "text-align": "right" },
+                        attrs: {
+                          currency: "Bs.",
+                          separator: ",",
+                          precision: 2,
                         },
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.valor },
-                      on: {
-                        input: function ($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.valor = $event.target.value
+                        on: { focus: _vm.selectAll },
+                        model: {
+                          value: _vm.preciolista,
+                          callback: function ($$v) {
+                            _vm.preciolista = $$v
+                          },
+                          expression: "preciolista",
+                        },
+                      }),
+                      _vm._v(" "),
+                      _vm.preciolista == 0
+                        ? _c("span", { staticClass: "error" }, [
+                            _vm._v("Debe Ingresar el Precio de Lista"),
+                          ])
+                        : _vm._e(),
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-group col-sm-4" },
+                    [
+                      _c("strong", [_vm._v("Precio de Venta:")]),
+                      _vm._v(" "),
+                      _c("vue-numeric", {
+                        staticClass: "form-control",
+                        staticStyle: { "text-align": "right" },
+                        attrs: {
+                          currency: "Bs.",
+                          separator: ",",
+                          precision: 2,
+                        },
+                        on: { focus: _vm.selectAll },
+                        model: {
+                          value: _vm.precioventa,
+                          callback: function ($$v) {
+                            _vm.precioventa = $$v
+                          },
+                          expression: "precioventa",
+                        },
+                      }),
+                      _vm._v(" "),
+                      _vm.precioventa == ""
+                        ? _c("span", { staticClass: "error" }, [
+                            _vm._v("Debe Ingresar el Precio de Venta"),
+                          ])
+                        : _vm._e(),
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group col-sm-4" }, [
+                    _c("strong", [_vm._v("Tiempo de Pedido:")]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.tiempopedidoselected,
+                            expression: "tiempopedidoselected",
+                          },
+                        ],
+                        staticClass: "form-control",
+                        on: {
+                          change: function ($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function (o) {
+                                return o.selected
+                              })
+                              .map(function (o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.tiempopedidoselected = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          },
                         },
                       },
-                    }),
+                      [
+                        _c("option", { attrs: { value: "0" } }, [
+                          _vm._v("Seleccionar"),
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.tiempopedido, function (tiempo) {
+                          return _c("option", {
+                            key: tiempo.id,
+                            domProps: {
+                              value: tiempo.id,
+                              textContent: _vm._s(tiempo.dato),
+                            },
+                          })
+                        }),
+                      ],
+                      2
+                    ),
                     _vm._v(" "),
-                    _vm.valor == ""
-                      ? _c("span", { staticClass: "text-error" }, [
-                          _vm._v("NIT no debe estar Vacio"),
+                    _vm.cantidad == ""
+                      ? _c("span", { staticClass: "error" }, [
+                          _vm._v("Debe ingresar Cantidad"),
                         ])
                       : _vm._e(),
                   ]),
@@ -49343,68 +50281,133 @@ var render = function () {
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group row" }, [
                   _c(
-                    "label",
-                    {
-                      staticClass: "col-md-3 form-control-label",
-                      attrs: { for: "text-input" },
-                    },
-                    [
-                      _vm._v("Nombre "),
-                      !_vm.sicompleto
-                        ? _c("span", { staticClass: "error" }, [_vm._v("(*)")])
-                        : _vm._e(),
-                    ]
+                    "strong",
+                    { staticClass: "col-md-3 ", attrs: { for: "text-input" } },
+                    [_vm._v("Indicaciones: ")]
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-md-9" }, [
-                    _c("input", {
+                    _c("textarea", {
                       directives: [
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.nombre,
-                          expression: "nombre",
+                          value: _vm.indicaciones,
+                          expression: "indicaciones",
                         },
                       ],
                       staticClass: "form-control",
-                      attrs: {
-                        type: "text",
-                        id: "nombre",
-                        name: "nombre",
-                        placeholder: "Nombre del Producto",
-                      },
-                      domProps: { value: _vm.nombre },
+                      staticStyle: { resize: "none" },
+                      attrs: { maxlength: "255", placeholder: "Ninguno" },
+                      domProps: { value: _vm.indicaciones },
                       on: {
-                        focus: _vm.selectAll,
-                        keyup: function ($event) {
-                          if (
-                            !$event.type.indexOf("key") &&
-                            _vm._k(
-                              $event.keyCode,
-                              "enter",
-                              13,
-                              $event.key,
-                              "Enter"
-                            )
-                          ) {
-                            return null
-                          }
-                          return _vm.registrarProducto()
-                        },
                         input: function ($event) {
                           if ($event.target.composing) {
                             return
                           }
-                          _vm.nombre = $event.target.value
+                          _vm.indicaciones = $event.target.value
                         },
                       },
                     }),
-                    _vm._v(" "),
-                    !_vm.sicompleto
-                      ? _c("span", { staticClass: "error" }, [
-                          _vm._v("Debe Ingresar el Nombre del Producto"),
-                        ])
-                      : _vm._e(),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c(
+                    "strong",
+                    { staticClass: "col-md-3 ", attrs: { for: "text-input" } },
+                    [_vm._v("Dosificacion: ")]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-9" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.dosificacion,
+                          expression: "dosificacion",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      staticStyle: { resize: "none" },
+                      attrs: { maxlength: "255", placeholder: "Ninguno" },
+                      domProps: { value: _vm.dosificacion },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.dosificacion = $event.target.value
+                        },
+                      },
+                    }),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c(
+                    "strong",
+                    { staticClass: "col-md-3 ", attrs: { for: "text-input" } },
+                    [_vm._v("Principio Activo: ")]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-9" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.principio,
+                          expression: "principio",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      staticStyle: { resize: "none" },
+                      attrs: { maxlength: "255", placeholder: "Ninguno" },
+                      domProps: { value: _vm.principio },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.principio = $event.target.value
+                        },
+                      },
+                    }),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c(
+                    "strong",
+                    { staticClass: "col-md-3 ", attrs: { for: "text-input" } },
+                    [_vm._v("Accion Terapeutica:k ")]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-9" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.accion,
+                          expression: "accion",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      staticStyle: { resize: "none" },
+                      attrs: { maxlength: "255", placeholder: "Ninguno" },
+                      domProps: { value: _vm.accion },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.accion = $event.target.value
+                        },
+                      },
+                    }),
                   ]),
                 ]),
               ]),
@@ -49488,7 +50491,23 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("Opciones")]),
         _vm._v(" "),
+        _c("th", [_vm._v("Linea")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Codigo")]),
+        _vm._v(" "),
         _c("th", [_vm._v("Nombre")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Cantidad")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Tiempo Pedido")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Precio Lista")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Precio Venta")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Dispenser")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Forma Farmaceutica")]),
         _vm._v(" "),
         _c("th", [_vm._v("Estado")]),
       ]),
@@ -52513,6 +53532,17 @@ function normalizeComponent (
   }
 }
 
+
+/***/ }),
+
+/***/ "./node_modules/vue-numeric/dist/vue-numeric.min.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/vue-numeric/dist/vue-numeric.min.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(e,t){ true?module.exports=t(__webpack_require__(/*! accounting-js */ "./node_modules/accounting-js/dist/accounting.umd.js")):undefined}("undefined"!=typeof self?self:this,function(e){return function(e){function t(n){if(r[n])return r[n].exports;var i=r[n]={i:n,l:!1,exports:{}};return e[n].call(i.exports,i,i.exports,t),i.l=!0,i.exports}var r={};return t.m=e,t.c=r,t.d=function(e,r,n){t.o(e,r)||Object.defineProperty(e,r,{configurable:!1,enumerable:!0,get:n})},t.n=function(e){var r=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(r,"a",r),r},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=1)}([function(e,t,r){"use strict";var n=r(4),i=r.n(n);t.a={name:"VueNumeric",props:{currency:{type:String,default:"",required:!1},max:{type:Number,default:Number.MAX_SAFE_INTEGER||9007199254740991,required:!1},min:{type:Number,default:Number.MIN_SAFE_INTEGER||-9007199254740991,required:!1},minus:{type:Boolean,default:!1,required:!1},placeholder:{type:String,default:"",required:!1},emptyValue:{type:[Number,String],default:"",required:!1},precision:{type:Number,default:0,required:!1},separator:{type:String,default:",",required:!1},thousandSeparator:{default:void 0,required:!1,type:String},decimalSeparator:{default:void 0,required:!1,type:String},outputType:{required:!1,type:String,default:"Number"},value:{type:[Number,String],default:0,required:!0},readOnly:{type:Boolean,default:!1,required:!1},readOnlyClass:{type:String,default:"",required:!1},disabled:{type:Boolean,default:!1,required:!1},currencySymbolPosition:{type:String,default:"prefix",required:!1}},data:function(){return{amount:""}},computed:{amountNumber:function(){return this.unformat(this.amount)},valueNumber:function(){return this.unformat(this.value)},decimalSeparatorSymbol:function(){return void 0!==this.decimalSeparator?this.decimalSeparator:","===this.separator?".":","},thousandSeparatorSymbol:function(){return void 0!==this.thousandSeparator?this.thousandSeparator:"."===this.separator?".":"space"===this.separator?" ":","},symbolPosition:function(){return this.currency?"suffix"===this.currencySymbolPosition?"%v %s":"%s %v":"%v"}},watch:{valueNumber:function(e){this.$refs.numeric!==document.activeElement&&(this.amount=this.format(e))},readOnly:function(e,t){var r=this;!1===t&&!0===e&&this.$nextTick(function(){r.$refs.readOnly.className=r.readOnlyClass})},separator:function(){this.process(this.valueNumber),this.amount=this.format(this.valueNumber)},currency:function(){this.process(this.valueNumber),this.amount=this.format(this.valueNumber)},precision:function(){this.process(this.valueNumber),this.amount=this.format(this.valueNumber)}},mounted:function(){var e=this;(this.valueNumber||this.isDeliberatelyZero())&&(this.process(this.valueNumber),this.amount=this.format(this.valueNumber),setTimeout(function(){e.process(e.valueNumber),e.amount=e.format(e.valueNumber)},500)),this.readOnly&&(this.$refs.readOnly.className=this.readOnlyClass)},methods:{onChangeHandler:function(e){this.$emit("change",e)},onBlurHandler:function(e){this.$emit("blur",e),this.amount=this.format(this.valueNumber)},onFocusHandler:function(e){this.$emit("focus",e),0===this.valueNumber?this.amount=null:this.amount=i.a.formatMoney(this.valueNumber,{symbol:"",format:"%v",thousand:"",decimal:this.decimalSeparatorSymbol,precision:Number(this.precision)})},onInputHandler:function(){this.process(this.amountNumber)},process:function(e){e>=this.max&&this.update(this.max),e<=this.min&&this.update(this.min),e>this.min&&e<this.max&&this.update(e),!this.minus&&e<0&&(this.min>=0?this.update(this.min):this.update(0))},update:function(e){var t=i.a.toFixed(e,this.precision),r="string"===this.outputType.toLowerCase()?t:Number(t);this.$emit("input",r)},format:function(e){return i.a.formatMoney(e,{symbol:this.currency,format:this.symbolPosition,precision:Number(this.precision),decimal:this.decimalSeparatorSymbol,thousand:this.thousandSeparatorSymbol})},unformat:function(e){var t="string"==typeof e&&""===e?this.emptyValue:e;return i.a.unformat(t,this.decimalSeparatorSymbol)},isDeliberatelyZero:function(){return 0===this.valueNumber&&""!==this.value}}}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n=r(2),i={install:function(e){e.component(n.a.name,n.a)}};n.a.install=i.install,t.default=n.a},function(e,t,r){"use strict";var n=r(0),i=r(5),u=r(3),a=u(n.a,i.a,!1,null,null,null);t.a=a.exports},function(e,t){e.exports=function(e,t,r,n,i,u){var a,o=e=e||{},s=typeof e.default;"object"!==s&&"function"!==s||(a=e,o=e.default);var l="function"==typeof o?o.options:o;t&&(l.render=t.render,l.staticRenderFns=t.staticRenderFns,l._compiled=!0),r&&(l.functional=!0),i&&(l._scopeId=i);var c;if(u?(c=function(e){e=e||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext,e||"undefined"==typeof __VUE_SSR_CONTEXT__||(e=__VUE_SSR_CONTEXT__),n&&n.call(this,e),e&&e._registeredComponents&&e._registeredComponents.add(u)},l._ssrRegister=c):n&&(c=n),c){var m=l.functional,d=m?l.render:l.beforeCreate;m?(l._injectStyles=c,l.render=function(e,t){return c.call(t),d(e,t)}):l.beforeCreate=d?[].concat(d,c):[c]}return{esModule:a,exports:o,options:l}}},function(t,r){t.exports=e},function(e,t,r){"use strict";var n=function(){var e=this,t=e.$createElement,r=e._self._c||t;return e.readOnly?r("span",{ref:"readOnly"},[e._v(e._s(e.amount))]):r("input",{directives:[{name:"model",rawName:"v-model",value:e.amount,expression:"amount"}],ref:"numeric",attrs:{placeholder:e.placeholder,disabled:e.disabled,type:"tel"},domProps:{value:e.amount},on:{blur:e.onBlurHandler,input:[function(t){t.target.composing||(e.amount=t.target.value)},e.onInputHandler],focus:e.onFocusHandler,change:e.onChangeHandler}})},i=[],u={render:n,staticRenderFns:i};t.a=u}])});
 
 /***/ }),
 

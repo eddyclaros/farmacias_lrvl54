@@ -26,21 +26,83 @@ class ProdProductoController extends Controller
                 $sqls='';
                 foreach($buscararray as $valor){
                     if(empty($sqls)){
-                        $sqls="(codigo like '%".$valor."%' or nombre like '%".$valor."%')" ;
+                        $sqls="(prod__productos.codigo like '%".$valor."%' 
+                                or prod__productos.nombre like '%".$valor."%' 
+                                or prod__lineas.nombre like '%".$valor."%' 
+                                or prod__dispensers.nombre like '%".$valor."%' 
+                                or prod__forma_farmaceuticas.nombre like '%".$valor."%'
+                                or prod__lineas.codigo like '%".$valor."%')" ;
                     }
                     else
                     {
-                        $sqls.=" and (codigo like '%".$valor."%' or nombre like '%".$valor."%')" ;
+                        $sqls.=" and (prod__productos.codigo like '%".$valor."%' 
+                                    or prod__productos.nombre like '%".$valor."%' 
+                                    or prod__lineas.nombre like '%".$valor."%' 
+                                    or prod__dispensers.nombre like '%".$valor."%' 
+                                    or prod__forma_farmaceuticas.nombre like '%".$valor."%'
+                                    or prod__lineas.codigo like '%".$valor."%')" ;
                     }
     
                 }
-                $producto= Prod_Producto::orderby('nombre','asc')->whereraw($sqls)->paginate(20);
+                $producto= Prod_Producto::join('prod__lineas','prod__lineas.id','prod__productos.idlinea')
+                                            ->join('prod__dispensers','prod__dispensers.id','prod__productos.iddispenser')
+                                            ->join('prod__forma_farmaceuticas','prod__forma_farmaceuticas.id','prod__productos.idformafarm')
+                                            ->select('prod__lineas.nombre as nombrelinea',
+                                                        'prod__dispensers.nombre as nombredispenser',
+                                                        'prod__forma_farmaceuticas.nombre as nombreformafarm',
+                                                        'prod__productos.codigo as codproducto',
+                                                        'prod__productos.nombre as nombreproducto',
+                                                        'prod__productos.id as idproducto',
+                                                        'cantidad',
+                                                        'indicaciones',
+                                                        'dosificacion',
+                                                        'accion_terapeutica',
+                                                        'principio_activo',
+                                                        'imagen',
+                                                        'tiempo_pedido',
+                                                        'precio_lista',
+                                                        'precio_venta',
+                                                        'prod__productos.estado',
+                                                        'prod__productos.activo',
+                                                        'prod__productos.id as id',
+                                                        'iddispenser',
+                                                        'idformafarm',
+                                                        'idlinea'
+                                                        )
+                                            ->where('prod__productos.estado',1)
+                                            ->orderby('prod__productos.nombre','asc')->whereraw($sqls)->paginate(30);
             }
         }
         
         else
         {
-            $producto= Prod_Producto::orderby('nombre','asc')->paginate(20);
+            $producto= Prod_Producto::join('prod__lineas','prod__lineas.id','prod__productos.idlinea')
+                                        ->join('prod__dispensers','prod__dispensers.id','prod__productos.iddispenser')
+                                        ->join('prod__forma_farmaceuticas','prod__forma_farmaceuticas.id','prod__productos.idformafarm')
+                                        ->select('prod__lineas.nombre as nombrelinea',
+                                                    'prod__dispensers.nombre as nombredispenser',
+                                                    'prod__forma_farmaceuticas.nombre as nombreformafarm',
+                                                    'prod__productos.codigo as codproducto',
+                                                    'prod__productos.nombre as nombreproducto',
+                                                    'prod__productos.id as idproducto',
+                                                    'cantidad',
+                                                    'indicaciones',
+                                                    'dosificacion',
+                                                    'accion_terapeutica',
+                                                    'principio_activo',
+                                                    'imagen',
+                                                    'tiempo_pedido',
+                                                    'precio_lista',
+                                                    'precio_venta',
+                                                    'prod__productos.estado',
+                                                    'prod__productos.activo',
+                                                    'prod__productos.id as id',
+                                                    'iddispenser',
+                                                    'idformafarm',
+                                                    'idlinea')
+                                        ->where('prod__productos.estado',1)
+                                        ->orderby('prod__productos.nombre','asc')
+                                        ->paginate(30);
         }
         
         //$producto = Prod_Producto::all();
@@ -105,11 +167,11 @@ class ProdProductoController extends Controller
 
         
         $producto->idlinea=$request->idlinea;
-        $producto->idlinea=$codigo;
-        $producto->idlinea=$correlativo;
+        $producto->codigo=$request->cod.$codigo;
+        $producto->correlativo=$correlativo;
         $producto->nombre=$request->nombre;
-        $producto->idproducto=$request->idproducto;
-        $producto->cantidad_producto=$request->cantidad_producto;
+        $producto->iddispenser=$request->iddispenser;
+        $producto->cantidad=$request->cantidad;
         $producto->idformafarm=$request->idformafarm;
         $producto->indicaciones=$request->indicaciones;
         $producto->dosificacion=$request->dosificacion;
@@ -133,7 +195,19 @@ class ProdProductoController extends Controller
     {
         $producto = Prod_Producto::findOrFail($request->id);
 
+        $producto->idlinea=$request->idlinea;
         $producto->nombre=$request->nombre;
+        $producto->iddispenser=$request->iddispenser;
+        $producto->cantidad=$request->cantidad;
+        $producto->idformafarm=$request->idformafarm;
+        $producto->indicaciones=$request->indicaciones;
+        $producto->dosificacion=$request->dosificacion;
+        $producto->accion_terapeutica=$request->accion_terapeutica;
+        $producto->principio_activo=$request->principio_activo;
+        //$producto->imagen='imagen';
+        $producto->tiempo_pedido=$request->tiempo_pedido;
+        $producto->precio_lista=$request->precio_lista;
+        $producto->precio_venta=$request->precio_venta;
         $producto->save();
     }
 

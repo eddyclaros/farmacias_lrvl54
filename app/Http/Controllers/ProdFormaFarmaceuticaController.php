@@ -112,15 +112,43 @@ class ProdFormaFarmaceuticaController extends Controller
         $formafarm->activo=1;
         $formafarm->save();
     }
-    public function selectProd_FormaFarmaceutica()
+    public function selectFormaFarm(Request $request)
     {
-        $formafarm=Prod_FormaFarmaceutica::select('nombre',
-                            'id')
-                    ->where('activo',1)
-                    ->orderby('nombre','asc')
-                    ->get();
-        return $formafarm;
-        
+        $buscararray = array(); 
+        if(!empty($request->buscar)) $buscararray = explode(" ",$request->buscar); 
+        if (sizeof($buscararray)>0) { 
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls))
+                    $sqls="(nombre like '%".$valor."%' )";
+                else
+                    $sqls.=" and (nombre like '%".$valor."%' )";
+            }   
+            $formafarm = Prod_FormaFarmaceutica::select('id','nombre')
+                                ->where('activo',1)
+                                ->whereraw($sqls)
+                                ->orderby('nombre','asc')
+                                ->get();
+        }
+        else {
+            if ($request->id){
+                    $formafarm = Prod_FormaFarmaceutica::select('id','nombre')
+                                                 ->where('activo',1)
+                                                ->where('id',$request->id)
+                                                ->orderby('nombre','asc')
+                                                ->get();
+            }
+
+            else
+            {
+                $formafarm = Prod_FormaFarmaceutica::select('id','nombre')
+                                    ->where('activo',1)
+                                    ->orderby('nombre','asc')
+                                    ->get();
+            }
+              
+        }
+        return ['formafarm' => $formafarm];
 
     }
    

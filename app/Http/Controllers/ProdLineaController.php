@@ -80,15 +80,12 @@ class ProdLineaController extends Controller
             $correlativo=$correlativo+1;
 
         if($correlativo<10)
-            $codigo='1000'.$correlativo;
+            $codigo='100'.$correlativo;
         else
             if($correlativo<100)
-                $codigo='100'.$correlativo;
+                $codigo='10'.$correlativo;
             else
-                if($correlativo<1000)
-                    $codigo='10';
-                else
-                    $codigo='1'.$correlativo;
+                $codigo='1'.$correlativo;
         
         $codigo=$letracodigo.$codigo;
         
@@ -152,7 +149,7 @@ class ProdLineaController extends Controller
                 else
                     $sqls.=" and (codigo like '%".$valor."%' or nombre like '%".$valor."%' )";
             }   
-            $lineas = Prod_Linea::select($raw,'id','nombre')
+            $lineas = Prod_Linea::select($raw,'id','nombre','codigo')
                                 ->where('activo',1)
                                 ->whereraw($sqls)
                                 ->orderby('codigo','asc')
@@ -160,7 +157,7 @@ class ProdLineaController extends Controller
         }
         else {
             if ($request->id){
-                    $lineas = Prod_Linea::select($raw,'id','nombre')
+                    $lineas = Prod_Linea::select($raw,'id','nombre','codigo')
                                                  ->where('activo',1)
                                                 ->where('id',$request->id)
                                                 ->orderby('codigo','asc')
@@ -169,7 +166,7 @@ class ProdLineaController extends Controller
 
             else
             {
-                $lineas = Prod_Linea::select($raw,'id','nombre')
+                $lineas = Prod_Linea::select($raw,'id','nombre','codigo')
                                     ->where('activo',1)
                                     ->orderby('codigo','asc')
                                     ->get();
