@@ -4466,6 +4466,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4510,7 +4534,7 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
     }, {
       'id': 12,
       'dato': '12 meses'
-    }]), _defineProperty(_ref, "tiempopedidoselected", 0), _defineProperty(_ref, "indicaciones", ''), _defineProperty(_ref, "dosificacion", ''), _defineProperty(_ref, "principio", ''), _defineProperty(_ref, "accion", ''), _defineProperty(_ref, "idproducto", ''), _ref;
+    }]), _defineProperty(_ref, "tiempopedidoselected", 0), _defineProperty(_ref, "indicaciones", ''), _defineProperty(_ref, "dosificacion", ''), _defineProperty(_ref, "principio", ''), _defineProperty(_ref, "accion", ''), _defineProperty(_ref, "idproducto", ''), _defineProperty(_ref, "image", ''), _defineProperty(_ref, "imagen", ''), _ref;
   },
   computed: {
     sicompleto: function sicompleto() {
@@ -4548,6 +4572,25 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
     }
   },
   methods: {
+    onFileChange: function onFileChange(e) {
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.createImage(files[0]);
+    },
+    createImage: function createImage(file) {
+      var image = new Image();
+      var reader = new FileReader();
+      var vm = this;
+
+      reader.onload = function (e) {
+        vm.image = e.target.result;
+      };
+
+      reader.readAsDataURL(file);
+    },
+    removeImage: function removeImage(e) {
+      this.image = '';
+    },
     tiempo: function tiempo() {
       this.clearSelected = 1;
     },
@@ -4636,7 +4679,8 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
         'indicaciones': me.indicaciones,
         'dosificacione': me.dosificacione,
         'principio_activo': me.principio,
-        'accion_terapeutica': me.accion
+        'accion_terapeutica': me.accion,
+        'imagen': me.image
       }).then(function (response) {
         console.log(response);
 
@@ -4762,6 +4806,7 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
       switch (accion) {
         case 'registrar':
           {
+            me.removeImage;
             me.tituloModal = 'Registar Producto';
             me.nombre = '';
             me.cantidad = '';
@@ -4779,6 +4824,8 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
             me.principio = '';
             me.accion = '';
             me.tipoAccion = 1;
+            me.image = '';
+            me.imagen = '';
             me.classModal.openModal('registrar');
             break;
           }
@@ -4810,6 +4857,9 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
             me.principio = data.principio_activo;
             me.accion = data.accion_terapeutica;
             me.tipoAccion = 2;
+            me.imagen = data.imagen;
+            me.removeImage;
+            me.image = '';
             me.classModal.openModal('registrar');
             break;
           }
@@ -4820,10 +4870,16 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
       me.classModal.closeModal(accion);
       me.nombre = '';
       me.cantidad = '';
+      me.idlineas = [];
+      me.idlineaselected = '';
       me.clearSelected = 0;
       setTimeout(me.tiempo, 200);
+      me.iddispenser = [];
+      me.iddispenserselected = '';
       me.clearSelected1 = 0;
       setTimeout(me.tiempo1, 200);
+      me.idformafarm = [];
+      me.idformafarmselected = '';
       me.clearSelected2 = 0;
       setTimeout(me.tiempo2, 200);
       me.preciolista = 0;
@@ -4834,6 +4890,8 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
       me.principio = '';
       me.accion = '';
       me.tipoAccion = 1;
+      me.image = '';
+      me.imagen = '';
     },
     selectAll: function selectAll(event) {
       setTimeout(function () {
@@ -11235,7 +11293,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.error[data-v-bb1c7034]{\r\n    color: red;\r\n    font-size: 10px;\n}\r\n", ""]);
+exports.push([module.i, "\n.error[data-v-bb1c7034]{\r\n    color: red;\r\n    font-size: 10px;\n}\nimg[data-v-bb1c7034] {\r\n  width: 30%;\r\n  margin: auto;\r\n  display: block;\r\n  margin-bottom: 10px;\n}\r\n", ""]);
 
 // exports
 
@@ -50382,7 +50440,7 @@ var render = function () {
                   _c(
                     "strong",
                     { staticClass: "col-md-3 ", attrs: { for: "text-input" } },
-                    [_vm._v("Accion Terapeutica:k ")]
+                    [_vm._v("Accion Terapeutica: ")]
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-md-9" }, [
@@ -50410,6 +50468,20 @@ var render = function () {
                     }),
                   ]),
                 ]),
+                _vm._v(" "),
+                _vm.tipoAccion == 1
+                  ? _c("div", [
+                      _c("h4", [_vm._v("Seleccionar Imagen")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        attrs: {
+                          type: "file",
+                          accept: "image/x-png,image/jpeg",
+                        },
+                        on: { change: _vm.onFileChange },
+                      }),
+                    ])
+                  : _vm._e(),
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [

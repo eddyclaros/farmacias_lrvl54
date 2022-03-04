@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateProdProductosTable extends Migration
 {
@@ -26,7 +27,7 @@ class CreateProdProductosTable extends Migration
             $table->string('dosificacion')->nullable();
             $table->string('accion_terapeutica')->nullable();
             $table->string('principio_activo')->nullable();
-            $table->string('imagen')->nullable();
+            //$table->lognblob('imagen')->nullable();
             $table->tinyInteger('tiempo_pedido');
             $table->decimal('precio_lista');
             $table->decimal('precio_venta');
@@ -37,7 +38,9 @@ class CreateProdProductosTable extends Migration
             $table->foreign('idlinea')->references('id')->on('prod__lineas');
             $table->foreign('iddispenser')->references('id')->on('prod__dispensers');
             $table->foreign('idformafarm')->references('id')->on('prod__forma_farmaceuticas');
+            
         });
+        DB::statement("ALTER TABLE prod__productos ADD imagen LONGBLOB");
     }
 
     /**

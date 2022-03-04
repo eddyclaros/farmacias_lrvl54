@@ -17,6 +17,14 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
+                        <!--  si se agrega filtro
+                        <div class="col-md-6">
+                            <label class="col-md-3 form-control-label" for="text-input">Linea: <span  v-if="!sicompleto" class="error">(*)</span></label>
+                            <div class="col-md-9">
+                                <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre de la Prestacion" v-model="nombre" v-on:focus="selectAll">
+                                <span  v-if="!sicompleto" class="error">Debe Ingresar el Nombre de la Prestacion</span>
+                            </div>
+                        </div> -->
                         <div class="col-md-6">
                             <div class="input-group">
                                 <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar"  @keyup.enter="listarProducto(1)">
@@ -213,11 +221,27 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <strong class="col-md-3 " for="text-input">Accion Terapeutica:k </strong>
+                            <strong class="col-md-3 " for="text-input">Accion Terapeutica: </strong>
                             <div class="col-md-9">
                                 <textarea class="form-control" maxlength="255" style="resize: none;" v-model="accion" placeholder="Ninguno"></textarea>
                             </div>
                         </div>
+                        <!--  -->
+
+                        <div v-if="tipoAccion==1">
+                            <h4>Seleccionar Imagen</h4>
+                            <input type="file" @change="onFileChange" accept="image/x-png,image/jpeg">
+                        </div>
+                        <!-- <div v-else>
+                            <img :src="'storage/producto/'+imagen"  width="200px"/>
+                            <img src="storage/producto/wT4pdk3MYitkDQAzA0B1Yq8kVjXMyn0l.jpg" alt="">
+                             <img  src="storage/producto/default.png" class="rounded-circle fotosociomini" alt="Cinque Terre" >
+                            <button @click="removeImage">Cambiar Imagen</button>
+                        </div> -->
+
+
+
+                        
 
                     
                         
@@ -289,6 +313,8 @@ Vue.use(VueNumeric)
                 principio:'',
                 accion:'',
                 idproducto:'',
+                image:'',
+                imagen:''
 
 
             }
@@ -328,6 +354,25 @@ Vue.use(VueNumeric)
 
         },
         methods :{
+            onFileChange(e) {
+                var files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                return;
+                this.createImage(files[0]);
+            },
+            createImage(file) {
+                var image = new Image();
+                var reader = new FileReader();
+                var vm = this;
+
+                reader.onload = (e) => {
+                    vm.image = e.target.result;
+                };
+                    reader.readAsDataURL(file);
+            },
+            removeImage: function (e) {
+                this.image = '';
+            },
             tiempo(){
             this.clearSelected=1;
             },
@@ -419,6 +464,7 @@ Vue.use(VueNumeric)
                     'dosificacione':me.dosificacione,
                     'principio_activo':me.principio,
                     'accion_terapeutica':me.accion,
+                    'imagen':me.image,
 
 
                 }).then(function(response){
@@ -577,6 +623,7 @@ Vue.use(VueNumeric)
                 switch(accion){
                     case 'registrar':
                     {
+                        me.removeImage;
                         me.tituloModal='Registar Producto'
                         me.nombre='';
                         me.cantidad='';
@@ -594,6 +641,9 @@ Vue.use(VueNumeric)
                         me.principio='';
                         me.accion='';
                         me.tipoAccion=1;
+                        me.image='';
+                        me.imagen='';
+
                         me.classModal.openModal('registrar');
                         break;
                     }
@@ -628,6 +678,9 @@ Vue.use(VueNumeric)
                         me.principio=data.principio_activo;
                         me.accion=data.accion_terapeutica;
                         me.tipoAccion=2;
+                        me.imagen=data.imagen;
+                        me.removeImage;
+                        me.image='';
                         me.classModal.openModal('registrar');
                         break;
                     }
@@ -640,10 +693,16 @@ Vue.use(VueNumeric)
                 me.classModal.closeModal(accion);
                 me.nombre='';
                 me.cantidad='';
+                me.idlineas=[];
+                me.idlineaselected='';
                 me.clearSelected=0;
                 setTimeout(me.tiempo, 200); 
+                me.iddispenser=[];
+                me.iddispenserselected='';
                 me.clearSelected1=0;
                 setTimeout(me.tiempo1, 200); 
+                me.idformafarm=[];
+                me.idformafarmselected='';
                 me.clearSelected2=0;
                 setTimeout(me.tiempo2, 200); 
                 me.preciolista=0;
@@ -654,6 +713,8 @@ Vue.use(VueNumeric)
                 me.principio='';
                 me.accion='';
                 me.tipoAccion=1;
+                me.image='';
+                me.imagen='';
                 
             },
             selectAll: function (event) {
@@ -677,5 +738,11 @@ Vue.use(VueNumeric)
     color: red;
     font-size: 10px;
     
+}
+img {
+  width: 30%;
+  margin: auto;
+  display: block;
+  margin-bottom: 10px;
 }
 </style>

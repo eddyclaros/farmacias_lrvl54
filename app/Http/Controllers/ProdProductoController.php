@@ -6,6 +6,9 @@ use App\Prod_Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 
 class ProdProductoController extends Controller
@@ -163,6 +166,14 @@ class ProdProductoController extends Controller
                     $codigo=$correlativo;
         
         $codigo=$request->codigolinea.$codigo;
+
+        $var = Str::random(32);
+        $var.='.jpg'; 
+        $value = substr($request->imagen, strpos($request->imagen, ',') + 1); 
+        $value = base64_decode($value); 
+        Storage::put('app/public/producto/'.$var, $value);
+ 
+
         $producto = new Prod_Producto();
 
         
@@ -177,11 +188,12 @@ class ProdProductoController extends Controller
         $producto->dosificacion=$request->dosificacion;
         $producto->accion_terapeutica=$request->accion_terapeutica;
         $producto->principio_activo=$request->principio_activo;
-        $producto->imagen='imagen';
+        $producto->imagen=$var;
         $producto->tiempo_pedido=$request->tiempo_pedido;
         $producto->precio_lista=$request->precio_lista;
         $producto->precio_venta=$request->precio_venta;
         $producto->save();
+        
         //return $validador;
     }
     /**
@@ -204,7 +216,7 @@ class ProdProductoController extends Controller
         $producto->dosificacion=$request->dosificacion;
         $producto->accion_terapeutica=$request->accion_terapeutica;
         $producto->principio_activo=$request->principio_activo;
-        //$producto->imagen='imagen';
+        $producto->imagen=$request->imagen;
         $producto->tiempo_pedido=$request->tiempo_pedido;
         $producto->precio_lista=$request->precio_lista;
         $producto->precio_venta=$request->precio_venta;
