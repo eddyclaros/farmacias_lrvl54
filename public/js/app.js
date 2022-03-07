@@ -48869,7 +48869,6 @@ var render = function () {
                             },
                           ],
                           staticClass: "form-control",
-                          staticStyle: { "text-align": "right" },
                           attrs: { type: "tex", id: "", name: "" },
                           domProps: { value: _vm.razonsocial },
                           on: {
