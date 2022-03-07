@@ -30,16 +30,21 @@ Vue.component('Ajaxselect', require('./components/plugin_vue/selectAjax.vue',).d
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('area-component', require('./components/servicios/AreaComponent.vue').default);
-Vue.component('descuentos-component', require('./components/configuraciones/DescuentosComponent.vue').default);
 Vue.component('prestaciones-component', require('./components/servicios/PrestacionesComponent.vue').default);
 Vue.component('ventas-component', require('./components/servicios/VentaServiciosComponent.vue').default);
 Vue.component('histventas-component', require('./components/servicios/HistorialVentasComponent.vue').default);
+
+Vue.component('descuentos-component', require('./components/configuraciones/DescuentosComponent.vue').default);
+Vue.component('descproductos-component', require('./components/configuraciones/DescProductosComponent.vue').default);
 
 
 Vue.component('linea-component', require('./components/productos/LineaComponent.vue').default);
 Vue.component('producto-component', require('./components/productos/ProductoComponent.vue').default);
 Vue.component('dispenser-component', require('./components/productos/DispenserComponent.vue').default);
 Vue.component('formafarm-component', require('./components/productos/FormaFarmaceuticaComponent.vue').default);
+
+
+Vue.component('sucursal-component', require('./components/administracion/SucursalComponent.vue').default);
 
 
 /**

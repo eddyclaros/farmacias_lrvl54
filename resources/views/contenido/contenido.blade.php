@@ -3,6 +3,10 @@
 <template v-if="menu==0">
 <h1>Contenido menu 0</h1>
 </template>
+<template v-if="menu==10">
+    <sucursal-component></sucursal-component>
+
+</template>
 <template v-if="menu==1">
     <area-component></area-component>
 
@@ -14,6 +18,9 @@
 
 <template v-if="menu==3">
     <descuentos-component></descuentos-component>
+</template>
+<template v-if="menu==31">
+    <descproductos-component></descproductos-component>
 </template>
 
 <template v-if="menu==4">
@@ -50,10 +57,6 @@
 
 <template v-if="menu==9">
     <h1>Contenido menu 9</h1>
-</template>
-
-<template v-if="menu==10">
-    <h1>Contenido menu 10</h1>
 </template>
 
 <template v-if="menu==11">

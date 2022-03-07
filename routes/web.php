@@ -21,6 +21,7 @@ use App\Http\Controllers\ProdLineaController;
 use App\Http\Controllers\ProdDispenserController;
 use App\Http\Controllers\ProdFormaFarmaceuticaController;
 use App\Http\Controllers\ProdProductoController;
+use App\Http\Controllers\AdmSucursalController;
 
 Route::get('/', function () {
     return view('contenido/contenido');
@@ -103,3 +104,11 @@ Route::put('/formafarm/actualizar', [ProdFormaFarmaceuticaController::class,'upd
 Route::put('/formafarm/desactivar', [ProdFormaFarmaceuticaController::class,'desactivar']);
 Route::put('/formafarm/activar', [ProdFormaFarmaceuticaController::class,'activar']);
 Route::get('/formafarm/selectformafarm',[ProdFormaFarmaceuticaController::class,'selectFormaFarm']);
+
+
+Route::get('/sucursal',[AdmSucursalController::class,'index']);
+Route::post('/sucursal/registrar', [AdmSucursalController::class,'store']);
+Route::put('/sucursal/actualizar', [AdmSucursalController::class,'update']);
+Route::put('/sucursal/desactivar', [AdmSucursalController::class,'desactivar']);
+Route::put('/sucursal/activar', [AdmSucursalController::class,'activar']);
+Route::get('/sucursal/selectsucursal',[AdmSucursalController::class,'selectSucursal']);

@@ -27,7 +27,7 @@ class CreateProdProductosTable extends Migration
             $table->string('dosificacion')->nullable();
             $table->string('accion_terapeutica')->nullable();
             $table->string('principio_activo')->nullable();
-            //$table->lognblob('imagen')->nullable();
+            $table->string('imagen')->nullable();
             $table->tinyInteger('tiempo_pedido');
             $table->decimal('precio_lista');
             $table->decimal('precio_venta');
@@ -40,7 +40,7 @@ class CreateProdProductosTable extends Migration
             $table->foreign('idformafarm')->references('id')->on('prod__forma_farmaceuticas');
             
         });
-        DB::statement("ALTER TABLE prod__productos ADD imagen LONGBLOB");
+        //DB::statement("ALTER TABLE prod__productos ADD imagen LONGBLOB");
     }
 
     /**
