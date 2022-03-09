@@ -32,6 +32,7 @@ class ProdProductoController extends Controller
                         $sqls="(prod__productos.codigo like '%".$valor."%' 
                                 or prod__productos.nombre like '%".$valor."%' 
                                 or prod__lineas.nombre like '%".$valor."%' 
+                                or prod__categorias.nombre like '%".$valor."%' 
                                 or prod__dispensers.nombre like '%".$valor."%' 
                                 or prod__forma_farmaceuticas.nombre like '%".$valor."%'
                                 or prod__lineas.codigo like '%".$valor."%')" ;
@@ -41,6 +42,7 @@ class ProdProductoController extends Controller
                         $sqls.=" and (prod__productos.codigo like '%".$valor."%' 
                                     or prod__productos.nombre like '%".$valor."%' 
                                     or prod__lineas.nombre like '%".$valor."%' 
+                                    or prod__categorias.nombre like '%".$valor."%' 
                                     or prod__dispensers.nombre like '%".$valor."%' 
                                     or prod__forma_farmaceuticas.nombre like '%".$valor."%'
                                     or prod__lineas.codigo like '%".$valor."%')" ;
@@ -50,8 +52,10 @@ class ProdProductoController extends Controller
                 $producto= Prod_Producto::join('prod__lineas','prod__lineas.id','prod__productos.idlinea')
                                             ->join('prod__dispensers','prod__dispensers.id','prod__productos.iddispenser')
                                             ->join('prod__forma_farmaceuticas','prod__forma_farmaceuticas.id','prod__productos.idformafarm')
+                                            ->join('prod__categorias','prod__categorias.id','prod__productos.idcategoria')
                                             ->select('prod__lineas.nombre as nombrelinea',
                                                         'prod__dispensers.nombre as nombredispenser',
+                                                        'prod__categorias.nombre as nombrecategoria',
                                                         'prod__forma_farmaceuticas.nombre as nombreformafarm',
                                                         'prod__productos.codigo as codproducto',
                                                         'prod__productos.nombre as nombreproducto',
@@ -70,7 +74,9 @@ class ProdProductoController extends Controller
                                                         'prod__productos.id as id',
                                                         'iddispenser',
                                                         'idformafarm',
-                                                        'idlinea'
+                                                        'idlinea',
+                                                        'idcategoria',
+                                                        'metodoabc'
                                                         )
                                             ->where('prod__productos.estado',1)
                                             ->orderby('prod__productos.nombre','asc')->whereraw($sqls)->paginate(30);
@@ -82,9 +88,11 @@ class ProdProductoController extends Controller
             $producto= Prod_Producto::join('prod__lineas','prod__lineas.id','prod__productos.idlinea')
                                         ->join('prod__dispensers','prod__dispensers.id','prod__productos.iddispenser')
                                         ->join('prod__forma_farmaceuticas','prod__forma_farmaceuticas.id','prod__productos.idformafarm')
+                                        ->join('prod__categorias','prod__categorias.id','prod__productos.idcategoria')
                                         ->select('prod__lineas.nombre as nombrelinea',
                                                     'prod__dispensers.nombre as nombredispenser',
                                                     'prod__forma_farmaceuticas.nombre as nombreformafarm',
+                                                    'prod__categorias.nombre as nombrecategoria',
                                                     'prod__productos.codigo as codproducto',
                                                     'prod__productos.nombre as nombreproducto',
                                                     'prod__productos.id as idproducto',
@@ -102,7 +110,9 @@ class ProdProductoController extends Controller
                                                     'prod__productos.id as id',
                                                     'iddispenser',
                                                     'idformafarm',
-                                                    'idlinea')
+                                                    'idlinea',
+                                                    'idcategoria',
+                                                    'metodoabc')
                                         ->where('prod__productos.estado',1)
                                         ->orderby('prod__productos.nombre','asc')
                                         ->paginate(30);
@@ -192,6 +202,8 @@ class ProdProductoController extends Controller
         $producto->tiempo_pedido=$request->tiempo_pedido;
         $producto->precio_lista=$request->precio_lista;
         $producto->precio_venta=$request->precio_venta;
+        $producto->idcategoria=$request->idcategoria;
+        $producto->metodoabc=$request->metodoabc;
         $producto->save();
         
         //return $validador;
@@ -220,6 +232,8 @@ class ProdProductoController extends Controller
         $producto->tiempo_pedido=$request->tiempo_pedido;
         $producto->precio_lista=$request->precio_lista;
         $producto->precio_venta=$request->precio_venta;
+        $producto->metodoabc=$request->metodoabc;
+        $producto->idcategoria=$request->idcategoria;
         $producto->save();
     }
 

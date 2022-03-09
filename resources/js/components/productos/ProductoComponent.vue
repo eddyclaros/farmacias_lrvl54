@@ -39,12 +39,12 @@
                                 <th>Linea</th>
                                 <th>Codigo</th>
                                 <th>Nombre</th>
-                                <th>Cantidad</th>
+                                <th>Presentacion</th>
                                 <th>Tiempo Pedido</th>
                                 <th>Precio Lista</th>
                                 <th>Precio Venta</th>
-                                <th>Dispenser</th>
-                                <th>Forma Farmaceutica</th>
+                                <th>Metodo</th>
+                                <th>Categoria</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>
@@ -64,12 +64,13 @@
                                 <td v-text="producto.nombrelinea"></td>
                                 <td v-text="producto.codproducto"></td>
                                 <td v-text="producto.nombreproducto"></td>
-                                <td v-text="producto.cantidad"></td>
+                                <td>{{ producto.nombredispenser}} - {{producto.cantidad}} <br /> {{producto.nombreformafarm }}</td>
                                 <td v-text="producto.tiempo_pedido"></td>
                                 <td v-text="producto.precio_lista"></td>
                                 <td v-text="producto.precio_venta"></td>
-                                <td v-text="producto.nombredispenser"></td>
-                                <td v-text="producto.nombreformafarm"></td>
+                                
+                                <td v-text="producto.metodoabc"></td>
+                                <td v-text="producto.nombrecategoria"></td>
                                 <td>
                                     <div v-if="producto.activo==1">
                                         <span class="badge badge-success">Activo</span>
@@ -110,19 +111,6 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="form-group col-sm-8">
-                                <strong>Producto:</strong>
-                                <input type="text" class="form-control" v-model="nombre" placeholder="Nombre del Producto">
-                                <span class="error" v-if="nombre.length==0">Debe Ingresar Nombre del Producto</span>
-                            </div>
-                            <div class="form-group col-sm-4">
-                                <strong>Cantidad:</strong>
-                                <input type="text" class="form-control" v-model="cantidad" style="text-align:right" placeholder="0" v-on:focus="selectAll">
-                                <span class="error" v-if="cantidad==''">Debe ingresar Cantidad</span>
-                            </div>
-                        </div>
-
-                        <div class="row">
                             <div class="form-group col-sm-4">
                                 <strong>Linea:</strong>
                                 <Ajaxselect  v-if="clearSelected"
@@ -136,6 +124,16 @@
                                 </Ajaxselect>
                                 <span class="error" v-if="idlineas.length==0">Debe Seleccionar la Linea</span>
                             </div>
+                            <div class="form-group col-sm-8">
+                                <strong>Producto:</strong>
+                                <input type="text" class="form-control" v-model="nombre" placeholder="Nombre del Producto">
+                                <span class="error" v-if="nombre.length==0">Debe Ingresar Nombre del Producto</span>
+                            </div>
+                            
+                            
+                        </div>
+
+                        <div class="row">
                             <div class="form-group col-sm-4">
                                 <strong>Dispenser:</strong>
                                 <Ajaxselect  v-if="clearSelected1"
@@ -148,6 +146,11 @@
                                     :clearable='true'>
                                 </Ajaxselect>
                                 <span class="error" v-if="iddispenser.length==0">Debe Seleccionar el dispenser</span>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <strong>Cantidad:</strong>
+                                <input type="text" class="form-control" v-model="cantidad" style="text-align:right" placeholder="0" v-on:focus="selectAll">
+                                <span class="error" v-if="cantidad==''">Debe ingresar Cantidad</span>
                             </div>
                             <div class="form-group col-sm-4">
                                 <strong>Forma Farmaceutica:</strong>
@@ -201,14 +204,50 @@
                                 <span class="error" v-if="cantidad==''">Debe ingresar Cantidad</span>
                             </div>
                         </div>
-
-                        <div class="form-group row">
-                            <strong class="col-md-3 " for="text-input">Indicaciones: </strong>
-                            <div class="col-md-9">
+                        <div class="row">
+                            <div class="form-group col-sm-4">
+                                <strong>Categoria:</strong>
+                                <Ajaxselect  v-if="clearSelected3"
+                                    ruta="/categoria/selectcategoria?buscar=" @found="categorias" @cleaning="cleancategorias"
+                                    resp_ruta="categorias"
+                                    labels="nombre"
+                                    placeholder="Ingrese Texto..." 
+                                    idtabla="id"
+                                    :id="idcategoriaselected"
+                                    :clearable='true'>
+                                </Ajaxselect>
+                                <span class="error" v-if="idcategoria.length==0">Debe Seleccionar la Categoria</span>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <strong>Clasificación ABC:</strong>
+                                <select v-model="metodoselected" class="form-control">
+                                    <option v-for="metodo in arrayMetodo" :key="metodo" :value="metodo" v-text="metodo"></option>
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <strong>Indicaciones:</strong>
                                 <textarea class="form-control" maxlength="255" style="resize: none;" v-model="indicaciones" placeholder="Ninguno"></textarea>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="row">
+                            <div class="form-group col-sm-4">
+                                <strong>Dosificacion:</strong>
+                                <textarea class="form-control" maxlength="255" style="resize: none;" v-model="dosificacion" placeholder="Ninguno"></textarea>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <strong>Principio Activo:</strong>
+                                <textarea class="form-control" maxlength="255" style="resize: none;" v-model="principio" placeholder="Ninguno"></textarea>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <strong>Accion Terapeutica:</strong>
+                                <textarea class="form-control" maxlength="255" style="resize: none;" v-model="accion" placeholder="Ninguno"></textarea>
+                            </div>
+
+
+                            
+                        </div>
+
+                       <!--  <div class="form-group row">
                             <strong class="col-md-3 " for="text-input">Dosificacion: </strong>
                             <div class="col-md-9">
                                 <textarea class="form-control" maxlength="255" style="resize: none;" v-model="dosificacion" placeholder="Ninguno"></textarea>
@@ -225,7 +264,7 @@
                             <div class="col-md-9">
                                 <textarea class="form-control" maxlength="255" style="resize: none;" v-model="accion" placeholder="Ninguno"></textarea>
                             </div>
-                        </div>
+                        </div> -->
                         <!--  -->
 
                         <div v-if="tipoAccion==1">
@@ -238,15 +277,6 @@
                              <img  src="storage/producto/default.png" class="rounded-circle fotosociomini" alt="Cinque Terre" >
                             <button @click="removeImage">Cambiar Imagen</button>
                         </div> -->
-
-
-
-                        
-
-                    
-                        
-                            
-                        
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"  @click="cerrarModal('registrar')">Cerrar</button>
@@ -314,7 +344,12 @@ Vue.use(VueNumeric)
                 accion:'',
                 idproducto:'',
                 image:'',
-                imagen:''
+                imagen:'',
+                metodoselected:'A',
+                arrayMetodo:['A','B','C'],
+                idcategoria:[],
+                idcategoriaselected:'',
+                clearSelected3:1
 
 
             }
@@ -323,7 +358,7 @@ Vue.use(VueNumeric)
         computed:{
             sicompleto(){
                 let me=this;
-                if (me.nombre=='' || me.cantidad==0 || me.idlineas.length==0 || me.iddispenser.length==0 || me.idformafarm.length==0 || me.preciolista==0 || me.precioventa==0 || me.tiempopedidoselected==0)
+                if (me.nombre=='' || me.cantidad==0 || me.idlineas.length==0 || me.iddispenser.length==0 || me.idformafarm.length==0 || me.preciolista==0 || me.precioventa==0 || me.tiempopedidoselected==0 || me.idcategoria.length==0)
                     return false;
                 else
                     return true;
@@ -381,6 +416,25 @@ Vue.use(VueNumeric)
             },
             tiempo2(){
             this.clearSelected2=1;
+            },
+            tiempo3(){
+            this.clearSelected3=1;
+            },
+            categorias(categorias){
+                this.idcategoria=[];
+                for (const key in categorias) {
+                    if (categorias.hasOwnProperty(key)) {
+                        const element = categorias[key];
+                        //console.log(element);
+                        this.idcategoria.push(element);
+                    }
+                }
+                //console.log(this.idprestaciones);
+            },
+            cleancategorias(){
+                this.idcategoria=[];
+                this.idcategoriaelected='';
+            
             },
             lineas(lineas){
                 this.idlineas=[];
@@ -464,7 +518,9 @@ Vue.use(VueNumeric)
                     'dosificacione':me.dosificacione,
                     'principio_activo':me.principio,
                     'accion_terapeutica':me.accion,
+                    'idcategoria':me.idcategoria[0],
                     'imagen':me.image,
+                    'metodoabc':me.metodoselected,
 
 
                 }).then(function(response){
@@ -601,6 +657,8 @@ Vue.use(VueNumeric)
                     'dosificacione':me.dosificacione,
                     'principio_activo':me.principio,
                     'accion_terapeutica':me.accion,
+                    'idcategoria':me.idcategoria[0],
+                    'metodoabc':me.metodoselected,
                     
                 }).then(function (response) {
                     if(response.data.length){
@@ -632,7 +690,9 @@ Vue.use(VueNumeric)
                         me.clearSelected1=0;
                         setTimeout(me.tiempo1, 200); 
                         me.clearSelected2=0;
-                        setTimeout(me.tiempo2, 200); 
+                        setTimeout(me.tiempo2, 200);
+                        me.clearSelected3=0;
+                        setTimeout(me.tiempo3, 200); 
                         me.preciolista=0;
                         me.precioventa=0;
                         me.tiempopedidoselected=0;
@@ -643,6 +703,7 @@ Vue.use(VueNumeric)
                         me.tipoAccion=1;
                         me.image='';
                         me.imagen='';
+                        me.metodoselected='A';
 
                         me.classModal.openModal('registrar');
                         break;
@@ -667,9 +728,15 @@ Vue.use(VueNumeric)
                         me.clearSelected2=0;
                         setTimeout(me.tiempo2, 200); 
                         me.idformafarmselected=data.idformafarm
+
+                        me.clearSelected3=0;
+                        setTimeout(me.tiempo3, 200); 
+                        me.idcategoriaselected=data.idcategoria
+
                         me.idlineas=[0,data.idlinea];
                         me.iddispenser=[data.iddispenser];
                         me.idformafarm=[data.idformafarm];
+                        me.idcategoria=[data.idcategoria];
                         me.preciolista=data.precio_lista;
                         me.precioventa=data.precio_venta;
                         me.tiempopedidoselected=data.tiempo_pedido;
@@ -681,6 +748,7 @@ Vue.use(VueNumeric)
                         me.imagen=data.imagen;
                         me.removeImage;
                         me.image='';
+                        me.metodoselected=data.metodoabc;
                         me.classModal.openModal('registrar');
                         break;
                     }
@@ -705,6 +773,10 @@ Vue.use(VueNumeric)
                 me.idformafarmselected='';
                 me.clearSelected2=0;
                 setTimeout(me.tiempo2, 200); 
+                me.clearSelected3=0;
+                setTimeout(me.tiempo3, 200); 
+                me.idcategoria=[];
+                me.idcategoriaselected='';
                 me.preciolista=0;
                 me.precioventa=0;
                 me.tiempopedidoselected=0;
@@ -715,6 +787,7 @@ Vue.use(VueNumeric)
                 me.tipoAccion=1;
                 me.image='';
                 me.imagen='';
+                me.metodoselected='A'
                 
             },
             selectAll: function (event) {

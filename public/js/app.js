@@ -5730,6 +5730,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -5774,12 +5804,12 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
     }, {
       'id': 12,
       'dato': '12 meses'
-    }]), _defineProperty(_ref, "tiempopedidoselected", 0), _defineProperty(_ref, "indicaciones", ''), _defineProperty(_ref, "dosificacion", ''), _defineProperty(_ref, "principio", ''), _defineProperty(_ref, "accion", ''), _defineProperty(_ref, "idproducto", ''), _defineProperty(_ref, "image", ''), _defineProperty(_ref, "imagen", ''), _ref;
+    }]), _defineProperty(_ref, "tiempopedidoselected", 0), _defineProperty(_ref, "indicaciones", ''), _defineProperty(_ref, "dosificacion", ''), _defineProperty(_ref, "principio", ''), _defineProperty(_ref, "accion", ''), _defineProperty(_ref, "idproducto", ''), _defineProperty(_ref, "image", ''), _defineProperty(_ref, "imagen", ''), _defineProperty(_ref, "metodoselected", 'A'), _defineProperty(_ref, "arrayMetodo", ['A', 'B', 'C']), _defineProperty(_ref, "idcategoria", []), _defineProperty(_ref, "idcategoriaselected", ''), _defineProperty(_ref, "clearSelected3", 1), _ref;
   },
   computed: {
     sicompleto: function sicompleto() {
       var me = this;
-      if (me.nombre == '' || me.cantidad == 0 || me.idlineas.length == 0 || me.iddispenser.length == 0 || me.idformafarm.length == 0 || me.preciolista == 0 || me.precioventa == 0 || me.tiempopedidoselected == 0) return false;else return true;
+      if (me.nombre == '' || me.cantidad == 0 || me.idlineas.length == 0 || me.iddispenser.length == 0 || me.idformafarm.length == 0 || me.preciolista == 0 || me.precioventa == 0 || me.tiempopedidoselected == 0 || me.idcategoria.length == 0) return false;else return true;
     },
     isActived: function isActived() {
       return this.pagination.current_page;
@@ -5839,6 +5869,25 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
     },
     tiempo2: function tiempo2() {
       this.clearSelected2 = 1;
+    },
+    tiempo3: function tiempo3() {
+      this.clearSelected3 = 1;
+    },
+    categorias: function categorias(_categorias) {
+      this.idcategoria = [];
+
+      for (var key in _categorias) {
+        if (_categorias.hasOwnProperty(key)) {
+          var element = _categorias[key]; //console.log(element);
+
+          this.idcategoria.push(element);
+        }
+      } //console.log(this.idprestaciones);
+
+    },
+    cleancategorias: function cleancategorias() {
+      this.idcategoria = [];
+      this.idcategoriaelected = '';
     },
     lineas: function lineas(_lineas) {
       this.idlineas = [];
@@ -5920,7 +5969,9 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
         'dosificacione': me.dosificacione,
         'principio_activo': me.principio,
         'accion_terapeutica': me.accion,
-        'imagen': me.image
+        'idcategoria': me.idcategoria[0],
+        'imagen': me.image,
+        'metodoabc': me.metodoselected
       }).then(function (response) {
         console.log(response);
 
@@ -6029,7 +6080,9 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
         'indicaciones': me.indicaciones,
         'dosificacione': me.dosificacione,
         'principio_activo': me.principio,
-        'accion_terapeutica': me.accion
+        'accion_terapeutica': me.accion,
+        'idcategoria': me.idcategoria[0],
+        'metodoabc': me.metodoselected
       }).then(function (response) {
         if (response.data.length) {} // console.log(response)
         else {
@@ -6056,6 +6109,8 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
             setTimeout(me.tiempo1, 200);
             me.clearSelected2 = 0;
             setTimeout(me.tiempo2, 200);
+            me.clearSelected3 = 0;
+            setTimeout(me.tiempo3, 200);
             me.preciolista = 0;
             me.precioventa = 0;
             me.tiempopedidoselected = 0;
@@ -6066,6 +6121,7 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
             me.tipoAccion = 1;
             me.image = '';
             me.imagen = '';
+            me.metodoselected = 'A';
             me.classModal.openModal('registrar');
             break;
           }
@@ -6086,9 +6142,13 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
             me.clearSelected2 = 0;
             setTimeout(me.tiempo2, 200);
             me.idformafarmselected = data.idformafarm;
+            me.clearSelected3 = 0;
+            setTimeout(me.tiempo3, 200);
+            me.idcategoriaselected = data.idcategoria;
             me.idlineas = [0, data.idlinea];
             me.iddispenser = [data.iddispenser];
             me.idformafarm = [data.idformafarm];
+            me.idcategoria = [data.idcategoria];
             me.preciolista = data.precio_lista;
             me.precioventa = data.precio_venta;
             me.tiempopedidoselected = data.tiempo_pedido;
@@ -6100,6 +6160,7 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
             me.imagen = data.imagen;
             me.removeImage;
             me.image = '';
+            me.metodoselected = data.metodoabc;
             me.classModal.openModal('registrar');
             break;
           }
@@ -6122,6 +6183,10 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
       me.idformafarmselected = '';
       me.clearSelected2 = 0;
       setTimeout(me.tiempo2, 200);
+      me.clearSelected3 = 0;
+      setTimeout(me.tiempo3, 200);
+      me.idcategoria = [];
+      me.idcategoriaselected = '';
       me.preciolista = 0;
       me.precioventa = 0;
       me.tiempopedidoselected = 0;
@@ -6132,6 +6197,7 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
       me.tipoAccion = 1;
       me.image = '';
       me.imagen = '';
+      me.metodoselected = 'A';
     },
     selectAll: function selectAll(event) {
       setTimeout(function () {
@@ -53145,9 +53211,16 @@ var render = function () {
                       },
                     }),
                     _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(producto.cantidad) },
-                    }),
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(producto.nombredispenser) +
+                          " - " +
+                          _vm._s(producto.cantidad) +
+                          " "
+                      ),
+                      _c("br"),
+                      _vm._v(" " + _vm._s(producto.nombreformafarm)),
+                    ]),
                     _vm._v(" "),
                     _c("td", {
                       domProps: { textContent: _vm._s(producto.tiempo_pedido) },
@@ -53162,14 +53235,12 @@ var render = function () {
                     }),
                     _vm._v(" "),
                     _c("td", {
-                      domProps: {
-                        textContent: _vm._s(producto.nombredispenser),
-                      },
+                      domProps: { textContent: _vm._s(producto.metodoabc) },
                     }),
                     _vm._v(" "),
                     _c("td", {
                       domProps: {
-                        textContent: _vm._s(producto.nombreformafarm),
+                        textContent: _vm._s(producto.nombrecategoria),
                       },
                     }),
                     _vm._v(" "),
@@ -53320,6 +53391,39 @@ var render = function () {
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("div", { staticClass: "row" }, [
+                  _c(
+                    "div",
+                    { staticClass: "form-group col-sm-4" },
+                    [
+                      _c("strong", [_vm._v("Linea:")]),
+                      _vm._v(" "),
+                      _vm.clearSelected
+                        ? _c("Ajaxselect", {
+                            attrs: {
+                              ruta: "/linea/selectlinea?buscar=",
+                              resp_ruta: "lineas",
+                              labels: "cod",
+                              placeholder: "Ingrese Texto...",
+                              idtabla: "id",
+                              id: _vm.idlineaselected,
+                              clearable: true,
+                            },
+                            on: {
+                              found: _vm.lineas,
+                              cleaning: _vm.cleanlineas,
+                            },
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.idlineas.length == 0
+                        ? _c("span", { staticClass: "error" }, [
+                            _vm._v("Debe Seleccionar la Linea"),
+                          ])
+                        : _vm._e(),
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
                   _c("div", { staticClass: "form-group col-sm-8" }, [
                     _c("strong", [_vm._v("Producto:")]),
                     _vm._v(" "),
@@ -53354,6 +53458,41 @@ var render = function () {
                         ])
                       : _vm._e(),
                   ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c(
+                    "div",
+                    { staticClass: "form-group col-sm-4" },
+                    [
+                      _c("strong", [_vm._v("Dispenser:")]),
+                      _vm._v(" "),
+                      _vm.clearSelected1
+                        ? _c("Ajaxselect", {
+                            attrs: {
+                              ruta: "/dispenser/selectdispenser?buscar=",
+                              resp_ruta: "dispensers",
+                              labels: "nombre",
+                              placeholder: "Ingrese Texto...",
+                              idtabla: "id",
+                              id: _vm.iddispenserselected,
+                              clearable: true,
+                            },
+                            on: {
+                              found: _vm.dispensers,
+                              cleaning: _vm.cleandispensers,
+                            },
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.iddispenser.length == 0
+                        ? _c("span", { staticClass: "error" }, [
+                            _vm._v("Debe Seleccionar el dispenser"),
+                          ])
+                        : _vm._e(),
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
                   _c("div", { staticClass: "form-group col-sm-4" }, [
                     _c("strong", [_vm._v("Cantidad:")]),
@@ -53388,74 +53527,6 @@ var render = function () {
                         ])
                       : _vm._e(),
                   ]),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c(
-                    "div",
-                    { staticClass: "form-group col-sm-4" },
-                    [
-                      _c("strong", [_vm._v("Linea:")]),
-                      _vm._v(" "),
-                      _vm.clearSelected
-                        ? _c("Ajaxselect", {
-                            attrs: {
-                              ruta: "/linea/selectlinea?buscar=",
-                              resp_ruta: "lineas",
-                              labels: "cod",
-                              placeholder: "Ingrese Texto...",
-                              idtabla: "id",
-                              id: _vm.idlineaselected,
-                              clearable: true,
-                            },
-                            on: {
-                              found: _vm.lineas,
-                              cleaning: _vm.cleanlineas,
-                            },
-                          })
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.idlineas.length == 0
-                        ? _c("span", { staticClass: "error" }, [
-                            _vm._v("Debe Seleccionar la Linea"),
-                          ])
-                        : _vm._e(),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "form-group col-sm-4" },
-                    [
-                      _c("strong", [_vm._v("Dispenser:")]),
-                      _vm._v(" "),
-                      _vm.clearSelected1
-                        ? _c("Ajaxselect", {
-                            attrs: {
-                              ruta: "/dispenser/selectdispenser?buscar=",
-                              resp_ruta: "dispensers",
-                              labels: "nombre",
-                              placeholder: "Ingrese Texto...",
-                              idtabla: "id",
-                              id: _vm.iddispenserselected,
-                              clearable: true,
-                            },
-                            on: {
-                              found: _vm.dispensers,
-                              cleaning: _vm.cleandispensers,
-                            },
-                          })
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.iddispenser.length == 0
-                        ? _c("span", { staticClass: "error" }, [
-                            _vm._v("Debe Seleccionar el dispenser"),
-                          ])
-                        : _vm._e(),
-                    ],
-                    1
-                  ),
                   _vm._v(" "),
                   _c(
                     "div",
@@ -53615,14 +53686,87 @@ var render = function () {
                   ]),
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "form-group row" }, [
+                _c("div", { staticClass: "row" }, [
                   _c(
-                    "strong",
-                    { staticClass: "col-md-3 ", attrs: { for: "text-input" } },
-                    [_vm._v("Indicaciones: ")]
+                    "div",
+                    { staticClass: "form-group col-sm-4" },
+                    [
+                      _c("strong", [_vm._v("Categoria:")]),
+                      _vm._v(" "),
+                      _vm.clearSelected3
+                        ? _c("Ajaxselect", {
+                            attrs: {
+                              ruta: "/categoria/selectcategoria?buscar=",
+                              resp_ruta: "categorias",
+                              labels: "nombre",
+                              placeholder: "Ingrese Texto...",
+                              idtabla: "id",
+                              id: _vm.idcategoriaselected,
+                              clearable: true,
+                            },
+                            on: {
+                              found: _vm.categorias,
+                              cleaning: _vm.cleancategorias,
+                            },
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.idcategoria.length == 0
+                        ? _c("span", { staticClass: "error" }, [
+                            _vm._v("Debe Seleccionar la Categoria"),
+                          ])
+                        : _vm._e(),
+                    ],
+                    1
                   ),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-md-9" }, [
+                  _c("div", { staticClass: "form-group col-sm-4" }, [
+                    _c("strong", [_vm._v("Clasificación ABC:")]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.metodoselected,
+                            expression: "metodoselected",
+                          },
+                        ],
+                        staticClass: "form-control",
+                        on: {
+                          change: function ($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function (o) {
+                                return o.selected
+                              })
+                              .map(function (o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.metodoselected = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          },
+                        },
+                      },
+                      _vm._l(_vm.arrayMetodo, function (metodo) {
+                        return _c("option", {
+                          key: metodo,
+                          domProps: {
+                            value: metodo,
+                            textContent: _vm._s(metodo),
+                          },
+                        })
+                      }),
+                      0
+                    ),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group col-sm-4" }, [
+                    _c("strong", [_vm._v("Indicaciones:")]),
+                    _vm._v(" "),
                     _c("textarea", {
                       directives: [
                         {
@@ -53648,14 +53792,10 @@ var render = function () {
                   ]),
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "form-group row" }, [
-                  _c(
-                    "strong",
-                    { staticClass: "col-md-3 ", attrs: { for: "text-input" } },
-                    [_vm._v("Dosificacion: ")]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-md-9" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "form-group col-sm-4" }, [
+                    _c("strong", [_vm._v("Dosificacion:")]),
+                    _vm._v(" "),
                     _c("textarea", {
                       directives: [
                         {
@@ -53679,16 +53819,10 @@ var render = function () {
                       },
                     }),
                   ]),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group row" }, [
-                  _c(
-                    "strong",
-                    { staticClass: "col-md-3 ", attrs: { for: "text-input" } },
-                    [_vm._v("Principio Activo: ")]
-                  ),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-md-9" }, [
+                  _c("div", { staticClass: "form-group col-sm-4" }, [
+                    _c("strong", [_vm._v("Principio Activo:")]),
+                    _vm._v(" "),
                     _c("textarea", {
                       directives: [
                         {
@@ -53712,16 +53846,10 @@ var render = function () {
                       },
                     }),
                   ]),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group row" }, [
-                  _c(
-                    "strong",
-                    { staticClass: "col-md-3 ", attrs: { for: "text-input" } },
-                    [_vm._v("Accion Terapeutica: ")]
-                  ),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-md-9" }, [
+                  _c("div", { staticClass: "form-group col-sm-4" }, [
+                    _c("strong", [_vm._v("Accion Terapeutica:")]),
+                    _vm._v(" "),
                     _c("textarea", {
                       directives: [
                         {
@@ -53847,7 +53975,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Nombre")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Cantidad")]),
+        _c("th", [_vm._v("Presentacion")]),
         _vm._v(" "),
         _c("th", [_vm._v("Tiempo Pedido")]),
         _vm._v(" "),
@@ -53855,9 +53983,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Precio Venta")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Dispenser")]),
+        _c("th", [_vm._v("Metodo")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Forma Farmaceutica")]),
+        _c("th", [_vm._v("Categoria")]),
         _vm._v(" "),
         _c("th", [_vm._v("Estado")]),
       ]),

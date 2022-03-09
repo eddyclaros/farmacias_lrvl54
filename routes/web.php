@@ -119,4 +119,4 @@ Route::post('/categoria/registrar', [ProdCategoriaController::class,'store']);
 Route::put('/categoria/actualizar', [ProdCategoriaController::class,'update']);
 Route::put('/categoria/desactivar', [ProdCategoriaController::class,'desactivar']);
 Route::put('/categoria/activar', [ProdCategoriaController::class,'activar']);
-Route::get('/categoria/selectcategoria',[ProdCategoriaController::class,'selectFormaFarm']);
+Route::get('/categoria/selectcategoria',[ProdCategoriaController::class,'selectCategoria']);

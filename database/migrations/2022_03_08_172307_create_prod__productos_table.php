@@ -32,6 +32,7 @@ class CreateProdProductosTable extends Migration
             $table->tinyInteger('tiempo_pedido');
             $table->decimal('precio_lista');
             $table->decimal('precio_venta');
+            $table->string('metodoabc',2);
             $table->tinyInteger('estado')->default(1)->comment('1->');
             $table->boolean('activo')->default(1);
             $table->timestamps();

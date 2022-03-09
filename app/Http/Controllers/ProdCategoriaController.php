@@ -112,7 +112,7 @@ class ProdCategoriaController extends Controller
         $categoria->activo=1;
         $categoria->save();
     }
-    public function selectFormaFarm(Request $request)
+    public function selectCategoria(Request $request)
     {
         $buscararray = array(); 
         if(!empty($request->buscar)) $buscararray = explode(" ",$request->buscar); 
@@ -148,7 +148,7 @@ class ProdCategoriaController extends Controller
             }
               
         }
-        return ['categoria' => $categoria];
+        return ['categorias' => $categoria];
 
     }
    
