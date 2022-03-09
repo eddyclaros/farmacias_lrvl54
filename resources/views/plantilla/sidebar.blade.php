@@ -61,6 +61,9 @@
                     <li @click="menu=63" class="nav-item">
                         <a class="nav-link" href="#"><i class="icon-info"></i> Forma Farmaceutica</a>
                     </li>
+                    <li @click="menu=64" class="nav-item">
+                        <a class="nav-link" href="#"><i class="icon-info"></i> Categorias</a>
+                    </li>
                 </ul>
             </li>
             <!--

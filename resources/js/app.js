@@ -42,9 +42,10 @@ Vue.component('linea-component', require('./components/productos/LineaComponent.
 Vue.component('producto-component', require('./components/productos/ProductoComponent.vue').default);
 Vue.component('dispenser-component', require('./components/productos/DispenserComponent.vue').default);
 Vue.component('formafarm-component', require('./components/productos/FormaFarmaceuticaComponent.vue').default);
-
+Vue.component('categoria-component', require('./components/productos/CategoriaComponent.vue').default);
 
 Vue.component('sucursal-component', require('./components/administracion/SucursalComponent.vue').default);
+
 
 
 /**

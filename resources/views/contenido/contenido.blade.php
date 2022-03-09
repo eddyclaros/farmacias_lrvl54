@@ -46,6 +46,9 @@
 <template v-if="menu==63">
     <formafarm-component></formafarm-component>
 </template>
+<template v-if="menu==64">
+    <categoria-component></categoria-component>
+</template>
 
 <template v-if="menu==7">
     <h1>Contenido menu 7</h1>

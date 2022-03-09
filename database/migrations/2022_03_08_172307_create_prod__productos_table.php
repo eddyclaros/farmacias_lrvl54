@@ -21,6 +21,7 @@ class CreateProdProductosTable extends Migration
             $table->integer('correlativo')->unsigned();
             $table->string('nombre',100);
             $table->bigInteger('iddispenser')->unsigned();
+            $table->bigInteger('idcategoria')->unsigned();
             $table->string('cantidad',15);
             $table->bigInteger('idformafarm')->unsigned();
             $table->string('indicaciones')->nullable();
@@ -38,6 +39,7 @@ class CreateProdProductosTable extends Migration
             $table->foreign('idlinea')->references('id')->on('prod__lineas');
             $table->foreign('iddispenser')->references('id')->on('prod__dispensers');
             $table->foreign('idformafarm')->references('id')->on('prod__forma_farmaceuticas');
+            $table->foreign('idcategoria')->references('id')->on('prod__categorias');
             
         });
         //DB::statement("ALTER TABLE prod__productos ADD imagen LONGBLOB");

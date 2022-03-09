@@ -18,12 +18,14 @@ class DatabaseSeeder extends Seeder
             'prod__dispensers',
             'prod__forma_farmaceuticas',
             'prod__lineas',
-            'adm__sucursals'
+            'adm__sucursals',
+            'prod__categorias'
         ]);
         $this->call(DispenserSeeder::class);
         $this->call(FormaFarmaceuticaSeeder::class);
         $this->call(LineaSeeder::class);
         $this->call(SucursalSeeder::class);
+        $this->call(ProdCategoriasSeeder::class);
     }
     protected function truncateTables(array $tables)
     {

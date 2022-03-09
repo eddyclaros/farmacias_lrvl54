@@ -10,7 +10,7 @@
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Sucursales
+                    <i class="fa fa-align-justify"></i> Categorias
                     <button type="button" class="btn btn-secondary" @click="abrirModal('registrar')">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
@@ -19,8 +19,8 @@
                     <div class="form-group row">
                         <div class="col-md-6">
                             <div class="input-group">
-                                <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar"  @keyup.enter="listarSucursales(1)">
-                                <button type="submit" class="btn btn-primary" @click="listarSucursales(1)"><i class="fa fa-search" ></i> Buscar</button>
+                                <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar"  @keyup.enter="listarCategoria(1)">
+                                <button type="submit" class="btn btn-primary" @click="listarCategoria(1)"><i class="fa fa-search" ></i> Buscar</button>
                             </div>
                         </div>
                     </div>
@@ -28,45 +28,33 @@
                         <thead>
                             <tr>
                                 <th>Opciones</th>
-                                <th>Tipo</th>
-                                <th>Razon Social</th>
-                                <th>Telefonos</th>
-                                <th>Nit</th>
-                                <th>Direccion</th>
-                                <th>Ciudad</th>
+                                <th>Nombre</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="sucursal in arraySucursales" :key="sucursal.id">
+                            <tr v-for="categoria in arrayCategoria" :key="categoria.id">
                                 <td>
-                                    <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('actualizar',sucursal)">
+                                    <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('actualizar',categoria)">
                                         <i class="icon-pencil"></i>
                                     </button> &nbsp;
-                                    <button v-if="sucursal.activo==1" type="button" class="btn btn-danger btn-sm" @click="eliminarSucursal(sucursal.id)" >
+                                    <button v-if="categoria.activo==1" type="button" class="btn btn-danger btn-sm" @click="eliminarCategoria(categoria.id)" >
                                         <i class="icon-trash"></i>
                                     </button>
-                                    <button v-else type="button" class="btn btn-info btn-sm" @click="activarSucursal(sucursal.id)" >
+                                    <button v-else type="button" class="btn btn-info btn-sm" @click="activarCategoria(categoria.id)" >
                                         <i class="icon-check"></i>
                                     </button>
                                 </td>
-                                <td v-text="sucursal.tipo"></td>
-                                <td v-text="sucursal.razon_social"></td>
-                                <td v-text="sucursal.telefonos"></td>
-                                <td v-text="sucursal.nit"></td>
-                                <td v-text="sucursal.direccion"></td>
-                                <td v-text="sucursal.ciudad"></td>
+                                <td v-text="categoria.nombre"></td>
                                 <td>
-                                    <div v-if="sucursal.activo==1">
+                                    <div v-if="categoria.activo==1">
                                         <span class="badge badge-success">Activo</span>
                                     </div>
                                     <div v-else>
                                         <span class="badge badge-warning">Desactivado</span>
                                     </div>
-                                    
                                 </td>
                             </tr>
-                           
                         </tbody>
                     </table>
                     <nav>
@@ -97,61 +85,20 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action=""  class="form-horizontal">
+                        <!-- <form action="" method="post" enctype="multipart/form-data" class="form-horizontal"> -->
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Tipo <span  v-if="tipo==0" class="error">(*)</span></label>
+                                <label class="col-md-3 form-control-label" for="text-input">Nombre <span  v-if="!sicompleto" class="error">(*)</span></label>
                                 <div class="col-md-9">
-                                    <select name="" id="" v-model="tipo" class="form-control">
-                                        <option value="0" disabled>Seleccionar...</option>
-                                        <option v-if="matriz!=1 || tipo=='Casa_Matriz'" value="Casa_Matriz">Casa Matriz</option>
-                                        <option value="Sucursal">Sucursal</option>
-                                    </select>
+                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del Categoria" v-model="nombre" v-on:focus="selectAll" @keyup.enter="registrarCategoria()">
+                                    <span  v-if="!sicompleto" class="error">Debe Ingresar el Nombre de la Categoria</span>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Razon Social <span  v-if="razonsocial" class="error">(*)</span></label>
-                                <div class="col-md-9">
-                                    <input type="tex" id="" name="" class="form-control"  v-model="razonsocial" v-on:focus="selectAll"  >
-                                    <span  v-if="razonsocial==''" class="error">Debe Ingresar La Razon Social</span>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Telefonos <span  v-if="telefono" class="error">(*)</span></label>
-                                <div class="col-md-9">
-                                    <input type="text" id="telefono" name="telefono" class="form-control" placeholder="Ingrese Los numeros de Telefono" v-model="telefono" v-on:focus="selectAll">
-                                    <span  v-if="telefono==''" class="error">Debe Ingresar La Razon Social</span>                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Nit <span  v-if="nit" class="error">(*)</span></label>
-                                <div class="col-md-9">
-                                    <input type="text" id="nit" name="nit" class="form-control" placeholder="Ingrese el numero de NIT" v-model="nit" v-on:focus="selectAll">
-                                    <span  v-if="nit==''" class="error">Debe Ingresar el NIT</span>                                
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Direccion <span  v-if="direccion" class="error">(*)</span></label>
-                                <div class="col-md-9">
-                                    <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ingrese la Direccion" v-model="direccion" v-on:focus="selectAll">
-                                    <span  v-if="direccion==''" class="error">Debe Ingresar la Direccion</span>                                
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Ciudad <span  v-if="ciudad==0" class="error">(*)</span></label>
-                                <div class="col-md-9">
-                                    <select name="" id="" v-model="ciudad" class="form-control">
-                                        <option value="0" disabled>Seleccionar...</option>
-                                        <option v-for="ciud in arrayciudad" :key="ciud.id" :value="ciud.valor" v-text="ciud.valor"></option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                        </form>
+                        <!-- </form> -->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"  @click="cerrarModal('registrar')">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarSucursal()" :disabled="!sicompleto">Guardar</button>
-                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarSucursal()">Actualizar</button>
+                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarCategoria()" :disabled="!sicompleto">Guardar</button>
+                        <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarCategoria()">Actualizar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -180,39 +127,18 @@ import Swal from 'sweetalert2'
                 },
                 offset:3,
                 nombre:'',
-                tipo:0,
-                nit:'',
-                direccion:'',
-                arraySucursales:[],
+                arrayCategoria:[],
                 tituloModal:'',
                 tipoAccion:1,
-                idsucursal:'',
-                buscar:'',
-                razonsocial:'',
-                telefono:'',
-                ciudad:0,
-                arrayciudad:[
-                                {'id':1,'valor':'La Paz'},
-                                {'id':2,'valor':'El Alto'},
-                                {'id':3,'valor':'Santa Cruz'},
-                                {'id':4,'valor':'Cochabamba'},
-                                {'id':5,'valor':'Oruro'},
-                                {'id':6,'valor':'Potosi'},
-                                {'id':7,'valor':'Sucre'},
-                                {'id':8,'valor':'Tarija'},
-                                {'id':9,'valor':'Pando'},
-                                {'id':10,'valor':'Beny'},
-                            ],
-                matriz:0,
-                
+                idcategoria:'',
+                buscar:''
             }
 
         },
         computed:{
-            
             sicompleto(){
                 let me=this;
-                if (me.tipo!=0 && me.razonsocial!='' && me.telefono!='' && me.nit!='' && me.direccion!='' && me.ciudad!=0)
+                if (me.nombre!='')
                     return true;
                 else
                     return false;
@@ -243,28 +169,14 @@ import Swal from 'sweetalert2'
 
         },
         methods :{
-            listarSucursales(page){
+            listarCategoria(page){
                 let me=this;
-                var url='/sucursal?page='+page+'&buscar='+me.buscar;
+                var url='/categoria?page='+page+'&buscar='+me.buscar;
                 axios.get(url).then(function(response){
                     var respuesta=response.data;
-                    //console.log(respuesta.sucursals);
                     me.pagination=respuesta.pagination;
-                    //console.log(me.sucursals.data);
-                    me.arraySucursales=respuesta.sucursales.data;
-                    let resp=me.arraySucursales.find(element=>element.tipo=='Casa_Matriz');
-                    if(resp!= undefined)
-                    {
-                        if(resp.tipo=='Casa_Matriz')
-                            me.matriz=1;
-                        else
-                            me.matriz=0;
-                    }
-                    else
-                        me.matriz=0;
-
+                    me.arrayCategoria=respuesta.categoria.data;
                     
-                    //console.log(me.arraySucursales);
                 })
                 .catch(function(error){
                     console.log(error);
@@ -273,29 +185,28 @@ import Swal from 'sweetalert2'
             cambiarPagina(page){
                 let me =this;
                 me.pagination.current_page = page;
-                me.listarSucursales(page);
+                me.listarCategoria(page);
             },
-            registrarSucursal(){
+            registrarCategoria(){
                 let me = this;
-                
-                
-
-                axios.post('/sucursal/registrar',{
-                    'tipo':me.tipo,
-                    'razon_social':me.razonsocial,
-                    'telefonos':me.telefono,
-                    'nit':me.nit,
-                    'direccion':me.direccion,
-                    'ciudad':me.ciudad,
+                axios.post('/categoria/registrar',{
+                    'nombre':me.nombre,
                 }).then(function(response){
-                    me.cerrarModal('registrar');
-                    me.listarSucursales();
+                    if(response.data=='error')
+                    {
+                        Swal.fire('El registro ya existe','Debe introducir uno diferente');
+                    }
+                    else
+                    {
+                        me.cerrarModal('registrar');
+                        me.listarCategoria(1);
+                    }
                 }).catch(function(error){
                     console.log(error);
                 });
 
             },
-            eliminarSucursal(idsucursal){
+            eliminarCategoria(idcategoria){
                 let me=this;
                 //console.log("prueba");
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -316,8 +227,8 @@ import Swal from 'sweetalert2'
                 reverseButtons: true
                 }).then((result) => {
                 if (result.isConfirmed) {
-                     axios.put('/sucursal/desactivar',{
-                        'id': idsucursal
+                     axios.put('/categoria/desactivar',{
+                        'id': idcategoria
                     }).then(function (response) {
                         
                         swalWithBootstrapButtons.fire(
@@ -325,7 +236,7 @@ import Swal from 'sweetalert2'
                             'El registro a sido desactivado Correctamente',
                             'success'
                         )
-                        me.listarSucursales();
+                        me.listarCategoria(me.pagination.current_page);
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -344,7 +255,7 @@ import Swal from 'sweetalert2'
                 }
                 })
             },
-            activarSucursal(idsucursal){
+            activarCategoria(idcategoria){
                 let me=this;
                 //console.log("prueba");
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -365,17 +276,16 @@ import Swal from 'sweetalert2'
                 reverseButtons: true
                 }).then((result) => {
                 if (result.isConfirmed) {
-                     axios.put('/sucursal/activar',{
-                        'id': idsucursal
+                     axios.put('/categoria/activar',{
+                        'id': idcategoria
                     }).then(function (response) {
-                        me.listarSucursales();
                         
                         swalWithBootstrapButtons.fire(
                             'Activado!',
                             'El registro a sido Activado Correctamente',
                             'success'
                         )
-                        
+                        me.listarCategoria(me.pagination.current_page);
                         
                     }).catch(function (error) {
                         console.log(error);
@@ -394,30 +304,22 @@ import Swal from 'sweetalert2'
                 }
                 })
             },
-            actualizarSucursal(){
+            actualizarCategoria(){
                // const Swal = require('sweetalert2')
                 let me =this;
-                axios.put('/sucursal/actualizar',{
-                    'id':me.idsucursal,
+                axios.put('/categoria/actualizar',{
+                    'id':me.idcategoria,
                     'nombre':me.nombre,
-                    'razon_social':me.razonsocial,
-                    'telefono':me.telefono,
-                    'nit':me.nit,
-                    'direccion':me.direccion,
-                    'tipo':me.tipo,
-                    'ciudad':me.ciudad,
-
+                    
                 }).then(function (response) {
-                    me.listarSucursales();
                     if(response.data.length){
                     }
                     // console.log(response)
                     else{
                             Swal.fire('Actualizado Correctamente')
 
-                        
+                        me.listarCategoria(me.pagination.current_page);
                     } 
-                    
                 }).catch(function (error) {
                    
                 });
@@ -430,30 +332,19 @@ import Swal from 'sweetalert2'
                 switch(accion){
                     case 'registrar':
                     {
-                        me.tituloModal='Registar Sucursal'
+                        me.tituloModal='Registar Categoria'
                         me.tipoAccion=1;
-                        me.tipo=0;
-                        me.razonsocial='';
-                        me.telefono='';
-                        me.nit='';
-                        me.direccion='';
-                        me.ciudad=0;
+                        me.nombre='';
                         me.classModal.openModal('registrar');
                         break;
                     }
                     
                     case 'actualizar':
                     {
-                        me.idsucursal=data.id;
+                        me.idcategoria=data.id;
                         me.tipoAccion=2;
-                        me.tituloModal='Actualizar Sucursal'
-                        me.tipoAccion=2;
-                        me.tipo=data.tipo;
-                        me.razonsocial=data.razon_social;
-                        me.telefono=data.telefono;
-                        me.nit=data.nit;
-                        me.direccion=data.direccion;
-                        me.ciudad=data.ciudad;
+                        me.tituloModal='Actualizar Categoria'
+                        me.nombre=data.nombre;
                         me.classModal.openModal('registrar');
                         break;
                     }
@@ -464,15 +355,8 @@ import Swal from 'sweetalert2'
             cerrarModal(accion){
                 let me = this;
                 me.classModal.closeModal(accion);
+                me.nombre='';
                 me.tipoAccion=1;
-                me.tipo=0;
-                me.razonsocial='';
-                me.telefono='';
-                me.nit='';
-                me.direccion='';
-                me.ciudad=0;
-                me.tipoAccion=1;
-                
                 
             },
             selectAll: function (event) {
@@ -484,7 +368,7 @@ import Swal from 'sweetalert2'
 
         },
         mounted() {
-            this.listarSucursales(1);
+            this.listarCategoria(1);
             this.classModal = new _pl.Modals();
             this.classModal.addModal('registrar');
             //console.log('Component mounted.')
