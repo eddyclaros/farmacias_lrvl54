@@ -16,6 +16,8 @@ class CreateAdmSucursalsTable extends Migration
         Schema::create('adm__sucursals', function (Blueprint $table) {
             $table->id();
             $table->string('tipo',100);
+            $table->string('cod',5);
+            $table->smallInteger('correlativo')->unsigned();
             $table->string('razon_social',200);
             $table->string('telefonos',100)->nullable();
             $table->string('nit',50)->nullable();

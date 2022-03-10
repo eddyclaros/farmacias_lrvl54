@@ -46,6 +46,9 @@ Vue.component('categoria-component', require('./components/productos/CategoriaCo
 
 Vue.component('sucursal-component', require('./components/administracion/SucursalComponent.vue').default);
 
+Vue.component('codificacion-component', require('./components/almacenes/CodificacionComponent.vue').default);
+Vue.component('almacen-component', require('./components/almacenes/AlmacenComponent.vue').default);
+
 
 
 /**

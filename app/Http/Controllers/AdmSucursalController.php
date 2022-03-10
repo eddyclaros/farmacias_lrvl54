@@ -61,9 +61,32 @@ class AdmSucursalController extends Controller
      */
     public function store(Request $request)
     {
+        $letracodigo='SU';
+        $maxcorrelativo = Adm_Sucursal::select(DB::raw('max(correlativo) as maximo'))
+                                ->get()->toArray();
+        //dd($maxcorrelativo);
+        $correlativo=$maxcorrelativo[0]['maximo'];
+        //dd($correlativo);
+        if(is_null($correlativo))
+            $correlativo=1;
+        else
+            $correlativo=$correlativo+1;
+
+        if($correlativo<10)
+            $codigo='00'.$correlativo;
+        else
+            if($correlativo<100)
+                $codigo='0'.$correlativo;
+
                 
+        
+        $codigo=$letracodigo.$codigo;        
+        
+        
         $sucursal = new Adm_Sucursal();
         $sucursal->tipo=$request->tipo;
+        $sucursal->cod=$codigo;
+        $sucursal->correlativo=$correlativo;
         $sucursal->razon_social=$request->razon_social;
         $sucursal->telefonos=$request->telefonos;
         $sucursal->nit=$request->nit;
@@ -111,7 +134,7 @@ class AdmSucursalController extends Controller
     }
     public function selectSucursal()
     {
-        $sucursales=Adm_Sucursal::select('id','tipo','razon_social')->where('activo',1)->get();
+        $sucursales=Adm_Sucursal::select('id','cod','tipo','razon_social')->where('activo',1)->get();
     }
     
 }

@@ -16,6 +16,17 @@
                 </ul>
             </li>
             <li class="nav-item nav-dropdown">
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i> Almacenes</a>
+                <ul class="nav-dropdown-items">
+                    <li @click="menu=70" class="nav-item">
+                        <a class="nav-link" href="#"><i class="icon-bag"></i> Codificacion</a>
+                    </li>
+                    <li @click="menu=71" class="nav-item">
+                        <a class="nav-link" href="#"><i class="icon-bag"></i> Almacenes</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item nav-dropdown">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i> Servicios</a>
                 <ul class="nav-dropdown-items">
                     <li @click="menu=1" class="nav-item">

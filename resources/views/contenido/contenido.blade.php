@@ -50,12 +50,12 @@
     <categoria-component></categoria-component>
 </template>
 
-<template v-if="menu==7">
-    <h1>Contenido menu 7</h1>
+<template v-if="menu==70">
+    <codificacion-component></codificacion-component>
 </template>
 
-<template v-if="menu==8">
-    <h1>Contenido menu 8</h1>
+<template v-if="menu==71">
+    <almacen-component></almacen-component>
 </template>
 
 <template v-if="menu==9">

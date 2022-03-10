@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Almacen;
+use App\Alm_Codificacion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class AlmacenController extends Controller
+class AlmCodificacionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,7 @@ class AlmacenController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -35,16 +36,21 @@ class AlmacenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $codificacion= new Alm_Codificacion();
+        $codificacion->idsucursal=$request->idsucursal;
+        $codificacion->legraestante=$request->letraestante;
+        $codificacion->numposicion=$request->numposicion;
+        $codificacion->numaltura=$request->numaltura;
+        $codificacion->save();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Almacen  $almacen
+     * @param  \App\Alm_Codificacion  $alm_Codificacion
      * @return \Illuminate\Http\Response
      */
-    public function show(Almacen $almacen)
+    public function show(Alm_Codificacion $alm_Codificacion)
     {
         //
     }
@@ -52,10 +58,10 @@ class AlmacenController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Almacen  $almacen
+     * @param  \App\Alm_Codificacion  $alm_Codificacion
      * @return \Illuminate\Http\Response
      */
-    public function edit(Almacen $almacen)
+    public function edit(Alm_Codificacion $alm_Codificacion)
     {
         //
     }
@@ -64,10 +70,10 @@ class AlmacenController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Almacen  $almacen
+     * @param  \App\Alm_Codificacion  $alm_Codificacion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Almacen $almacen)
+    public function update(Request $request, Alm_Codificacion $alm_Codificacion)
     {
         //
     }
@@ -75,10 +81,10 @@ class AlmacenController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Almacen  $almacen
+     * @param  \App\Alm_Codificacion  $alm_Codificacion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Almacen $almacen)
+    public function destroy(Alm_Codificacion $alm_Codificacion)
     {
         //
     }

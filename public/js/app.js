@@ -2725,6 +2725,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
  //Vue.use(VeeValidate);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2780,7 +2782,7 @@ __webpack_require__.r(__webpack_exports__);
         'valor': 'Pando'
       }, {
         'id': 10,
-        'valor': 'Beny'
+        'valor': 'Beni'
       }],
       matriz: 0
     };
@@ -49070,6 +49072,10 @@ var render = function () {
                     ]),
                     _vm._v(" "),
                     _c("td", {
+                      domProps: { textContent: _vm._s(sucursal.cod) },
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
                       domProps: { textContent: _vm._s(sucursal.tipo) },
                     }),
                     _vm._v(" "),
@@ -49674,6 +49680,8 @@ var staticRenderFns = [
     return _c("thead", [
       _c("tr", [
         _c("th", [_vm._v("Opciones")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Codigo")]),
         _vm._v(" "),
         _c("th", [_vm._v("Tipo")]),
         _vm._v(" "),
@@ -69175,6 +69183,8 @@ Vue.component('dispenser-component', __webpack_require__(/*! ./components/produc
 Vue.component('formafarm-component', __webpack_require__(/*! ./components/productos/FormaFarmaceuticaComponent.vue */ "./resources/js/components/productos/FormaFarmaceuticaComponent.vue")["default"]);
 Vue.component('categoria-component', __webpack_require__(/*! ./components/productos/CategoriaComponent.vue */ "./resources/js/components/productos/CategoriaComponent.vue")["default"]);
 Vue.component('sucursal-component', __webpack_require__(/*! ./components/administracion/SucursalComponent.vue */ "./resources/js/components/administracion/SucursalComponent.vue")["default"]);
+Vue.component('codificacion-component', __webpack_require__(/*! ./components/almacenes/CodificacionComponent.vue */ "./resources/js/components/almacenes/CodificacionComponent.vue")["default"]);
+Vue.component('almacen-component', __webpack_require__(/*! ./components/almacenes/AlmacenComponent.vue */ "./resources/js/components/almacenes/AlmacenComponent.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -69387,6 +69397,70 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SucursalComponent_vue_vue_type_template_id_f0fd97f0_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/components/almacenes/AlmacenComponent.vue":
+/*!****************************************************************!*\
+  !*** ./resources/js/components/almacenes/AlmacenComponent.vue ***!
+  \****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+var render, staticRenderFns
+var script = {}
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_0__["default"])(
+  script,
+  render,
+  staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+component.options.__file = "resources/js/components/almacenes/AlmacenComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/almacenes/CodificacionComponent.vue":
+/*!*********************************************************************!*\
+  !*** ./resources/js/components/almacenes/CodificacionComponent.vue ***!
+  \*********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+var render, staticRenderFns
+var script = {}
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_0__["default"])(
+  script,
+  render,
+  staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+component.options.__file = "resources/js/components/almacenes/CodificacionComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 

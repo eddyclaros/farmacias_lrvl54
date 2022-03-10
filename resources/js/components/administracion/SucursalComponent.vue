@@ -28,6 +28,7 @@
                         <thead>
                             <tr>
                                 <th>Opciones</th>
+                                <th>Codigo</th>
                                 <th>Tipo</th>
                                 <th>Razon Social</th>
                                 <th>Telefonos</th>
@@ -50,6 +51,7 @@
                                         <i class="icon-check"></i>
                                     </button>
                                 </td>
+                                <td v-text="sucursal.cod"></td>
                                 <td v-text="sucursal.tipo"></td>
                                 <td v-text="sucursal.razon_social"></td>
                                 <td v-text="sucursal.telefonos"></td>
@@ -201,7 +203,7 @@ import Swal from 'sweetalert2'
                                 {'id':7,'valor':'Sucre'},
                                 {'id':8,'valor':'Tarija'},
                                 {'id':9,'valor':'Pando'},
-                                {'id':10,'valor':'Beny'},
+                                {'id':10,'valor':'Beni'},
                             ],
                 matriz:0,
                 
