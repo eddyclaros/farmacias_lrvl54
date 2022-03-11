@@ -134,7 +134,11 @@ class AdmSucursalController extends Controller
     }
     public function selectSucursal()
     {
-        $sucursales=Adm_Sucursal::select('id','cod','tipo','razon_social')->where('activo',1)->get();
+        $sucursales=Adm_Sucursal::select('id','cod','tipo','razon_social as nombre')
+                                ->where('activo',1)
+                                ->orderBy('cod', 'asc')
+                                ->get();
+        return $sucursales;
     }
     
 }

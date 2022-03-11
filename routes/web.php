@@ -23,6 +23,7 @@ use App\Http\Controllers\ProdFormaFarmaceuticaController;
 use App\Http\Controllers\ProdProductoController;
 use App\Http\Controllers\AdmSucursalController;
 use App\Http\Controllers\ProdCategoriaController;
+use App\Http\Controllers\AlmCodificacionController;
 
 Route::get('/', function () {
     return view('contenido/contenido');
@@ -120,3 +121,13 @@ Route::put('/categoria/actualizar', [ProdCategoriaController::class,'update']);
 Route::put('/categoria/desactivar', [ProdCategoriaController::class,'desactivar']);
 Route::put('/categoria/activar', [ProdCategoriaController::class,'activar']);
 Route::get('/categoria/selectcategoria',[ProdCategoriaController::class,'selectCategoria']);
+
+Route::get('/estante',[AlmCodificacionController::class,'index']);
+Route::post('/estante/registrar', [AlmCodificacionController::class,'store']);
+Route::put('/estante/actualizar', [AlmCodificacionController::class,'update']);
+Route::put('/estante/desactivar', [AlmCodificacionController::class,'desactivar']);
+Route::put('/estante/activar', [AlmCodificacionController::class,'activar']);
+Route::get('/estante/selectestante',[AlmCodificacionController::class,'selectEstante']);
+
+
+Route::get ('/imprimir_codigos', [AlmCodificacionController::class,'imprimirCodigos']);
