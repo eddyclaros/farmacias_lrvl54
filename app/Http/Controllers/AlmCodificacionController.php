@@ -161,7 +161,10 @@ class AlmCodificacionController extends Controller
      */
     public function update(Request $request, Alm_Codificacion $alm_Codificacion)
     {
-        //
+        $codificacion = Alm_Codificacion::findOrFail($request->id);
+        $codificacion->numposicion=$request->numposicion;
+        $codificacion->numaltura=$request->numaltura;
+        $codificacion->save();
     }
 
     /**
@@ -192,10 +195,33 @@ class AlmCodificacionController extends Controller
         $posicion=$estante[0]->numposicion;
         $altura=$estante[0]->numaltura;
         $codigo=$estante[0]->codestante;
+        //dd($request->lista);
+        if($request->lista==0)
+        {
+            return view('reporte_estante')->with(['posicion'=>$posicion,
+            'altura'=>$altura,
+            'codestante'=>$codigo
+        ]);
+        }   
+        else
+        {
+            return ['posicion'=>$posicion,
+            'altura'=>$altura,
+            'codestante'=>$codigo];
+        }
+            
+    }
+    public function desactivar(Request $request)
+    {
+        $estante = Alm_Codificacion::findOrFail($request->id);
+        $estante->activo=0;
+        $estante->save();
+    }
 
-        return view('reporte_estante')->with(['posicion'=>$posicion,
-                                            'altura'=>$altura,
-                                            'codestante'=>$codigo
-                                        ]);
+    public function activar(Request $request)
+    {
+        $estante = Alm_Codificacion::findOrFail($request->id);
+        $estante->activo=1;
+        $estante->save();
     }
 }

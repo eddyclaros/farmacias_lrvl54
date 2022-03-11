@@ -3269,7 +3269,7 @@ __webpack_require__.r(__webpack_exports__);
       plugin.viewPDF(url,'Codigos Estante'); */
       ///////////////////////////////////////
 
-      var url = '/imprimir_codigos?idestante=' + idestante; //console.log(url);
+      var url = '/imprimir_codigos?idestante=' + idestante + '&lista=' + 0; //console.log(url);
 
       window.open(url, '_blank');
     },
@@ -3391,9 +3391,8 @@ __webpack_require__.r(__webpack_exports__);
       var me = this;
       axios.put('/estante/actualizar', {
         'id': me.idestante,
-        'nombre': me.nombre,
-        'descripcion': me.descripcion,
-        'tiempo_demora': me.demora
+        'numposicion': me.numposicion,
+        'numaltura': me.numaltura
       }).then(function (response) {
         if (response.data.length) {} // console.log(response)
         else {
@@ -3428,9 +3427,10 @@ __webpack_require__.r(__webpack_exports__);
             me.idestante = data.id;
             me.tipoAccion = 2;
             me.tituloModal = 'Actualizar Estante';
-            me.nombre = data.nombre;
-            me.descripcion = data.descripcion;
-            me.demora = data.demora;
+            me.numposicion = data.numposicion;
+            me.numaltura = data.numaltura;
+            me.letra = data.letraestante;
+            me.codestante = data.codestante;
             me.classModal.openModal('registrar');
             break;
           }
@@ -3439,10 +3439,12 @@ __webpack_require__.r(__webpack_exports__);
     cerrarModal: function cerrarModal(accion) {
       var me = this;
       me.classModal.closeModal(accion);
-      me.nombre = '';
-      me.descripcion = '';
+      me.codsucursal = '';
+      me.codestante = '';
       me.tipoAccion = 1;
-      me.demora = 7;
+      me.numposicion = 0;
+      me.numaltura = 0;
+      me.letra = '';
     },
     selectAll: function selectAll(event) {
       setTimeout(function () {

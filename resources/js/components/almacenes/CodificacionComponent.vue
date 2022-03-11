@@ -231,7 +231,7 @@ import Swal from 'sweetalert2';
                 plugin.viewPDF(url,'Codigos Estante'); */
                 ///////////////////////////////////////
                 
-                var url='/imprimir_codigos?idestante='+ idestante;
+                var url='/imprimir_codigos?idestante='+ idestante+'&lista='+0;
                 
                 //console.log(url);
                 window.open(url, '_blank');
@@ -377,9 +377,8 @@ import Swal from 'sweetalert2';
                 let me =this;
                 axios.put('/estante/actualizar',{
                     'id':me.idestante,
-                    'nombre':me.nombre,
-                    'descripcion':me.descripcion,
-                    'tiempo_demora':me.demora
+                    'numposicion':me.numposicion,
+                    'numaltura':me.numaltura
                     
                 }).then(function (response) {
                     if(response.data.length){
@@ -418,9 +417,10 @@ import Swal from 'sweetalert2';
                         me.idestante=data.id;
                         me.tipoAccion=2;
                         me.tituloModal='Actualizar Estante'
-                        me.nombre=data.nombre;
-                        me.descripcion=data.descripcion;
-                        me.demora=data.demora;
+                        me.numposicion=data.numposicion;
+                        me.numaltura=data.numaltura;
+                        me.letra=data.letraestante;
+                        me.codestante=data.codestante;
                         me.classModal.openModal('registrar');
                         break;
                     }
@@ -431,10 +431,12 @@ import Swal from 'sweetalert2';
             cerrarModal(accion){
                 let me = this;
                 me.classModal.closeModal(accion);
-                me.nombre='';
-                me.descripcion='';
+                me.codsucursal='';
+                me.codestante='';
                 me.tipoAccion=1;
-                me.demora=7;
+                me.numposicion=0;
+                me.numaltura=0;
+                me.letra='';
                 
             },
             selectAll: function (event) {
