@@ -3512,23 +3512,29 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    actualizarAlmacen: function actualizarAlmacen() {
-      // const Swal = require('sweetalert2')
-      var me = this;
-      axios.put('/almacen/actualizar', {
-        'id': me.idalmacen,
-        'nombre': me.nombre,
-        'precio': me.precio,
-        'descripcion': me.descripcion
-      }).then(function (response) {
-        if (response.data.length) {} // console.log(response)
-        else {
-          sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Actualizado Correctamente');
-          me.listarProductosAlmacen(1);
-        }
-      })["catch"](function (error) {});
-      me.cerrarModal('registrar');
-    },
+
+    /* actualizarAlmacen(){
+       // const Swal = require('sweetalert2')
+        let me =this;
+        axios.put('/almacen/actualizar',{
+            'id':me.idalmacen,
+            'nombre':me.nombre,
+            'precio':me.precio,
+            'descripcion':me.descripcion,
+            
+        }).then(function (response) {
+            if(response.data.length){
+            }
+            // console.log(response)
+            else{
+                    Swal.fire('Actualizado Correctamente')
+                  me.listarProductosAlmacen(1);
+            } 
+        }).catch(function (error) {
+           
+        });
+        me.cerrarModal('registrar');
+        }, */
     abrirModal: function abrirModal(accion) {
       var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
       var me = this;

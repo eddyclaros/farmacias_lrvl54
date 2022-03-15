@@ -526,7 +526,7 @@ import Swal from 'sweetalert2'
                 }
                 })
             },
-            actualizarAlmacen(){
+            /* actualizarAlmacen(){
                // const Swal = require('sweetalert2')
                 let me =this;
                 axios.put('/almacen/actualizar',{
@@ -550,7 +550,7 @@ import Swal from 'sweetalert2'
                 me.cerrarModal('registrar');
 
 
-            },
+            }, */
             abrirModal(accion,data= []){
                 let me=this;
                 me.listarEstantes(me.sucursalselected);
