@@ -24,6 +24,7 @@ use App\Http\Controllers\ProdProductoController;
 use App\Http\Controllers\AdmSucursalController;
 use App\Http\Controllers\ProdCategoriaController;
 use App\Http\Controllers\AlmCodificacionController;
+use App\Http\Controllers\AlmAlmacenController;
 
 Route::get('/', function () {
     return view('contenido/contenido');
@@ -131,3 +132,11 @@ Route::get('/estante/selectestante',[AlmCodificacionController::class,'selectEst
 
 
 Route::get ('/imprimir_codigos', [AlmCodificacionController::class,'imprimirCodigos']);
+
+Route::get('/almacen',[AlmAlmacenController::class,'index']);
+Route::post('/almacen/registrar', [AlmAlmacenController::class,'store']);
+Route::put('/almacen/actualizar', [AlmAlmacenController::class,'update']);
+Route::put('/almacen/desactivar', [AlmAlmacenController::class,'desactivar']);
+Route::put('/almacen/activar', [AlmAlmacenController::class,'activar']);
+Route::get('/almacen/selectalmacen',[AlmAlmacenController::class,'selectAlmacen']);
+

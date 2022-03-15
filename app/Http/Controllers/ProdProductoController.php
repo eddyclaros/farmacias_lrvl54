@@ -250,7 +250,7 @@ class ProdProductoController extends Controller
         $producto->activo=1;
         $producto->save();
     }
-    public function selectProd_Producto()
+    /* public function selectProd_Producto()
     {
         $producto=Prod_Producto::select('nombre',
                             'id')
@@ -258,6 +258,60 @@ class ProdProductoController extends Controller
                     ->orderby('nombre','asc')
                     ->get();
         return $producto;
+        
+
+    } */
+    public function selectProducto(Request $request)
+    {
+        $buscararray = array(); 
+        if(!empty($request->buscar)) $buscararray = explode(" ",$request->buscar); 
+        $raw=DB::raw(DB::raw('concat(prod__productos.codigo," ",prod__productos.nombre," ",prod__dispensers.nombre," ",prod__productos.cantidad," ",prod__forma_farmaceuticas.nombre) as cod'));
+        if (sizeof($buscararray)>0) { 
+            $sqls=''; 
+            foreach($buscararray as $valor){
+                if(empty($sqls))
+                    $sqls="(prod__productos.codigo like '%".$valor."%' or prod__productos.nombre like '%".$valor."%' or prod__dispensers.nombre like '%".$valor."%' or prod__forma_farmaceuticas.nombre like '%".$valor."%' )";
+                else
+                    $sqls.=" and (prod__productos.codigo like '%".$valor."%' or prod__productos.nombre like '%".$valor."%' or prod__dispensers.nombre like '%".$valor."%' or prod__forma_farmaceuticas.nombre like '%".$valor."%')";
+            }   
+            $productos = Prod_Producto::join('prod__dispensers','prod__dispensers.id','prod__productos.iddispenser')
+                                        ->join('prod__forma_farmaceuticas','prod__forma_farmaceuticas.id','prod__productos.idformafarm')
+                                        ->select('prod__productos.id as id' ,
+                                                    $raw,
+                                                    'prod__productos.nombre as nombre')
+                                        ->where('prod__productos.activo',1)
+                                        ->whereraw($sqls)
+                                        ->orderby('prod__productos.nombre','asc')
+                                        ->get();
+        }
+        else {
+            if ($request->id){
+                    $productos = Prod_Producto::join('prod__dispensers','prod__dispensers.id','prod__productos.iddispenser')
+                                                ->join('prod__forma_farmaceuticas','prod__forma_farmaceuticas.id','prod__productos.idformafarm')
+                                                ->select('prod__productos.id as id' ,
+                                                            $raw,
+                                                            'prod__productos.nombre as nombre')
+                                                ->where('prod__productos.activo',1)
+                                                ->where('id',$request->id)
+                                                ->orderby('prod__productos.nombre','asc')
+                                                ->get();
+                    
+            }
+
+            else
+            {
+                $productos = Prod_Producto::join('prod__dispensers','prod__dispensers.id','prod__productos.iddispenser')
+                                            ->join('prod__forma_farmaceuticas','prod__forma_farmaceuticas.id','prod__productos.idformafarm')
+                                            ->select('prod__productos.id as id' ,
+                                                        $raw,
+                                                        'prod__productos.nombre as nombre')
+                                            ->where('prod__productos.activo',1)
+                                            ->orderby('prod__productos.nombre','asc')
+                                            ->get();
+            }
+              
+        }
+        return ['productos' => $productos];
         
 
     }

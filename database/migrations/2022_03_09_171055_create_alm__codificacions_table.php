@@ -15,7 +15,7 @@ class CreateAlmCodificacionsTable extends Migration
     {
         Schema::create('alm__codificacions', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('idsucursal');
+            $table->bigInteger('idsucursal')->unsigned();
             $table->string('letraestante',2);
             $table->tinyInteger('numletra')->unsigned();
             $table->string('codestante',6);
@@ -23,6 +23,7 @@ class CreateAlmCodificacionsTable extends Migration
             $table->tinyInteger('numaltura')->unsigned();
             $table->boolean('activo')->default(1);
             $table->timestamps();
+            $table->foreign('idsucursal')->references('id')->on('adm__sucursals');
         });
     }
 

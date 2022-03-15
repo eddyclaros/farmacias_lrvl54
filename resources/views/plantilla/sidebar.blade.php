@@ -22,7 +22,7 @@
                         <a class="nav-link" href="#"><i class="icon-bag"></i> Codificacion</a>
                     </li>
                     <li @click="menu=71" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-bag"></i> Almacenes</a>
+                        <a class="nav-link" href="#"><i class="icon-bag"></i> Ingreso Productos</a>
                     </li>
                 </ul>
             </li>

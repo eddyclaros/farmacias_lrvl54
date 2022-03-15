@@ -44,9 +44,10 @@ class AlmCodificacionController extends Controller
                                                      'numposicion',
                                                      'numaltura',
                                                      'alm__codificacions.activo')
-                                            ->orderby('letraestante','asc')
-                                            ->where('idsucursal',$request->idsucursal)
-                                            ->whereraw($sqls)
+                                            ->orderby('letraestante','asc');
+                                            if($request->idsucursal!=0)
+                                                $estantes=$estantes->where('idsucursal',$request->idsucursal);
+                                            $estantes=$estantes->whereraw($sqls)
                                             ->paginate(40);
             }
         }
@@ -223,5 +224,15 @@ class AlmCodificacionController extends Controller
         $estante = Alm_Codificacion::findOrFail($request->id);
         $estante->activo=1;
         $estante->save();
+    }
+    public function selectEstante(Request $request)
+    {
+        $estante = Alm_Codificacion::where('idsucursal',$request->idsucursal)
+                                    ->where('activo',1)
+                                    ->select('id','codestante','numposicion','numaltura')
+                                    ->get();
+        return $estante;
+                                    
+
     }
 }
