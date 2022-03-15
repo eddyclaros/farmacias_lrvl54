@@ -40,19 +40,21 @@
                         <thead>
                             <tr>
                                 <th>Opciones</th>
-                                <th>Codigo</th>
-                                <th>Nombre</th>
-                                <th>Precio</th>
-                                <th>Descripción</th>
+                                <th>Usuario</th>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Fecha Vencimiento</th>
+                                <th>Estante</th>
+                                <th>Lote</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="almacen in arrayAlmacen" :key="almacen.id">
                                 <td>
-                                    <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('actualizar',almacen)">
+                                    <!-- <button type="button" class="btn btn-warning btn-sm" @click="abrirModal('actualizar',almacen)">
                                         <i class="icon-pencil"></i>
-                                    </button> &nbsp;
+                                    </button> &nbsp; -->
                                     <button v-if="almacen.activo==1" type="button" class="btn btn-danger btn-sm" @click="eliminarAlmacen(almacen.id)" >
                                         <i class="icon-trash"></i>
                                     </button>
@@ -60,10 +62,12 @@
                                         <i class="icon-check"></i>
                                     </button>
                                 </td>
-                                <td v-text="almacen.codigo"></td>
-                                <td v-text="almacen.nombre"></td>
-                                <td v-text="almacen.precio + ' Bs.'" style="text-align:right"></td>
-                                <td v-text="almacen.descripcion"></td>
+                                <td>Admin</td>
+                                <td v-text="almacen.codprod"></td>
+                                <td v-text="almacen.cantidad" style="text-align:right"></td>
+                                <td v-text="almacen.fecha_vencimiento"></td>
+                                <td v-text="almacen.ubicacion_estante"></td>
+                                <td v-text="almacen.lote"></td>
                                 <td>
                                     <div v-if="almacen.activo==1">
                                         <span class="badge badge-success">Activo</span>
@@ -123,8 +127,9 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4">
-                                    <strong>Cantidad:</strong>
+                                    <strong>Cantidad: <span  v-if="cantidad==0" class="error">(*)</span></strong>
                                     <input type="number" class="form-control" v-model="cantidad" style="text-align:right" placeholder="0" v-on:focus="selectAll">
+                                    <span  v-if="cantidad==0" class="error">Debe Ingresar la Cantidad </span>
                                 </div>
                                 <div class="form-group col-sm-4">
                                     <strong>Tipo Entrada:</strong>
@@ -133,44 +138,54 @@
                                 </select>
                                 </div>
                                 <div class="form-group col-sm-4">
-                                    <strong>Fecha de Vencimiento:</strong>
+                                    <strong>Fecha de Vencimiento: <span  v-if="fecha_vencimiento==''" class="error">(*)</span></strong>
                                     <input type="date"
                                     :min="fechamin"
                                     class="form-control" 
                                     v-model="fecha_vencimiento" >
                                 </div>
+                                <span  v-if="fecha_vencimiento==''" class="error">Debe Ingresar la fecha de Vencimiento</span>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4">
-                                    <strong>Seleccionar Estante:</strong>
+                                    <strong>Seleccionar Estante: <span  v-if="estanteselected==0" class="error">(*)</span></strong>
                                     <select v-model="estanteselected" class="form-control" @change="listarposicion(estanteselected)">
                                         <option value="0">Seleccionar...</option>
                                         <option v-for="estante in arrayEstantes" :key="estante.id" :value="estante.id" v-text="estante.codestante"></option>
                                     </select>
+                                    <span  v-if="estanteselected==0" class="error">Debe seleccionar un Estante</span>
                                 </div>
                                 <div class="form-group col-sm-4">
-                                    <strong>Seleccionar Ubicacion:</strong>
+                                    <strong>Seleccionar Ubicacion: <span  v-if="ubicacionSelected==0" class="error">(*)</span></strong>
                                     <select v-model="ubicacionSelected" class="form-control">
                                         <option value="0">Seleccionar...</option>
                                         <option v-for="ubicacion in arrayUbicacions" :key="ubicacion" :value="ubicacion" v-text="ubicacion"></option>
                                     </select>
+                                    <span  v-if="ubicacionSelected==0" class="error">Debe seleccionar la ubicacion</span>
                                 </div>
                                 <div class="form-group col-sm-4">
-                                    <strong>Lote:</strong>
+                                    <strong>Lote: <span  v-if="lote==''" class="error">(*)</span></strong>
                                     <input type="text" class="form-control" placeholder="Lote" v-model="lote" v-on:focus="selectAll">
+                                    <span  v-if="lote==''" class="error">Debe Ingresar el lote</span>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-sm-12 ">
-                                    <strong>Codigo</strong>
+                                <div class="form-group col-sm-6 ">
+                                    <strong>Codigo: <span  v-if="codigo==''" class="error">(*)</span></strong>
                                     <input type="text" class="form-control" placeholder="Codigo" v-model="codigo" v-on:focus="selectAll">
+                                    <span  v-if="codigo==''" class="error">Debe Ingresar el Codigo</span>
+                                </div>
+                                <div class="form-group col-sm-6 ">
+                                    <strong>Registro Sanitario:<span  v-if="registrosanitario==''" class="error">(*)</span></strong>
+                                    <input type="text" class="form-control" placeholder="Registro Sanitario" v-model="registrosanitario" v-on:focus="selectAll">
+                                    <span  v-if="registrosanitario==''" class="error">Debe Ingresar el Registro Sanitario</span>
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"  @click="cerrarModal('registrar')">Cerrar</button>
-                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarAlmacen()" :disabled="!sicompleto || !sicompletoprecio">Guardar</button>
+                        <button type="button" v-if="tipoAccion==1" class="btn btn-primary" @click="registrarAlmacen()" :disabled="!sicompleto">Guardar</button>
                         <button type="button" v-if="tipoAccion==2" class="btn btn-primary" @click="actualizarAlmacen()">Actualizar</button>
                     </div>
                 </div>
@@ -227,6 +242,7 @@ import Swal from 'sweetalert2'
                 arrayUbicacions:[],
                 ubicacionSelected:0,
                 lote:'',
+                registrosanitario:'',
                 arraytipoentrada:['Bonificacion',
                                     'Compensacion',
                                     'Compra',
@@ -245,23 +261,9 @@ import Swal from 'sweetalert2'
 
         },
         computed:{
-            sisucursallesected(){
-                let me=this;
-                if (me.sucursalselected!=0)
-                    return true;
-                else
-                    return false;
-            },
-            sicompletoprecio(){
-                let me=this;
-                if (me.precio!=0)
-                    return true;
-                else
-                    return false;
-            },
             sicompleto(){
                 let me=this;
-                if (me.nombre!='')
+                if (me.idproducto.length!=0 && me.cantidad!=0 && me.fecha_vencimiento!='' && me.estanteselected!=0 && me.ubicacionSelected!=0 && me.lote!='' && me.codigo!='' && me.registrosanitario!='')
                     return true;
                 else
                     return false;
@@ -329,7 +331,7 @@ import Swal from 'sweetalert2'
                             if(index2<10)
                                 valor=index+'-0'+index2;
                             else
-                                valor=index+index2;
+                                valor=index+'-'+index2;
 
                             me.arrayUbicacions.push(valor);
                         }
@@ -356,12 +358,12 @@ import Swal from 'sweetalert2'
             this.clearSelected=1;
             },
             productos(productos){
-                this.idcategoria=[];
+                this.idproducto=[];
                 for (const key in productos) {
                     if (productos.hasOwnProperty(key)) {
                         const element = productos[key];
                         //console.log(element);
-                        this.idcategoria.push(element);
+                        this.idproducto.push(element);
                     }
                 }
                 //console.log(this.idprestaciones);
@@ -377,7 +379,7 @@ import Swal from 'sweetalert2'
                 var url='/almacen?page='+page+'&idsucursal='+me.sucursalselected+'&buscar='+me.buscar;
                 axios.get(url).then(function(response){
                     var respuesta=response.data;
-                    me.arrayAlmacen=respuesta.almacen.data;
+                    me.arrayAlmacen=respuesta.productos.data;
                     me.pagination=respuesta.pagination;
                     me.listarEstantes(me.sucursalselected);
                     
@@ -406,25 +408,19 @@ import Swal from 'sweetalert2'
             },
             registrarAlmacen(){
                 let me = this;
-                if(me.correlativo=='')
-                    me.correlativo=1;
-                else
-                    me.correlativo++;
-                
-                if(me.correlativo<10)
-                    me.codigo='00'+me.correlativo;
-                
-                if(me.correlativo<100 && me.correlativo>9)
-                    me.codigo='0'+ me.correlativo;
-
                 axios.post('/almacen/registrar',{
                     'idsucursal':me.sucursalselected,
-                    'nombre':me.nombre,
-                    'precio':me.precio,
-                    'descripcion':me.descripcion,
+                    'idproducto':me.idproducto[0],
+                    'idusuario':1,
+                    'cantidad':me.cantidad,
+                    'tipo_entrada':me.tipo_entrada,
+                    'lote':me.lote,
+                    'fecha_vencimiento':me.fecha_vencimiento,
                     'codigo':me.codigo,
-                    'correlativo':me.correlativo
+                    'registro_sanitario':me.registrosanitario,
+                    'ubicacion_estante':me.codestante+'-'+me.ubicacionSelected
                 }).then(function(response){
+                    Swal.fire('Registrado Correctamente')
                     me.cerrarModal('registrar');
                     me.listarProductosAlmacen(1);
                 }).catch(function(error){
@@ -598,10 +594,19 @@ import Swal from 'sweetalert2'
             cerrarModal(accion){
                 let me = this;
                 me.classModal.closeModal(accion);
-                me.nombre='';
-                me.precio=''
-                me.descripcion='';
-                me.tipoAccion=1;
+                //me.sucursalselected=0;
+                me.idproducto=[];
+                me.clearSelected=0;
+                setTimeout(me.tiempo, 200); 
+                me.cantidad=0;
+                me.tipo_entrada='';
+                me.lote='';
+                me.fecha_vencimiento=me.fechaactual;
+                me.codigo='';
+                me.registrosanitario='';
+                me.ubicacionSelected=0;
+                me.estanteselected=0;
+                me.codestante='';
                 
             },
             selectAll: function (event) {

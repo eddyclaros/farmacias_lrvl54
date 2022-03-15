@@ -3225,6 +3225,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
  //Vue.use(VeeValidate);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3266,21 +3281,14 @@ __webpack_require__.r(__webpack_exports__);
       arrayUbicacions: [],
       ubicacionSelected: 0,
       lote: '',
+      registrosanitario: '',
       arraytipoentrada: ['Bonificacion', 'Compensacion', 'Compra', 'Devolucion', 'Donacion', 'Error de Registro', 'Permuta', 'Prestamo', 'Recuperacion', 'Reintegro', 'Reposicion', 'Sobrante', 'Traspaso']
     };
   },
   computed: {
-    sisucursallesected: function sisucursallesected() {
-      var me = this;
-      if (me.sucursalselected != 0) return true;else return false;
-    },
-    sicompletoprecio: function sicompletoprecio() {
-      var me = this;
-      if (me.precio != 0) return true;else return false;
-    },
     sicompleto: function sicompleto() {
       var me = this;
-      if (me.nombre != '') return true;else return false;
+      if (me.idproducto.length != 0 && me.cantidad != 0 && me.fecha_vencimiento != '' && me.estanteselected != 0 && me.ubicacionSelected != 0 && me.lote != '' && me.codigo != '' && me.registrosanitario != '') return true;else return false;
     },
     isActived: function isActived() {
       return this.pagination.current_page;
@@ -3340,7 +3348,7 @@ __webpack_require__.r(__webpack_exports__);
             if (index2 < 10) valor = '0' + index + '-0' + index2;else valor = '0' + index + '-' + index2;
             me.arrayUbicacions.push(valor);
           } else {
-            if (index2 < 10) valor = index + '-0' + index2;else valor = index + index2;
+            if (index2 < 10) valor = index + '-0' + index2;else valor = index + '-' + index2;
             me.arrayUbicacions.push(valor);
           }
         }
@@ -3362,13 +3370,13 @@ __webpack_require__.r(__webpack_exports__);
       this.clearSelected = 1;
     },
     productos: function productos(_productos) {
-      this.idcategoria = [];
+      this.idproducto = [];
 
       for (var key in _productos) {
         if (_productos.hasOwnProperty(key)) {
           var element = _productos[key]; //console.log(element);
 
-          this.idcategoria.push(element);
+          this.idproducto.push(element);
         }
       } //console.log(this.idprestaciones);
 
@@ -3383,7 +3391,7 @@ __webpack_require__.r(__webpack_exports__);
       var url = '/almacen?page=' + page + '&idsucursal=' + me.sucursalselected + '&buscar=' + me.buscar;
       axios.get(url).then(function (response) {
         var respuesta = response.data;
-        me.arrayAlmacen = respuesta.almacen.data;
+        me.arrayAlmacen = respuesta.productos.data;
         me.pagination = respuesta.pagination;
         me.listarEstantes(me.sucursalselected);
       })["catch"](function (error) {
@@ -3407,17 +3415,19 @@ __webpack_require__.r(__webpack_exports__);
     },
     registrarAlmacen: function registrarAlmacen() {
       var me = this;
-      if (me.correlativo == '') me.correlativo = 1;else me.correlativo++;
-      if (me.correlativo < 10) me.codigo = '00' + me.correlativo;
-      if (me.correlativo < 100 && me.correlativo > 9) me.codigo = '0' + me.correlativo;
       axios.post('/almacen/registrar', {
         'idsucursal': me.sucursalselected,
-        'nombre': me.nombre,
-        'precio': me.precio,
-        'descripcion': me.descripcion,
+        'idproducto': me.idproducto[0],
+        'idusuario': 1,
+        'cantidad': me.cantidad,
+        'tipo_entrada': me.tipo_entrada,
+        'lote': me.lote,
+        'fecha_vencimiento': me.fecha_vencimiento,
         'codigo': me.codigo,
-        'correlativo': me.correlativo
+        'registro_sanitario': me.registrosanitario,
+        'ubicacion_estante': me.codestante + '-' + me.ubicacionSelected
       }).then(function (response) {
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Registrado Correctamente');
         me.cerrarModal('registrar');
         me.listarProductosAlmacen(1);
       })["catch"](function (error) {
@@ -3559,11 +3569,20 @@ __webpack_require__.r(__webpack_exports__);
     },
     cerrarModal: function cerrarModal(accion) {
       var me = this;
-      me.classModal.closeModal(accion);
-      me.nombre = '';
-      me.precio = '';
-      me.descripcion = '';
-      me.tipoAccion = 1;
+      me.classModal.closeModal(accion); //me.sucursalselected=0;
+
+      me.idproducto = [];
+      me.clearSelected = 0;
+      setTimeout(me.tiempo, 200);
+      me.cantidad = 0;
+      me.tipo_entrada = '';
+      me.lote = '';
+      me.fecha_vencimiento = me.fechaactual;
+      me.codigo = '';
+      me.registrosanitario = '';
+      me.ubicacionSelected = 0;
+      me.estanteselected = 0;
+      me.codestante = '';
     },
     selectAll: function selectAll(event) {
       setTimeout(function () {
@@ -50976,20 +50995,6 @@ var render = function () {
                 _vm._l(_vm.arrayAlmacen, function (almacen) {
                   return _c("tr", { key: almacen.id }, [
                     _c("td", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-warning btn-sm",
-                          attrs: { type: "button" },
-                          on: {
-                            click: function ($event) {
-                              return _vm.abrirModal("actualizar", almacen)
-                            },
-                          },
-                        },
-                        [_c("i", { staticClass: "icon-pencil" })]
-                      ),
-                      _vm._v("  \n                                "),
                       almacen.activo == 1
                         ? _c(
                             "button",
@@ -51019,23 +51024,31 @@ var render = function () {
                           ),
                     ]),
                     _vm._v(" "),
-                    _c("td", {
-                      domProps: { textContent: _vm._s(almacen.codigo) },
-                    }),
+                    _c("td", [_vm._v("Admin")]),
                     _vm._v(" "),
                     _c("td", {
-                      domProps: { textContent: _vm._s(almacen.nombre) },
+                      domProps: { textContent: _vm._s(almacen.codprod) },
                     }),
                     _vm._v(" "),
                     _c("td", {
                       staticStyle: { "text-align": "right" },
+                      domProps: { textContent: _vm._s(almacen.cantidad) },
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
                       domProps: {
-                        textContent: _vm._s(almacen.precio + " Bs."),
+                        textContent: _vm._s(almacen.fecha_vencimiento),
                       },
                     }),
                     _vm._v(" "),
                     _c("td", {
-                      domProps: { textContent: _vm._s(almacen.descripcion) },
+                      domProps: {
+                        textContent: _vm._s(almacen.ubicacion_estante),
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(almacen.lote) },
                     }),
                     _vm._v(" "),
                     _c("td", [
@@ -51242,7 +51255,14 @@ var render = function () {
                     _vm._v(" "),
                     _c("div", { staticClass: "row" }, [
                       _c("div", { staticClass: "form-group col-sm-4" }, [
-                        _c("strong", [_vm._v("Cantidad:")]),
+                        _c("strong", [
+                          _vm._v("Cantidad: "),
+                          _vm.cantidad == 0
+                            ? _c("span", { staticClass: "error" }, [
+                                _vm._v("(*)"),
+                              ])
+                            : _vm._e(),
+                        ]),
                         _vm._v(" "),
                         _c("input", {
                           directives: [
@@ -51267,6 +51287,12 @@ var render = function () {
                             },
                           },
                         }),
+                        _vm._v(" "),
+                        _vm.cantidad == 0
+                          ? _c("span", { staticClass: "error" }, [
+                              _vm._v("Debe Ingresar la Cantidad "),
+                            ])
+                          : _vm._e(),
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "form-group col-sm-4" }, [
@@ -51314,7 +51340,14 @@ var render = function () {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "form-group col-sm-4" }, [
-                        _c("strong", [_vm._v("Fecha de Vencimiento:")]),
+                        _c("strong", [
+                          _vm._v("Fecha de Vencimiento: "),
+                          _vm.fecha_vencimiento == ""
+                            ? _c("span", { staticClass: "error" }, [
+                                _vm._v("(*)"),
+                              ])
+                            : _vm._e(),
+                        ]),
                         _vm._v(" "),
                         _c("input", {
                           directives: [
@@ -51338,11 +51371,24 @@ var render = function () {
                           },
                         }),
                       ]),
+                      _vm._v(" "),
+                      _vm.fecha_vencimiento == ""
+                        ? _c("span", { staticClass: "error" }, [
+                            _vm._v("Debe Ingresar la fecha de Vencimiento"),
+                          ])
+                        : _vm._e(),
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "row" }, [
                       _c("div", { staticClass: "form-group col-sm-4" }, [
-                        _c("strong", [_vm._v("Seleccionar Estante:")]),
+                        _c("strong", [
+                          _vm._v("Seleccionar Estante: "),
+                          _vm.estanteselected == 0
+                            ? _c("span", { staticClass: "error" }, [
+                                _vm._v("(*)"),
+                              ])
+                            : _vm._e(),
+                        ]),
                         _vm._v(" "),
                         _c(
                           "select",
@@ -51395,10 +51441,23 @@ var render = function () {
                           ],
                           2
                         ),
+                        _vm._v(" "),
+                        _vm.estanteselected == 0
+                          ? _c("span", { staticClass: "error" }, [
+                              _vm._v("Debe seleccionar un Estante"),
+                            ])
+                          : _vm._e(),
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "form-group col-sm-4" }, [
-                        _c("strong", [_vm._v("Seleccionar Ubicacion:")]),
+                        _c("strong", [
+                          _vm._v("Seleccionar Ubicacion: "),
+                          _vm.ubicacionSelected == 0
+                            ? _c("span", { staticClass: "error" }, [
+                                _vm._v("(*)"),
+                              ])
+                            : _vm._e(),
+                        ]),
                         _vm._v(" "),
                         _c(
                           "select",
@@ -51445,10 +51504,23 @@ var render = function () {
                           ],
                           2
                         ),
+                        _vm._v(" "),
+                        _vm.ubicacionSelected == 0
+                          ? _c("span", { staticClass: "error" }, [
+                              _vm._v("Debe seleccionar la ubicacion"),
+                            ])
+                          : _vm._e(),
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "form-group col-sm-4" }, [
-                        _c("strong", [_vm._v("Lote:")]),
+                        _c("strong", [
+                          _vm._v("Lote: "),
+                          _vm.lote == ""
+                            ? _c("span", { staticClass: "error" }, [
+                                _vm._v("(*)"),
+                              ])
+                            : _vm._e(),
+                        ]),
                         _vm._v(" "),
                         _c("input", {
                           directives: [
@@ -51472,12 +51544,25 @@ var render = function () {
                             },
                           },
                         }),
+                        _vm._v(" "),
+                        _vm.lote == ""
+                          ? _c("span", { staticClass: "error" }, [
+                              _vm._v("Debe Ingresar el lote"),
+                            ])
+                          : _vm._e(),
                       ]),
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "form-group col-sm-12 " }, [
-                        _c("strong", [_vm._v("Codigo")]),
+                      _c("div", { staticClass: "form-group col-sm-6 " }, [
+                        _c("strong", [
+                          _vm._v("Codigo: "),
+                          _vm.codigo == ""
+                            ? _c("span", { staticClass: "error" }, [
+                                _vm._v("(*)"),
+                              ])
+                            : _vm._e(),
+                        ]),
                         _vm._v(" "),
                         _c("input", {
                           directives: [
@@ -51501,6 +51586,55 @@ var render = function () {
                             },
                           },
                         }),
+                        _vm._v(" "),
+                        _vm.codigo == ""
+                          ? _c("span", { staticClass: "error" }, [
+                              _vm._v("Debe Ingresar el Codigo"),
+                            ])
+                          : _vm._e(),
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "form-group col-sm-6 " }, [
+                        _c("strong", [
+                          _vm._v("Registro Sanitario:"),
+                          _vm.registrosanitario == ""
+                            ? _c("span", { staticClass: "error" }, [
+                                _vm._v("(*)"),
+                              ])
+                            : _vm._e(),
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.registrosanitario,
+                              expression: "registrosanitario",
+                            },
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "text",
+                            placeholder: "Registro Sanitario",
+                          },
+                          domProps: { value: _vm.registrosanitario },
+                          on: {
+                            focus: _vm.selectAll,
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.registrosanitario = $event.target.value
+                            },
+                          },
+                        }),
+                        _vm._v(" "),
+                        _vm.registrosanitario == ""
+                          ? _c("span", { staticClass: "error" }, [
+                              _vm._v("Debe Ingresar el Registro Sanitario"),
+                            ])
+                          : _vm._e(),
                       ]),
                     ]),
                   ]
@@ -51527,10 +51661,7 @@ var render = function () {
                       "button",
                       {
                         staticClass: "btn btn-primary",
-                        attrs: {
-                          type: "button",
-                          disabled: !_vm.sicompleto || !_vm.sicompletoprecio,
-                        },
+                        attrs: { type: "button", disabled: !_vm.sicompleto },
                         on: {
                           click: function ($event) {
                             return _vm.registrarAlmacen()
@@ -51599,13 +51730,17 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("Opciones")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Codigo")]),
+        _c("th", [_vm._v("Usuario")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Nombre")]),
+        _c("th", [_vm._v("Producto")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Precio")]),
+        _c("th", [_vm._v("Cantidad")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Descripción")]),
+        _c("th", [_vm._v("Fecha Vencimiento")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Estante")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Lote")]),
         _vm._v(" "),
         _c("th", [_vm._v("Estado")]),
       ]),
