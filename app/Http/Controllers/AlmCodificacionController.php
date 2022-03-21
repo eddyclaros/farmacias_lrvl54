@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Alm_Codificacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
-use function PHPUnit\Framework\isNull;
+//use Barryvdh\DomPDF\PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AlmCodificacionController extends Controller
 {
@@ -206,6 +206,21 @@ class AlmCodificacionController extends Controller
         }   
         else
         {
+            /* echo "entra";
+            $data = [
+                'title' => 'Lista de Codigos para Imprimir',
+                'heading' => 'Lista de Codigos para Imprimir',
+                'posicion'=>$posicion,
+                'altura'=>$altura,
+                'codestante'=>$codigo
+                  ];
+              
+              $pdf = PDF::loadView('reporte_estante', $data);
+        
+              return $pdf->download('imprimir_codigos.pdf');
+             */
+            
+            
             return ['posicion'=>$posicion,
             'altura'=>$altura,
             'codestante'=>$codigo];
@@ -234,5 +249,17 @@ class AlmCodificacionController extends Controller
         return $estante;
                                     
 
+    }
+    public function pdf() 
+    {
+    	$data = [
+            'title' => 'First PDF for Coding Driver',
+            'heading' => 'Hello from Coding Driver',
+            'content' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.'        
+              ];
+          
+          $pdf = PDF::loadView('sample', $data);
+    
+          return $pdf->stream('codingdriver.pdf');
     }
 }

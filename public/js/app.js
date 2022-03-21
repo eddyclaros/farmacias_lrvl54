@@ -4060,6 +4060,45 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4214,7 +4253,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
+    var _ref;
+
+    return _ref = {
       pagination: {
         'total': 0,
         'current_page': 0,
@@ -4225,23 +4266,86 @@ __webpack_require__.r(__webpack_exports__);
       },
       offset: 3,
       nombre: '',
-      descripcion: '',
+      regla_descuento: '',
       codigo: '',
       correlativo: 0,
-      arrayDescuentos: [],
       tituloModal: '',
       tipoAccion: 1,
       iddescuento: '',
       buscar: '',
-      siporcentaje: true,
+      idtipodescuento: true,
+      regla: '',
+      caracter: '%',
+      arrayDias: [],
+      arrayDescuentos: [],
+      arrayTipoDescuentos: [],
+      idtipodescuentoselected: 0,
+      aplica_a: '',
+      arrayAplica: [{
+        'id': 1,
+        'valor': 'Todos los Productos'
+      }, {
+        'id': 2,
+        'valor': 'Producto individual'
+      }, {
+        'id': 3,
+        'valor': 'Categoria'
+      }, {
+        'id': 4,
+        'valor': 'Metodo ABC'
+      }],
+      montodescuento: 0,
+      arraySubCategorias: [],
+      subcategoriaselected: 0,
       monto: '',
-      caracter: '%'
-    };
+      nomdescuento: '',
+      arrayOperadores: [{
+        'id': 1,
+        'valor': '='
+      }, {
+        'id': 2,
+        'valor': '>'
+      }, {
+        'id': 3,
+        'valor': '<'
+      }],
+      arrayABC: [{
+        'id': 1,
+        'valor': 'A'
+      }, {
+        'id': 2,
+        'valor': 'B'
+      }, {
+        'id': 3,
+        'valor': 'C'
+      }]
+    }, _defineProperty(_ref, "arrayDias", [{
+      'id': 1,
+      'valor': 'Lunes'
+    }, {
+      'id': 2,
+      'valor': 'Martes'
+    }, {
+      'id': 3,
+      'valor': 'Miercoles'
+    }, {
+      'id': 4,
+      'valor': 'Jueves'
+    }, {
+      'id': 5,
+      'valor': 'Viernes'
+    }, {
+      'id': 6,
+      'valor': 'Sabado'
+    }, {
+      'id': 7,
+      'valor': 'Domingo'
+    }]), _defineProperty(_ref, "arrayDetalle", []), _defineProperty(_ref, "detalleselected", 0), _defineProperty(_ref, "valor", 0), _defineProperty(_ref, "idcategoria", []), _defineProperty(_ref, "idcategoriaselected", ''), _defineProperty(_ref, "clearSelected", 1), _defineProperty(_ref, "fechainicio", ''), _defineProperty(_ref, "fechafin", ''), _defineProperty(_ref, "fechamin", ''), _defineProperty(_ref, "fechahoy", ''), _defineProperty(_ref, "diaselected", []), _ref;
   },
   computed: {
-    sicompletomonto: function sicompletomonto() {
+    sicompletoregla: function sicompletoregla() {
       var me = this;
-      if (me.monto != 0) return true;else return false;
+      if (me.regla != 0) return true;else return false;
     },
     sicompleto: function sicompleto() {
       var me = this;
@@ -4278,9 +4382,61 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    obtenerfecha: function obtenerfecha(valor) {
+      var me = this;
+      var url = '/obtenerfecha';
+      axios.get(url).then(function (response) {
+        var respuesta = response.data;
+        me.fechaactual = respuesta[0].fecha;
+        me.fechainicio = me.fechaactual;
+        me.fechafin = me.fechaactual;
+        me.fechahoy = me.fechaactual;
+      })["catch"](function (error) {
+        console.log(error);
+      }); //me.fechafactura=me.fechaactual;
+    },
+    tiempo: function tiempo() {
+      this.clearSelected = 1;
+    },
+    cleancategorias: function cleancategorias() {
+      this.idcategoria = [];
+      this.idcategoriaelected = '';
+    },
+    categorias: function categorias(_categorias) {
+      this.idcategoria = [];
+
+      for (var key in _categorias) {
+        if (_categorias.hasOwnProperty(key)) {
+          var element = _categorias[key]; //console.log(element);
+
+          this.idcategoria.push(element);
+        }
+      }
+    },
+    listarSubcategorias: function listarSubcategorias() {
+      var me = this;
+      me.subcategoriaselected = 0;
+      me.valor = 0;
+      var resp = me.arrayTipoDescuentos.find(function (element) {
+        return element.id == me.idtipodescuentoselected;
+      });
+      var subcategoria = resp.subcategorias;
+      me.arraySubCategorias = subcategoria.split('|');
+    },
+    selectTipoDescuentos: function selectTipoDescuentos() {
+      var me = this;
+      var url = '/tipodescuento/selecttipodescuento';
+      axios.get(url).then(function (response) {
+        var respuesta = response.data; //me.arrayDias=respuesta.arraydias;
+
+        me.arrayTipoDescuentos = respuesta.tipodescuentos;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     listarDescuentos: function listarDescuentos(page) {
       var me = this;
-      var url = '/descuento?page=' + page + '&buscar=' + me.buscar;
+      var url = '/proddescuento?page=' + page + '&buscar=' + me.buscar;
       axios.get(url).then(function (response) {
         var respuesta = response.data;
         me.pagination = respuesta.pagination;
@@ -4296,11 +4452,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     registrarDescuento: function registrarDescuento() {
       var me = this;
-      axios.post('/descuento/registrar', {
+      axios.post('/proddescuento/registrar', {
         'nombre': me.nombre,
-        'descripcion': me.descripcion,
-        'siporcentaje': me.siporcentaje,
-        'monto': me.monto
+        'regla_descuento': me.regla_descuento,
+        'idtipodescuento': me.idtipodescuento,
+        'regla': me.regla,
+        'aplica_a': me.aplica_a
       }).then(function (response) {
         me.cerrarModal('registrar');
         me.listarDescuentos();
@@ -4328,7 +4485,7 @@ __webpack_require__.r(__webpack_exports__);
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          axios.put('/descuento/desactivar', {
+          axios.put('/proddescuento/desactivar', {
             'id': iddescuento
           }).then(function (response) {
             swalWithBootstrapButtons.fire('Desactivado!', 'El registro a sido desactivado Correctamente', 'success');
@@ -4367,7 +4524,7 @@ __webpack_require__.r(__webpack_exports__);
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          axios.put('/descuento/activar', {
+          axios.put('/proddescuento/activar', {
             'id': iddescuento
           }).then(function (response) {
             swalWithBootstrapButtons.fire('Activado!', 'El registro a sido Activado Correctamente', 'success');
@@ -4389,12 +4546,12 @@ __webpack_require__.r(__webpack_exports__);
     actualizarDescuento: function actualizarDescuento() {
       // const Swal = require('sweetalert2')
       var me = this;
-      axios.put('/descuento/actualizar', {
+      axios.put('/proddescuento/actualizar', {
         'id': me.iddescuento,
         'nombre': me.nombre,
-        'descripcion': me.descripcion,
-        'siporcentaje': me.siporcentaje,
-        'monto': me.monto
+        'regla_descuento': me.regla_descuento,
+        'idtipodescuento': me.idtipodescuento,
+        'regla': me.regla
       }).then(function (response) {
         if (response.data.length) {} // console.log(response)
         else {
@@ -4404,6 +4561,83 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {});
       me.cerrarModal('registrar');
     },
+    listarDetalle: function listarDetalle() {
+      var me = this;
+      me.arrayDetalle = 0;
+      me.valor = 0;
+
+      switch (me.subcategoriaselected) {
+        case 'Metodo ABC':
+          {
+            me.valor = 1;
+            me.arrayDetalle = me.arrayABC;
+            break;
+          }
+
+        case 'Producto Individual':
+          {
+            me.valor = 2;
+            break;
+          }
+
+        case 'Categoria':
+          {
+            me.valor = 3;
+            break;
+          }
+
+        case 'Monto mayor A':
+          {
+            me.valor = 4;
+            me.arrayDetalle = me.arrayOperadores;
+            break;
+          }
+
+        case 'Cantidad de Compras':
+          {
+            me.valor = 5;
+            me.arrayDetalle = me.arrayOperadores;
+            break;
+          }
+
+        case 'Semana':
+          {
+            me.valor = 6;
+            me.arrayDetalle = me.arrayDias;
+            break;
+          }
+
+        case 'Rango de Fechas':
+          {
+            me.valor = 7;
+            break;
+          }
+
+        case 'Fecha X':
+          {
+            me.valor = 8;
+            break;
+          }
+
+        case 'Efectivo':
+          {
+            break;
+          }
+
+        case 'Tarjeta':
+          {
+            break;
+          }
+
+        case 'Transferencia':
+          {
+            break;
+          }
+
+        default:
+          break;
+      }
+    },
     abrirModal: function abrirModal(accion) {
       var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
       var me = this;
@@ -4411,12 +4645,13 @@ __webpack_require__.r(__webpack_exports__);
       switch (accion) {
         case 'registrar':
           {
+            //me.listarDescuentos();
             me.tituloModal = 'Registar Descuento';
             me.tipoAccion = 1;
             me.nombre = '';
-            me.descripcion = '';
-            me.siporcentaje = true;
-            me.monto = '';
+            me.regla_descuento = '';
+            me.idtipodescuento = true;
+            me.regla = '';
             me.classModal.openModal('registrar');
             break;
           }
@@ -4427,9 +4662,9 @@ __webpack_require__.r(__webpack_exports__);
             me.tipoAccion = 2;
             me.tituloModal = 'Actualizar Descuento';
             me.nombre = data.nombre;
-            me.descripcion = data.descripcion;
-            me.siporcentaje = data.siporcentaje;
-            me.monto = data.monto;
+            me.regla_descuento = data.regla_descuento;
+            me.idtipodescuento = data.idtipodescuento;
+            me.regla = data.regla;
             me.classModal.openModal('registrar');
             break;
           }
@@ -4439,9 +4674,9 @@ __webpack_require__.r(__webpack_exports__);
       var me = this;
       me.classModal.closeModal(accion);
       me.nombre = '';
-      me.descripcion = '';
-      me.siporcentaje = true;
-      me.monto = 0;
+      me.regla_descuento = '';
+      me.idtipodescuento = true;
+      me.regla = 0;
       me.tipoAccion = 1;
     },
     selectAll: function selectAll(event) {
@@ -4451,7 +4686,8 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.listarDescuentos(1);
+    this.selectTipoDescuentos(); //this.listarDescuentos(1);
+
     this.classModal = new _pl.Modals();
     this.classModal.addModal('registrar'); //console.log('Component mounted.')
   }
@@ -52421,7 +52657,7 @@ var render = function () {
       _c("div", { staticClass: "card" }, [
         _c("div", { staticClass: "card-header" }, [
           _c("i", { staticClass: "fa fa-align-justify" }),
-          _vm._v(" Descuentos\n                "),
+          _vm._v(" Configuracion de Descuentos en Productos\n                "),
           _c(
             "button",
             {
@@ -52559,18 +52795,22 @@ var render = function () {
                     }),
                     _vm._v(" "),
                     _c("td", {
-                      domProps: { textContent: _vm._s(descuento.descripcion) },
+                      domProps: {
+                        textContent: _vm._s(descuento.regla_descuento),
+                      },
                     }),
                     _vm._v(" "),
-                    descuento.siporcentaje
-                      ? _c("td", [_vm._v("Si")])
-                      : _c("td", [_vm._v("No")]),
+                    _c("td", {
+                      domProps: {
+                        textContent: _vm._s(descuento.tipodescuento),
+                      },
+                    }),
                     _vm._v(" "),
-                    descuento.siporcentaje
-                      ? _c("td", [_vm._v(" " + _vm._s(descuento.monto) + " %")])
-                      : _c("td", [
-                          _vm._v(" " + _vm._s(descuento.monto) + " Bs."),
-                        ]),
+                    _c("td", { domProps: { textContent: _vm._s(_vm.regla) } }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(_vm.aplica_a) },
+                    }),
                     _vm._v(" "),
                     _c("td", [
                       descuento.activo == 1
@@ -52737,161 +52977,8 @@ var render = function () {
                           attrs: { for: "text-input" },
                         },
                         [
-                          _vm._v("Nombre "),
-                          !_vm.sicompleto
-                            ? _c("span", { staticClass: "error" }, [
-                                _vm._v("(*)"),
-                              ])
-                            : _vm._e(),
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.nombre,
-                              expression: "nombre",
-                            },
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "text",
-                            id: "nombre",
-                            name: "nombre",
-                            placeholder: "Nombre del Descuento",
-                          },
-                          domProps: { value: _vm.nombre },
-                          on: {
-                            focus: _vm.selectAll,
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.nombre = $event.target.value
-                            },
-                          },
-                        }),
-                        _vm._v(" "),
-                        !_vm.sicompleto
-                          ? _c("span", { staticClass: "error" }, [
-                              _vm._v("Debe Ingresar el Nombre del Descuento"),
-                            ])
-                          : _vm._e(),
-                      ]),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "col-md-3 form-control-label",
-                          attrs: { for: "text-input" },
-                        },
-                        [_vm._v("Descripción:")]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-9" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.descripcion,
-                              expression: "descripcion",
-                            },
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "text",
-                            id: "descripcion",
-                            name: "descripcion",
-                            placeholder: "Ingrese una Descripción",
-                          },
-                          domProps: { value: _vm.descripcion },
-                          on: {
-                            focus: _vm.selectAll,
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.descripcion = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
-                        { staticClass: "col-md-4", attrs: { for: "chekbox" } },
-                        [_vm._v("¿Descuento en Porcentaje?")]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-8" }, [
-                        _c(
-                          "label",
-                          { staticClass: "switch switch-pill switch-success" },
-                          [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.siporcentaje,
-                                  expression: "siporcentaje",
-                                },
-                              ],
-                              staticClass: "switch-input",
-                              attrs: { type: "checkbox", checked: "" },
-                              domProps: {
-                                checked: Array.isArray(_vm.siporcentaje)
-                                  ? _vm._i(_vm.siporcentaje, null) > -1
-                                  : _vm.siporcentaje,
-                              },
-                              on: {
-                                change: function ($event) {
-                                  var $$a = _vm.siporcentaje,
-                                    $$el = $event.target,
-                                    $$c = $$el.checked ? true : false
-                                  if (Array.isArray($$a)) {
-                                    var $$v = null,
-                                      $$i = _vm._i($$a, $$v)
-                                    if ($$el.checked) {
-                                      $$i < 0 &&
-                                        (_vm.siporcentaje = $$a.concat([$$v]))
-                                    } else {
-                                      $$i > -1 &&
-                                        (_vm.siporcentaje = $$a
-                                          .slice(0, $$i)
-                                          .concat($$a.slice($$i + 1)))
-                                    }
-                                  } else {
-                                    _vm.siporcentaje = $$c
-                                  }
-                                },
-                              },
-                            }),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "switch-slider" }),
-                          ]
-                        ),
-                      ]),
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group row" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "col-md-3 form-control-label",
-                          attrs: { for: "text-input" },
-                        },
-                        [
-                          _vm._v("Monto: "),
-                          !_vm.sicompletomonto
+                          _vm._v("Nombre Descuento: "),
+                          _vm.nomdescuento == ""
                             ? _c("span", { staticClass: "error" }, [
                                 _vm._v("(*)"),
                               ])
@@ -52905,39 +52992,400 @@ var render = function () {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.monto,
-                              expression: "monto",
+                              value: _vm.nomdescuento,
+                              expression: "nomdescuento",
                             },
                           ],
                           staticClass: "form-control",
-                          staticStyle: { "text-align": "right" },
                           attrs: {
-                            type: "number",
-                            id: "monto",
-                            name: "monto",
-                            placeholder: "0.0",
+                            type: "text",
+                            placeholder: "Nombre Descuento",
                           },
-                          domProps: { value: _vm.monto },
+                          domProps: { value: _vm.nomdescuento },
                           on: {
                             focus: _vm.selectAll,
                             input: function ($event) {
                               if ($event.target.composing) {
                                 return
                               }
-                              _vm.monto = $event.target.value
+                              _vm.nomdescuento = $event.target.value
                             },
                           },
                         }),
-                        _vm.siporcentaje
-                          ? _c("span", [_vm._v(" %")])
-                          : _c("span", [_vm._v(" Bs.")]),
                         _vm._v(" "),
-                        !_vm.sicompletomonto
+                        _vm.nomdescuento == ""
                           ? _c("span", { staticClass: "error" }, [
                               _vm._v("Debe Ingresar el Monto del descuento"),
                             ])
                           : _vm._e(),
                       ]),
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "from-group row" }, [
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c("strong", [_vm._v("Tipo de Descuento:")]),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.idtipodescuentoselected,
+                                expression: "idtipodescuentoselected",
+                              },
+                            ],
+                            staticClass: "form-control",
+                            on: {
+                              change: [
+                                function ($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function (o) {
+                                      return o.selected
+                                    })
+                                    .map(function (o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.idtipodescuentoselected = $event.target
+                                    .multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                },
+                                function ($event) {
+                                  return _vm.listarSubcategorias()
+                                },
+                              ],
+                            },
+                          },
+                          [
+                            _c(
+                              "option",
+                              { attrs: { disabled: "", value: "0" } },
+                              [_vm._v("Seleccionar...")]
+                            ),
+                            _vm._v(" "),
+                            _vm._l(
+                              _vm.arrayTipoDescuentos,
+                              function (tipodescuento) {
+                                return _c("option", {
+                                  key: tipodescuento.cod,
+                                  domProps: {
+                                    value: tipodescuento.cod,
+                                    textContent: _vm._s(tipodescuento.aplica_a),
+                                  },
+                                })
+                              }
+                            ),
+                          ],
+                          2
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c("strong", [_vm._v("Sub Categoria:")]),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.subcategoriaselected,
+                                expression: "subcategoriaselected",
+                              },
+                            ],
+                            staticClass: "form-control",
+                            on: {
+                              change: [
+                                function ($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function (o) {
+                                      return o.selected
+                                    })
+                                    .map(function (o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.subcategoriaselected = $event.target
+                                    .multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                },
+                                function ($event) {
+                                  return _vm.listarDetalle()
+                                },
+                              ],
+                            },
+                          },
+                          [
+                            _c(
+                              "option",
+                              { attrs: { disabled: "", value: "0" } },
+                              [_vm._v("Seleccionar...")]
+                            ),
+                            _vm._v(" "),
+                            _vm._l(
+                              _vm.arraySubCategorias,
+                              function (subcategoria) {
+                                return _c("option", {
+                                  key: subcategoria,
+                                  domProps: {
+                                    value: subcategoria,
+                                    textContent: _vm._s(subcategoria),
+                                  },
+                                })
+                              }
+                            ),
+                          ],
+                          2
+                        ),
+                      ]),
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group row" }, [
+                      _vm.valor == 1 || _vm.valor == 4 || _vm.valor == 5
+                        ? _c("div", { staticClass: "col-md-6" }, [
+                            _c("strong", [_vm._v("Detalle:")]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.detalleselected,
+                                    expression: "detalleselected",
+                                  },
+                                ],
+                                staticClass: "form-control",
+                                on: {
+                                  change: function ($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call(
+                                        $event.target.options,
+                                        function (o) {
+                                          return o.selected
+                                        }
+                                      )
+                                      .map(function (o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.detalleselected = $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  },
+                                },
+                              },
+                              [
+                                _c(
+                                  "option",
+                                  { attrs: { disabled: "", value: "0" } },
+                                  [_vm._v("Seleccionar...")]
+                                ),
+                                _vm._v(" "),
+                                _vm._l(_vm.arrayDetalle, function (detalle) {
+                                  return _c("option", {
+                                    key: detalle.id,
+                                    domProps: {
+                                      value: detalle.valor,
+                                      textContent: _vm._s(detalle.valor),
+                                    },
+                                  })
+                                }),
+                              ],
+                              2
+                            ),
+                          ])
+                        : _vm.valor == 2
+                        ? _c("div", { staticClass: "col-md-6" })
+                        : _vm.valor == 3
+                        ? _c(
+                            "div",
+                            { staticClass: "col-md-6" },
+                            [
+                              _c("strong", [_vm._v("Categoria:")]),
+                              _vm._v(" "),
+                              _vm.clearSelected
+                                ? _c("Ajaxselect", {
+                                    attrs: {
+                                      ruta: "/categoria/selectcategoria?buscar=",
+                                      resp_ruta: "categorias",
+                                      labels: "nombre",
+                                      placeholder: "Ingrese Texto...",
+                                      idtabla: "id",
+                                      id: _vm.idcategoriaselected,
+                                      clearable: true,
+                                    },
+                                    on: {
+                                      found: _vm.categorias,
+                                      cleaning: _vm.cleancategorias,
+                                    },
+                                  })
+                                : _vm._e(),
+                            ],
+                            1
+                          )
+                        : _vm.valor == 7
+                        ? _c("div", { staticClass: "col-md-12" }, [
+                            _c("div", { staticClass: "form-group row" }, [
+                              _c("div", { staticClass: "col-md-6" }, [
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "form-control-label",
+                                    attrs: { for: "date-input" },
+                                  },
+                                  [_vm._v("Fecha Inicial:")]
+                                ),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.fechainicio,
+                                      expression: "fechainicio",
+                                    },
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "date",
+                                    max: _vm.fechafin,
+                                    min: _vm.fechamin,
+                                  },
+                                  domProps: { value: _vm.fechainicio },
+                                  on: {
+                                    input: function ($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.fechainicio = $event.target.value
+                                    },
+                                  },
+                                }),
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "col-md-6" }, [
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass: "form-control-label",
+                                    attrs: { for: "date-input" },
+                                  },
+                                  [_vm._v("Fecha Final:")]
+                                ),
+                                _vm._v(" "),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.fechafin,
+                                      expression: "fechafin",
+                                    },
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "date",
+                                    max: _vm.fechahoy,
+                                    min: _vm.fechainicio,
+                                  },
+                                  domProps: { value: _vm.fechafin },
+                                  on: {
+                                    input: function ($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.fechafin = $event.target.value
+                                    },
+                                  },
+                                }),
+                              ]),
+                            ]),
+                          ])
+                        : _vm.valor == 6
+                        ? _c(
+                            "div",
+                            { staticClass: "col-md-6" },
+                            _vm._l(_vm.arrayDetalle, function (diasemana) {
+                              return _c(
+                                "div",
+                                {
+                                  key: diasemana.id,
+                                  staticClass: "form-check ",
+                                },
+                                [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.diaselected,
+                                        expression: "diaselected",
+                                      },
+                                    ],
+                                    staticClass: "form-check-input",
+                                    attrs: {
+                                      type: "checkbox",
+                                      id: diasemana.valor,
+                                    },
+                                    domProps: {
+                                      value: diasemana.valor,
+                                      checked: Array.isArray(_vm.diaselected)
+                                        ? _vm._i(
+                                            _vm.diaselected,
+                                            diasemana.valor
+                                          ) > -1
+                                        : _vm.diaselected,
+                                    },
+                                    on: {
+                                      change: function ($event) {
+                                        var $$a = _vm.diaselected,
+                                          $$el = $event.target,
+                                          $$c = $$el.checked ? true : false
+                                        if (Array.isArray($$a)) {
+                                          var $$v = diasemana.valor,
+                                            $$i = _vm._i($$a, $$v)
+                                          if ($$el.checked) {
+                                            $$i < 0 &&
+                                              (_vm.diaselected = $$a.concat([
+                                                $$v,
+                                              ]))
+                                          } else {
+                                            $$i > -1 &&
+                                              (_vm.diaselected = $$a
+                                                .slice(0, $$i)
+                                                .concat($$a.slice($$i + 1)))
+                                          }
+                                        } else {
+                                          _vm.diaselected = $$c
+                                        }
+                                      },
+                                    },
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "label",
+                                    {
+                                      staticClass: "form-check-label",
+                                      attrs: { for: diasemana.valor },
+                                    },
+                                    [_vm._v(_vm._s(diasemana.valor))]
+                                  ),
+                                ]
+                              )
+                            }),
+                            0
+                          )
+                        : _vm._e(),
                     ]),
                   ]
                 ),
@@ -53024,11 +53472,13 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Nombre")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Descripción")]),
+        _c("th", [_vm._v("Monto Descuento")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Porcentaje")]),
+        _c("th", [_vm._v("Tipo Descuento")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Monto")]),
+        _c("th", [_vm._v("Regla")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Aplica A")]),
         _vm._v(" "),
         _c("th", [_vm._v("Estado")]),
       ]),

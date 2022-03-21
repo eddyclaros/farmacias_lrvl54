@@ -25,12 +25,14 @@ use App\Http\Controllers\AdmSucursalController;
 use App\Http\Controllers\ProdCategoriaController;
 use App\Http\Controllers\AlmCodificacionController;
 use App\Http\Controllers\AlmAlmacenController;
+use App\Http\Controllers\ProdTipoDescuentoController;
+use App\Http\Controllers\ProdDescuentoController;
 
 Route::get('/', function () {
     return view('contenido/contenido');
 });
 
-
+Route::get('pdf',[AlmCodificacionController::class,'pdf']);
 Route::get('/area',[AreaController::class,'index']);
 Route::post('/area/registrar', [AreaController::class,'store']);
 Route::put('/area/actualizar', [AreaController::class,'update']);
@@ -140,3 +142,11 @@ Route::put('/almacen/desactivar', [AlmAlmacenController::class,'desactivar']);
 Route::put('/almacen/activar', [AlmAlmacenController::class,'activar']);
 Route::get('/almacen/selectalmacen',[AlmAlmacenController::class,'selectAlmacen']);
 
+Route::get('/tipodescuento/selecttipodescuento',[ProdTipoDescuentoController::class,'selectTipoDescuento']);
+
+Route::get('/proddescuento',[ProdDescuentoController::class,'index']);
+Route::post('/proddescuento/registrar', [ProdDescuentoController::class,'store']);
+Route::put('/proddescuento/actualizar', [ProdDescuentoController::class,'update']);
+Route::put('/proddescuento/desactivar', [ProdDescuentoController::class,'desactivar']);
+Route::put('/proddescuento/activar', [ProdDescuentoController::class,'activar']);
+Route::get('/proddescuento/selectdescuento',[ProdDescuentoController::class,'selectDescuento']);

@@ -10,7 +10,7 @@
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Descuentos
+                    <i class="fa fa-align-justify"></i> Configuracion de Descuentos en Productos
                     <button type="button" class="btn btn-secondary" @click="abrirModal('registrar')">
                         <i class="icon-plus"></i>&nbsp;Nuevo
                     </button>
@@ -29,9 +29,10 @@
                             <tr>
                                 <th>Opciones</th>
                                 <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th>Porcentaje</th>
-                                <th>Monto</th>
+                                <th>Monto Descuento</th>
+                                <th>Tipo Descuento</th>
+                                <th>Regla</th>
+                                <th>Aplica A</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>
@@ -49,12 +50,10 @@
                                     </button>
                                 </td>
                                 <td v-text="descuento.nombre"></td>
-                                <td v-text="descuento.descripcion"></td>
-                                <td v-if="descuento.siporcentaje">Si</td>
-                                <td v-else>No</td>
-                                <td v-if="descuento.siporcentaje"> {{descuento.monto}} %</td>
-                                <td v-else> {{ descuento.monto }} Bs.</td>
-                                
+                                <td v-text="descuento.regla_descuento"></td>
+                                <td v-text="descuento.tipodescuento"></td>
+                                <td v-text="regla"></td>
+                                <td v-text="aplica_a"></td>
                                 <td>
                                     <div v-if="descuento.activo==1">
                                         <span class="badge badge-success">Activo</span>
@@ -98,36 +97,74 @@
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Nombre <span  v-if="!sicompleto" class="error">(*)</span></label>
-                                <div class="col-md-9">
-                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del Descuento" v-model="nombre" v-on:focus="selectAll" >
-                                    <span  v-if="!sicompleto" class="error">Debe Ingresar el Nombre del Descuento</span>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Descripción:</label>
-                                <div class="col-md-9">
-                                    <input type="text" id="descripcion" name="descripcion" class="form-control" placeholder="Ingrese una Descripción" v-model="descripcion" v-on:focus="selectAll">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="chekbox" class="col-md-4">¿Descuento en Porcentaje?</label>
+                                <label class="col-md-3 form-control-label" for="text-input">Nombre Descuento: <span  v-if="nomdescuento==''" class="error">(*)</span></label>
                                 <div class="col-md-8">
-                                    <label class="switch switch-pill switch-success">
-                                        <input class="switch-input" 
-                                                v-model="siporcentaje"
-                                                type="checkbox" 
-                                                checked="">
-                                        <span class="switch-slider"></span>
-                                    </label>    
+                                    <input type="text" class="form-control" placeholder="Nombre Descuento" v-model="nomdescuento" v-on:focus="selectAll" >
+                                    <span  v-if="nomdescuento==''" class="error">Debe Ingresar el Monto del descuento</span>
+                                </div>
+                            </div>
+                            <div class="from-group row">
+                                <div class="col-md-6">
+                                    <strong>Tipo de Descuento:</strong>
+                                    <select class="form-control" @change="listarSubcategorias()" v-model="idtipodescuentoselected">
+                                        <option disabled value="0">Seleccionar...</option>
+                                        <option v-for="tipodescuento in arrayTipoDescuentos" :key="tipodescuento.cod" v-text="tipodescuento.aplica_a " :value="tipodescuento.cod"></option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Sub Categoria:</strong>
+                                    <select class="form-control" v-model="subcategoriaselected" @change="listarDetalle()">
+                                        <option disabled value="0">Seleccionar...</option>
+                                        <option v-for="subcategoria in arraySubCategorias" :key="subcategoria" v-text="subcategoria" :value="subcategoria"></option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Monto: <span  v-if="!sicompletomonto" class="error">(*)</span></label>
-                                <div class="col-md-8">
-                                    <input type="number" id="monto" name="monto" class="form-control" placeholder="0.0" v-model="monto" style="text-align:right" v-on:focus="selectAll" ><span v-if="siporcentaje">&nbsp;%</span><span v-else>&nbsp;Bs.</span>
-                                    <span  v-if="!sicompletomonto" class="error">Debe Ingresar el Monto del descuento</span>
+                                <div class="col-md-6" v-if="valor==1 || valor==4 || valor==5 ">
+                                    <strong>Detalle:</strong>
+                                    <select class="form-control" v-model="detalleselected">
+                                        <option disabled value="0">Seleccionar...</option>
+                                        <option v-for="detalle in arrayDetalle" :key="detalle.id" v-text="detalle.valor" :value="detalle.valor"></option>
+                                    </select>
+                                </div>
+                                <div v-else-if="valor==2" class="col-md-6">
+
+                                </div>
+                                <div v-else-if="valor==3" class="col-md-6">
+                                    <strong>Categoria:</strong>
+                                    <Ajaxselect  v-if="clearSelected"
+                                        ruta="/categoria/selectcategoria?buscar=" @found="categorias" @cleaning="cleancategorias"
+                                        resp_ruta="categorias"
+                                        labels="nombre"
+                                        placeholder="Ingrese Texto..." 
+                                        idtabla="id"
+                                        :id="idcategoriaselected"
+                                        :clearable='true'>
+                                    </Ajaxselect>
+                                </div>
+                                <div v-else-if="valor==7" class="col-md-12">
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label class="form-control-label" for="date-input">Fecha Inicial:</label>
+                                            <input class="form-control" 
+                                                type="date" v-model="fechainicio"
+                                                :max="fechafin"
+                                                :min="fechamin">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-control-label" for="date-input">Fecha Final:</label>
+                                            <input class="form-control" 
+                                                type="date" v-model="fechafin"
+                                                :max="fechahoy"
+                                                :min="fechainicio">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else-if="valor==6" class="col-md-6">
+                                    <div  class="form-check " v-for="diasemana in arrayDetalle" v-bind:key="diasemana.id">
+                                        <input class="form-check-input" type="checkbox" v-model="diaselected" :id="diasemana.valor" :value="diasemana.valor">
+                                        <label class="form-check-label" :for="diasemana.valor">{{diasemana.valor}}</label>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -164,25 +201,68 @@ import Swal from 'sweetalert2'
                 },
                 offset:3,
                 nombre:'',
-                descripcion:'',
+                regla_descuento:'',
                 codigo:'',
                 correlativo:0,
-                arrayDescuentos:[],
                 tituloModal:'',
                 tipoAccion:1,
                 iddescuento:'',
                 buscar:'',
-                siporcentaje:true,
+                idtipodescuento:true,
+                regla:'',
+                caracter:'%',
+
+                arrayDias:[],
+                arrayDescuentos:[],
+                arrayTipoDescuentos:[],
+                idtipodescuentoselected:0,
+                aplica_a:'',
+                arrayAplica:[{'id':1,'valor':'Todos los Productos'},
+                                {'id':2,'valor':'Producto individual'},
+                                {'id':3,'valor':'Categoria'},
+                                {'id':4,'valor':'Metodo ABC'}],
+                montodescuento:0,
+                arraySubCategorias:[],
+                subcategoriaselected:0,
                 monto:'',
-                caracter:'%'
+                nomdescuento:'',
+                arrayOperadores:[{'id':1,'valor':'='},
+                                    {'id':2,'valor':'>'},
+                                    {'id':3,'valor':'<'}
+                                    ],
+                arrayABC:[{'id':1,'valor':'A'},
+                            {'id':2,'valor':'B'},
+                            {'id':3,'valor':'C'}],
+                arrayDias:[{'id':1,'valor':'Lunes'},
+                            {'id':2,'valor':'Martes'},
+                            {'id':3,'valor':'Miercoles'},
+                            {'id':4,'valor':'Jueves'},
+                            {'id':5,'valor':'Viernes'},
+                            {'id':6,'valor':'Sabado'},
+                            {'id':7,'valor':'Domingo'}],
+                arrayDetalle: [],
+                detalleselected:0,
+                valor:0,
+
+                idcategoria:[],
+                idcategoriaselected:'',
+                clearSelected:1,
+
+                fechainicio:'',
+                fechafin:'',
+                fechamin:'',
+                fechahoy:'',
+                diaselected:[]
+
+
                 
             }
 
         },
         computed:{
-            sicompletomonto(){
+            sicompletoregla(){
                 let me=this;
-                if (me.monto!=0)
+                if (me.regla!=0)
                     return true;
                 else
                     return false;
@@ -220,9 +300,65 @@ import Swal from 'sweetalert2'
 
         },
         methods :{
+            obtenerfecha(valor){
+                let me = this;
+                var url= '/obtenerfecha';
+                axios.get(url).then(function (response) {
+                    let respuesta= response.data; 
+                    me.fechaactual=respuesta[0].fecha;
+                    me.fechainicio=me.fechaactual;
+                    me.fechafin=me.fechaactual;
+                    me.fechahoy=me.fechaactual;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+                
+                
+                //me.fechafactura=me.fechaactual;
+            },
+            tiempo(){
+                this.clearSelected=1;
+            },
+            cleancategorias(){
+                this.idcategoria=[];
+                this.idcategoriaelected='';
+            
+            },
+            categorias(categorias){
+                this.idcategoria=[];
+                for (const key in categorias) {
+                    if (categorias.hasOwnProperty(key)) {
+                        const element = categorias[key];
+                        //console.log(element);
+                        this.idcategoria.push(element);
+                    }
+                }
+            },
+            listarSubcategorias(){
+                let me =this;
+                me.subcategoriaselected=0;
+                me.valor=0;
+                let resp=me.arrayTipoDescuentos.find(element=>element.id==me.idtipodescuentoselected);
+                let subcategoria=resp.subcategorias;
+                
+                me.arraySubCategorias=subcategoria.split('|');
+            },
+            selectTipoDescuentos(){
+                let me=this;
+                var url='/tipodescuento/selecttipodescuento';
+                axios.get(url).then(function(response){
+                    var respuesta=response.data;
+                    //me.arrayDias=respuesta.arraydias;
+                    me.arrayTipoDescuentos=respuesta.tipodescuentos;
+                })
+                .catch(function(error){
+                    console.log(error);
+                });
+            },
             listarDescuentos(page){
                 let me=this;
-                var url='/descuento?page='+page+'&buscar='+me.buscar;
+                var url='/proddescuento?page='+page+'&buscar='+me.buscar;
                 axios.get(url).then(function(response){
                     var respuesta=response.data;
                     me.pagination=respuesta.pagination;
@@ -239,11 +375,12 @@ import Swal from 'sweetalert2'
             },
             registrarDescuento(){
                 let me = this;
-                axios.post('/descuento/registrar',{
+                axios.post('/proddescuento/registrar',{
                     'nombre':me.nombre,
-                    'descripcion':me.descripcion,
-                    'siporcentaje':me.siporcentaje,
-                    'monto':me.monto
+                    'regla_descuento':me.regla_descuento,
+                    'idtipodescuento':me.idtipodescuento,
+                    'regla':me.regla,
+                    'aplica_a':me.aplica_a,
                 }).then(function(response){
                     me.cerrarModal('registrar');
                     me.listarDescuentos();
@@ -273,7 +410,7 @@ import Swal from 'sweetalert2'
                 reverseButtons: true
                 }).then((result) => {
                 if (result.isConfirmed) {
-                     axios.put('/descuento/desactivar',{
+                     axios.put('/proddescuento/desactivar',{
                         'id': iddescuento
                     }).then(function (response) {
                         
@@ -322,7 +459,7 @@ import Swal from 'sweetalert2'
                 reverseButtons: true
                 }).then((result) => {
                 if (result.isConfirmed) {
-                     axios.put('/descuento/activar',{
+                     axios.put('/proddescuento/activar',{
                         'id': iddescuento
                     }).then(function (response) {
                         
@@ -353,12 +490,12 @@ import Swal from 'sweetalert2'
             actualizarDescuento(){
                // const Swal = require('sweetalert2')
                 let me =this;
-                axios.put('/descuento/actualizar',{
+                axios.put('/proddescuento/actualizar',{
                     'id':me.iddescuento,
                     'nombre':me.nombre,
-                    'descripcion':me.descripcion,
-                    'siporcentaje':me.siporcentaje,
-                    'monto':me.monto
+                    'regla_descuento':me.regla_descuento,
+                    'idtipodescuento':me.idtipodescuento,
+                    'regla':me.regla
                     
                 }).then(function (response) {
                     if(response.data.length){
@@ -376,17 +513,90 @@ import Swal from 'sweetalert2'
 
 
             },
+            listarDetalle(){
+                let me=this;
+                me.arrayDetalle=0;
+                me.valor=0;
+                switch (me.subcategoriaselected) {
+                    case 'Metodo ABC':
+                        {
+                            me.valor=1;
+                            me.arrayDetalle=me.arrayABC;
+                            break;
+                        }
+                    case 'Producto Individual':
+                    {
+                        me.valor=2;
+                        break;
+                    }
+                    case 'Categoria':
+                    {
+                        me.valor=3;
+                        break;
+                    }
+                    case 'Monto mayor A':
+                    {
+                        me.valor=4;
+                        me.arrayDetalle=me.arrayOperadores;
+                        break;
+                    }
+                    case 'Cantidad de Compras':
+                    {
+                        me.valor=5;
+                        me.arrayDetalle=me.arrayOperadores;
+                        break;
+                    }
+                    case 'Semana':
+                    {
+                        me.valor=6;
+                        me.arrayDetalle=me.arrayDias;
+                        break;
+                    }
+                    case 'Rango de Fechas':
+                    {
+                        me.valor=7;
+                        break;
+                    }
+                    case 'Fecha X':
+                    {
+                        me.valor=8;
+                        break;
+                    }
+                    case 'Efectivo':
+                    {
+                        break;
+                    }
+                    case 'Tarjeta':
+                    {
+                        break;
+                    }
+                    case 'Transferencia':
+                    {
+                        break;
+                    }
+
+                        
+                        
+                
+                    default:
+                        break;
+                }
+
+            },
+
             abrirModal(accion,data= []){
                 let me=this;
                 switch(accion){
                     case 'registrar':
                     {
-                        me.tituloModal='Registar Descuento'
+                        //me.listarDescuentos();
+                       
+                       me.tituloModal='Registar Descuento'
                         me.tipoAccion=1;
                         me.nombre='';
-                        me.descripcion='';
-                        me.siporcentaje=true;
-                        me.monto='';
+                        me.regla_descuento='';
+                        me.idtipodescuento=true;
+                        me.regla='';
                         me.classModal.openModal('registrar');
                         break;
                     }
@@ -397,9 +607,9 @@ import Swal from 'sweetalert2'
                         me.tipoAccion=2;
                         me.tituloModal='Actualizar Descuento'
                         me.nombre=data.nombre;
-                        me.descripcion=data.descripcion;
-                        me.siporcentaje=data.siporcentaje;
-                        me.monto=data.monto;
+                        me.regla_descuento=data.regla_descuento;
+                        me.idtipodescuento=data.idtipodescuento;
+                        me.regla=data.regla;
                         me.classModal.openModal('registrar');
                         break;
                     }
@@ -411,9 +621,9 @@ import Swal from 'sweetalert2'
                 let me = this;
                 me.classModal.closeModal(accion);
                 me.nombre='';
-                me.descripcion='';
-                me.siporcentaje=true;
-                me.monto=0;
+                me.regla_descuento='';
+                me.idtipodescuento=true;
+                me.regla=0;
                 me.tipoAccion=1;
                 
             },
@@ -426,7 +636,8 @@ import Swal from 'sweetalert2'
 
         },
         mounted() {
-            this.listarDescuentos(1);
+            this.selectTipoDescuentos();
+            //this.listarDescuentos(1);
             this.classModal = new _pl.Modals();
             this.classModal.addModal('registrar');
             //console.log('Component mounted.')
