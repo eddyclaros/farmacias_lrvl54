@@ -14,14 +14,16 @@ class CreateProdTipoDescuentosTable extends Migration
     public function up()
     {
         Schema::create('prod__tipo_descuentos', function (Blueprint $table) {
-            $table->tinyIncrements('id');
-            $table->tinyInteger('cod');
+            $table->tinyIncrements('id')->unsigned();
+            $table->tinyInteger('cod')->unsigned()->unique();
             $table->string('aplica_a',100);
             $table->string('descripcion')->nullable();
             $table->tinyInteger('estado')->default(1)->comment('1->');
             $table->boolean('activo')->default(1);
             $table->string('subcategorias',255);
             $table->timestamps();
+
+           // $table->primary(['cod']);
         });
     }
 
