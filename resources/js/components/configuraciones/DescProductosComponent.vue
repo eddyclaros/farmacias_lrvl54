@@ -120,12 +120,19 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <div class="col-md-6" v-if="valor==1 || valor==4 || valor==5 ">
-                                    <strong>Detalle:</strong>
-                                    <select class="form-control" v-model="detalleselected">
-                                        <option disabled value="0">Seleccionar...</option>
-                                        <option v-for="detalle in arrayDetalle" :key="detalle.id" v-text="detalle.valor" :value="detalle.valor"></option>
-                                    </select>
+                                <div class="from-group row col-md-12" v-if="valor==1 || valor==4 || valor==5 ">
+                                    <div class="col-md-6" >
+                                        <strong>Operador:</strong>
+                                        <select class="form-control" v-model="detalleselected">
+                                            <option disabled value="0">Seleccionar...</option>
+                                            <option v-for="detalle in arrayDetalle" :key="detalle.id" v-text="detalle.valor" :value="detalle.valor"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6" v-if="valor==4 || valor==5">
+                                        <strong>Valor:</strong>
+                                        <input type="number" class="form-control" placeholder="0" v-model="limite" v-on:focus="selectAll" style="text-align:right">
+                                        <span  v-if="limite==0" class="error">Debe Ingresar el valor</span>
+                                    </div>
                                 </div>
                                 <div v-else-if="valor==2" class="col-md-6">
 
@@ -148,24 +155,67 @@
                                             <label class="form-control-label" for="date-input">Fecha Inicial:</label>
                                             <input class="form-control" 
                                                 type="date" v-model="fechainicio"
-                                                :max="fechafin"
-                                                :min="fechamin">
+                                                :min="fechahoy">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-control-label" for="date-input">Fecha Final:</label>
                                             <input class="form-control" 
                                                 type="date" v-model="fechafin"
-                                                :max="fechahoy"
-                                                :min="fechainicio">
+                                                :min="fechahoy">
                                         </div>
                                     </div>
                                 </div>
-                                <div v-else-if="valor==6" class="col-md-6">
+                                <div v-else-if="valor==6" class="col-md-12">
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div  class="form-check" v-for="diasemana in arrayDetalle" v-bind:key="diasemana.id">
+                                                <input class="form-check-input" type="checkbox" v-model="diaselected" :id="diasemana.valor" :value="diasemana.valor">
+                                                <label class="form-check-label" :for="diasemana.valor">{{diasemana.valor}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="col.md-5">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" v-model="repetir" id="cadasemana" value="1">
+                                                <label class="form-check-label" for="cadasemana">Repetir Cada Semana</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" v-model="repetir" id="unavez" value="2">
+                                                <label class="form-check-label" for="unavez">Repetir Una Vez</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else-if="valor==8" class="col-md-6">
+                                    <strong>Detalle:</strong>
+                                    <input class="form-control" 
+                                        type="date" v-model="fechax"
+                                        :min="fechahoy">
+                                </div>
+                               <!--  <div v-else-if="valor==6" class="col-md-6" >
                                     <div  class="form-check " v-for="diasemana in arrayDetalle" v-bind:key="diasemana.id">
                                         <input class="form-check-input" type="checkbox" v-model="diaselected" :id="diasemana.valor" :value="diasemana.valor">
                                         <label class="form-check-label" :for="diasemana.valor">{{diasemana.valor}}</label>
                                     </div>
+                                </div> -->
+                            </div>
+                            <hr>
+                            <div class="from-group row">
+                                <div class="col-md-3">
+                                    <strong>% de Descuento:</strong>
+                                    <input type="number" class="form-control" placeholder="0" v-model="descuento" v-on:focus="selectAll" style="text-align:right">
+                                    <span  v-if="descuento==0" class="error">Debe Ingresar el % del descuento</span>
                                 </div>
+                                <div class="col-md-6" v-if="idtipodescuentoselected!=1">
+                                    <strong>Aplica A:</strong>
+                                    <select class="form-control" v-model="aplicaselected">
+                                        <option disabled value="0">Seleccionar...</option>
+                                        <option v-for="aplica in arrayAplica" :key="aplica.id" v-text="aplica.valor" :value="aplica.valor"></option>
+                                    </select>
+                                </div>
+                                
                             </div>
                         </form>
                     </div>
@@ -252,7 +302,12 @@ import Swal from 'sweetalert2'
                 fechafin:'',
                 fechamin:'',
                 fechahoy:'',
-                diaselected:[]
+                diaselected:[],
+                repetir:1,
+                fechax:'',
+                descuento:0,
+                aplicaselected:0,
+                limite:0
 
 
                 
@@ -309,6 +364,7 @@ import Swal from 'sweetalert2'
                     me.fechainicio=me.fechaactual;
                     me.fechafin=me.fechaactual;
                     me.fechahoy=me.fechaactual;
+                    me.fechax=me.fechahoy;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -564,14 +620,18 @@ import Swal from 'sweetalert2'
                     }
                     case 'Efectivo':
                     {
+                        
+                        me.valor=9;
                         break;
                     }
                     case 'Tarjeta':
                     {
+                        me.valor=10;
                         break;
                     }
                     case 'Transferencia':
                     {
+                        me.valor=11;
                         break;
                     }
 
@@ -636,6 +696,7 @@ import Swal from 'sweetalert2'
 
         },
         mounted() {
+            this.obtenerfecha();
             this.selectTipoDescuentos();
             //this.listarDescuentos(1);
             this.classModal = new _pl.Modals();

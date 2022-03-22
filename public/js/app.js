@@ -4249,6 +4249,56 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
  //Vue.use(VeeValidate);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4340,7 +4390,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }, {
       'id': 7,
       'valor': 'Domingo'
-    }]), _defineProperty(_ref, "arrayDetalle", []), _defineProperty(_ref, "detalleselected", 0), _defineProperty(_ref, "valor", 0), _defineProperty(_ref, "idcategoria", []), _defineProperty(_ref, "idcategoriaselected", ''), _defineProperty(_ref, "clearSelected", 1), _defineProperty(_ref, "fechainicio", ''), _defineProperty(_ref, "fechafin", ''), _defineProperty(_ref, "fechamin", ''), _defineProperty(_ref, "fechahoy", ''), _defineProperty(_ref, "diaselected", []), _ref;
+    }]), _defineProperty(_ref, "arrayDetalle", []), _defineProperty(_ref, "detalleselected", 0), _defineProperty(_ref, "valor", 0), _defineProperty(_ref, "idcategoria", []), _defineProperty(_ref, "idcategoriaselected", ''), _defineProperty(_ref, "clearSelected", 1), _defineProperty(_ref, "fechainicio", ''), _defineProperty(_ref, "fechafin", ''), _defineProperty(_ref, "fechamin", ''), _defineProperty(_ref, "fechahoy", ''), _defineProperty(_ref, "diaselected", []), _defineProperty(_ref, "repetir", 1), _defineProperty(_ref, "fechax", ''), _defineProperty(_ref, "descuento", 0), _defineProperty(_ref, "aplicaselected", 0), _defineProperty(_ref, "limite", 0), _ref;
   },
   computed: {
     sicompletoregla: function sicompletoregla() {
@@ -4391,6 +4441,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         me.fechainicio = me.fechaactual;
         me.fechafin = me.fechaactual;
         me.fechahoy = me.fechaactual;
+        me.fechax = me.fechahoy;
       })["catch"](function (error) {
         console.log(error);
       }); //me.fechafactura=me.fechaactual;
@@ -4621,16 +4672,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         case 'Efectivo':
           {
+            me.valor = 9;
             break;
           }
 
         case 'Tarjeta':
           {
+            me.valor = 10;
             break;
           }
 
         case 'Transferencia':
           {
+            me.valor = 11;
             break;
           }
 
@@ -4686,6 +4740,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   mounted: function mounted() {
+    this.obtenerfecha();
     this.selectTipoDescuentos(); //this.listarDescuentos(1);
 
     this.classModal = new _pl.Modals();
@@ -53149,61 +53204,113 @@ var render = function () {
                     _vm._v(" "),
                     _c("div", { staticClass: "form-group row" }, [
                       _vm.valor == 1 || _vm.valor == 4 || _vm.valor == 5
-                        ? _c("div", { staticClass: "col-md-6" }, [
-                            _c("strong", [_vm._v("Detalle:")]),
-                            _vm._v(" "),
-                            _c(
-                              "select",
-                              {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.detalleselected,
-                                    expression: "detalleselected",
-                                  },
-                                ],
-                                staticClass: "form-control",
-                                on: {
-                                  change: function ($event) {
-                                    var $$selectedVal = Array.prototype.filter
-                                      .call(
-                                        $event.target.options,
-                                        function (o) {
-                                          return o.selected
-                                        }
-                                      )
-                                      .map(function (o) {
-                                        var val =
-                                          "_value" in o ? o._value : o.value
-                                        return val
-                                      })
-                                    _vm.detalleselected = $event.target.multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
-                                  },
-                                },
-                              },
-                              [
-                                _c(
-                                  "option",
-                                  { attrs: { disabled: "", value: "0" } },
-                                  [_vm._v("Seleccionar...")]
-                                ),
+                        ? _c(
+                            "div",
+                            { staticClass: "from-group row col-md-12" },
+                            [
+                              _c("div", { staticClass: "col-md-6" }, [
+                                _c("strong", [_vm._v("Operador:")]),
                                 _vm._v(" "),
-                                _vm._l(_vm.arrayDetalle, function (detalle) {
-                                  return _c("option", {
-                                    key: detalle.id,
-                                    domProps: {
-                                      value: detalle.valor,
-                                      textContent: _vm._s(detalle.valor),
+                                _c(
+                                  "select",
+                                  {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.detalleselected,
+                                        expression: "detalleselected",
+                                      },
+                                    ],
+                                    staticClass: "form-control",
+                                    on: {
+                                      change: function ($event) {
+                                        var $$selectedVal =
+                                          Array.prototype.filter
+                                            .call(
+                                              $event.target.options,
+                                              function (o) {
+                                                return o.selected
+                                              }
+                                            )
+                                            .map(function (o) {
+                                              var val =
+                                                "_value" in o
+                                                  ? o._value
+                                                  : o.value
+                                              return val
+                                            })
+                                        _vm.detalleselected = $event.target
+                                          .multiple
+                                          ? $$selectedVal
+                                          : $$selectedVal[0]
+                                      },
                                     },
-                                  })
-                                }),
-                              ],
-                              2
-                            ),
-                          ])
+                                  },
+                                  [
+                                    _c(
+                                      "option",
+                                      { attrs: { disabled: "", value: "0" } },
+                                      [_vm._v("Seleccionar...")]
+                                    ),
+                                    _vm._v(" "),
+                                    _vm._l(
+                                      _vm.arrayDetalle,
+                                      function (detalle) {
+                                        return _c("option", {
+                                          key: detalle.id,
+                                          domProps: {
+                                            value: detalle.valor,
+                                            textContent: _vm._s(detalle.valor),
+                                          },
+                                        })
+                                      }
+                                    ),
+                                  ],
+                                  2
+                                ),
+                              ]),
+                              _vm._v(" "),
+                              _vm.valor == 4 || _vm.valor == 5
+                                ? _c("div", { staticClass: "col-md-6" }, [
+                                    _c("strong", [_vm._v("Valor:")]),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.limite,
+                                          expression: "limite",
+                                        },
+                                      ],
+                                      staticClass: "form-control",
+                                      staticStyle: { "text-align": "right" },
+                                      attrs: {
+                                        type: "number",
+                                        placeholder: "0",
+                                      },
+                                      domProps: { value: _vm.limite },
+                                      on: {
+                                        focus: _vm.selectAll,
+                                        input: function ($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.limite = $event.target.value
+                                        },
+                                      },
+                                    }),
+                                    _vm._v(" "),
+                                    _vm.limite == 0
+                                      ? _c("span", { staticClass: "error" }, [
+                                          _vm._v("Debe Ingresar el valor"),
+                                        ])
+                                      : _vm._e(),
+                                  ])
+                                : _vm._e(),
+                            ]
+                          )
                         : _vm.valor == 2
                         ? _c("div", { staticClass: "col-md-6" })
                         : _vm.valor == 3
@@ -53256,11 +53363,7 @@ var render = function () {
                                     },
                                   ],
                                   staticClass: "form-control",
-                                  attrs: {
-                                    type: "date",
-                                    max: _vm.fechafin,
-                                    min: _vm.fechamin,
-                                  },
+                                  attrs: { type: "date", min: _vm.fechahoy },
                                   domProps: { value: _vm.fechainicio },
                                   on: {
                                     input: function ($event) {
@@ -53293,11 +53396,7 @@ var render = function () {
                                     },
                                   ],
                                   staticClass: "form-control",
-                                  attrs: {
-                                    type: "date",
-                                    max: _vm.fechahoy,
-                                    min: _vm.fechainicio,
-                                  },
+                                  attrs: { type: "date", min: _vm.fechahoy },
                                   domProps: { value: _vm.fechafin },
                                   on: {
                                     input: function ($event) {
@@ -53312,62 +53411,109 @@ var render = function () {
                             ]),
                           ])
                         : _vm.valor == 6
-                        ? _c(
-                            "div",
-                            { staticClass: "col-md-6" },
-                            _vm._l(_vm.arrayDetalle, function (diasemana) {
-                              return _c(
+                        ? _c("div", { staticClass: "col-md-12" }, [
+                            _c("div", { staticClass: "form-group row" }, [
+                              _c("div", { staticClass: "col-md-2" }),
+                              _vm._v(" "),
+                              _c(
                                 "div",
-                                {
-                                  key: diasemana.id,
-                                  staticClass: "form-check ",
-                                },
-                                [
+                                { staticClass: "col-md-5" },
+                                _vm._l(_vm.arrayDetalle, function (diasemana) {
+                                  return _c(
+                                    "div",
+                                    {
+                                      key: diasemana.id,
+                                      staticClass: "form-check",
+                                    },
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.diaselected,
+                                            expression: "diaselected",
+                                          },
+                                        ],
+                                        staticClass: "form-check-input",
+                                        attrs: {
+                                          type: "checkbox",
+                                          id: diasemana.valor,
+                                        },
+                                        domProps: {
+                                          value: diasemana.valor,
+                                          checked: Array.isArray(
+                                            _vm.diaselected
+                                          )
+                                            ? _vm._i(
+                                                _vm.diaselected,
+                                                diasemana.valor
+                                              ) > -1
+                                            : _vm.diaselected,
+                                        },
+                                        on: {
+                                          change: function ($event) {
+                                            var $$a = _vm.diaselected,
+                                              $$el = $event.target,
+                                              $$c = $$el.checked ? true : false
+                                            if (Array.isArray($$a)) {
+                                              var $$v = diasemana.valor,
+                                                $$i = _vm._i($$a, $$v)
+                                              if ($$el.checked) {
+                                                $$i < 0 &&
+                                                  (_vm.diaselected = $$a.concat(
+                                                    [$$v]
+                                                  ))
+                                              } else {
+                                                $$i > -1 &&
+                                                  (_vm.diaselected = $$a
+                                                    .slice(0, $$i)
+                                                    .concat($$a.slice($$i + 1)))
+                                              }
+                                            } else {
+                                              _vm.diaselected = $$c
+                                            }
+                                          },
+                                        },
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "label",
+                                        {
+                                          staticClass: "form-check-label",
+                                          attrs: { for: diasemana.valor },
+                                        },
+                                        [_vm._v(_vm._s(diasemana.valor))]
+                                      ),
+                                    ]
+                                  )
+                                }),
+                                0
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "col.md-5" }, [
+                                _c("div", { staticClass: "form-check" }, [
                                   _c("input", {
                                     directives: [
                                       {
                                         name: "model",
                                         rawName: "v-model",
-                                        value: _vm.diaselected,
-                                        expression: "diaselected",
+                                        value: _vm.repetir,
+                                        expression: "repetir",
                                       },
                                     ],
                                     staticClass: "form-check-input",
                                     attrs: {
-                                      type: "checkbox",
-                                      id: diasemana.valor,
+                                      type: "radio",
+                                      id: "cadasemana",
+                                      value: "1",
                                     },
                                     domProps: {
-                                      value: diasemana.valor,
-                                      checked: Array.isArray(_vm.diaselected)
-                                        ? _vm._i(
-                                            _vm.diaselected,
-                                            diasemana.valor
-                                          ) > -1
-                                        : _vm.diaselected,
+                                      checked: _vm._q(_vm.repetir, "1"),
                                     },
                                     on: {
                                       change: function ($event) {
-                                        var $$a = _vm.diaselected,
-                                          $$el = $event.target,
-                                          $$c = $$el.checked ? true : false
-                                        if (Array.isArray($$a)) {
-                                          var $$v = diasemana.valor,
-                                            $$i = _vm._i($$a, $$v)
-                                          if ($$el.checked) {
-                                            $$i < 0 &&
-                                              (_vm.diaselected = $$a.concat([
-                                                $$v,
-                                              ]))
-                                          } else {
-                                            $$i > -1 &&
-                                              (_vm.diaselected = $$a
-                                                .slice(0, $$i)
-                                                .concat($$a.slice($$i + 1)))
-                                          }
-                                        } else {
-                                          _vm.diaselected = $$c
-                                        }
+                                        _vm.repetir = "1"
                                       },
                                     },
                                   }),
@@ -53376,15 +53522,172 @@ var render = function () {
                                     "label",
                                     {
                                       staticClass: "form-check-label",
-                                      attrs: { for: diasemana.valor },
+                                      attrs: { for: "cadasemana" },
                                     },
-                                    [_vm._v(_vm._s(diasemana.valor))]
+                                    [_vm._v("Repetir Cada Semana")]
                                   ),
-                                ]
-                              )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "form-check" }, [
+                                  _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.repetir,
+                                        expression: "repetir",
+                                      },
+                                    ],
+                                    staticClass: "form-check-input",
+                                    attrs: {
+                                      type: "radio",
+                                      id: "unavez",
+                                      value: "2",
+                                    },
+                                    domProps: {
+                                      checked: _vm._q(_vm.repetir, "2"),
+                                    },
+                                    on: {
+                                      change: function ($event) {
+                                        _vm.repetir = "2"
+                                      },
+                                    },
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "label",
+                                    {
+                                      staticClass: "form-check-label",
+                                      attrs: { for: "unavez" },
+                                    },
+                                    [_vm._v("Repetir Una Vez")]
+                                  ),
+                                ]),
+                              ]),
+                            ]),
+                          ])
+                        : _vm.valor == 8
+                        ? _c("div", { staticClass: "col-md-6" }, [
+                            _c("strong", [_vm._v("Detalle:")]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.fechax,
+                                  expression: "fechax",
+                                },
+                              ],
+                              staticClass: "form-control",
+                              attrs: { type: "date", min: _vm.fechahoy },
+                              domProps: { value: _vm.fechax },
+                              on: {
+                                input: function ($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.fechax = $event.target.value
+                                },
+                              },
                             }),
-                            0
-                          )
+                          ])
+                        : _vm._e(),
+                    ]),
+                    _vm._v(" "),
+                    _c("hr"),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "from-group row" }, [
+                      _c("div", { staticClass: "col-md-3" }, [
+                        _c("strong", [_vm._v("% de Descuento:")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.descuento,
+                              expression: "descuento",
+                            },
+                          ],
+                          staticClass: "form-control",
+                          staticStyle: { "text-align": "right" },
+                          attrs: { type: "number", placeholder: "0" },
+                          domProps: { value: _vm.descuento },
+                          on: {
+                            focus: _vm.selectAll,
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.descuento = $event.target.value
+                            },
+                          },
+                        }),
+                        _vm._v(" "),
+                        _vm.descuento == 0
+                          ? _c("span", { staticClass: "error" }, [
+                              _vm._v("Debe Ingresar el % del descuento"),
+                            ])
+                          : _vm._e(),
+                      ]),
+                      _vm._v(" "),
+                      _vm.idtipodescuentoselected != 1
+                        ? _c("div", { staticClass: "col-md-6" }, [
+                            _c("strong", [_vm._v("Aplica A:")]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.aplicaselected,
+                                    expression: "aplicaselected",
+                                  },
+                                ],
+                                staticClass: "form-control",
+                                on: {
+                                  change: function ($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call(
+                                        $event.target.options,
+                                        function (o) {
+                                          return o.selected
+                                        }
+                                      )
+                                      .map(function (o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.aplicaselected = $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  },
+                                },
+                              },
+                              [
+                                _c(
+                                  "option",
+                                  { attrs: { disabled: "", value: "0" } },
+                                  [_vm._v("Seleccionar...")]
+                                ),
+                                _vm._v(" "),
+                                _vm._l(_vm.arrayAplica, function (aplica) {
+                                  return _c("option", {
+                                    key: aplica.id,
+                                    domProps: {
+                                      value: aplica.valor,
+                                      textContent: _vm._s(aplica.valor),
+                                    },
+                                  })
+                                }),
+                              ],
+                              2
+                            ),
+                          ])
                         : _vm._e(),
                     ]),
                   ]
