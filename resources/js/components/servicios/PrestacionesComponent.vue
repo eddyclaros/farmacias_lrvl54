@@ -11,25 +11,14 @@
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-align-justify"></i> Prestaciones
-                    <button type="button" class="btn btn-secondary" @click="abrirModal('registrar')" :disabled="areaselected==0">
+                    <button type="button" class="btn btn-secondary" @click="abrirModal('registrar')" >
                         <i class="icon-plus"></i>&nbsp;Nuevo 
-                    </button><span  v-if="!siarealesected" class="error"> &nbsp; &nbsp;Debe Seleccionar un Area</span>
+                    </button>
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
-                        <div class="col-md-2" style="text-align:center">
-                            <label for="" >Area:</label>
-                        </div>
+                        <!-- -->
                         <div class="col-md-6">
-                            <div class="input-group">
-                                <select class="form-control" @change="listarPrestaciones(1,buscar)"
-                                    v-model="areaselected">
-                                    <option value="0" disabled>Seleccionar...</option>
-                                    <option v-for="area in arrayAreas" :key="area.id" :value="area.id" v-text="area.area"></option>
-                                </select>                              
-                            </div>
-                        </div>
-                        <div class="col-md-4">
                             <div class="input-group">
                                 <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar" v-model="buscar"  @keyup.enter="listarPrestaciones(1)">
                                 <button type="submit" class="btn btn-primary" @click="listarPrestaciones(1)"><i class="fa fa-search" ></i> Buscar</button>
@@ -41,6 +30,7 @@
                             <tr>
                                 <th>Opciones</th>
                                 <th>Codigo</th>
+                                <th>Linea</th>
                                 <th>Nombre</th>
                                 <th>Precio</th>
                                 <th>Descripción</th>
@@ -60,7 +50,8 @@
                                         <i class="icon-check"></i>
                                     </button>
                                 </td>
-                                <td v-text="prestacion.codigo"></td>
+                                <td v-text="prestacion.codarea + prestacion.codigo"></td>
+                                <td v-text="prestacion.nomarea"></td>
                                 <td v-text="prestacion.nombre"></td>
                                 <td v-text="prestacion.precio + ' Bs.'" style="text-align:right"></td>
                                 <td v-text="prestacion.descripcion"></td>
@@ -106,6 +97,18 @@
                     </div>
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-md-3" for="" >Area: <span  v-if="areaselected==0" class="error">(*)</span></label>
+                                <div class="col-md-9">
+                                    <select class="form-control"
+                                        v-model="areaselected">
+                                        <option value="0" disabled>Seleccionar...</option>
+                                        <option v-for="area in arrayAreas" :key="area.id" :value="area.id" v-text="area.area"></option>
+                                    </select>  
+                                    <span  v-if="areaselected==0" class="error">Debe Seleccionar el Area</span>                            
+                                </div>
+
+                            </div>
                             <div class="form-group row">
                                 <label class="col-md-3 form-control-label" for="text-input">Nombre <span  v-if="!sicompleto" class="error">(*)</span></label>
                                 <div class="col-md-9">
@@ -163,7 +166,6 @@ import Swal from 'sweetalert2'
                 nombre:'',
                 descripcion:'',
                 codigo:'',
-                correlativo:0,
                 arrayAreas:[],
                 tituloModal:'',
                 tipoAccion:1,
@@ -227,12 +229,12 @@ import Swal from 'sweetalert2'
         methods :{
             listarPrestaciones(page){
                 let me=this;
-                var url='/prestacion?page='+page+'&idarea='+me.areaselected+'&buscar='+me.buscar;
+                var url='/prestacion?page='+page+'&buscar='+me.buscar;
                 axios.get(url).then(function(response){
                     var respuesta=response.data;
                     me.arrayPrestacion=respuesta.prestaciones.data;
                     me.pagination=respuesta.pagination;
-                    me.correlativo=respuesta.maxcorrelativo[0].maximo;
+                    
                 })
                 .catch(function(error){
                     console.log(error);
@@ -257,24 +259,12 @@ import Swal from 'sweetalert2'
             },
             registrarPrestacion(){
                 let me = this;
-                if(me.correlativo=='')
-                    me.correlativo=1;
-                else
-                    me.correlativo++;
-                
-                if(me.correlativo<10)
-                    me.codigo='00'+me.correlativo;
-                
-                if(me.correlativo<100 && me.correlativo>9)
-                    me.codigo='0'+ me.correlativo;
-
                 axios.post('/prestacion/registrar',{
                     'idarea':me.areaselected,
                     'nombre':me.nombre,
                     'precio':me.precio,
                     'descripcion':me.descripcion,
                     'codigo':me.codigo,
-                    'correlativo':me.correlativo
                 }).then(function(response){
                     me.cerrarModal('registrar');
                     me.listarPrestaciones(1);
@@ -408,25 +398,18 @@ import Swal from 'sweetalert2'
             },
             abrirModal(accion,data= []){
                 let me=this;
-                let respuesta=me.arrayAreas.find(element=>element.id==me.areaselected);
+                this.selectAreas();
                 switch(accion){
                     case 'registrar':
                     {
-                        if(me.areaselected!=0)
-                        {
-                            
-                            me.tituloModal='Registar Prestacion para: '+ respuesta.area;
-                            me.tipoAccion=1;
-                            me.nombre='';
-                            me.precio='';
-                            me.descripcion='';
-                            me.classModal.openModal('registrar');
-                        }
-                        else
-                        {
-                            Swal.fire('Debe Seleccionar un Area')
-                        }
                         
+                        me.tituloModal='Registar Prestacion'; 
+                        me.tipoAccion=1;
+                        me.nombre='';
+                        me.precio='';
+                        me.descripcion='';
+                        me.classModal.openModal('registrar');
+                       
                         break;
                     }
                     
@@ -434,8 +417,7 @@ import Swal from 'sweetalert2'
                     {
                         me.idprestacion=data.id;
                         me.tipoAccion=2;
-                        me.tituloModal='Actualizar Prestacion para: '+ respuesta.area
-                        me.nombre=data.nombre;
+                        me.tituloModal='Actualizar Prestacion';                         me.nombre=data.nombre;
                         me.precio=data.precio;
                         me.descripcion=data.descripcion;
                         me.classModal.openModal('registrar');
@@ -464,7 +446,8 @@ import Swal from 'sweetalert2'
 
         },
         mounted() {
-            this.selectAreas();
+            this.listarPrestaciones(1);
+            //
             this.classModal = new _pl.Modals();
             this.classModal.addModal('registrar');
             //console.log('Component mounted.')

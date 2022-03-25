@@ -224,27 +224,36 @@
                                     <option v-for="metodo in arrayMetodo" :key="metodo" :value="metodo" v-text="metodo"></option>
                                 </select>
                             </div>
-                            <div class="form-group col-sm-4">
-                                <strong>Indicaciones:</strong>
-                                <textarea class="form-control" maxlength="255" style="resize: none;" v-model="indicaciones" placeholder="Ninguno"></textarea>
+                            <div class="form-check col-sm-4 mt-4 pl-5">
+                                <input class="form-check-input" type="checkbox" v-model="mostrardetalles" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    Mostrar Detalles
+                                </label>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="form-group col-sm-4">
-                                <strong>Dosificacion:</strong>
-                                <textarea class="form-control" maxlength="255" style="resize: none;" v-model="dosificacion" placeholder="Ninguno"></textarea>
-                            </div>
-                            <div class="form-group col-sm-4">
-                                <strong>Principio Activo:</strong>
-                                <textarea class="form-control" maxlength="255" style="resize: none;" v-model="principio" placeholder="Ninguno"></textarea>
-                            </div>
-                            <div class="form-group col-sm-4">
-                                <strong>Accion Terapeutica:</strong>
-                                <textarea class="form-control" maxlength="255" style="resize: none;" v-model="accion" placeholder="Ninguno"></textarea>
-                            </div>
-
-
+                        
+                        <div  v-if="mostrardetalles==1">
+                            <div class="row">
+                                <div class="form-group col-sm-6">
+                                    <strong>Indicaciones:</strong>
+                                    <textarea class="form-control" maxlength="255" style="resize: none;" v-model="indicaciones" placeholder="Ninguno"></textarea>
+                                </div>
                             
+                                <div class="form-group col-sm-6">
+                                    <strong>Dosificacion:</strong>
+                                    <textarea class="form-control" maxlength="255" style="resize: none;" v-model="dosificacion" placeholder="Ninguno"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6">
+                                    <strong>Principio Activo:</strong>
+                                    <textarea class="form-control" maxlength="255" style="resize: none;" v-model="principio" placeholder="Ninguno"></textarea>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <strong>Accion Terapeutica:</strong>
+                                    <textarea class="form-control" maxlength="255" style="resize: none;" v-model="accion" placeholder="Ninguno"></textarea>
+                                </div>
+                            </div>
                         </div>
 
                        <!--  <div class="form-group row">
@@ -349,7 +358,8 @@ Vue.use(VueNumeric)
                 arrayMetodo:['A','B','C'],
                 idcategoria:[],
                 idcategoriaselected:'',
-                clearSelected3:1
+                clearSelected3:1,
+                mostrardetalles:0
 
 
             }

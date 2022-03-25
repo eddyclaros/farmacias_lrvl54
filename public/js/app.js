@@ -7074,6 +7074,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -7118,7 +7127,7 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_numeric__WEBPACK_IMPORTED_MOD
     }, {
       'id': 12,
       'dato': '12 meses'
-    }]), _defineProperty(_ref, "tiempopedidoselected", 0), _defineProperty(_ref, "indicaciones", ''), _defineProperty(_ref, "dosificacion", ''), _defineProperty(_ref, "principio", ''), _defineProperty(_ref, "accion", ''), _defineProperty(_ref, "idproducto", ''), _defineProperty(_ref, "image", ''), _defineProperty(_ref, "imagen", ''), _defineProperty(_ref, "metodoselected", 'A'), _defineProperty(_ref, "arrayMetodo", ['A', 'B', 'C']), _defineProperty(_ref, "idcategoria", []), _defineProperty(_ref, "idcategoriaselected", ''), _defineProperty(_ref, "clearSelected3", 1), _ref;
+    }]), _defineProperty(_ref, "tiempopedidoselected", 0), _defineProperty(_ref, "indicaciones", ''), _defineProperty(_ref, "dosificacion", ''), _defineProperty(_ref, "principio", ''), _defineProperty(_ref, "accion", ''), _defineProperty(_ref, "idproducto", ''), _defineProperty(_ref, "image", ''), _defineProperty(_ref, "imagen", ''), _defineProperty(_ref, "metodoselected", 'A'), _defineProperty(_ref, "arrayMetodo", ['A', 'B', 'C']), _defineProperty(_ref, "idcategoria", []), _defineProperty(_ref, "idcategoriaselected", ''), _defineProperty(_ref, "clearSelected3", 1), _defineProperty(_ref, "mostrardetalles", 0), _ref;
   },
   computed: {
     sicompleto: function sicompleto() {
@@ -8536,6 +8545,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
  //Vue.use(VeeValidate);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -8553,7 +8565,6 @@ __webpack_require__.r(__webpack_exports__);
       nombre: '',
       descripcion: '',
       codigo: '',
-      correlativo: 0,
       arrayAreas: [],
       tituloModal: '',
       tipoAccion: 1,
@@ -8610,12 +8621,11 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     listarPrestaciones: function listarPrestaciones(page) {
       var me = this;
-      var url = '/prestacion?page=' + page + '&idarea=' + me.areaselected + '&buscar=' + me.buscar;
+      var url = '/prestacion?page=' + page + '&buscar=' + me.buscar;
       axios.get(url).then(function (response) {
         var respuesta = response.data;
         me.arrayPrestacion = respuesta.prestaciones.data;
         me.pagination = respuesta.pagination;
-        me.correlativo = respuesta.maxcorrelativo[0].maximo;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -8637,16 +8647,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     registrarPrestacion: function registrarPrestacion() {
       var me = this;
-      if (me.correlativo == '') me.correlativo = 1;else me.correlativo++;
-      if (me.correlativo < 10) me.codigo = '00' + me.correlativo;
-      if (me.correlativo < 100 && me.correlativo > 9) me.codigo = '0' + me.correlativo;
       axios.post('/prestacion/registrar', {
         'idarea': me.areaselected,
         'nombre': me.nombre,
         'precio': me.precio,
         'descripcion': me.descripcion,
-        'codigo': me.codigo,
-        'correlativo': me.correlativo
+        'codigo': me.codigo
       }).then(function (response) {
         me.cerrarModal('registrar');
         me.listarPrestaciones(1);
@@ -8752,24 +8758,17 @@ __webpack_require__.r(__webpack_exports__);
     abrirModal: function abrirModal(accion) {
       var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
       var me = this;
-      var respuesta = me.arrayAreas.find(function (element) {
-        return element.id == me.areaselected;
-      });
+      this.selectAreas();
 
       switch (accion) {
         case 'registrar':
           {
-            if (me.areaselected != 0) {
-              me.tituloModal = 'Registar Prestacion para: ' + respuesta.area;
-              me.tipoAccion = 1;
-              me.nombre = '';
-              me.precio = '';
-              me.descripcion = '';
-              me.classModal.openModal('registrar');
-            } else {
-              sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Debe Seleccionar un Area');
-            }
-
+            me.tituloModal = 'Registar Prestacion';
+            me.tipoAccion = 1;
+            me.nombre = '';
+            me.precio = '';
+            me.descripcion = '';
+            me.classModal.openModal('registrar');
             break;
           }
 
@@ -8777,7 +8776,7 @@ __webpack_require__.r(__webpack_exports__);
           {
             me.idprestacion = data.id;
             me.tipoAccion = 2;
-            me.tituloModal = 'Actualizar Prestacion para: ' + respuesta.area;
+            me.tituloModal = 'Actualizar Prestacion';
             me.nombre = data.nombre;
             me.precio = data.precio;
             me.descripcion = data.descripcion;
@@ -8801,7 +8800,8 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.selectAreas();
+    this.listarPrestaciones(1); //
+
     this.classModal = new _pl.Modals();
     this.classModal.addModal('registrar'); //console.log('Component mounted.')
   }
@@ -57218,116 +57218,177 @@ var render = function () {
                     ),
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "form-group col-sm-4" }, [
-                    _c("strong", [_vm._v("Indicaciones:")]),
-                    _vm._v(" "),
-                    _c("textarea", {
+                  _c("div", { staticClass: "form-check col-sm-4 mt-4 pl-5" }, [
+                    _c("input", {
                       directives: [
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.indicaciones,
-                          expression: "indicaciones",
+                          value: _vm.mostrardetalles,
+                          expression: "mostrardetalles",
                         },
                       ],
-                      staticClass: "form-control",
-                      staticStyle: { resize: "none" },
-                      attrs: { maxlength: "255", placeholder: "Ninguno" },
-                      domProps: { value: _vm.indicaciones },
+                      staticClass: "form-check-input",
+                      attrs: { type: "checkbox", id: "defaultCheck1" },
+                      domProps: {
+                        checked: Array.isArray(_vm.mostrardetalles)
+                          ? _vm._i(_vm.mostrardetalles, null) > -1
+                          : _vm.mostrardetalles,
+                      },
                       on: {
-                        input: function ($event) {
-                          if ($event.target.composing) {
-                            return
+                        change: function ($event) {
+                          var $$a = _vm.mostrardetalles,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = null,
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 &&
+                                (_vm.mostrardetalles = $$a.concat([$$v]))
+                            } else {
+                              $$i > -1 &&
+                                (_vm.mostrardetalles = $$a
+                                  .slice(0, $$i)
+                                  .concat($$a.slice($$i + 1)))
+                            }
+                          } else {
+                            _vm.mostrardetalles = $$c
                           }
-                          _vm.indicaciones = $event.target.value
                         },
                       },
                     }),
+                    _vm._v(" "),
+                    _c(
+                      "label",
+                      {
+                        staticClass: "form-check-label",
+                        attrs: { for: "defaultCheck1" },
+                      },
+                      [
+                        _vm._v(
+                          "\n                                Mostrar Detalles\n                            "
+                        ),
+                      ]
+                    ),
                   ]),
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "form-group col-sm-4" }, [
-                    _c("strong", [_vm._v("Dosificacion:")]),
-                    _vm._v(" "),
-                    _c("textarea", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.dosificacion,
-                          expression: "dosificacion",
-                        },
-                      ],
-                      staticClass: "form-control",
-                      staticStyle: { resize: "none" },
-                      attrs: { maxlength: "255", placeholder: "Ninguno" },
-                      domProps: { value: _vm.dosificacion },
-                      on: {
-                        input: function ($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.dosificacion = $event.target.value
-                        },
-                      },
-                    }),
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-group col-sm-4" }, [
-                    _c("strong", [_vm._v("Principio Activo:")]),
-                    _vm._v(" "),
-                    _c("textarea", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.principio,
-                          expression: "principio",
-                        },
-                      ],
-                      staticClass: "form-control",
-                      staticStyle: { resize: "none" },
-                      attrs: { maxlength: "255", placeholder: "Ninguno" },
-                      domProps: { value: _vm.principio },
-                      on: {
-                        input: function ($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.principio = $event.target.value
-                        },
-                      },
-                    }),
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-group col-sm-4" }, [
-                    _c("strong", [_vm._v("Accion Terapeutica:")]),
-                    _vm._v(" "),
-                    _c("textarea", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.accion,
-                          expression: "accion",
-                        },
-                      ],
-                      staticClass: "form-control",
-                      staticStyle: { resize: "none" },
-                      attrs: { maxlength: "255", placeholder: "Ninguno" },
-                      domProps: { value: _vm.accion },
-                      on: {
-                        input: function ($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.accion = $event.target.value
-                        },
-                      },
-                    }),
-                  ]),
-                ]),
+                _vm.mostrardetalles == 1
+                  ? _c("div", [
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "form-group col-sm-6" }, [
+                          _c("strong", [_vm._v("Indicaciones:")]),
+                          _vm._v(" "),
+                          _c("textarea", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.indicaciones,
+                                expression: "indicaciones",
+                              },
+                            ],
+                            staticClass: "form-control",
+                            staticStyle: { resize: "none" },
+                            attrs: { maxlength: "255", placeholder: "Ninguno" },
+                            domProps: { value: _vm.indicaciones },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.indicaciones = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group col-sm-6" }, [
+                          _c("strong", [_vm._v("Dosificacion:")]),
+                          _vm._v(" "),
+                          _c("textarea", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.dosificacion,
+                                expression: "dosificacion",
+                              },
+                            ],
+                            staticClass: "form-control",
+                            staticStyle: { resize: "none" },
+                            attrs: { maxlength: "255", placeholder: "Ninguno" },
+                            domProps: { value: _vm.dosificacion },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.dosificacion = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "form-group col-sm-6" }, [
+                          _c("strong", [_vm._v("Principio Activo:")]),
+                          _vm._v(" "),
+                          _c("textarea", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.principio,
+                                expression: "principio",
+                              },
+                            ],
+                            staticClass: "form-control",
+                            staticStyle: { resize: "none" },
+                            attrs: { maxlength: "255", placeholder: "Ninguno" },
+                            domProps: { value: _vm.principio },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.principio = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group col-sm-6" }, [
+                          _c("strong", [_vm._v("Accion Terapeutica:")]),
+                          _vm._v(" "),
+                          _c("textarea", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.accion,
+                                expression: "accion",
+                              },
+                            ],
+                            staticClass: "form-control",
+                            staticStyle: { resize: "none" },
+                            attrs: { maxlength: "255", placeholder: "Ninguno" },
+                            domProps: { value: _vm.accion },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.accion = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                      ]),
+                    ])
+                  : _vm._e(),
                 _vm._v(" "),
                 _vm.tipoAccion == 1
                   ? _c("div", [
@@ -58693,7 +58754,7 @@ var render = function () {
             "button",
             {
               staticClass: "btn btn-secondary",
-              attrs: { type: "button", disabled: _vm.areaselected == 0 },
+              attrs: { type: "button" },
               on: {
                 click: function ($event) {
                   return _vm.abrirModal("registrar")
@@ -58705,73 +58766,11 @@ var render = function () {
               _vm._v(" Nuevo \n                "),
             ]
           ),
-          !_vm.siarealesected
-            ? _c("span", { staticClass: "error" }, [
-                _vm._v("    Debe Seleccionar un Area"),
-              ])
-            : _vm._e(),
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "card-body" }, [
           _c("div", { staticClass: "form-group row" }, [
-            _vm._m(1),
-            _vm._v(" "),
             _c("div", { staticClass: "col-md-6" }, [
-              _c("div", { staticClass: "input-group" }, [
-                _c(
-                  "select",
-                  {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.areaselected,
-                        expression: "areaselected",
-                      },
-                    ],
-                    staticClass: "form-control",
-                    on: {
-                      change: [
-                        function ($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function (o) {
-                              return o.selected
-                            })
-                            .map(function (o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.areaselected = $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        },
-                        function ($event) {
-                          return _vm.listarPrestaciones(1, _vm.buscar)
-                        },
-                      ],
-                    },
-                  },
-                  [
-                    _c("option", { attrs: { value: "0", disabled: "" } }, [
-                      _vm._v("Seleccionar..."),
-                    ]),
-                    _vm._v(" "),
-                    _vm._l(_vm.arrayAreas, function (area) {
-                      return _c("option", {
-                        key: area.id,
-                        domProps: {
-                          value: area.id,
-                          textContent: _vm._s(area.area),
-                        },
-                      })
-                    }),
-                  ],
-                  2
-                ),
-              ]),
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-4" }, [
               _c("div", { staticClass: "input-group" }, [
                 _c("input", {
                   directives: [
@@ -58833,7 +58832,7 @@ var render = function () {
                 "table table-bordered table-striped table-sm table-responsive",
             },
             [
-              _vm._m(2),
+              _vm._m(1),
               _vm._v(" "),
               _c(
                 "tbody",
@@ -58884,7 +58883,15 @@ var render = function () {
                     ]),
                     _vm._v(" "),
                     _c("td", {
-                      domProps: { textContent: _vm._s(prestacion.codigo) },
+                      domProps: {
+                        textContent: _vm._s(
+                          prestacion.codarea + prestacion.codigo
+                        ),
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("td", {
+                      domProps: { textContent: _vm._s(prestacion.nomarea) },
                     }),
                     _vm._v(" "),
                     _c("td", {
@@ -59059,6 +59066,77 @@ var render = function () {
                     },
                   },
                   [
+                    _c("div", { staticClass: "form-group row" }, [
+                      _c(
+                        "label",
+                        { staticClass: "col-md-3", attrs: { for: "" } },
+                        [
+                          _vm._v("Area: "),
+                          _vm.areaselected == 0
+                            ? _c("span", { staticClass: "error" }, [
+                                _vm._v("(*)"),
+                              ])
+                            : _vm._e(),
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-9" }, [
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.areaselected,
+                                expression: "areaselected",
+                              },
+                            ],
+                            staticClass: "form-control",
+                            on: {
+                              change: function ($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function (o) {
+                                    return o.selected
+                                  })
+                                  .map(function (o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.areaselected = $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              },
+                            },
+                          },
+                          [
+                            _c(
+                              "option",
+                              { attrs: { value: "0", disabled: "" } },
+                              [_vm._v("Seleccionar...")]
+                            ),
+                            _vm._v(" "),
+                            _vm._l(_vm.arrayAreas, function (area) {
+                              return _c("option", {
+                                key: area.id,
+                                domProps: {
+                                  value: area.id,
+                                  textContent: _vm._s(area.area),
+                                },
+                              })
+                            }),
+                          ],
+                          2
+                        ),
+                        _vm._v(" "),
+                        _vm.areaselected == 0
+                          ? _c("span", { staticClass: "error" }, [
+                              _vm._v("Debe Seleccionar el Area"),
+                            ])
+                          : _vm._e(),
+                      ]),
+                    ]),
+                    _vm._v(" "),
                     _c("div", { staticClass: "form-group row" }, [
                       _c(
                         "label",
@@ -59294,21 +59372,13 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "col-md-2", staticStyle: { "text-align": "center" } },
-      [_c("label", { attrs: { for: "" } }, [_vm._v("Area:")])]
-    )
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
         _c("th", [_vm._v("Opciones")]),
         _vm._v(" "),
         _c("th", [_vm._v("Codigo")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Linea")]),
         _vm._v(" "),
         _c("th", [_vm._v("Nombre")]),
         _vm._v(" "),

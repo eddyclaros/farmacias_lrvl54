@@ -24,33 +24,53 @@ class PrestacionController extends Controller
                 $sqls='';
                 foreach($buscararray as $valor){
                     if(empty($sqls)){
-                        $sqls="(codigo like '%".$valor."%' or nombre like '%".$valor."%' or precio like '%".$valor."%')" ;
+                        $sqls="(areas.codigo like '%".$valor."%' or areas.nombre like '%".$valor."%' or prestacions.codigo like '%".$valor."%' or prestacions.nombre like '%".$valor."%' or precio like '%".$valor."%')" ;
                     }
                     else
                     {
-                        $sqls.=" and (codigo like '%".$valor."%' or nombre like '%".$valor."%' or precio like '%".$valor."%')" ;
+                        $sqls.=" and (areas.codigo like '%".$valor."%' or areas.nombre like '%".$valor."%' or prestacions.codigo like '%".$valor."%' or prestacions.nombre like '%".$valor."%' or precio like '%".$valor."%')" ;
                     }
     
                 }
-                $prestaciones= Prestacion::orderby('codigo','asc')
+                $prestaciones= Prestacion::join('areas','areas.id','prestacions.idarea')
+                                        ->select('areas.nombre as nomarea',
+                                                'areas.codigo as codarea',
+                                                'prestacions.codigo as codigo',
+                                                'prestacions.id as id',
+                                                'prestacions.nombre as nombre',
+                                                'precio',
+                                                'prestacions.descripcion',
+                                                'prestacions.activo'
+                                                )
+                                                ->orderby('areas.codigo','asc')
+                                                ->orderby('prestacions.codigo','asc')
                                             ->whereraw($sqls)
-                                            ->where('idarea',$request->idarea)
+                                            ->where('prestacions.activo',1)
                                             ->paginate(20);
             }
         }
         
         else
         {
-            $prestaciones= Prestacion::orderby('codigo','asc')
-                                        ->where('idarea',$request->idarea)
+            $prestaciones= Prestacion::join('areas','areas.id','prestacions.idarea')
+                                        ->select('areas.nombre as nomarea',
+                                                 'areas.codigo as codarea',
+                                                'prestacions.codigo as codigo',
+                                                'prestacions.id as id',
+                                                'prestacions.nombre as nombre',
+                                                'precio',
+                                                'prestacions.descripcion',
+                                                'prestacions.activo'
+                                                )
+                                        ->orderby('areas.codigo','asc')
+                                        ->orderby('prestacions.codigo','asc')
+                                        ->where('prestacions.activo',1)
                                         ->paginate(20);
         }
         
         //$prestaciones = Prestacion::all();
         
-        $maxcorrelativo = Prestacion::select(DB::raw('max(correlativo) as maximo'))
-                                        ->where('idarea',$request->idarea)
-                                        ->get();
+        
         return ['pagination'=>[
             'total'         =>    $prestaciones->total(),
             'current_page'  =>    $prestaciones->currentPage(),
@@ -61,7 +81,7 @@ class PrestacionController extends Controller
 
         ] ,
                 'prestaciones'=>$prestaciones, 
-                'maxcorrelativo'=>$maxcorrelativo
+                
             ];
      
     }
@@ -84,14 +104,32 @@ class PrestacionController extends Controller
      */
     public function store(Request $request)
     {
+        
+        $maxcorrelativo = Prestacion::select(DB::raw('max(correlativo) as maximo'))
+                                        ->where('idarea',$request->idarea)
+                                        ->get()->toArray();
+        
+        $correlativo=$maxcorrelativo[0]['maximo'];
+
+        if(is_null($correlativo))
+            $correlativo=1;
+        else
+            $correlativo=$correlativo+1;
+
+        if($correlativo<10)
+            $codigo='00'.$correlativo;
+        else
+            if($correlativo<100)
+                $codigo='0'.$correlativo;
+
         $prestacion = new Prestacion();
 
         $prestacion->idarea=$request->idarea;
         $prestacion->nombre=$request->nombre;
         $prestacion->precio=$request->precio;
         $prestacion->descripcion=$request->descripcion;
-        $prestacion->codigo=$request->codigo;
-        $prestacion->correlativo=$request->correlativo;
+        $prestacion->codigo=$codigo;
+        $prestacion->correlativo=$correlativo;
         $prestacion->save();
     
     }

@@ -7,16 +7,20 @@
             <!-- <li class="nav-title">
                 Mantenimiento
             </li> -->
-            <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i> Administracion</a>
+            <li class="nav-item nav-dropdown menudown ">
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i> 
+                    <font color="turquoise" style="text-transform:capitalize">Administracion</font>
+                </a>
                 <ul class="nav-dropdown-items">
                     <li @click="menu=10" class="nav-item">
                         <a class="nav-link" href="#"><i class="icon-bag"></i> Sucursales</a>
                     </li>
                 </ul>
             </li>
-            <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i> Almacenes</a>
+            <li class="nav-item nav-dropdown menudown">
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i>
+                    <font color="turquoise" style="text-transform:capitalize">Almacenes</font>
+                </a>
                 <ul class="nav-dropdown-items">
                     <li @click="menu=70" class="nav-item">
                         <a class="nav-link" href="#"><i class="icon-bag"></i> Codificacion</a>
@@ -26,8 +30,10 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i> Servicios</a>
+            <li class="nav-item nav-dropdown menudown">
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i> 
+                    <font color="turquoise" style="text-transform:capitalize">Servicios</font> 
+                </a>
                 <ul class="nav-dropdown-items">
                     <li @click="menu=1" class="nav-item">
                         <a class="nav-link" href="#"><i class="icon-bag"></i> Areas</a>
@@ -43,8 +49,10 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wallet"></i> Configuraciones</a>
+            <li class="nav-item nav-dropdown menudown">
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wallet"></i> 
+                    <font color="turquoise" style="text-transform:capitalize">Configuraciones</font> 
+                </a>
                 <ul class="nav-dropdown-items">
                     <li @click="menu=3" class="nav-item">
                         <a class="nav-link" href="#"><i class="icon-wallet"></i> Desc. Servicios</a>
@@ -57,8 +65,10 @@
                     </li> -->
                 </ul>
             </li>
-            <li class="nav-item nav-dropdown">
-                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-basket"></i> Productos</a>
+            <li class="nav-item nav-dropdown menudown">
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-basket"></i> 
+                    <font color="turquoise" style="text-transform:capitalize">Productos</font> 
+                </a>
                 <ul class="nav-dropdown-items">
                     <li @click="menu=60" class="nav-item">
                         <a class="nav-link" href="#"><i class="icon-basket-loaded"></i> Lineas</a>
@@ -78,7 +88,7 @@
                 </ul>
             </li>
             <!--
-            <li class="nav-item nav-dropdown">
+            <li class="nav-item nav-dropdown menudown">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-people"></i> Acceso</a>
                 <ul class="nav-dropdown-items">
                     <li @click="menu=7" class="nav-item">
@@ -89,7 +99,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item nav-dropdown">
+            <li class="nav-item nav-dropdown menudown">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-pie-chart"></i> Reportes</a>
                 <ul class="nav-dropdown-items">
                     <li @click="menu=9" class="nav-item">
