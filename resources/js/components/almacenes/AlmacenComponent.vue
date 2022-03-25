@@ -111,7 +111,7 @@
                     <div class="modal-body">
                         <form  enctype="multipart/form-data" class="form-horizontal">
                             <div class="form-group row">
-                                <strong class="col-md-3 form-control-label" for="text-input">Producto <span  v-if="idproducto.length==0" class="error">(*)</span></strong>
+                                <strong class="col-md-3 form-control-label" for="text-input">Producto: <span  v-if="idproducto.length==0" class="error">(*)</span></strong>
                                 <div class="col-md-9">
                                     <Ajaxselect  v-if="clearSelected"
                                     ruta="/producto/selectproducto?buscar=" @found="productos" @cleaning="cleanproductos"
@@ -171,9 +171,10 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-6 ">
-                                    <strong>Codigo: <span  v-if="codigo==''" class="error">(*)</span></strong>
-                                    <input type="text" class="form-control" placeholder="Codigo" v-model="codigo" v-on:focus="selectAll">
-                                    <span  v-if="codigo==''" class="error">Debe Ingresar el Codigo</span>
+                                    <strong>Codigo: </strong>
+                                    <qrcode-vue :value="codigo" :size="size" level="H" />
+                                    <!-- <input type="text" class="form-control" placeholder="Codigo" v-model="codigo" v-on:focus="selectAll">
+                                    <span  v-if="codigo==''" class="error">Debe Ingresar el Codigo</span> -->
                                 </div>
                                 <div class="form-group col-sm-6 ">
                                     <strong>Registro Sanitario:<span  v-if="registrosanitario==''" class="error">(*)</span></strong>
@@ -201,6 +202,7 @@
 
 <script>
 import Swal from 'sweetalert2'
+import QrcodeVue from 'qrcode.vue'
 //Vue.use(VeeValidate);
     export default {
         data(){
@@ -255,12 +257,27 @@ import Swal from 'sweetalert2'
                                     'Reintegro',
                                     'Reposicion',
                                     'Sobrante',
-                                    'Traspaso']
+                                    'Traspaso'],
+                
+                 //////qrcode
+                value: 'https://example.com',
+                size: 100,
                 
             }
 
         },
+        components: {
+            QrcodeVue,
+        },
         computed:{
+            generarqr(){
+                let me=this;
+                me.codigo='';
+                if(me.idproducto.length!=0 && me.lote!='' && me.fecha_vencimiento!=me.fechaactual)
+                    return me.codigo=me.idproducto[3]+'|'+me.lote+'|'+ me.fecha_vencimiento+'|'+me.tipo_entrada;
+                else
+                    return me.codigo;
+            },
             sicompleto(){
                 let me=this;
                 if (me.idproducto.length!=0 && me.cantidad!=0 && me.fecha_vencimiento!='' && me.estanteselected!=0 && me.ubicacionSelected!=0 && me.lote!='' && me.codigo!='' && me.registrosanitario!='')

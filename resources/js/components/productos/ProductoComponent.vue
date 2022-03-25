@@ -110,6 +110,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        
                         <div class="row">
                             <div class="form-group col-sm-4">
                                 <strong>Linea:</strong>
@@ -307,6 +308,7 @@
 import Swal from 'sweetalert2'
 import Vue from 'vue'
 import VueNumeric from 'vue-numeric'
+import QrcodeVue from 'qrcode.vue'
 
 Vue.use(VueNumeric)
 //Vue.use(VeeValidate);
@@ -359,11 +361,18 @@ Vue.use(VueNumeric)
                 idcategoria:[],
                 idcategoriaselected:'',
                 clearSelected3:1,
-                mostrardetalles:0
+                mostrardetalles:0,
+
+                //////qrcode
+                value: 'https://example.com',
+                size: 300,
 
 
             }
 
+        },
+        components: {
+            QrcodeVue,
         },
         computed:{
             sicompleto(){

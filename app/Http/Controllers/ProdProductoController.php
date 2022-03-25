@@ -278,7 +278,8 @@ class ProdProductoController extends Controller
                                         ->join('prod__forma_farmaceuticas','prod__forma_farmaceuticas.id','prod__productos.idformafarm')
                                         ->select('prod__productos.id as id' ,
                                                     $raw,
-                                                    'prod__productos.nombre as nombre')
+                                                    'prod__productos.nombre as nombre',
+                                                    'prod__productos.codigo')
                                         ->where('prod__productos.activo',1)
                                         ->whereraw($sqls)
                                         ->orderby('prod__productos.nombre','asc')
@@ -290,7 +291,8 @@ class ProdProductoController extends Controller
                                                 ->join('prod__forma_farmaceuticas','prod__forma_farmaceuticas.id','prod__productos.idformafarm')
                                                 ->select('prod__productos.id as id' ,
                                                             $raw,
-                                                            'prod__productos.nombre as nombre')
+                                                            'prod__productos.nombre as nombre',
+                                                            'prod__productos.codigo')
                                                 ->where('prod__productos.activo',1)
                                                 ->where('id',$request->id)
                                                 ->orderby('prod__productos.nombre','asc')
@@ -304,7 +306,8 @@ class ProdProductoController extends Controller
                                             ->join('prod__forma_farmaceuticas','prod__forma_farmaceuticas.id','prod__productos.idformafarm')
                                             ->select('prod__productos.id as id' ,
                                                         $raw,
-                                                        'prod__productos.nombre as nombre')
+                                                        'prod__productos.nombre as nombre',
+                                                        'prod__productos.codigo')
                                             ->where('prod__productos.activo',1)
                                             ->orderby('prod__productos.nombre','asc')
                                             ->get();
