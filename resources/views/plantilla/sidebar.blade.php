@@ -16,6 +16,11 @@
                         <a class="nav-link" href="#"><i class="icon-bag"></i> Sucursales</a>
                     </li>
                 </ul>
+                <ul class="nav-dropdown-items">
+                    <li @click="menu=11" class="nav-item">
+                        <a class="nav-link" href="#"><i class="icon-bag"></i> Cargos</a>
+                    </li>
+                </ul>
             </li>
             <li class="nav-item nav-dropdown menudown">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i>

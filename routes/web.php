@@ -27,6 +27,7 @@ use App\Http\Controllers\AlmCodificacionController;
 use App\Http\Controllers\AlmAlmacenController;
 use App\Http\Controllers\ProdTipoDescuentoController;
 use App\Http\Controllers\ProdDescuentoController;
+use App\Http\Controllers\RrhCargoController;
 
 Route::get('/', function () {
     return view('contenido/contenido');
@@ -150,3 +151,11 @@ Route::put('/proddescuento/actualizar', [ProdDescuentoController::class,'update'
 Route::put('/proddescuento/desactivar', [ProdDescuentoController::class,'desactivar']);
 Route::put('/proddescuento/activar', [ProdDescuentoController::class,'activar']);
 Route::get('/proddescuento/selectdescuento',[ProdDescuentoController::class,'selectDescuento']);
+
+
+Route::get('/cargo',[RrhCargoController::class,'index']);
+Route::post('/cargo/registrar', [RrhCargoController::class,'store']);
+Route::put('/cargo/actualizar', [RrhCargoController::class,'update']);
+Route::put('/cargo/desactivar', [RrhCargoController::class,'desactivar']);
+Route::put('/cargo/activar', [RrhCargoController::class,'activar']);
+Route::get('/cargo/selectcargo',[RrhCargoController::class,'selectCargo']);

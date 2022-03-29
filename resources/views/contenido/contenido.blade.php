@@ -7,6 +7,10 @@
     <sucursal-component></sucursal-component>
 
 </template>
+<template v-if="menu==11">
+    <cargos-component></cargos-component>
+
+</template>
 <template v-if="menu==1">
     <area-component></area-component>
 
@@ -62,9 +66,7 @@
     <h1>Contenido menu 9</h1>
 </template>
 
-<template v-if="menu==11">
-    <h1>Contenido menu 11</h1>
-</template>
+
 
 <template v-if="menu==12">
     <h1>Contenido menu 12</h1>

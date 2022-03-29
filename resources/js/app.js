@@ -45,6 +45,7 @@ Vue.component('formafarm-component', require('./components/productos/FormaFarmac
 Vue.component('categoria-component', require('./components/productos/CategoriaComponent.vue').default);
 
 Vue.component('sucursal-component', require('./components/administracion/SucursalComponent.vue').default);
+Vue.component('cargos-component', require('./components/administracion/CargosComponent.vue').default);
 
 Vue.component('codificacion-component', require('./components/almacenes/CodificacionComponent.vue').default);
 Vue.component('almacen-component', require('./components/almacenes/AlmacenComponent.vue').default);
