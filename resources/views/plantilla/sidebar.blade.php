@@ -22,6 +22,21 @@
                     </li>
                 </ul>
             </li>
+            <li class="nav-item nav-dropdown menudown ">
+                <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-user"></i> 
+                    <font color="turquoise" style="text-transform:capitalize">Recursos Humanos</font>
+                </a>
+                <ul class="nav-dropdown-items">
+                    <li @click="menu=20" class="nav-item">
+                        <a class="nav-link" href="#"><i class="icon-user"></i> Configuraciones</a>
+                    </li>
+                </ul>
+                {{-- <ul class="nav-dropdown-items">
+                    <li @click="menu=21" class="nav-item">
+                        <a class="nav-link" href="#"><i class="icon-bag"></i> Cargos</a>
+                    </li>
+                </ul> --}}
+            </li>
             <li class="nav-item nav-dropdown menudown">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i>
                     <font color="turquoise" style="text-transform:capitalize">Almacenes</font>

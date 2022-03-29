@@ -11,6 +11,10 @@
     <cargos-component></cargos-component>
 
 </template>
+<template v-if="menu==20">
+    <rrhconf-component></rrhconf-component>
+</template>
+
 <template v-if="menu==1">
     <area-component></area-component>
 

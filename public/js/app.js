@@ -2548,6 +2548,843 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      accion: '',
+      formFormacion: 0,
+      arrayFormaciones: [],
+      idformacion: '',
+      nomformacion: '',
+      formProfesion: 0,
+      arrayProfesiones: [],
+      idprofesion: '',
+      nomprofesion: '',
+      formTipocontrato: 0,
+      arrayTipocontratos: [],
+      idtipocontrato: '',
+      nomtipocontrato: '',
+      formMotivo: 0,
+      arrayMotivos: [],
+      idmotivo: '',
+      nommotivo: '',
+      formSeguro: 0,
+      arraySeguros: [],
+      idseguro: '',
+      nomseguro: '',
+      tipo: '',
+      sigla: '',
+      formCargo: 0,
+      arrayCargos: [],
+      idcargo: '',
+      nomcargo: ''
+    };
+  },
+  methods: {
+    //formaciones formaciones formaciones  formaciones formaciones formaciones formaciones
+    //formaciones formaciones formaciones  formaciones formaciones formaciones formaciones
+    listaFormaciones: function listaFormaciones() {
+      var me = this;
+      axios.get('formacion/listaFormaciones').then(function (response) {
+        me.arrayFormaciones = response.data.formaciones;
+      });
+    },
+    nuevaFormacion: function nuevaFormacion() {
+      this.formFormacion = 1;
+      this.accion = 1;
+      this.nomformacion = '';
+    },
+    editarFormacion: function editarFormacion(formacion) {
+      this.formFormacion = 1;
+      this.accion = 2;
+      this.idformacion = formacion.idformacion;
+      this.nomformacion = formacion.nomformacion;
+    },
+    registrar: function registrar() {
+      var me = this;
+      var url = '/formacion/registrar';
+      axios.post(url, {
+        'nomformacion': this.nomformacion
+      }).then(function () {
+        swal('Nivel de formación creada correctamente', '', 'success');
+        me.formFormacion = 0;
+        me.listaFormaciones();
+      });
+    },
+    actualizar: function actualizar() {
+      var me = this;
+      var url = '/formacion/actualizar';
+      axios.put(url, {
+        'idformacion': this.idformacion,
+        'nomformacion': this.nomformacion
+      }).then(function () {
+        swal('Datos actualizados', '', 'success');
+        me.formFormacion = 0;
+        me.listaFormaciones();
+      });
+    },
+    estadoFormacion: function estadoFormacion(formacion) {
+      var _this = this;
+
+      this.idformacion = formacion.idformacion;
+
+      if (formacion.activo) {
+        swal({
+          title: 'Desactivará<br>' + formacion.nomformacion,
+          type: 'warning',
+          html: 'No podrá acceder a la información dependiente',
+          showCancelButton: true,
+          confirmButtonColor: '#f86c6b',
+          confirmButtonText: 'Desactivar Formacion',
+          cancelButtonText: 'Cancelar',
+          reverseButtons: true
+        }).then(function (confirmar) {
+          if (confirmar.value) _this.switchFormacion(1);
+        });
+      } else this.switchFormacion(0);
+    },
+    switchFormacion: function switchFormacion(activo) {
+      if (activo) var titswal = 'Desactivado';else var titswal = 'Activado';
+      var url = '/formacion/switchFormacion?idformacion=' + this.idformacion;
+      var me = this;
+      axios.put(url).then(function () {
+        swal(titswal + ' correctamente', '', 'success');
+        me.listaFormaciones();
+      });
+    },
+    //profesiones profesiones profesiones profesiones profesiones profesiones profesiones
+    //profesiones profesiones profesiones profesiones profesiones profesiones profesiones
+    listaProfesiones: function listaProfesiones() {
+      var me = this;
+      axios.get('rrh_profesion/listaProfesiones').then(function (response) {
+        me.arrayProfesiones = response.data.profesiones;
+      });
+    },
+    nuevaProfesion: function nuevaProfesion() {
+      this.formProfesion = 1;
+      this.accion = 1;
+      this.nomprofesion = '';
+    },
+    editarProfesion: function editarProfesion(profesion) {
+      this.formProfesion = 1;
+      this.accion = 2;
+      this.idprofesion = profesion.idprofesion;
+      this.nomprofesion = profesion.nomprofesion;
+    },
+    storeProfesion: function storeProfesion() {
+      var me = this;
+      var url = '/rrh_profesion/storeProfesion';
+      axios.post(url, {
+        'nomprofesion': this.nomprofesion
+      }).then(function () {
+        swal('Profesion creado correctamente', '', 'success');
+        me.formProfesion = 0;
+        me.listaProfesiones();
+      });
+    },
+    updateProfesion: function updateProfesion() {
+      var me = this;
+      var url = '/rrh_profesion/updateProfesion';
+      axios.put(url, {
+        'idprofesion': this.idprofesion,
+        'nomprofesion': this.nomprofesion
+      }).then(function () {
+        swal('Datos actualizados', '', 'success');
+        me.formProfesion = 0;
+        me.listaProfesiones();
+      });
+    },
+    estadoProfesion: function estadoProfesion(profesion) {
+      var _this2 = this;
+
+      this.idprofesion = profesion.idprofesion;
+
+      if (profesion.activo) {
+        swal({
+          title: 'Desactivará este item',
+          type: 'warning',
+          html: 'No podrá acceder a la información dependiente',
+          showCancelButton: true,
+          confirmButtonColor: '#f86c6b',
+          confirmButtonText: 'Desactivar Profesion',
+          cancelButtonText: 'Cancelar',
+          reverseButtons: true
+        }).then(function (confirmar) {
+          if (confirmar.value) _this2.switchProfesion(1);
+        });
+      } else this.switchProfesion(0);
+    },
+    switchProfesion: function switchProfesion(activo) {
+      if (activo) var titswal = 'Desactivado';else var titswal = 'Activado';
+      var url = '/rrh_profesion/switchProfesion?idprofesion=' + this.idprofesion;
+      var me = this;
+      axios.put(url).then(function () {
+        swal(titswal + ' correctamente', '', 'success');
+        me.listaProfesiones();
+      });
+    },
+    // tipo contratos tipo contratos tipo contratos tipo contratos tipo contratos tipo contratos
+    // tipo contratos tipo contratos tipo contratos tipo contratos tipo contratos tipo contratos
+    listaTipocontratos: function listaTipocontratos() {
+      var me = this;
+      var url = '/rrh_tipocontrato/listaTipocontratos';
+      axios.get(url).then(function (response) {
+        me.arrayTipocontratos = response.data.tipocontratos;
+      });
+    },
+    nuevoTipocontrato: function nuevoTipocontrato() {
+      this.formTipocontrato = 1;
+      this.accion = 1;
+      this.nomtipocontrato = '';
+    },
+    editarTipocontrato: function editarTipocontrato(tipocontrato) {
+      this.formTipocontrato = 1;
+      this.accion = 2;
+      this.idtipocontrato = tipocontrato.idtipocontrato;
+      this.nomtipocontrato = tipocontrato.nomtipocontrato;
+    },
+    storeTipocontrato: function storeTipocontrato() {
+      var me = this;
+      var url = '/rrh_tipocontrato/storeTipocontrato';
+      axios.post(url, {
+        'nomtipocontrato': this.nomtipocontrato
+      }).then(function () {
+        swal('Tipocontrato creado correctamente', '', 'success');
+        me.formTipocontrato = 0;
+        me.listaTipocontratos();
+      });
+    },
+    updateTipocontrato: function updateTipocontrato() {
+      var me = this;
+      var url = '/rrh_tipocontrato/updateTipocontrato';
+      axios.put(url, {
+        'idtipocontrato': this.idtipocontrato,
+        'nomtipocontrato': this.nomtipocontrato
+      }).then(function () {
+        swal('Datos actualizados', '', 'success');
+        me.formTipocontrato = 0;
+        me.listaTipocontratos();
+      });
+    },
+    estadoTipocontrato: function estadoTipocontrato(tipocontrato) {
+      var _this3 = this;
+
+      this.idtipocontrato = tipocontrato.idtipocontrato;
+
+      if (tipocontrato.activo) {
+        swal({
+          title: 'Desactivará este item',
+          type: 'warning',
+          html: 'No podrá acceder a la información dependiente',
+          showCancelButton: true,
+          confirmButtonColor: '#f86c6b',
+          confirmButtonText: 'Desactivar Tipocontrato',
+          cancelButtonText: 'Cancelar',
+          reverseButtons: true
+        }).then(function (confirmar) {
+          if (confirmar.value) _this3.switchTipocontrato(1);
+        });
+      } else this.switchTipocontrato(0);
+    },
+    switchTipocontrato: function switchTipocontrato(activo) {
+      if (activo) var titswal = 'Desactivado';else var titswal = 'Activado';
+      var url = '/rrh_tipocontrato/switchTipocontrato?idtipocontrato=' + this.idtipocontrato;
+      var me = this;
+      axios.put(url).then(function () {
+        swal(titswal + ' correctamente', '', 'success');
+        me.listaTipocontratos();
+      });
+    },
+    //motivos motivos motivos motivos motivos motivos motivos motivos
+    //motivos motivos motivos motivos motivos motivos motivos motivos
+    listaMotivos: function listaMotivos() {
+      var me = this;
+      var url = '/rrh_motivo/listaMotivos';
+      axios.get(url).then(function (response) {
+        me.arrayMotivos = response.data.motivos;
+      });
+    },
+    nuevoMotivo: function nuevoMotivo() {
+      this.formMotivo = 1;
+      this.accion = 1;
+      this.nommotivo = '';
+    },
+    editarMotivo: function editarMotivo(motivo) {
+      this.formMotivo = 1;
+      this.accion = 2;
+      this.idmotivo = motivo.idmotivo;
+      this.nommotivo = motivo.nommotivo;
+    },
+    storeMotivo: function storeMotivo() {
+      var me = this;
+      var url = '/rrh_motivo/storeMotivo';
+      axios.post(url, {
+        'nommotivo': this.nommotivo
+      }).then(function () {
+        swal('Motivo creado correctamente', '', 'success');
+        me.formMotivo = 0;
+        me.listaMotivos();
+      });
+    },
+    updateMotivo: function updateMotivo() {
+      var me = this;
+      var url = '/rrh_motivo/updateMotivo';
+      axios.put(url, {
+        'idmotivo': this.idmotivo,
+        'nommotivo': this.nommotivo
+      }).then(function () {
+        swal('Datos actualizados', '', 'success');
+        me.formMotivo = 0;
+        me.listaMotivos();
+      });
+    },
+    estadoMotivo: function estadoMotivo(motivo) {
+      var _this4 = this;
+
+      this.idmotivo = motivo.idmotivo;
+
+      if (motivo.activo) {
+        swal({
+          title: 'Desactivará este item',
+          type: 'warning',
+          html: 'No podrá acceder a la información dependiente',
+          showCancelButton: true,
+          confirmButtonColor: '#f86c6b',
+          confirmButtonText: 'Desactivar Motivo',
+          cancelButtonText: 'Cancelar',
+          reverseButtons: true
+        }).then(function (confirmar) {
+          if (confirmar.value) _this4.switchMotivo(1);
+        });
+      } else this.switchMotivo(0);
+    },
+    switchMotivo: function switchMotivo(activo) {
+      if (activo) var titswal = 'Desactivado';else var titswal = 'Activado';
+      var url = '/rrh_motivo/switchMotivo?idmotivo=' + this.idmotivo;
+      var me = this;
+      axios.put(url).then(function () {
+        swal(titswal + ' correctamente', '', 'success');
+        me.listaMotivos();
+      });
+    },
+    // seguros  seguros  seguros  seguros  seguros  seguros  seguros  seguros 
+    // seguros  seguros  seguros  seguros  seguros  seguros  seguros  seguros 
+    listaSeguros: function listaSeguros() {
+      var me = this;
+      var url = '/rrh_seguro/listaSeguros';
+      axios.get(url).then(function (response) {
+        me.arraySeguros = response.data.seguros;
+      });
+    },
+    nuevoSeguro: function nuevoSeguro() {
+      this.formSeguro = 1;
+      this.accion = 1;
+      this.tipo = '';
+      this.sigla = '';
+      this.nomseguro = '';
+    },
+    editarSeguro: function editarSeguro(seguro) {
+      this.formSeguro = 1;
+      this.accion = 2;
+      this.idseguro = seguro.idseguro;
+      this.tipo = seguro.tipo;
+      this.sigla = seguro.sigla;
+      this.nomseguro = seguro.nomseguro;
+    },
+    storeSeguro: function storeSeguro() {
+      var me = this;
+      var url = '/rrh_seguro/storeSeguro';
+      axios.post(url, {
+        'tipo': this.tipo,
+        'sigla': this.sigla,
+        'nomseguro': this.nomseguro
+      }).then(function () {
+        swal('Seguro creado correctamente', '', 'success');
+        me.formSeguro = 0;
+        me.listaSeguros();
+      });
+    },
+    updateSeguro: function updateSeguro() {
+      var me = this;
+      var url = '/rrh_seguro/updateSeguro';
+      axios.put(url, {
+        'idseguro': this.idseguro,
+        'tipo': this.tipo,
+        'sigla': this.sigla,
+        'nomseguro': this.nomseguro
+      }).then(function () {
+        swal('Datos actualizados', '', 'success');
+        me.formSeguro = 0;
+        me.listaSeguros();
+      });
+    },
+    estadoSeguro: function estadoSeguro(seguro) {
+      var _this5 = this;
+
+      this.idseguro = seguro.idseguro;
+
+      if (seguro.activo) {
+        swal({
+          title: 'Desactivará ' + seguro.sigla,
+          type: 'warning',
+          html: 'No podrá acceder a la información dependiente',
+          showCancelButton: true,
+          confirmButtonColor: '#f86c6b',
+          confirmButtonText: 'Desactivar Seguro',
+          cancelButtonText: 'Cancelar',
+          reverseButtons: true
+        }).then(function (confirmar) {
+          if (confirmar.value) _this5.switchSeguro(1);
+        });
+      } else this.switchSeguro(0);
+    },
+    switchSeguro: function switchSeguro(activo) {
+      if (activo) var titswal = 'Desactivado';else var titswal = 'Activado';
+      var url = '/rrh_seguro/switchSeguro?idseguro=' + this.idseguro;
+      var me = this;
+      axios.put(url).then(function () {
+        swal(titswal + ' correctamente', '', 'success');
+        me.listaSeguros();
+      });
+    },
+    //cargos cargos cargos cargos cargos cargos cargos cargos
+    //cargos cargos cargos cargos cargos cargos cargos cargos
+    listaCargos: function listaCargos() {
+      var me = this;
+      var url = '/rrh_cargo/listaCargos';
+      axios.get(url).then(function (response) {
+        me.arrayCargos = response.data.cargos;
+      });
+    },
+    nuevoCargo: function nuevoCargo() {
+      this.formCargo = 1;
+      this.accion = 1;
+      this.nomcargo = '';
+    },
+    editarCargo: function editarCargo(cargo) {
+      this.formCargo = 1;
+      this.accion = 2;
+      this.idcargo = cargo.idcargo;
+      this.nomcargo = cargo.nomcargo;
+    },
+    storeCargo: function storeCargo() {
+      var me = this;
+      var url = '/rrh_cargo/storeCargo';
+      axios.post(url, {
+        'nomcargo': this.nomcargo
+      }).then(function () {
+        swal('Cargo creado correctamente', '', 'success');
+        me.formCargo = 0;
+        me.listaCargos();
+      });
+    },
+    updateCargo: function updateCargo() {
+      var me = this;
+      var url = '/rrh_cargo/updateCargo';
+      axios.put(url, {
+        'idcargo': this.idcargo,
+        'nomcargo': this.nomcargo
+      }).then(function () {
+        swal('Datos actualizados', '', 'success');
+        me.formCargo = 0;
+        me.listaCargos();
+      });
+    },
+    estadoCargo: function estadoCargo(cargo) {
+      var _this6 = this;
+
+      this.idcargo = cargo.idcargo;
+
+      if (cargo.activo) {
+        swal({
+          title: 'Desactivará:<br>' + cargo.nomcargo,
+          type: 'warning',
+          html: 'No podrá acceder a la información dependiente',
+          showCancelButton: true,
+          confirmButtonColor: '#f86c6b',
+          confirmButtonText: 'Desactivar Cargo',
+          cancelButtonText: 'Cancelar',
+          reverseButtons: true
+        }).then(function (confirmar) {
+          if (confirmar.value) _this6.switchCargo(1);
+        });
+      } else this.switchCargo(0);
+    },
+    switchCargo: function switchCargo(activo) {
+      if (activo) var titswal = 'Desactivado';else var titswal = 'Activado';
+      var url = '/rrh_cargo/switchCargo?idcargo=' + this.idcargo;
+      var me = this;
+      axios.put(url).then(function () {
+        swal(titswal + ' correctamente', '', 'success');
+        me.listaCargos();
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.listaFormaciones();
+    this.listaProfesiones();
+    this.listaTipocontratos();
+    this.listaMotivos();
+    this.listaSeguros();
+    this.listaCargos();
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/administracion/CargosComponent.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/administracion/CargosComponent.vue?vue&type=script&lang=js& ***!
@@ -51907,6 +52744,1455 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue?vue&type=template&id=7a39696e&":
+/*!*****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue?vue&type=template&id=7a39696e& ***!
+  \*****************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("main", { staticClass: "main" }, [
+    _c("div", { staticClass: "breadcrumb titmodulo" }, [
+      _vm._v("RRHH > Configuración de Parámetros"),
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "container-fluid" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header titcard" }, [
+              _c("div", { staticClass: "row" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-4 col-sm-4 text-right" }, [
+                  !_vm.formFormacion
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          staticStyle: { "margin-top": "0" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.nuevaFormacion()
+                            },
+                          },
+                        },
+                        [_vm._v("Nueva")]
+                      )
+                    : _vm._e(),
+                ]),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "card-body",
+                staticStyle: { height: "280px", "overflow-y": "scroll" },
+              },
+              [
+                !_vm.formFormacion
+                  ? _c(
+                      "table",
+                      { staticClass: "table table-sm table-striped" },
+                      [
+                        _c("thead", { staticClass: "tcabecera" }, [
+                          _c("tr", [
+                            _c("th", [
+                              _c("span", {
+                                staticClass: "badge badge-success",
+                                domProps: {
+                                  textContent: _vm._s(
+                                    _vm.arrayFormaciones.length + " items"
+                                  ),
+                                },
+                              }),
+                            ]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Descripción")]),
+                          ]),
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.arrayFormaciones, function (formacion) {
+                            return _c(
+                              "tr",
+                              {
+                                key: formacion.id,
+                                class: formacion.activo ? "" : "txtdesactivado",
+                                attrs: { align: "center" },
+                              },
+                              [
+                                formacion.activo
+                                  ? _c("td", { attrs: { nowrap: "" } }, [
+                                      _c("button", {
+                                        staticClass:
+                                          "btn btn-warning btn-sm icon-pencil",
+                                        attrs: { title: "Editar Formación" },
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.editarFormacion(
+                                              formacion
+                                            )
+                                          },
+                                        },
+                                      }),
+                                      _vm._v(" "),
+                                      _c("button", {
+                                        staticClass:
+                                          "btn btn-danger btn-sm icon-trash",
+                                        attrs: {
+                                          title: "Desactivar Formación",
+                                        },
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.estadoFormacion(
+                                              formacion
+                                            )
+                                          },
+                                        },
+                                      }),
+                                    ])
+                                  : _c("td", [
+                                      _c("button", {
+                                        staticClass:
+                                          "btn btn-warning btn-sm icon-action-redo",
+                                        attrs: { title: "Restaurar Formación" },
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.estadoFormacion(
+                                              formacion
+                                            )
+                                          },
+                                        },
+                                      }),
+                                    ]),
+                                _vm._v(" "),
+                                _c("td", {
+                                  attrs: { align: "left" },
+                                  domProps: {
+                                    textContent: _vm._s(formacion.nomformacion),
+                                  },
+                                }),
+                              ]
+                            )
+                          }),
+                          0
+                        ),
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.formFormacion
+                  ? _c("div", [
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("h4", { staticClass: "titazul" }, [
+                        _c("span", {
+                          domProps: {
+                            textContent: _vm._s(
+                              _vm.accion == 1 ? "Nueva" : "Modificar"
+                            ),
+                          },
+                        }),
+                        _vm._v(" Formación"),
+                      ]),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v("Nivel de Formación: "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.nomformacion,
+                            expression: "nomformacion",
+                          },
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", autofocus: "" },
+                        domProps: { value: _vm.nomformacion },
+                        on: {
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.nomformacion = $event.target.value
+                          },
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("p", { attrs: { align: "right" } }, [
+                        _c("br"),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-secondary",
+                            on: {
+                              click: function ($event) {
+                                _vm.formFormacion = 0
+                              },
+                            },
+                          },
+                          [_vm._v("Cancelar")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            on: {
+                              click: function ($event) {
+                                _vm.accion == 1
+                                  ? _vm.registrar()
+                                  : _vm.actualizar()
+                              },
+                            },
+                          },
+                          [
+                            _vm._v(
+                              "\r\n                                Guardar "
+                            ),
+                            _vm.accion == 2
+                              ? _c("span", [_vm._v("Modificaciones")])
+                              : _vm._e(),
+                          ]
+                        ),
+                      ]),
+                    ])
+                  : _vm._e(),
+              ]
+            ),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header titcard" }, [
+              _c("div", { staticClass: "row" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-4 col-sm-4 text-right" }, [
+                  !_vm.formProfesion
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          staticStyle: { "margin-top": "0" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.nuevaProfesion()
+                            },
+                          },
+                        },
+                        [_vm._v("Nueva")]
+                      )
+                    : _vm._e(),
+                ]),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "card-body",
+                staticStyle: { height: "280px", "overflow-y": "scroll" },
+              },
+              [
+                !_vm.formProfesion
+                  ? _c(
+                      "table",
+                      { staticClass: "table table-sm table-striped" },
+                      [
+                        _c("thead", { staticClass: "tcabecera" }, [
+                          _c("tr", [
+                            _c("th", [
+                              _c("span", {
+                                staticClass: "badge badge-success",
+                                domProps: {
+                                  textContent: _vm._s(
+                                    _vm.arrayProfesiones.length + " items"
+                                  ),
+                                },
+                              }),
+                            ]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Descripción")]),
+                          ]),
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.arrayProfesiones, function (profesion) {
+                            return _c(
+                              "tr",
+                              {
+                                key: profesion.id,
+                                class: profesion.activo ? "" : "txtdesactivado",
+                                attrs: { align: "center" },
+                              },
+                              [
+                                profesion.activo
+                                  ? _c(
+                                      "td",
+                                      {
+                                        attrs: { align: "center", nowrap: "" },
+                                      },
+                                      [
+                                        _c("button", {
+                                          staticClass:
+                                            "btn btn-warning btn-sm icon-pencil",
+                                          attrs: { title: "Editar Profesión" },
+                                          on: {
+                                            click: function ($event) {
+                                              return _vm.editarProfesion(
+                                                profesion
+                                              )
+                                            },
+                                          },
+                                        }),
+                                        _vm._v(" "),
+                                        _c("button", {
+                                          staticClass:
+                                            "btn btn-danger btn-sm icon-trash",
+                                          attrs: {
+                                            title: "Desactivar Profesión",
+                                          },
+                                          on: {
+                                            click: function ($event) {
+                                              return _vm.estadoProfesion(
+                                                profesion
+                                              )
+                                            },
+                                          },
+                                        }),
+                                      ]
+                                    )
+                                  : _c("td", [
+                                      _c("button", {
+                                        staticClass:
+                                          "btn btn-warning btn-sm icon-action-redo",
+                                        attrs: { title: "Restaurar Profesión" },
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.estadoProfesion(
+                                              profesion
+                                            )
+                                          },
+                                        },
+                                      }),
+                                    ]),
+                                _vm._v(" "),
+                                _c("td", {
+                                  attrs: { align: "left" },
+                                  domProps: {
+                                    textContent: _vm._s(profesion.nomprofesion),
+                                  },
+                                }),
+                              ]
+                            )
+                          }),
+                          0
+                        ),
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.formProfesion
+                  ? _c("div", [
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("h4", { staticClass: "titazul" }, [
+                        _c("span", {
+                          domProps: {
+                            textContent: _vm._s(
+                              _vm.accion == 1 ? "Nueva" : "Modificar"
+                            ),
+                          },
+                        }),
+                        _vm._v(" Profesión"),
+                      ]),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v("Profesión: "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.nomprofesion,
+                            expression: "nomprofesion",
+                          },
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", autofocus: "" },
+                        domProps: { value: _vm.nomprofesion },
+                        on: {
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.nomprofesion = $event.target.value
+                          },
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("p", { attrs: { align: "right" } }, [
+                        _c("br"),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-secondary",
+                            on: {
+                              click: function ($event) {
+                                _vm.formProfesion = 0
+                              },
+                            },
+                          },
+                          [_vm._v("Cancelar")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            on: {
+                              click: function ($event) {
+                                _vm.accion == 1
+                                  ? _vm.storeProfesion()
+                                  : _vm.updateProfesion()
+                              },
+                            },
+                          },
+                          [
+                            _vm._v(
+                              "\r\n                                Guardar "
+                            ),
+                            _vm.accion == 2
+                              ? _c("span", [_vm._v("Modificaciones")])
+                              : _vm._e(),
+                          ]
+                        ),
+                      ]),
+                    ])
+                  : _vm._e(),
+              ]
+            ),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header titcard" }, [
+              _c("div", { staticClass: "row" }, [
+                _vm._m(2),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-4 col-sm-4 text-right" }, [
+                  !_vm.formMotivo
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          staticStyle: { "margin-top": "0" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.nuevoMotivo()
+                            },
+                          },
+                        },
+                        [_vm._v("Nueva")]
+                      )
+                    : _vm._e(),
+                ]),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "card-body",
+                staticStyle: { height: "280px", "overflow-y": "scroll" },
+              },
+              [
+                !_vm.formMotivo
+                  ? _c(
+                      "table",
+                      { staticClass: "table table-sm table-striped" },
+                      [
+                        _c("thead", { staticClass: "tcabecera" }, [
+                          _c("tr", [
+                            _c("th", [
+                              _c("span", {
+                                staticClass: "badge badge-success",
+                                domProps: {
+                                  textContent: _vm._s(
+                                    _vm.arrayMotivos.length + " items"
+                                  ),
+                                },
+                              }),
+                            ]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Descripción")]),
+                          ]),
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.arrayMotivos, function (motivo) {
+                            return _c(
+                              "tr",
+                              {
+                                key: motivo.id,
+                                class: motivo.activo ? "" : "txtdesactivado",
+                                attrs: { align: "center" },
+                              },
+                              [
+                                motivo.activo
+                                  ? _c("td", { attrs: { nowrap: "" } }, [
+                                      _c("button", {
+                                        staticClass:
+                                          "btn btn-warning btn-sm icon-pencil",
+                                        attrs: { title: "Editar motivo" },
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.editarMotivo(motivo)
+                                          },
+                                        },
+                                      }),
+                                      _vm._v(" "),
+                                      _c("button", {
+                                        staticClass:
+                                          "btn btn-danger btn-sm icon-trash",
+                                        attrs: { title: "Desactivar motivo" },
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.estadoMotivo(motivo)
+                                          },
+                                        },
+                                      }),
+                                    ])
+                                  : _c("td", [
+                                      _c("button", {
+                                        staticClass:
+                                          "btn btn-warning btn-sm icon-action-redo",
+                                        attrs: { title: "Restaurar motivo" },
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.estadoMotivo(motivo)
+                                          },
+                                        },
+                                      }),
+                                    ]),
+                                _vm._v(" "),
+                                _c("td", {
+                                  attrs: { align: "left" },
+                                  domProps: {
+                                    textContent: _vm._s(motivo.nommotivo),
+                                  },
+                                }),
+                              ]
+                            )
+                          }),
+                          0
+                        ),
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _vm.formMotivo
+                  ? _c("div", [
+                      _c("h4", { staticClass: "titazul" }, [
+                        _c("span", {
+                          domProps: {
+                            textContent: _vm._s(
+                              _vm.accion == 1 ? "Nuevo" : "Modifcar"
+                            ),
+                          },
+                        }),
+                        _vm._v(" Motivo"),
+                      ]),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v("Motivo: "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.nommotivo,
+                            expression: "nommotivo",
+                          },
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text" },
+                        domProps: { value: _vm.nommotivo },
+                        on: {
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.nommotivo = $event.target.value
+                          },
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("p", { attrs: { align: "right" } }, [
+                        _c("br"),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-secondary",
+                            on: {
+                              click: function ($event) {
+                                _vm.formMotivo = 0
+                              },
+                            },
+                          },
+                          [_vm._v("Cancelar")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            on: {
+                              click: function ($event) {
+                                _vm.accion == 1
+                                  ? _vm.storeMotivo()
+                                  : _vm.updateMotivo()
+                              },
+                            },
+                          },
+                          [
+                            _vm._v(
+                              "\r\n                                    Guardar "
+                            ),
+                            _vm.accion == 2
+                              ? _c("span", [_vm._v("Modificaciones")])
+                              : _vm._e(),
+                          ]
+                        ),
+                      ]),
+                    ])
+                  : _vm._e(),
+              ]
+            ),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header titcard" }, [
+              _c("div", { staticClass: "row" }, [
+                _vm._m(3),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-4 col-sm-4 text-right" }, [
+                  !_vm.formSeguro
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          staticStyle: { "margin-top": "0" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.nuevoSeguro()
+                            },
+                          },
+                        },
+                        [_vm._v("Nuevo")]
+                      )
+                    : _vm._e(),
+                ]),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "card-body",
+                staticStyle: { height: "280px", "overflow-y": "scroll" },
+              },
+              [
+                !_vm.formSeguro
+                  ? _c(
+                      "table",
+                      { staticClass: "table table-sm table-striped" },
+                      [
+                        _c("thead", { staticClass: "tcabecera" }, [
+                          _c("tr", [
+                            _c("th", [
+                              _c("span", {
+                                staticClass: "badge badge-success",
+                                domProps: {
+                                  textContent: _vm._s(
+                                    _vm.arraySeguros.length + " items"
+                                  ),
+                                },
+                              }),
+                            ]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Tipo")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Sigla")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Descripción")]),
+                          ]),
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.arraySeguros, function (seguro) {
+                            return _c(
+                              "tr",
+                              {
+                                key: seguro.id,
+                                class: seguro.activo ? "" : "txtdesactivado",
+                                attrs: { align: "center" },
+                              },
+                              [
+                                seguro.activo
+                                  ? _c("td", { attrs: { nowrap: "" } }, [
+                                      _c("button", {
+                                        staticClass:
+                                          "btn btn-warning btn-sm icon-pencil",
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.editarSeguro(seguro)
+                                          },
+                                        },
+                                      }),
+                                      _vm._v(" "),
+                                      _c("button", {
+                                        staticClass:
+                                          "btn btn-danger btn-sm icon-trash",
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.estadoSeguro(seguro)
+                                          },
+                                        },
+                                      }),
+                                    ])
+                                  : _c("td", [
+                                      _c("button", {
+                                        staticClass:
+                                          "btn btn-warning btn-sm icon-action-redo",
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.estadoSeguro(seguro)
+                                          },
+                                        },
+                                      }),
+                                    ]),
+                                _vm._v(" "),
+                                _c("td", {
+                                  domProps: {
+                                    textContent: _vm._s(
+                                      seguro.tipo == 1 ? "Pensiones" : "Salud"
+                                    ),
+                                  },
+                                }),
+                                _vm._v(" "),
+                                _c("td", {
+                                  domProps: {
+                                    textContent: _vm._s(seguro.sigla),
+                                  },
+                                }),
+                                _vm._v(" "),
+                                _c("td", {
+                                  attrs: { align: "left" },
+                                  domProps: {
+                                    textContent: _vm._s(seguro.nomseguro),
+                                  },
+                                }),
+                              ]
+                            )
+                          }),
+                          0
+                        ),
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.formSeguro ? _c("br") : _vm._e(),
+                _vm._v(" "),
+                _vm.formSeguro
+                  ? _c("h4", { staticClass: "titazul" }, [
+                      _c("span", {
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.accion == 1 ? "Nuevo" : "Modificar"
+                          ),
+                        },
+                      }),
+                      _vm._v(" Seguro"),
+                    ])
+                  : _vm._e(),
+                _c("br"),
+                _vm._v(" "),
+                _vm.formSeguro
+                  ? _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-md-3" }, [
+                        _vm._v("Tipo:\r\n                                "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.tipo,
+                                expression: "tipo",
+                              },
+                            ],
+                            staticClass: "form-control",
+                            on: {
+                              change: function ($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function (o) {
+                                    return o.selected
+                                  })
+                                  .map(function (o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.tipo = $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              },
+                            },
+                          },
+                          [
+                            _c("option", { attrs: { value: "1" } }, [
+                              _vm._v("Pensiones"),
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "2" } }, [
+                              _vm._v("Salud"),
+                            ]),
+                          ]
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-3" }, [
+                        _vm._v("Sigla:\r\n                                "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.sigla,
+                              expression: "sigla",
+                            },
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "text" },
+                          domProps: { value: _vm.sigla },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.sigla = $event.target.value
+                            },
+                          },
+                        }),
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _vm._v("Nombre:\r\n                                "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.nomseguro,
+                              expression: "nomseguro",
+                            },
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "text" },
+                          domProps: { value: _vm.nomseguro },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.nomseguro = $event.target.value
+                            },
+                          },
+                        }),
+                      ]),
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.formSeguro
+                  ? _c("div", { staticClass: "text-right" }, [
+                      _c("br"),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-secondary",
+                          on: {
+                            click: function ($event) {
+                              _vm.formSeguro = 0
+                            },
+                          },
+                        },
+                        [_vm._v("Cancelar")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          on: {
+                            click: function ($event) {
+                              _vm.accion == 1
+                                ? _vm.storeSeguro()
+                                : _vm.updateSeguro()
+                            },
+                          },
+                        },
+                        [
+                          _vm._v(
+                            "\r\n                                Guardar "
+                          ),
+                          _vm.accion == 2
+                            ? _c("span", [_vm._v("Modificaciones")])
+                            : _vm._e(),
+                        ]
+                      ),
+                    ])
+                  : _vm._e(),
+              ]
+            ),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header titcard" }, [
+              _c("div", { staticClass: "row" }, [
+                _vm._m(4),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-4 col-sm-4 text-right" }, [
+                  !_vm.formProfesion
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          staticStyle: { "margin-top": "0" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.nuevoTipocontrato()
+                            },
+                          },
+                        },
+                        [_vm._v("Nuevo")]
+                      )
+                    : _vm._e(),
+                ]),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "card-body",
+                staticStyle: { height: "280px", "overflow-y": "scroll" },
+              },
+              [
+                !_vm.formTipocontrato
+                  ? _c(
+                      "table",
+                      { staticClass: "table table-sm table-striped" },
+                      [
+                        _c("thead", { staticClass: "tcabecera" }, [
+                          _c("tr", [
+                            _c("th", [
+                              _c("span", {
+                                staticClass: "badge badge-success",
+                                domProps: {
+                                  textContent: _vm._s(
+                                    _vm.arrayTipocontratos.length + " items"
+                                  ),
+                                },
+                              }),
+                            ]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Descripción")]),
+                          ]),
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(
+                            _vm.arrayTipocontratos,
+                            function (tipocontrato) {
+                              return _c(
+                                "tr",
+                                {
+                                  key: tipocontrato.id,
+                                  class: tipocontrato.activo
+                                    ? ""
+                                    : "txtdesactivado",
+                                  attrs: { align: "center" },
+                                },
+                                [
+                                  tipocontrato.activo
+                                    ? _c(
+                                        "td",
+                                        {
+                                          attrs: {
+                                            align: "center",
+                                            nowrap: "",
+                                          },
+                                        },
+                                        [
+                                          _c("button", {
+                                            staticClass:
+                                              "btn btn-warning btn-sm icon-pencil",
+                                            attrs: {
+                                              title: "Editar Profesión",
+                                            },
+                                            on: {
+                                              click: function ($event) {
+                                                return _vm.editarTipocontrato(
+                                                  tipocontrato
+                                                )
+                                              },
+                                            },
+                                          }),
+                                          _vm._v(" "),
+                                          _c("button", {
+                                            staticClass:
+                                              "btn btn-danger btn-sm icon-trash",
+                                            attrs: {
+                                              title: "Desactivar Profesión",
+                                            },
+                                            on: {
+                                              click: function ($event) {
+                                                return _vm.estadoTipocontrato(
+                                                  tipocontrato
+                                                )
+                                              },
+                                            },
+                                          }),
+                                        ]
+                                      )
+                                    : _c("td", [
+                                        _c("button", {
+                                          staticClass:
+                                            "btn btn-warning btn-sm icon-action-redo",
+                                          attrs: {
+                                            title: "Restaurar Profesión",
+                                          },
+                                          on: {
+                                            click: function ($event) {
+                                              return _vm.estadoTipocontrato(
+                                                tipocontrato
+                                              )
+                                            },
+                                          },
+                                        }),
+                                      ]),
+                                  _vm._v(" "),
+                                  _c("td", {
+                                    attrs: { align: "left" },
+                                    domProps: {
+                                      textContent: _vm._s(
+                                        tipocontrato.nomtipocontrato
+                                      ),
+                                    },
+                                  }),
+                                ]
+                              )
+                            }
+                          ),
+                          0
+                        ),
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.formTipocontrato
+                  ? _c("div", [
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("h4", { staticClass: "titazul" }, [
+                        _c("span", {
+                          domProps: {
+                            textContent: _vm._s(
+                              _vm.accion == 1 ? "Nueva" : "Modificar"
+                            ),
+                          },
+                        }),
+                        _vm._v(" Tipo de contrato"),
+                      ]),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v("Tipo de Contrato: "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.nomtipocontrato,
+                            expression: "nomtipocontrato",
+                          },
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", autofocus: "" },
+                        domProps: { value: _vm.nomtipocontrato },
+                        on: {
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.nomtipocontrato = $event.target.value
+                          },
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("p", { attrs: { align: "right" } }, [
+                        _c("br"),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-secondary",
+                            on: {
+                              click: function ($event) {
+                                _vm.formTipocontrato = 0
+                              },
+                            },
+                          },
+                          [_vm._v("Cancelar")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            on: {
+                              click: function ($event) {
+                                _vm.accion == 1
+                                  ? _vm.storeTipocontrato()
+                                  : _vm.updateTipocontrato()
+                              },
+                            },
+                          },
+                          [
+                            _vm._v(
+                              "\r\n                                Guardar "
+                            ),
+                            _vm.accion == 2
+                              ? _c("span", [_vm._v("Modificaciones")])
+                              : _vm._e(),
+                          ]
+                        ),
+                      ]),
+                    ])
+                  : _vm._e(),
+              ]
+            ),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header titcard" }, [
+              _c("div", { staticClass: "row" }, [
+                _vm._m(5),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-4 col-sm-4 text-right" }, [
+                  !_vm.formProfesion
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          staticStyle: { "margin-top": "0" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.nuevoCargo()
+                            },
+                          },
+                        },
+                        [_vm._v("Nuevo")]
+                      )
+                    : _vm._e(),
+                ]),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "card-body",
+                staticStyle: { height: "280px", "overflow-y": "scroll" },
+              },
+              [
+                !_vm.formCargo
+                  ? _c(
+                      "table",
+                      { staticClass: "table table-sm table-striped" },
+                      [
+                        _c("thead", { staticClass: "tcabecera" }, [
+                          _c("tr", [
+                            _c("th", [
+                              _c("span", {
+                                staticClass: "badge badge-success",
+                                domProps: {
+                                  textContent: _vm._s(
+                                    _vm.arrayCargos.length + " items"
+                                  ),
+                                },
+                              }),
+                            ]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Descripción")]),
+                          ]),
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.arrayCargos, function (cargo) {
+                            return _c(
+                              "tr",
+                              {
+                                key: cargo.id,
+                                class: cargo.activo ? "" : "txtdesactivado",
+                                attrs: { align: "center" },
+                              },
+                              [
+                                cargo.activo
+                                  ? _c(
+                                      "td",
+                                      {
+                                        attrs: { align: "center", nowrap: "" },
+                                      },
+                                      [
+                                        _c("button", {
+                                          staticClass:
+                                            "btn btn-warning btn-sm icon-pencil",
+                                          attrs: { title: "Editar Cargo" },
+                                          on: {
+                                            click: function ($event) {
+                                              return _vm.editarCargo(cargo)
+                                            },
+                                          },
+                                        }),
+                                        _vm._v(" "),
+                                        _c("button", {
+                                          staticClass:
+                                            "btn btn-danger btn-sm icon-trash",
+                                          attrs: { title: "Desactivar Cargo" },
+                                          on: {
+                                            click: function ($event) {
+                                              return _vm.estadoCargo(cargo)
+                                            },
+                                          },
+                                        }),
+                                      ]
+                                    )
+                                  : _c("td", [
+                                      _c("button", {
+                                        staticClass:
+                                          "btn btn-warning btn-sm icon-action-redo",
+                                        attrs: { title: "Restaurar Cargo" },
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.estadoCargo(cargo)
+                                          },
+                                        },
+                                      }),
+                                    ]),
+                                _vm._v(" "),
+                                _c("td", {
+                                  attrs: { align: "left" },
+                                  domProps: {
+                                    textContent: _vm._s(cargo.nomcargo),
+                                  },
+                                }),
+                              ]
+                            )
+                          }),
+                          0
+                        ),
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.formCargo
+                  ? _c("div", [
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("h4", { staticClass: "titazul" }, [
+                        _c("span", {
+                          domProps: {
+                            textContent: _vm._s(
+                              _vm.accion == 1 ? "Nuevo" : "Modificar"
+                            ),
+                          },
+                        }),
+                        _vm._v(" cargo"),
+                      ]),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v("Cargo: "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.nomcargo,
+                            expression: "nomcargo",
+                          },
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", autofocus: "" },
+                        domProps: { value: _vm.nomcargo },
+                        on: {
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.nomcargo = $event.target.value
+                          },
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c("p", { attrs: { align: "right" } }, [
+                        _c("br"),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-secondary",
+                            on: {
+                              click: function ($event) {
+                                _vm.formCargo = 0
+                              },
+                            },
+                          },
+                          [_vm._v("Cancelar")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            on: {
+                              click: function ($event) {
+                                _vm.accion == 1
+                                  ? _vm.storeCargo()
+                                  : _vm.updateCargo()
+                              },
+                            },
+                          },
+                          [
+                            _vm._v(
+                              "\r\n                                Guardar "
+                            ),
+                            _vm.accion == 2
+                              ? _c("span", [_vm._v("Modificaciones")])
+                              : _vm._e(),
+                          ]
+                        ),
+                      ]),
+                    ])
+                  : _vm._e(),
+              ]
+            ),
+          ]),
+        ]),
+      ]),
+    ]),
+  ])
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-8 col-sm-8" }, [
+      _c("div", { staticClass: "tablatit" }, [
+        _c("div", { staticClass: "tcelda" }, [_vm._v("Niveles de Formación")]),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-8 col-sm-8" }, [
+      _c("div", { staticClass: "tablatit" }, [
+        _c("div", { staticClass: "tcelda" }, [_vm._v("Profesiones")]),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-8 col-sm-8" }, [
+      _c("div", { staticClass: "tablatit" }, [
+        _c("div", { staticClass: "tcelda" }, [_vm._v("Motivos de Permiso")]),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-8 col-sm-8" }, [
+      _c("div", { staticClass: "tablatit" }, [
+        _c("div", { staticClass: "tcelda" }, [_vm._v("Seguro Social")]),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-8 col-sm-8" }, [
+      _c("div", { staticClass: "tablatit" }, [
+        _c("div", { staticClass: "tcelda" }, [_vm._v("Tipos de Contrato")]),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-8 col-sm-8" }, [
+      _c("div", { staticClass: "tablatit" }, [
+        _c("div", { staticClass: "tcelda" }, [_vm._v("Cargos")]),
+      ]),
+    ])
+  },
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/administracion/CargosComponent.vue?vue&type=template&id=045f7c71&scoped=true&":
 /*!*********************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/administracion/CargosComponent.vue?vue&type=template&id=045f7c71&scoped=true& ***!
@@ -74792,7 +77078,9 @@ Vue.component('categoria-component', __webpack_require__(/*! ./components/produc
 Vue.component('sucursal-component', __webpack_require__(/*! ./components/administracion/SucursalComponent.vue */ "./resources/js/components/administracion/SucursalComponent.vue")["default"]);
 Vue.component('cargos-component', __webpack_require__(/*! ./components/administracion/CargosComponent.vue */ "./resources/js/components/administracion/CargosComponent.vue")["default"]);
 Vue.component('codificacion-component', __webpack_require__(/*! ./components/almacenes/CodificacionComponent.vue */ "./resources/js/components/almacenes/CodificacionComponent.vue")["default"]);
-Vue.component('almacen-component', __webpack_require__(/*! ./components/almacenes/AlmacenComponent.vue */ "./resources/js/components/almacenes/AlmacenComponent.vue")["default"]);
+Vue.component('almacen-component', __webpack_require__(/*! ./components/almacenes/AlmacenComponent.vue */ "./resources/js/components/almacenes/AlmacenComponent.vue")["default"]); //rrh
+
+Vue.component('rrhconf-component', __webpack_require__(/*! ./components/RecursosHumanos/ConfiguracionComponent.vue */ "./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -74916,6 +77204,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue":
+/*!****************************************************************************!*\
+  !*** ./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue ***!
+  \****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ConfiguracionComponent_vue_vue_type_template_id_7a39696e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ConfiguracionComponent.vue?vue&type=template&id=7a39696e& */ "./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue?vue&type=template&id=7a39696e&");
+/* harmony import */ var _ConfiguracionComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ConfiguracionComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ConfiguracionComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ConfiguracionComponent_vue_vue_type_template_id_7a39696e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ConfiguracionComponent_vue_vue_type_template_id_7a39696e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/RecursosHumanos/ConfiguracionComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************!*\
+  !*** ./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ConfiguracionComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./ConfiguracionComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ConfiguracionComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue?vue&type=template&id=7a39696e&":
+/*!***********************************************************************************************************!*\
+  !*** ./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue?vue&type=template&id=7a39696e& ***!
+  \***********************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ConfiguracionComponent_vue_vue_type_template_id_7a39696e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ConfiguracionComponent.vue?vue&type=template&id=7a39696e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/RecursosHumanos/ConfiguracionComponent.vue?vue&type=template&id=7a39696e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ConfiguracionComponent_vue_vue_type_template_id_7a39696e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ConfiguracionComponent_vue_vue_type_template_id_7a39696e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

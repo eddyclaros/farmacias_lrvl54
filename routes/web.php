@@ -28,6 +28,10 @@ use App\Http\Controllers\AlmAlmacenController;
 use App\Http\Controllers\ProdTipoDescuentoController;
 use App\Http\Controllers\ProdDescuentoController;
 use App\Http\Controllers\RrhCargoController;
+use App\Http\Controllers\RrhEmpleadoController;
+use App\Http\Controllers\RrhFormacionController;
+use App\Http\Controllers\RrhProfesionController;
+
 
 Route::get('/', function () {
     return view('contenido/contenido');
@@ -153,9 +157,24 @@ Route::put('/proddescuento/activar', [ProdDescuentoController::class,'activar'])
 Route::get('/proddescuento/selectdescuento',[ProdDescuentoController::class,'selectDescuento']);
 
 
+//rrhh
 Route::get('/cargo',[RrhCargoController::class,'index']);
 Route::post('/cargo/registrar', [RrhCargoController::class,'store']);
 Route::put('/cargo/actualizar', [RrhCargoController::class,'update']);
 Route::put('/cargo/desactivar', [RrhCargoController::class,'desactivar']);
 Route::put('/cargo/activar', [RrhCargoController::class,'activar']);
 Route::get('/cargo/selectcargo',[RrhCargoController::class,'selectCargo']);
+
+Route::get('/profesion',[RrhFormacionController::class,'index']);
+Route::post('/profesion/registrar', [RrhFormacionController::class,'store']);
+Route::put('/profesion/actualizar', [RrhFormacionController::class,'update']);
+Route::put('/profesion/desactivar', [RrhFormacionController::class,'desactivar']);
+Route::put('/profesion/activar', [RrhFormacionController::class,'activar']);
+Route::get('/profesion/selectcargo',[RrhFormacionController::class,'selectCargo']);
+
+Route::get('/formacion',[RrhProfesionController::class,'index']);
+Route::post('/formacion/registrar', [RrhProfesionController::class,'store']);
+Route::put('/formacion/actualizar', [RrhProfesionController::class,'update']);
+Route::put('/formacion/desactivar', [RrhProfesionController::class,'desactivar']);
+Route::put('/formacion/activar', [RrhProfesionController::class,'activar']);
+Route::get('/formacion/selectcargo',[RrhProfesionController::class,'selectCargo']);

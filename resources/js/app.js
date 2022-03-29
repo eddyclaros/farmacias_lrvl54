@@ -51,6 +51,9 @@ Vue.component('codificacion-component', require('./components/almacenes/Codifica
 Vue.component('almacen-component', require('./components/almacenes/AlmacenComponent.vue').default);
 
 
+//rrh
+Vue.component('rrhconf-component', require('./components/RecursosHumanos/ConfiguracionComponent.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
