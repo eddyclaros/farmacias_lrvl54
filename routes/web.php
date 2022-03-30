@@ -165,16 +165,16 @@ Route::put('/cargo/desactivar', [RrhCargoController::class,'desactivar']);
 Route::put('/cargo/activar', [RrhCargoController::class,'activar']);
 Route::get('/cargo/selectcargo',[RrhCargoController::class,'selectCargo']);
 
-Route::get('/profesion',[RrhFormacionController::class,'index']);
-Route::post('/profesion/registrar', [RrhFormacionController::class,'store']);
-Route::put('/profesion/actualizar', [RrhFormacionController::class,'update']);
-Route::put('/profesion/desactivar', [RrhFormacionController::class,'desactivar']);
-Route::put('/profesion/activar', [RrhFormacionController::class,'activar']);
-Route::get('/profesion/selectcargo',[RrhFormacionController::class,'selectCargo']);
+Route::get('/profesion',[RrhProfesionController::class,'index']);
+Route::post('/profesion/registrar', [RrhProfesionController::class,'store']);
+Route::put('/profesion/actualizar', [RrhProfesionController::class,'update']);
+Route::put('/profesion/desactivar', [RrhProfesionController::class,'desactivar']);
+Route::put('/profesion/activar', [RrhProfesionController::class,'activar']);
+Route::get('/profesion/selectcargo',[RrhProfesionController::class,'selectCargo']);
 
-Route::get('/formacion',[RrhProfesionController::class,'index']);
-Route::post('/formacion/registrar', [RrhProfesionController::class,'store']);
-Route::put('/formacion/actualizar', [RrhProfesionController::class,'update']);
-Route::put('/formacion/desactivar', [RrhProfesionController::class,'desactivar']);
-Route::put('/formacion/activar', [RrhProfesionController::class,'activar']);
-Route::get('/formacion/selectcargo',[RrhProfesionController::class,'selectCargo']);
+Route::get('/formacion',[RrhFormacionController::class,'index']);
+Route::post('/formacion/registrar', [RrhFormacionController::class,'store']);
+Route::put('/formacion/actualizar', [RrhFormacionController::class,'update']);
+Route::put('/formacion/desactivar', [RrhFormacionController::class,'desactivar']);
+Route::put('/formacion/activar', [RrhFormacionController::class,'activar']);
+Route::get('/formacion/selectcargo',[RrhFormacionController::class,'selectCargo']);

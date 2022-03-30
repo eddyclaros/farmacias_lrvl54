@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Rrh_Formacion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class RrhFormacionController extends Controller
 {
@@ -14,7 +15,11 @@ class RrhFormacionController extends Controller
      */
     public function index()
     {
-        //
+        $formacion= Rrh_Formacion::orderby('nombre','asc')->paginate(50);
+        //$formacion = Rrh_Formacion::all();
+        return [
+                'formacion'=>$formacion
+                ];
     }
 
     /**
@@ -35,7 +40,19 @@ class RrhFormacionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator=Validator::make($request->all(),['nombre'=>'unique:rrh__formacions']);
+
+        //dd($validator->errors());
+        
+        if($validator->fails())
+        {
+            return 'error';
+        }
+        
+        $formacion = new Rrh_Formacion();
+
+        $formacion->nombre=$request->nombre;
+        $formacion->save();
     }
 
     /**
@@ -69,7 +86,10 @@ class RrhFormacionController extends Controller
      */
     public function update(Request $request, Rrh_Formacion $rrh_Formacion)
     {
-        //
+        $formacion = Rrh_Formacion::findOrFail($request->id);
+
+        $formacion->nombre=$request->nombre;
+        $formacion->save();
     }
 
     /**
@@ -81,5 +101,18 @@ class RrhFormacionController extends Controller
     public function destroy(Rrh_Formacion $rrh_Formacion)
     {
         //
+    }
+    public function desactivar(Request $request)
+    {
+        $formacion = Rrh_Formacion::findOrFail($request->id);
+        $formacion->activo=0;
+        $formacion->save();
+    }
+
+    public function activar(Request $request)
+    {
+        $formacion = Rrh_Formacion::findOrFail($request->id);
+        $formacion->activo=1;
+        $formacion->save();
     }
 }

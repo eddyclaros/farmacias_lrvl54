@@ -2557,6 +2557,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -2756,151 +2758,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2930,7 +2788,9 @@ __webpack_require__.r(__webpack_exports__);
       formCargo: 0,
       arrayCargos: [],
       idcargo: '',
-      nomcargo: ''
+      nomcargo: '',
+      arrayNiveles: [1, 2, 3, 4, 5],
+      nivelselected: 1
     };
   },
   methods: {
@@ -2938,8 +2798,8 @@ __webpack_require__.r(__webpack_exports__);
     //formaciones formaciones formaciones  formaciones formaciones formaciones formaciones
     listaFormaciones: function listaFormaciones() {
       var me = this;
-      axios.get('formacion/listaFormaciones').then(function (response) {
-        me.arrayFormaciones = response.data.formaciones;
+      axios.get('/formacion').then(function (response) {
+        me.arrayFormaciones = response.data.formacion.data;
       });
     },
     nuevaFormacion: function nuevaFormacion() {
@@ -2950,28 +2810,28 @@ __webpack_require__.r(__webpack_exports__);
     editarFormacion: function editarFormacion(formacion) {
       this.formFormacion = 1;
       this.accion = 2;
-      this.idformacion = formacion.idformacion;
-      this.nomformacion = formacion.nomformacion;
+      this.idformacion = formacion.id;
+      this.nomformacion = formacion.nombre;
     },
-    registrar: function registrar() {
+    registrarFormacion: function registrarFormacion() {
       var me = this;
       var url = '/formacion/registrar';
       axios.post(url, {
-        'nomformacion': this.nomformacion
+        'nombre': this.nomformacion
       }).then(function () {
-        swal('Nivel de formación creada correctamente', '', 'success');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Nivel de formación creada correctamente', '', 'success');
         me.formFormacion = 0;
         me.listaFormaciones();
       });
     },
-    actualizar: function actualizar() {
+    actualizarFormacion: function actualizarFormacion() {
       var me = this;
       var url = '/formacion/actualizar';
       axios.put(url, {
-        'idformacion': this.idformacion,
-        'nomformacion': this.nomformacion
+        'id': this.idformacion,
+        'nombre': this.nomformacion
       }).then(function () {
-        swal('Datos actualizados', '', 'success');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Datos actualizados', '', 'success');
         me.formFormacion = 0;
         me.listaFormaciones();
       });
@@ -2979,12 +2839,19 @@ __webpack_require__.r(__webpack_exports__);
     estadoFormacion: function estadoFormacion(formacion) {
       var _this = this;
 
-      this.idformacion = formacion.idformacion;
+      var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      });
+      this.idformacion = formacion.id;
 
       if (formacion.activo) {
-        swal({
-          title: 'Desactivará<br>' + formacion.nomformacion,
-          type: 'warning',
+        swalWithBootstrapButtons.fire({
+          title: 'Desactivará<br>' + formacion.nombre,
+          icon: 'warning',
           html: 'No podrá acceder a la información dependiente',
           showCancelButton: true,
           confirmButtonColor: '#f86c6b',
@@ -2997,11 +2864,17 @@ __webpack_require__.r(__webpack_exports__);
       } else this.switchFormacion(0);
     },
     switchFormacion: function switchFormacion(activo) {
-      if (activo) var titswal = 'Desactivado';else var titswal = 'Activado';
-      var url = '/formacion/switchFormacion?idformacion=' + this.idformacion;
+      if (activo) {
+        var titswal = 'Desactivado';
+        var url = '/formacion/desactivar?id=' + this.idformacion;
+      } else {
+        var titswal = 'Activado';
+        var url = '/formacion/activar?id=' + this.idformacion;
+      }
+
       var me = this;
       axios.put(url).then(function () {
-        swal(titswal + ' correctamente', '', 'success');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire(titswal + ' correctamente', '', 'success');
         me.listaFormaciones();
       });
     },
@@ -3009,8 +2882,8 @@ __webpack_require__.r(__webpack_exports__);
     //profesiones profesiones profesiones profesiones profesiones profesiones profesiones
     listaProfesiones: function listaProfesiones() {
       var me = this;
-      axios.get('rrh_profesion/listaProfesiones').then(function (response) {
-        me.arrayProfesiones = response.data.profesiones;
+      axios.get('/profesion').then(function (response) {
+        me.arrayProfesiones = response.data.profesion.data;
       });
     },
     nuevaProfesion: function nuevaProfesion() {
@@ -3019,30 +2892,31 @@ __webpack_require__.r(__webpack_exports__);
       this.nomprofesion = '';
     },
     editarProfesion: function editarProfesion(profesion) {
+      console.log(profesion);
       this.formProfesion = 1;
       this.accion = 2;
-      this.idprofesion = profesion.idprofesion;
-      this.nomprofesion = profesion.nomprofesion;
+      this.idprofesion = profesion.id;
+      this.nomprofesion = profesion.nombre;
     },
-    storeProfesion: function storeProfesion() {
+    registrarProfesion: function registrarProfesion() {
       var me = this;
-      var url = '/rrh_profesion/storeProfesion';
+      var url = '/profesion/registrar';
       axios.post(url, {
-        'nomprofesion': this.nomprofesion
+        'nombre': this.nomprofesion
       }).then(function () {
-        swal('Profesion creado correctamente', '', 'success');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Profesion creada correctamente', '', 'success');
         me.formProfesion = 0;
         me.listaProfesiones();
       });
     },
-    updateProfesion: function updateProfesion() {
+    actualizarProfesion: function actualizarProfesion() {
       var me = this;
-      var url = '/rrh_profesion/updateProfesion';
+      var url = '/profesion/actualizar';
       axios.put(url, {
-        'idprofesion': this.idprofesion,
-        'nomprofesion': this.nomprofesion
+        'id': this.idprofesion,
+        'nombre': this.nomprofesion
       }).then(function () {
-        swal('Datos actualizados', '', 'success');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Datos actualizados', '', 'success');
         me.formProfesion = 0;
         me.listaProfesiones();
       });
@@ -3050,12 +2924,19 @@ __webpack_require__.r(__webpack_exports__);
     estadoProfesion: function estadoProfesion(profesion) {
       var _this2 = this;
 
-      this.idprofesion = profesion.idprofesion;
+      var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      });
+      this.idprofesion = profesion.id;
 
       if (profesion.activo) {
-        swal({
-          title: 'Desactivará este item',
-          type: 'warning',
+        swalWithBootstrapButtons.fire({
+          title: 'Desactivará:<br>' + profesion.nombre,
+          icon: 'warning',
           html: 'No podrá acceder a la información dependiente',
           showCancelButton: true,
           confirmButtonColor: '#f86c6b',
@@ -3068,290 +2949,114 @@ __webpack_require__.r(__webpack_exports__);
       } else this.switchProfesion(0);
     },
     switchProfesion: function switchProfesion(activo) {
-      if (activo) var titswal = 'Desactivado';else var titswal = 'Activado';
-      var url = '/rrh_profesion/switchProfesion?idprofesion=' + this.idprofesion;
+      console.log(this.idprofesion);
+
+      if (activo) {
+        var titswal = 'Desactivado';
+        var url = '/profesion/desactivar?id=' + this.idprofesion;
+      } else {
+        var titswal = 'Activado';
+        var url = '/profesion/activar?id=' + this.idprofesion;
+      }
+
       var me = this;
       axios.put(url).then(function () {
-        swal(titswal + ' correctamente', '', 'success');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire(titswal + ' correctamente', '', 'success');
         me.listaProfesiones();
       });
     },
     // tipo contratos tipo contratos tipo contratos tipo contratos tipo contratos tipo contratos
     // tipo contratos tipo contratos tipo contratos tipo contratos tipo contratos tipo contratos
-    listaTipocontratos: function listaTipocontratos() {
-      var me = this;
-      var url = '/rrh_tipocontrato/listaTipocontratos';
-      axios.get(url).then(function (response) {
-        me.arrayTipocontratos = response.data.tipocontratos;
-      });
-    },
-    nuevoTipocontrato: function nuevoTipocontrato() {
-      this.formTipocontrato = 1;
-      this.accion = 1;
-      this.nomtipocontrato = '';
-    },
-    editarTipocontrato: function editarTipocontrato(tipocontrato) {
-      this.formTipocontrato = 1;
-      this.accion = 2;
-      this.idtipocontrato = tipocontrato.idtipocontrato;
-      this.nomtipocontrato = tipocontrato.nomtipocontrato;
-    },
-    storeTipocontrato: function storeTipocontrato() {
-      var me = this;
-      var url = '/rrh_tipocontrato/storeTipocontrato';
-      axios.post(url, {
-        'nomtipocontrato': this.nomtipocontrato
-      }).then(function () {
-        swal('Tipocontrato creado correctamente', '', 'success');
-        me.formTipocontrato = 0;
-        me.listaTipocontratos();
-      });
-    },
-    updateTipocontrato: function updateTipocontrato() {
-      var me = this;
-      var url = '/rrh_tipocontrato/updateTipocontrato';
-      axios.put(url, {
-        'idtipocontrato': this.idtipocontrato,
-        'nomtipocontrato': this.nomtipocontrato
-      }).then(function () {
-        swal('Datos actualizados', '', 'success');
-        me.formTipocontrato = 0;
-        me.listaTipocontratos();
-      });
-    },
-    estadoTipocontrato: function estadoTipocontrato(tipocontrato) {
-      var _this3 = this;
-
-      this.idtipocontrato = tipocontrato.idtipocontrato;
-
-      if (tipocontrato.activo) {
-        swal({
-          title: 'Desactivará este item',
-          type: 'warning',
-          html: 'No podrá acceder a la información dependiente',
-          showCancelButton: true,
-          confirmButtonColor: '#f86c6b',
-          confirmButtonText: 'Desactivar Tipocontrato',
-          cancelButtonText: 'Cancelar',
-          reverseButtons: true
-        }).then(function (confirmar) {
-          if (confirmar.value) _this3.switchTipocontrato(1);
-        });
-      } else this.switchTipocontrato(0);
-    },
-    switchTipocontrato: function switchTipocontrato(activo) {
-      if (activo) var titswal = 'Desactivado';else var titswal = 'Activado';
-      var url = '/rrh_tipocontrato/switchTipocontrato?idtipocontrato=' + this.idtipocontrato;
-      var me = this;
-      axios.put(url).then(function () {
-        swal(titswal + ' correctamente', '', 'success');
-        me.listaTipocontratos();
-      });
-    },
     //motivos motivos motivos motivos motivos motivos motivos motivos
     //motivos motivos motivos motivos motivos motivos motivos motivos
-    listaMotivos: function listaMotivos() {
-      var me = this;
-      var url = '/rrh_motivo/listaMotivos';
-      axios.get(url).then(function (response) {
-        me.arrayMotivos = response.data.motivos;
-      });
-    },
-    nuevoMotivo: function nuevoMotivo() {
-      this.formMotivo = 1;
-      this.accion = 1;
-      this.nommotivo = '';
-    },
-    editarMotivo: function editarMotivo(motivo) {
-      this.formMotivo = 1;
-      this.accion = 2;
-      this.idmotivo = motivo.idmotivo;
-      this.nommotivo = motivo.nommotivo;
-    },
-    storeMotivo: function storeMotivo() {
-      var me = this;
-      var url = '/rrh_motivo/storeMotivo';
-      axios.post(url, {
-        'nommotivo': this.nommotivo
-      }).then(function () {
-        swal('Motivo creado correctamente', '', 'success');
-        me.formMotivo = 0;
-        me.listaMotivos();
-      });
-    },
-    updateMotivo: function updateMotivo() {
-      var me = this;
-      var url = '/rrh_motivo/updateMotivo';
-      axios.put(url, {
-        'idmotivo': this.idmotivo,
-        'nommotivo': this.nommotivo
-      }).then(function () {
-        swal('Datos actualizados', '', 'success');
-        me.formMotivo = 0;
-        me.listaMotivos();
-      });
-    },
-    estadoMotivo: function estadoMotivo(motivo) {
-      var _this4 = this;
-
-      this.idmotivo = motivo.idmotivo;
-
-      if (motivo.activo) {
-        swal({
-          title: 'Desactivará este item',
-          type: 'warning',
-          html: 'No podrá acceder a la información dependiente',
-          showCancelButton: true,
-          confirmButtonColor: '#f86c6b',
-          confirmButtonText: 'Desactivar Motivo',
-          cancelButtonText: 'Cancelar',
-          reverseButtons: true
-        }).then(function (confirmar) {
-          if (confirmar.value) _this4.switchMotivo(1);
-        });
-      } else this.switchMotivo(0);
-    },
-    switchMotivo: function switchMotivo(activo) {
-      if (activo) var titswal = 'Desactivado';else var titswal = 'Activado';
-      var url = '/rrh_motivo/switchMotivo?idmotivo=' + this.idmotivo;
-      var me = this;
-      axios.put(url).then(function () {
-        swal(titswal + ' correctamente', '', 'success');
-        me.listaMotivos();
-      });
-    },
     // seguros  seguros  seguros  seguros  seguros  seguros  seguros  seguros 
     // seguros  seguros  seguros  seguros  seguros  seguros  seguros  seguros 
-    listaSeguros: function listaSeguros() {
-      var me = this;
-      var url = '/rrh_seguro/listaSeguros';
-      axios.get(url).then(function (response) {
-        me.arraySeguros = response.data.seguros;
-      });
-    },
-    nuevoSeguro: function nuevoSeguro() {
-      this.formSeguro = 1;
-      this.accion = 1;
-      this.tipo = '';
-      this.sigla = '';
-      this.nomseguro = '';
-    },
-    editarSeguro: function editarSeguro(seguro) {
-      this.formSeguro = 1;
-      this.accion = 2;
-      this.idseguro = seguro.idseguro;
-      this.tipo = seguro.tipo;
-      this.sigla = seguro.sigla;
-      this.nomseguro = seguro.nomseguro;
-    },
-    storeSeguro: function storeSeguro() {
-      var me = this;
-      var url = '/rrh_seguro/storeSeguro';
-      axios.post(url, {
-        'tipo': this.tipo,
-        'sigla': this.sigla,
-        'nomseguro': this.nomseguro
-      }).then(function () {
-        swal('Seguro creado correctamente', '', 'success');
-        me.formSeguro = 0;
-        me.listaSeguros();
-      });
-    },
-    updateSeguro: function updateSeguro() {
-      var me = this;
-      var url = '/rrh_seguro/updateSeguro';
-      axios.put(url, {
-        'idseguro': this.idseguro,
-        'tipo': this.tipo,
-        'sigla': this.sigla,
-        'nomseguro': this.nomseguro
-      }).then(function () {
-        swal('Datos actualizados', '', 'success');
-        me.formSeguro = 0;
-        me.listaSeguros();
-      });
-    },
-    estadoSeguro: function estadoSeguro(seguro) {
-      var _this5 = this;
-
-      this.idseguro = seguro.idseguro;
-
-      if (seguro.activo) {
-        swal({
-          title: 'Desactivará ' + seguro.sigla,
-          type: 'warning',
-          html: 'No podrá acceder a la información dependiente',
-          showCancelButton: true,
-          confirmButtonColor: '#f86c6b',
-          confirmButtonText: 'Desactivar Seguro',
-          cancelButtonText: 'Cancelar',
-          reverseButtons: true
-        }).then(function (confirmar) {
-          if (confirmar.value) _this5.switchSeguro(1);
-        });
-      } else this.switchSeguro(0);
-    },
-    switchSeguro: function switchSeguro(activo) {
-      if (activo) var titswal = 'Desactivado';else var titswal = 'Activado';
-      var url = '/rrh_seguro/switchSeguro?idseguro=' + this.idseguro;
-      var me = this;
-      axios.put(url).then(function () {
-        swal(titswal + ' correctamente', '', 'success');
-        me.listaSeguros();
-      });
-    },
     //cargos cargos cargos cargos cargos cargos cargos cargos
     //cargos cargos cargos cargos cargos cargos cargos cargos
     listaCargos: function listaCargos() {
       var me = this;
-      var url = '/rrh_cargo/listaCargos';
+      var url = '/cargo';
       axios.get(url).then(function (response) {
-        me.arrayCargos = response.data.cargos;
+        me.arrayCargos = response.data.cargo.data;
       });
     },
     nuevoCargo: function nuevoCargo() {
       this.formCargo = 1;
       this.accion = 1;
       this.nomcargo = '';
+      this.nivelselected = 1;
     },
     editarCargo: function editarCargo(cargo) {
+      console.log(cargo);
       this.formCargo = 1;
       this.accion = 2;
-      this.idcargo = cargo.idcargo;
-      this.nomcargo = cargo.nomcargo;
+      this.idcargo = cargo.id;
+      this.nomcargo = cargo.nombre;
+      this.nivelselected = cargo.nivel;
     },
-    storeCargo: function storeCargo() {
-      var me = this;
-      var url = '/rrh_cargo/storeCargo';
-      axios.post(url, {
-        'nomcargo': this.nomcargo
-      }).then(function () {
-        swal('Cargo creado correctamente', '', 'success');
-        me.formCargo = 0;
-        me.listaCargos();
+    registrarCargo: function registrarCargo() {
+      var _this3 = this;
+
+      var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      });
+      swalWithBootstrapButtons.fire({
+        title: 'Registrará: <br>Cargo: ' + this.nomcargo + '<br>Nivel: ' + this.nivelselected,
+        icon: 'info',
+        html: 'Esta Seguro?',
+        showCancelButton: true,
+        confirmButtonColor: '#f86c6b',
+        confirmButtonText: 'Regisrar Cargo',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+      }).then(function (confirmar) {
+        if (confirmar.value) {
+          var me = _this3;
+          var url = '/cargo/registrar';
+          axios.post(url, {
+            'nombre': _this3.nomcargo,
+            'nivel': _this3.nivelselected
+          }).then(function () {
+            sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Cargo creado correctamente', '', 'success');
+            me.formCargo = 0;
+            me.listaCargos();
+          });
+        }
       });
     },
-    updateCargo: function updateCargo() {
+    actualizarCargo: function actualizarCargo() {
       var me = this;
-      var url = '/rrh_cargo/updateCargo';
+      var url = '/cargo/actualizar';
       axios.put(url, {
-        'idcargo': this.idcargo,
-        'nomcargo': this.nomcargo
+        'id': this.idcargo,
+        'nombre': this.nomcargo,
+        'nivel': this.nivelselected
       }).then(function () {
-        swal('Datos actualizados', '', 'success');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire('Datos actualizados', '', 'success');
         me.formCargo = 0;
         me.listaCargos();
       });
     },
     estadoCargo: function estadoCargo(cargo) {
-      var _this6 = this;
+      var _this4 = this;
 
-      this.idcargo = cargo.idcargo;
+      var swalWithBootstrapButtons = sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      });
+      this.idcargo = cargo.id;
 
       if (cargo.activo) {
-        swal({
-          title: 'Desactivará:<br>' + cargo.nomcargo,
-          type: 'warning',
+        swalWithBootstrapButtons.fire({
+          title: 'Desactivará:<br>' + cargo.nombre,
+          icon: 'warning',
           html: 'No podrá acceder a la información dependiente',
           showCancelButton: true,
           confirmButtonColor: '#f86c6b',
@@ -3359,16 +3064,22 @@ __webpack_require__.r(__webpack_exports__);
           cancelButtonText: 'Cancelar',
           reverseButtons: true
         }).then(function (confirmar) {
-          if (confirmar.value) _this6.switchCargo(1);
+          if (confirmar.value) _this4.switchCargo(1);
         });
       } else this.switchCargo(0);
     },
     switchCargo: function switchCargo(activo) {
-      if (activo) var titswal = 'Desactivado';else var titswal = 'Activado';
-      var url = '/rrh_cargo/switchCargo?idcargo=' + this.idcargo;
+      if (activo) {
+        var titswal = 'Desactivado';
+        var url = '/cargo/desactivar?idcargo=' + this.idcargo;
+      } else {
+        var titswal = 'Activado';
+        var url = '/cargo/activar?idcargo=' + this.idcargo;
+      }
+
       var me = this;
       axios.put(url).then(function () {
-        swal(titswal + ' correctamente', '', 'success');
+        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire(titswal + ' correctamente', '', 'success');
         me.listaCargos();
       });
     }
@@ -3376,9 +3087,6 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.listaFormaciones();
     this.listaProfesiones();
-    this.listaTipocontratos();
-    this.listaMotivos();
-    this.listaSeguros();
     this.listaCargos();
   }
 });
@@ -52865,7 +52573,7 @@ var render = function () {
                                   : _c("td", [
                                       _c("button", {
                                         staticClass:
-                                          "btn btn-warning btn-sm icon-action-redo",
+                                          "btn btn-success btn-sm icon-action-redo",
                                         attrs: { title: "Restaurar Formación" },
                                         on: {
                                           click: function ($event) {
@@ -52880,7 +52588,7 @@ var render = function () {
                                 _c("td", {
                                   attrs: { align: "left" },
                                   domProps: {
-                                    textContent: _vm._s(formacion.nomformacion),
+                                    textContent: _vm._s(formacion.nombre),
                                   },
                                 }),
                               ]
@@ -52951,11 +52659,12 @@ var render = function () {
                           "button",
                           {
                             staticClass: "btn btn-primary",
+                            attrs: { disabled: _vm.nomformacion == "" },
                             on: {
                               click: function ($event) {
                                 _vm.accion == 1
-                                  ? _vm.registrar()
-                                  : _vm.actualizar()
+                                  ? _vm.registrarFormacion()
+                                  : _vm.actualizarFormacion()
                               },
                             },
                           },
@@ -53081,7 +52790,7 @@ var render = function () {
                                   : _c("td", [
                                       _c("button", {
                                         staticClass:
-                                          "btn btn-warning btn-sm icon-action-redo",
+                                          "btn btn-success btn-sm icon-action-redo",
                                         attrs: { title: "Restaurar Profesión" },
                                         on: {
                                           click: function ($event) {
@@ -53096,7 +52805,7 @@ var render = function () {
                                 _c("td", {
                                   attrs: { align: "left" },
                                   domProps: {
-                                    textContent: _vm._s(profesion.nomprofesion),
+                                    textContent: _vm._s(profesion.nombre),
                                   },
                                 }),
                               ]
@@ -53167,11 +52876,12 @@ var render = function () {
                           "button",
                           {
                             staticClass: "btn btn-primary",
+                            attrs: { disabled: _vm.nomprofesion == "" },
                             on: {
                               click: function ($event) {
                                 _vm.accion == 1
-                                  ? _vm.storeProfesion()
-                                  : _vm.updateProfesion()
+                                  ? _vm.registrarProfesion()
+                                  : _vm.actualizarProfesion()
                               },
                             },
                           },
@@ -53192,736 +52902,14 @@ var render = function () {
           ]),
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "col-md-12" }, [
           _c("div", { staticClass: "card" }, [
             _c("div", { staticClass: "card-header titcard" }, [
               _c("div", { staticClass: "row" }, [
                 _vm._m(2),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-md-4 col-sm-4 text-right" }, [
-                  !_vm.formMotivo
-                    ? _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary",
-                          staticStyle: { "margin-top": "0" },
-                          on: {
-                            click: function ($event) {
-                              return _vm.nuevoMotivo()
-                            },
-                          },
-                        },
-                        [_vm._v("Nueva")]
-                      )
-                    : _vm._e(),
-                ]),
-              ]),
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "card-body",
-                staticStyle: { height: "280px", "overflow-y": "scroll" },
-              },
-              [
-                !_vm.formMotivo
-                  ? _c(
-                      "table",
-                      { staticClass: "table table-sm table-striped" },
-                      [
-                        _c("thead", { staticClass: "tcabecera" }, [
-                          _c("tr", [
-                            _c("th", [
-                              _c("span", {
-                                staticClass: "badge badge-success",
-                                domProps: {
-                                  textContent: _vm._s(
-                                    _vm.arrayMotivos.length + " items"
-                                  ),
-                                },
-                              }),
-                            ]),
-                            _vm._v(" "),
-                            _c("th", [_vm._v("Descripción")]),
-                          ]),
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "tbody",
-                          _vm._l(_vm.arrayMotivos, function (motivo) {
-                            return _c(
-                              "tr",
-                              {
-                                key: motivo.id,
-                                class: motivo.activo ? "" : "txtdesactivado",
-                                attrs: { align: "center" },
-                              },
-                              [
-                                motivo.activo
-                                  ? _c("td", { attrs: { nowrap: "" } }, [
-                                      _c("button", {
-                                        staticClass:
-                                          "btn btn-warning btn-sm icon-pencil",
-                                        attrs: { title: "Editar motivo" },
-                                        on: {
-                                          click: function ($event) {
-                                            return _vm.editarMotivo(motivo)
-                                          },
-                                        },
-                                      }),
-                                      _vm._v(" "),
-                                      _c("button", {
-                                        staticClass:
-                                          "btn btn-danger btn-sm icon-trash",
-                                        attrs: { title: "Desactivar motivo" },
-                                        on: {
-                                          click: function ($event) {
-                                            return _vm.estadoMotivo(motivo)
-                                          },
-                                        },
-                                      }),
-                                    ])
-                                  : _c("td", [
-                                      _c("button", {
-                                        staticClass:
-                                          "btn btn-warning btn-sm icon-action-redo",
-                                        attrs: { title: "Restaurar motivo" },
-                                        on: {
-                                          click: function ($event) {
-                                            return _vm.estadoMotivo(motivo)
-                                          },
-                                        },
-                                      }),
-                                    ]),
-                                _vm._v(" "),
-                                _c("td", {
-                                  attrs: { align: "left" },
-                                  domProps: {
-                                    textContent: _vm._s(motivo.nommotivo),
-                                  },
-                                }),
-                              ]
-                            )
-                          }),
-                          0
-                        ),
-                      ]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
-                _vm.formMotivo
-                  ? _c("div", [
-                      _c("h4", { staticClass: "titazul" }, [
-                        _c("span", {
-                          domProps: {
-                            textContent: _vm._s(
-                              _vm.accion == 1 ? "Nuevo" : "Modifcar"
-                            ),
-                          },
-                        }),
-                        _vm._v(" Motivo"),
-                      ]),
-                      _vm._v(" "),
-                      _c("br"),
-                      _vm._v("Motivo: "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.nommotivo,
-                            expression: "nommotivo",
-                          },
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text" },
-                        domProps: { value: _vm.nommotivo },
-                        on: {
-                          input: function ($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.nommotivo = $event.target.value
-                          },
-                        },
-                      }),
-                      _vm._v(" "),
-                      _c("p", { attrs: { align: "right" } }, [
-                        _c("br"),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-secondary",
-                            on: {
-                              click: function ($event) {
-                                _vm.formMotivo = 0
-                              },
-                            },
-                          },
-                          [_vm._v("Cancelar")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-primary",
-                            on: {
-                              click: function ($event) {
-                                _vm.accion == 1
-                                  ? _vm.storeMotivo()
-                                  : _vm.updateMotivo()
-                              },
-                            },
-                          },
-                          [
-                            _vm._v(
-                              "\r\n                                    Guardar "
-                            ),
-                            _vm.accion == 2
-                              ? _c("span", [_vm._v("Modificaciones")])
-                              : _vm._e(),
-                          ]
-                        ),
-                      ]),
-                    ])
-                  : _vm._e(),
-              ]
-            ),
-          ]),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header titcard" }, [
-              _c("div", { staticClass: "row" }, [
-                _vm._m(3),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-md-4 col-sm-4 text-right" }, [
-                  !_vm.formSeguro
-                    ? _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary",
-                          staticStyle: { "margin-top": "0" },
-                          on: {
-                            click: function ($event) {
-                              return _vm.nuevoSeguro()
-                            },
-                          },
-                        },
-                        [_vm._v("Nuevo")]
-                      )
-                    : _vm._e(),
-                ]),
-              ]),
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "card-body",
-                staticStyle: { height: "280px", "overflow-y": "scroll" },
-              },
-              [
-                !_vm.formSeguro
-                  ? _c(
-                      "table",
-                      { staticClass: "table table-sm table-striped" },
-                      [
-                        _c("thead", { staticClass: "tcabecera" }, [
-                          _c("tr", [
-                            _c("th", [
-                              _c("span", {
-                                staticClass: "badge badge-success",
-                                domProps: {
-                                  textContent: _vm._s(
-                                    _vm.arraySeguros.length + " items"
-                                  ),
-                                },
-                              }),
-                            ]),
-                            _vm._v(" "),
-                            _c("th", [_vm._v("Tipo")]),
-                            _vm._v(" "),
-                            _c("th", [_vm._v("Sigla")]),
-                            _vm._v(" "),
-                            _c("th", [_vm._v("Descripción")]),
-                          ]),
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "tbody",
-                          _vm._l(_vm.arraySeguros, function (seguro) {
-                            return _c(
-                              "tr",
-                              {
-                                key: seguro.id,
-                                class: seguro.activo ? "" : "txtdesactivado",
-                                attrs: { align: "center" },
-                              },
-                              [
-                                seguro.activo
-                                  ? _c("td", { attrs: { nowrap: "" } }, [
-                                      _c("button", {
-                                        staticClass:
-                                          "btn btn-warning btn-sm icon-pencil",
-                                        on: {
-                                          click: function ($event) {
-                                            return _vm.editarSeguro(seguro)
-                                          },
-                                        },
-                                      }),
-                                      _vm._v(" "),
-                                      _c("button", {
-                                        staticClass:
-                                          "btn btn-danger btn-sm icon-trash",
-                                        on: {
-                                          click: function ($event) {
-                                            return _vm.estadoSeguro(seguro)
-                                          },
-                                        },
-                                      }),
-                                    ])
-                                  : _c("td", [
-                                      _c("button", {
-                                        staticClass:
-                                          "btn btn-warning btn-sm icon-action-redo",
-                                        on: {
-                                          click: function ($event) {
-                                            return _vm.estadoSeguro(seguro)
-                                          },
-                                        },
-                                      }),
-                                    ]),
-                                _vm._v(" "),
-                                _c("td", {
-                                  domProps: {
-                                    textContent: _vm._s(
-                                      seguro.tipo == 1 ? "Pensiones" : "Salud"
-                                    ),
-                                  },
-                                }),
-                                _vm._v(" "),
-                                _c("td", {
-                                  domProps: {
-                                    textContent: _vm._s(seguro.sigla),
-                                  },
-                                }),
-                                _vm._v(" "),
-                                _c("td", {
-                                  attrs: { align: "left" },
-                                  domProps: {
-                                    textContent: _vm._s(seguro.nomseguro),
-                                  },
-                                }),
-                              ]
-                            )
-                          }),
-                          0
-                        ),
-                      ]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.formSeguro ? _c("br") : _vm._e(),
-                _vm._v(" "),
-                _vm.formSeguro
-                  ? _c("h4", { staticClass: "titazul" }, [
-                      _c("span", {
-                        domProps: {
-                          textContent: _vm._s(
-                            _vm.accion == 1 ? "Nuevo" : "Modificar"
-                          ),
-                        },
-                      }),
-                      _vm._v(" Seguro"),
-                    ])
-                  : _vm._e(),
-                _c("br"),
-                _vm._v(" "),
-                _vm.formSeguro
-                  ? _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-md-3" }, [
-                        _vm._v("Tipo:\r\n                                "),
-                        _c(
-                          "select",
-                          {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.tipo,
-                                expression: "tipo",
-                              },
-                            ],
-                            staticClass: "form-control",
-                            on: {
-                              change: function ($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function (o) {
-                                    return o.selected
-                                  })
-                                  .map(function (o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.tipo = $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              },
-                            },
-                          },
-                          [
-                            _c("option", { attrs: { value: "1" } }, [
-                              _vm._v("Pensiones"),
-                            ]),
-                            _vm._v(" "),
-                            _c("option", { attrs: { value: "2" } }, [
-                              _vm._v("Salud"),
-                            ]),
-                          ]
-                        ),
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-3" }, [
-                        _vm._v("Sigla:\r\n                                "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.sigla,
-                              expression: "sigla",
-                            },
-                          ],
-                          staticClass: "form-control",
-                          attrs: { type: "text" },
-                          domProps: { value: _vm.sigla },
-                          on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.sigla = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-md-6" }, [
-                        _vm._v("Nombre:\r\n                                "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.nomseguro,
-                              expression: "nomseguro",
-                            },
-                          ],
-                          staticClass: "form-control",
-                          attrs: { type: "text" },
-                          domProps: { value: _vm.nomseguro },
-                          on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.nomseguro = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.formSeguro
-                  ? _c("div", { staticClass: "text-right" }, [
-                      _c("br"),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-secondary",
-                          on: {
-                            click: function ($event) {
-                              _vm.formSeguro = 0
-                            },
-                          },
-                        },
-                        [_vm._v("Cancelar")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary",
-                          on: {
-                            click: function ($event) {
-                              _vm.accion == 1
-                                ? _vm.storeSeguro()
-                                : _vm.updateSeguro()
-                            },
-                          },
-                        },
-                        [
-                          _vm._v(
-                            "\r\n                                Guardar "
-                          ),
-                          _vm.accion == 2
-                            ? _c("span", [_vm._v("Modificaciones")])
-                            : _vm._e(),
-                        ]
-                      ),
-                    ])
-                  : _vm._e(),
-              ]
-            ),
-          ]),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header titcard" }, [
-              _c("div", { staticClass: "row" }, [
-                _vm._m(4),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-md-4 col-sm-4 text-right" }, [
-                  !_vm.formProfesion
-                    ? _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary",
-                          staticStyle: { "margin-top": "0" },
-                          on: {
-                            click: function ($event) {
-                              return _vm.nuevoTipocontrato()
-                            },
-                          },
-                        },
-                        [_vm._v("Nuevo")]
-                      )
-                    : _vm._e(),
-                ]),
-              ]),
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "card-body",
-                staticStyle: { height: "280px", "overflow-y": "scroll" },
-              },
-              [
-                !_vm.formTipocontrato
-                  ? _c(
-                      "table",
-                      { staticClass: "table table-sm table-striped" },
-                      [
-                        _c("thead", { staticClass: "tcabecera" }, [
-                          _c("tr", [
-                            _c("th", [
-                              _c("span", {
-                                staticClass: "badge badge-success",
-                                domProps: {
-                                  textContent: _vm._s(
-                                    _vm.arrayTipocontratos.length + " items"
-                                  ),
-                                },
-                              }),
-                            ]),
-                            _vm._v(" "),
-                            _c("th", [_vm._v("Descripción")]),
-                          ]),
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "tbody",
-                          _vm._l(
-                            _vm.arrayTipocontratos,
-                            function (tipocontrato) {
-                              return _c(
-                                "tr",
-                                {
-                                  key: tipocontrato.id,
-                                  class: tipocontrato.activo
-                                    ? ""
-                                    : "txtdesactivado",
-                                  attrs: { align: "center" },
-                                },
-                                [
-                                  tipocontrato.activo
-                                    ? _c(
-                                        "td",
-                                        {
-                                          attrs: {
-                                            align: "center",
-                                            nowrap: "",
-                                          },
-                                        },
-                                        [
-                                          _c("button", {
-                                            staticClass:
-                                              "btn btn-warning btn-sm icon-pencil",
-                                            attrs: {
-                                              title: "Editar Profesión",
-                                            },
-                                            on: {
-                                              click: function ($event) {
-                                                return _vm.editarTipocontrato(
-                                                  tipocontrato
-                                                )
-                                              },
-                                            },
-                                          }),
-                                          _vm._v(" "),
-                                          _c("button", {
-                                            staticClass:
-                                              "btn btn-danger btn-sm icon-trash",
-                                            attrs: {
-                                              title: "Desactivar Profesión",
-                                            },
-                                            on: {
-                                              click: function ($event) {
-                                                return _vm.estadoTipocontrato(
-                                                  tipocontrato
-                                                )
-                                              },
-                                            },
-                                          }),
-                                        ]
-                                      )
-                                    : _c("td", [
-                                        _c("button", {
-                                          staticClass:
-                                            "btn btn-warning btn-sm icon-action-redo",
-                                          attrs: {
-                                            title: "Restaurar Profesión",
-                                          },
-                                          on: {
-                                            click: function ($event) {
-                                              return _vm.estadoTipocontrato(
-                                                tipocontrato
-                                              )
-                                            },
-                                          },
-                                        }),
-                                      ]),
-                                  _vm._v(" "),
-                                  _c("td", {
-                                    attrs: { align: "left" },
-                                    domProps: {
-                                      textContent: _vm._s(
-                                        tipocontrato.nomtipocontrato
-                                      ),
-                                    },
-                                  }),
-                                ]
-                              )
-                            }
-                          ),
-                          0
-                        ),
-                      ]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.formTipocontrato
-                  ? _c("div", [
-                      _c("br"),
-                      _vm._v(" "),
-                      _c("h4", { staticClass: "titazul" }, [
-                        _c("span", {
-                          domProps: {
-                            textContent: _vm._s(
-                              _vm.accion == 1 ? "Nueva" : "Modificar"
-                            ),
-                          },
-                        }),
-                        _vm._v(" Tipo de contrato"),
-                      ]),
-                      _vm._v(" "),
-                      _c("br"),
-                      _vm._v("Tipo de Contrato: "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.nomtipocontrato,
-                            expression: "nomtipocontrato",
-                          },
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", autofocus: "" },
-                        domProps: { value: _vm.nomtipocontrato },
-                        on: {
-                          input: function ($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.nomtipocontrato = $event.target.value
-                          },
-                        },
-                      }),
-                      _vm._v(" "),
-                      _c("p", { attrs: { align: "right" } }, [
-                        _c("br"),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-secondary",
-                            on: {
-                              click: function ($event) {
-                                _vm.formTipocontrato = 0
-                              },
-                            },
-                          },
-                          [_vm._v("Cancelar")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-primary",
-                            on: {
-                              click: function ($event) {
-                                _vm.accion == 1
-                                  ? _vm.storeTipocontrato()
-                                  : _vm.updateTipocontrato()
-                              },
-                            },
-                          },
-                          [
-                            _vm._v(
-                              "\r\n                                Guardar "
-                            ),
-                            _vm.accion == 2
-                              ? _c("span", [_vm._v("Modificaciones")])
-                              : _vm._e(),
-                          ]
-                        ),
-                      ]),
-                    ])
-                  : _vm._e(),
-              ]
-            ),
-          ]),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-6" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header titcard" }, [
-              _c("div", { staticClass: "row" }, [
-                _vm._m(5),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-md-4 col-sm-4 text-right" }, [
-                  !_vm.formProfesion
+                  !_vm.formCargo
                     ? _c(
                         "button",
                         {
@@ -53966,6 +52954,8 @@ var render = function () {
                             ]),
                             _vm._v(" "),
                             _c("th", [_vm._v("Descripción")]),
+                            _vm._v(" "),
+                            _c("th", [_vm._v("Nivel")]),
                           ]),
                         ]),
                         _vm._v(" "),
@@ -54013,7 +53003,7 @@ var render = function () {
                                   : _c("td", [
                                       _c("button", {
                                         staticClass:
-                                          "btn btn-warning btn-sm icon-action-redo",
+                                          "btn btn-success btn-sm icon-action-redo",
                                         attrs: { title: "Restaurar Cargo" },
                                         on: {
                                           click: function ($event) {
@@ -54026,7 +53016,14 @@ var render = function () {
                                 _c("td", {
                                   attrs: { align: "left" },
                                   domProps: {
-                                    textContent: _vm._s(cargo.nomcargo),
+                                    textContent: _vm._s(cargo.nombre),
+                                  },
+                                }),
+                                _vm._v(" "),
+                                _c("td", {
+                                  attrs: { align: "left" },
+                                  domProps: {
+                                    textContent: _vm._s(cargo.nivel),
                                   },
                                 }),
                               ]
@@ -54054,28 +53051,82 @@ var render = function () {
                       ]),
                       _vm._v(" "),
                       _c("br"),
-                      _vm._v("Cargo: "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.nomcargo,
-                            expression: "nomcargo",
-                          },
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", autofocus: "" },
-                        domProps: { value: _vm.nomcargo },
-                        on: {
-                          input: function ($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.nomcargo = $event.target.value
-                          },
-                        },
-                      }),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "form-group row" }, [
+                        _c("div", { staticClass: "col-md-8" }, [
+                          _vm._v(
+                            "\r\n                                    Cargo: "
+                          ),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.nomcargo,
+                                expression: "nomcargo",
+                              },
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "text", autofocus: "" },
+                            domProps: { value: _vm.nomcargo },
+                            on: {
+                              input: function ($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.nomcargo = $event.target.value
+                              },
+                            },
+                          }),
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-4" }, [
+                          _vm._v(
+                            "\r\n                                    Nivel:\r\n                                    "
+                          ),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.nivelselected,
+                                  expression: "nivelselected",
+                                },
+                              ],
+                              staticClass: "form-control",
+                              attrs: { name: "", id: "" },
+                              on: {
+                                change: function ($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function (o) {
+                                      return o.selected
+                                    })
+                                    .map(function (o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.nivelselected = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                },
+                              },
+                            },
+                            _vm._l(_vm.arrayNiveles, function (niveles) {
+                              return _c("option", {
+                                key: niveles,
+                                domProps: {
+                                  value: niveles,
+                                  textContent: _vm._s(niveles),
+                                },
+                              })
+                            }),
+                            0
+                          ),
+                        ]),
+                      ]),
                       _vm._v(" "),
                       _c("p", { attrs: { align: "right" } }, [
                         _c("br"),
@@ -54097,11 +53148,12 @@ var render = function () {
                           "button",
                           {
                             staticClass: "btn btn-primary",
+                            attrs: { disabled: _vm.nomcargo == "" },
                             on: {
                               click: function ($event) {
                                 _vm.accion == 1
-                                  ? _vm.storeCargo()
-                                  : _vm.updateCargo()
+                                  ? _vm.registrarCargo()
+                                  : _vm.actualizarCargo()
                               },
                             },
                           },
@@ -54143,36 +53195,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "col-md-8 col-sm-8" }, [
       _c("div", { staticClass: "tablatit" }, [
         _c("div", { staticClass: "tcelda" }, [_vm._v("Profesiones")]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-8 col-sm-8" }, [
-      _c("div", { staticClass: "tablatit" }, [
-        _c("div", { staticClass: "tcelda" }, [_vm._v("Motivos de Permiso")]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-8 col-sm-8" }, [
-      _c("div", { staticClass: "tablatit" }, [
-        _c("div", { staticClass: "tcelda" }, [_vm._v("Seguro Social")]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-8 col-sm-8" }, [
-      _c("div", { staticClass: "tablatit" }, [
-        _c("div", { staticClass: "tcelda" }, [_vm._v("Tipos de Contrato")]),
       ]),
     ])
   },

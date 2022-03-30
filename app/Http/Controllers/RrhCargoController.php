@@ -13,50 +13,14 @@ class RrhCargoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $buscararray=array();
-        if(!empty($request->buscar)){
-            $buscararray = explode(" ",$request->buscar);
-            //dd($buscararray);
-            $valor=sizeof($buscararray);
-            if($valor > 0){
-                $sqls='';
-                foreach($buscararray as $valor){
-                    if(empty($sqls)){
-                        $sqls="(nombre like '%".$valor."%' or nivel like '%".$valor."%')" ;
-                    }
-                    else
-                    {
-                        $sqls.=" and (nombre like '%".$valor."%' or nivel like '%".$valor."%')" ;
-                    }
-    
-                }
-                $cargo= Rrh_Cargo::orderby('nivel','asc')
-                                ->orderby('nombre','asc')
-                                ->whereraw($sqls)
-                                ->paginate(30);
-            }
-        }
-        
-        else
-        {
-            $cargo= Rrh_Cargo::orderby('nombre','asc')
+        $cargo= Rrh_Cargo::orderby('nivel','asc')
                             ->orderby('nombre','asc')
-                            ->paginate(20);
-        }
-        
+                            ->paginate(50);
         //$cargo = Rrh_Cargo::all();
-        return ['pagination'=>[
-            'total'         =>    $cargo->total(),
-            'current_page'  =>    $cargo->currentPage(),
-            'per_page'      =>    $cargo->perPage(),
-            'last_page'     =>    $cargo->lastPage(),
-            'from'          =>    $cargo->firstItem(),
-            'to'            =>    $cargo->lastItem(),
-
-        ] ,
-                'cargo'=>$cargo,
+        return [
+                'cargo'=>$cargo
                 ];
     }
 
@@ -78,7 +42,7 @@ class RrhCargoController extends Controller
      */
     public function store(Request $request)
     {
-        $validator=Validator::make($request->all(),['nombre'=>'unique:cargos']);
+        $validator=Validator::make($request->all(),['nombre'=>'unique:rrh__cargos']);
 
         //dd($validator->errors());
         
@@ -157,44 +121,7 @@ class RrhCargoController extends Controller
     }
     public function selectCargo(Request $request)
     {
-        $buscararray = array(); 
-        if(!empty($request->buscar)) $buscararray = explode(" ",$request->buscar); 
-        if (sizeof($buscararray)>0) { 
-            $sqls=''; 
-            foreach($buscararray as $valor){
-                if(empty($sqls))
-                    $sqls="(nombre like '%".$valor."%' or nivel like '%".$valor."%' )";
-                else
-                    $sqls.=" and (nombre like '%".$valor."%' or nivel like '%".$valor."%' )";
-            }   
-            $cargo = Rrh_Cargo::select('id','nombre','nivel')
-                                ->where('activo',1)
-                                ->whereraw($sqls)
-                                ->orderby('nombre','asc')
-                                ->orderby('nombre','asc')
-                                ->get();
-        }
-        else {
-            if ($request->id){
-                    $cargo = Rrh_Cargo::select('id','nombre','nivel')
-                                                 ->where('activo',1)
-                                                ->where('id',$request->id)
-                                                ->orderby('nombre','asc')
-                                                ->orderby('nombre','asc')
-                                                ->get();
-            }
-
-            else
-            {
-                $cargo = Rrh_Cargo::select('id','nombre')
-                                    ->where('activo',1)
-                                    ->orderby('nombre','asc')
-                                    ->orderby('nombre','asc')
-                                    ->get();
-            }
-              
-        }
-        return ['cargos' => $cargo];
+        
 
     }
 }
