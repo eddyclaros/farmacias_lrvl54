@@ -1,16 +1,22 @@
 @extends('principal')
 @section('contenido')
-<template v-if="menu==0">
-<h1>Contenido menu 0</h1>
-</template>
-<template v-if="menu==10">
+
+
+<?php 
+use App\Http\Controllers\ParVentanaModuloController;
+$var2 = ParVentanaModuloController::listarVentanas(); 
+?>
+@foreach($var2 as $ventana)
+    <template v-if="menu=={{ $ventana->codventana }}">
+        <{{ $ventana->template }}></{{ $ventana->template }}>
+    </template>
+@endforeach
+
+{{-- <template v-if="menu==10">
     <sucursal-component></sucursal-component>
 
 </template>
-<template v-if="menu==11">
-    <cargos-component></cargos-component>
 
-</template>
 <template v-if="menu==20">
     <rrhconf-component></rrhconf-component>
 </template>
@@ -68,7 +74,7 @@
 
 <template v-if="menu==9">
     <h1>Contenido menu 9</h1>
-</template>
+</template> --}}
 
 
 

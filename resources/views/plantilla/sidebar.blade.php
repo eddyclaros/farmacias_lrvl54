@@ -1,13 +1,38 @@
-<div class="sidebar">
+<div class="sidebar ">
     <nav class="sidebar-nav">
-        <ul class="nav">
-            <li @click="menu=0" class="nav-item">
-                <a class="nav-link active" href="#"><i class="icon-speedometer"></i> Escritorio</a>
+        <ul class="nav" style="height: auto;">
+            <li  class="nav-item" id="0">
+                <a class="nav-link active" href="#"><i class="icon-speedometer"></i> INICIO</a>
             </li>
+            <li class="nav-title">
+                Menu Opciones
+            </li>
+
+            <?php use App\Http\Controllers\ParVentanaModuloController;
+                $vent=ParVentanaModuloController::listarPermisos();
+                
+            ?>
+            
+            @foreach ($vent as $item)
+                <li class="nav-item nav-dropdown menudown ">
+                    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i> 
+                        <font color="turquoise" style="text-transform:capitalize">{{ $item->nombre }}</font>
+                    </a>
+                    <ul class="nav-dropdown-items">
+                        @foreach($item->ventana as $ventana)
+                            <li @click="menu={{ $ventana->codventana }}" class="nav-item">
+                                <a class="nav-link" href="#"><i class="icon-bag"></i>{{ $ventana->nomventana }} </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
+            @endforeach
+
+
             <!-- <li class="nav-title">
                 Mantenimiento
             </li> -->
-            <li class="nav-item nav-dropdown menudown ">
+           {{--  <li class="nav-item nav-dropdown menudown ">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i> 
                     <font color="turquoise" style="text-transform:capitalize">Administracion</font>
                 </a>
@@ -31,11 +56,7 @@
                         <a class="nav-link" href="#"><i class="icon-user"></i> Configuraciones</a>
                     </li>
                 </ul>
-                {{-- <ul class="nav-dropdown-items">
-                    <li @click="menu=21" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-bag"></i> Cargos</a>
-                    </li>
-                </ul> --}}
+                
             </li>
             <li class="nav-item nav-dropdown menudown">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-bag"></i>
@@ -80,9 +101,7 @@
                     <li @click="menu=31" class="nav-item">
                         <a class="nav-link" href="#"><i class="icon-wallet"></i> Desc. Productos</a>
                     </li>
-                    <!-- <li @click="menu=4" class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-notebook"></i> Validaciones</a>
-                    </li> -->
+                   
                 </ul>
             </li>
             <li class="nav-item nav-dropdown menudown">
@@ -106,7 +125,7 @@
                         <a class="nav-link" href="#"><i class="icon-info"></i> Categorias</a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
             <!--
             <li class="nav-item nav-dropdown menudown">
                 <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-people"></i> Acceso</a>

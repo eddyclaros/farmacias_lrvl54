@@ -25,7 +25,9 @@ class DatabaseSeeder extends Seeder
             'rrh__formacions',
             'rrh__profesions',
             'rrh__empleados',
-            'users'
+            'users',
+            'par__modulos',
+            'par__ventana_modulos',
         ]);
         $this->call(DispenserSeeder::class);
         $this->call(FormaFarmaceuticaSeeder::class);
@@ -38,6 +40,8 @@ class DatabaseSeeder extends Seeder
         $this->call(RrhProfesionSeeder::class);
         $this->call(RrhEmpleadoSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(ParModuloSeeder::class);
+        $this->call(ParVentanaModuloSeeder::class);
 
     }
     protected function truncateTables(array $tables)
